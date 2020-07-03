@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ITQJ.Domain.Models
+﻿namespace ITQJ.Domain.Models
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     [Table("Message")]
-    class Message
+    public class Message
     {
         [Key]
         public int Id { get; set; }
@@ -16,5 +16,9 @@ namespace ITQJ.Domain.Models
         [Required]
         [ForeignKey(nameof(Project))]
         public int ProjectId { get; set; }
+
+        public virtual User User { get; set; }
+
+        public virtual Project  Project { get; set; }
     }
 }

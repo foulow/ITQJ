@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ITQJ.Domain.Models
+﻿namespace ITQJ.Domain.Models
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     [Table("LegalDocument")]
-    class LegalDocument
+    public class LegalDocument
     {
         [Key]
         public int Id { get; set; }
@@ -21,5 +21,7 @@ namespace ITQJ.Domain.Models
         [ForeignKey(nameof(DocumentType))]
         public int DocumentTypeId { get; set; }
         public virtual DocumentType DocumentType { get; set; }
+
+        public virtual PersonalInfo PersonalInfo { get; set; }
     }
 }

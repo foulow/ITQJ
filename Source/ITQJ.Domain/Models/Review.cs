@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ITQJ.Domain.Models
+﻿namespace ITQJ.Domain.Models
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     [Table("Reviews")]
-    class Review
+    public class Review
     {
         [Key]
         public int Id { get; set; }
@@ -19,5 +19,7 @@ namespace ITQJ.Domain.Models
         [Required]
         [ForeignKey(nameof(User))]
         public int UserId { get; set; }
+
+        public virtual User User { get; set; }
     }
 }

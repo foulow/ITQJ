@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ITQJ.Domain.Models
+﻿namespace ITQJ.Domain.Models
 {
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     [Table("PersonalInfos")]
-    class PersonalInfo
+    public class PersonalInfo
     {
         [Key]
         public int Id { get; set; }
@@ -43,5 +43,6 @@ namespace ITQJ.Domain.Models
         public virtual User User { get; set; }
 
         public virtual ICollection<ProfesionalSkill> ProfesionalSkills { get; set; }
+
     }
 }

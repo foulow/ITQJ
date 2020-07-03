@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ITQJ.Domain.Models
+﻿namespace ITQJ.Domain.Models
 {
+
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     [Table("Users")]
-    class User
+    public class User
     {
         [Key]
         public int Id { get; set; }
@@ -26,6 +28,17 @@ namespace ITQJ.Domain.Models
         [Required]
         [ForeignKey(nameof(Rol))]
         public int RolId { get; set; }
+
         public virtual Rol Rol { get; set; }
+
+        public virtual PersonalInfo PersonalInfo { get; set; }
+
+        public virtual ICollection<Project> Projects { get; set; }
+
+        public virtual ICollection<Postulant> Postulants { get; set; }
+
+        public virtual ICollection<Message> Messages { get; set; }
+
+        public virtual ICollection<Review> Reviews { get; set; }
     }
 }

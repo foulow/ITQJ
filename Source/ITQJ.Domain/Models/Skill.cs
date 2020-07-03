@@ -1,11 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-
-namespace ITQJ.Domain.Models
+﻿namespace ITQJ.Domain.Models
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     [Table("Skills")]
-    class Skill
+    public class Skill
     {
         [Key]
         public int Id { get; set; }
@@ -13,5 +12,7 @@ namespace ITQJ.Domain.Models
         [Required]
         [StringLength(25)]
         public string Name { get; set; }
+
+        public virtual ProfesionalSkill ProfesionalSkill { get; set; }
     }
 }
