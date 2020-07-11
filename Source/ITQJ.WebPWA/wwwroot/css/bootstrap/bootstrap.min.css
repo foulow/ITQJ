@@ -69,6 +69,7 @@ a.bg-success:hover,
 button.bg-success:focus,
 button.bg-success:hover{background-color:#1e7e34!important}
 
+.bg-lightcyan{background-color:#F1FEFE!important}a.bg-lightcyan:focus,a.bg-lightcyan:hover,button.bg-lightcyan:focus,button.bg-lightcyan:hover{background-color:#F1FEFE!important}
 .bg-info{background-color:#17a2b8!important}a.bg-info:focus,a.bg-info:hover,button.bg-info:focus,button.bg-info:hover{background-color:#117a8b!important}
 .bg-warning{background-color:#ffc107!important}a.bg-warning:focus,a.bg-warning:hover,button.bg-warning:focus,button.bg-warning:hover{background-color:#d39e00!important}
 .bg-danger{background-color:#dc3545!important}a.bg-danger:focus,a.bg-danger:hover,button.bg-danger:focus,button.bg-danger:hover{background-color:#bd2130!important}

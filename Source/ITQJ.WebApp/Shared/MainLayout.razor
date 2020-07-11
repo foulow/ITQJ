@@ -1,15 +1,47 @@
 ﻿@inherits LayoutComponentBase
-
-<div class="sidebar">
-    <NavMenu />
-</div>
+@inject IBootstrapCss BootstrapCss
 
 <div class="main">
-    <div class="top-row px-4">
-        <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
+
+    <div class="top-row bg-dark">
+
+        <div class="col pt-3 bg-primary">
+           
+            <img  src="/wwwroot/Images/Logo.png" asp-append-version="true" width="150" height="50"/>
+       
+        </div>
+
+        <div class="text-center border-left col-6 pt-5 border-right bg-primary">
+                <ITQJ.WebApp.Pages.Login />
+        </div>
+
+        <div class="col pt-4  bg-primary">
+
+            <div width="100" class="text-center pt-3">
+
+                <a href="#" class="btn btn-sm btn-dark">Registarse / Inicio Sección</a>
+
+            </div>
+
+        </div>
+
     </div>
 
     <div class="content px-4">
         @Body
     </div>
+
 </div>
+
+@code{        
+
+    protected override async Task OnInitializedAsync()
+    {
+        await BootstrapCss.SetBootstrapCss("4.5.0");
+    }
+
+
+    string img = "/wwwroot/Images/Logo.png";
+
+
+}
