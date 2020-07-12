@@ -1,0 +1,75 @@
+﻿@page "/Register"
+@layout AuthLayout
+@using ITQJ.Domain.Models;
+
+<div class="row">
+
+    <div class="col-12">
+
+        <h2>Crear nuevo usuario</h2>
+
+        <EditForm Model="user" OnValidSubmit="RegisterUser">
+            <DataAnnotationsValidator />
+            <ValidationSummary/>
+    
+            <label>Nombre de Usuario</label>
+            @*<RadzenTextBox @bind-Value="@user.UserName"></RadzenTextBox>
+
+            <label>Contraseña</label>
+            <RadzenPassword @bind-Value="@user.Password"></RadzenPassword>
+
+            <label>Email</label>
+            <RadzenEmailValidator @bind-Value="@user.Email"></RadzenEmailValidator>
+
+            <label>Rol</label>
+            <RadzenRadioButtonList TValue="int?" Change="@((args) => { Change((int)args); })">
+                <Items>
+                    <RadzenRadioButtonListItem Text="Empleador" Value="1" TValue="int" />
+                    <RadzenRadioButtonListItem Text="Postulante" Value="2" TValue="int" />
+                </Items>
+            </RadzenRadioButtonList>
+
+            <hr />
+
+            <RadzenButton ButtonType="Radzen.ButtonType.Submit" Text="Registarse" ButtonStyle="Radzen.ButtonStyle.Primary" class="btn-block" mr-2 />
+            <RadzenButton ButtonType="Radzen.ButtonType.Submit" Text="Nuevo Usuario" ButtonStyle="Radzen.ButtonStyle.Secondary" class="btn-block" mr-2 />*@
+
+        </EditForm>
+
+    </div>
+
+</div>
+
+@code
+{
+    User user = new User();
+
+    int value = 0;
+
+    void Change(int? value)
+    {
+        value++;
+
+        if (value == 1)
+        {
+            user.Rol = new Rol
+            {
+                Id = (int)value,
+                Name = "Empleador"
+            };
+        }
+        else
+        {
+            user.Rol = new Rol
+            {
+                Id = (int)value,
+                Name = "Postulante"
+            };
+        }
+    }
+
+    public void RegisterUser()
+    {
+
+    }
+}

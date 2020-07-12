@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using BlazorStrap;
+using Radzen;
 
 namespace ITQJ.WebPWA
 {
@@ -21,6 +22,8 @@ namespace ITQJ.WebPWA
             builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
             builder.Services.AddBootstrapCss();
+            //builder.Services.AddScoped<DialogService>();
+            //builder.Services.AddScoped<NotificationService>();
 
             await builder.Build().RunAsync();
         }
