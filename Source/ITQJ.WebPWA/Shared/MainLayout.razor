@@ -7,7 +7,7 @@
 
         <div class="col pt-3 bg-primary">
 
-            <img src="/wwwroot/Images/Logo.png" asp-append-version="true" width="150" height="50" />
+            <img src="../wwwroot/Images/Logo.png" asp-append-version="true" width="150" height="50" />
 
         </div>
 
@@ -37,7 +37,7 @@
 
             <div width="100" class="text-center pt-3">
 
-                <a href="#" class="btn btn-sm btn-dark">Registarse / Inicio Sección</a>
+                <a href="Login" class="btn btn-sm btn-dark">Registarse / Inicio Sección</a>
 
             </div>
 
@@ -177,14 +177,14 @@
 
     <footer>
 
-        <div class="row p-3 bg-dark">
+        <div class="row bg-dark">
 
-            <div class="col ml-2 pb-3 bg-primary">
+            <div class="col pb-2 ml-5 bg-primary">
 
                
             </div>
 
-            <div class="text-center border-left col-6 pb-5 border-right bg-primary">
+            <div class="text-center border-left pb-3 col-6  border-right bg-primary">
 
                 <div class="text-center">
                     <span class="badge badge-dark badge-pill">© @DateTime.Now.Year.ToString() ITQJ </span>
@@ -192,7 +192,7 @@
 
             </div>
 
-            <div class="col  mr-2 pb-4  bg-primary">
+            <div class="col pb-2 mr-5 bg-primary">
 
 
             </div>
@@ -205,9 +205,25 @@
 
 @code{
 
+    private bool isServerSide = false;
     protected override async Task OnInitializedAsync()
     {
-        await BootstrapCss.SetBootstrapCss("4.5.0");
+        try
+        {
+            await BootstrapCss.SetBootstrapCss("Lux","4.3.1");
+        }
+        catch (Exception)
+        {
+            isServerSide = true;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(isServerSide && firstRender)
+        {
+            await BootstrapCss.SetBootstrapCss("Lux","4.3.1");
+        }
     }
 
 }
