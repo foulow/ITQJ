@@ -1,16 +1,34 @@
 ﻿@inherits LayoutComponentBase
 @inject IBootstrapCss BootstrapCss
 
-    @*<RadzenDialog />
-    <RadzenNotification />*@
+    <RadzenDialog />
+    <RadzenNotification />
 
-    <div class="main bg-lightcyan">
+    <div class="main ">
+        <!--bg-lightcyan-->
 
         <div class="top-row bg-dark">
 
             <div class="col pt-3 bg-primary">
 
-                <img src="" asp-append-version="true" width="150" height="50" />
+                <div style=" width:150px; height:75px; ">
+
+                    <img src="/assets/Logo.png" style="
+                         position: absolute;
+                         display: block;
+                         margin: 10px;
+                         top: 50%;
+                         left: 50%;
+                         width: 125px;
+                         height: 125px;
+                         transform: translate(-110%,-30%)
+                         " />
+
+                    <label style=" position:absolute;
+                                   bottom:0px;
+                                   left: 50%;"> Trabajos Rapidos </label>
+
+                </div>
 
             </div>
 
@@ -26,7 +44,7 @@
 
                         <ul class="collpse">
 
-                            <ITQJ.WebPWA.Pages.Menu />
+                            <ITQJ.WebPWA.Pages.P_Menu />
 
                         </ul>
 
@@ -40,7 +58,7 @@
 
                 <div width="100" class="text-center pt-3">
 
-                    <a href="Register" class="btn btn-sm btn-dark">Registarse / Inicio Sección</a>
+                    <a href="P_Register" class="btn btn-sm btn-dark">Registarse / Inicio Sección</a>
 
                 </div>
 

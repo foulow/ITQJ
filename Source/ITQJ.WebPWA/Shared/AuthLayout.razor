@@ -1,13 +1,21 @@
 ﻿@inherits LayoutComponentBase
 
-<div style="
-margin:auto; 
-margin-top:150px;
-width:450px;
-padding:30px;
-box-shadow: 5px 10px 18px #888888;
-border-radius: 20px;">
+<div class="p-3 h-100 w-100 position-absolute" style="top:0px; left:0;">
 
-    @Body
+        <img src="/assets/Empleos-Y-Negocios-.png" class="w-100 h-100" style=" position: absolute; display:inline-block; top:0px; left:0px;" />
 
+        <div style="        
+        position: absolute;
+        display: block;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        width: 450px;
+        padding: 30px;
+        box-shadow: 5px 10px 18px #888888;
+        border-radius: 20px;">
+
+            @Body
+
+        </div>
 </div>

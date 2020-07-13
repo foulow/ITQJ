@@ -10,13 +10,15 @@
     <link href="css/app.css" rel="stylesheet" />
     <link href="manifest.json" rel="manifest" />
     <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
-    <!--<link rel="stylesheet" href="_ content/Radzen.Blazor/css/default-base.css ">-->
-    <!--<link rel="stylesheet" href="_ content/Radzen.Blazor/css/default.css">-->
+    <link rel="stylesheet" href="_content/Radzen.Blazor/css/default-base.css ">
+    <!--<link rel="stylesheet" href="_content/Radzen.Blazor/css/default.css">-->
 
 </head>
 
 <body>
+
     <app>Loading...</app>
+    <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" Style="margin-bottom: 20px" />
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
@@ -26,7 +28,7 @@
     <script src="_framework/blazor.webassembly.js"></script>
     <script>navigator.serviceWorker.register('service-worker.js');</script>
 
-    <!--<script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>-->
+    <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
 
 </body>
 

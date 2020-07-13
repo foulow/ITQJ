@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ITQJ.WebPWA.Pages
+﻿namespace ITQJ.WebPWA.Class
 {
+    using System;
+    using System.Collections.Generic;
+
     public class UserManagerResponse
     {
         public string Message { get; set; }
