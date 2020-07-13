@@ -1,6 +1,6 @@
 {
-  "name": "ITQJ.WebApp",
-  "short_name": "ITQJ.WebApp",
+  "name": "ITQJ.WebPWA",
+  "short_name": "ITQJ.WebPWA",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
