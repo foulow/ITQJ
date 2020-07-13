@@ -1,6 +1,6 @@
 ﻿@page "/Register"
 @layout AuthLayout
-@using ITQJ.Domain.Models;
+@using ITQJ.WebPWA.Models;
 
 <div class="row">
 
@@ -10,29 +10,29 @@
 
         <EditForm Model="user" OnValidSubmit="RegisterUser">
             <DataAnnotationsValidator />
-            <ValidationSummary/>
-    
+            <ValidationSummary />
+
             <label>Nombre de Usuario</label>
             @*<RadzenTextBox @bind-Value="@user.UserName"></RadzenTextBox>
 
-            <label>Contraseña</label>
-            <RadzenPassword @bind-Value="@user.Password"></RadzenPassword>
+                <label>Contraseña</label>
+                <RadzenPassword @bind-Value="@user.Password"></RadzenPassword>
 
-            <label>Email</label>
-            <RadzenEmailValidator @bind-Value="@user.Email"></RadzenEmailValidator>
+                <label>Email</label>
+                <RadzenEmailValidator @bind-Value="@user.Email"></RadzenEmailValidator>
 
-            <label>Rol</label>
-            <RadzenRadioButtonList TValue="int?" Change="@((args) => { Change((int)args); })">
-                <Items>
-                    <RadzenRadioButtonListItem Text="Empleador" Value="1" TValue="int" />
-                    <RadzenRadioButtonListItem Text="Postulante" Value="2" TValue="int" />
-                </Items>
-            </RadzenRadioButtonList>
+                <label>Rol</label>
+                <RadzenRadioButtonList TValue="int?" Change="@((args) => { Change((int)args); })">
+                    <Items>
+                        <RadzenRadioButtonListItem Text="Empleador" Value="1" TValue="int" />
+                        <RadzenRadioButtonListItem Text="Postulante" Value="2" TValue="int" />
+                    </Items>
+                </RadzenRadioButtonList>
 
-            <hr />
+                <hr />
 
-            <RadzenButton ButtonType="Radzen.ButtonType.Submit" Text="Registarse" ButtonStyle="Radzen.ButtonStyle.Primary" class="btn-block" mr-2 />
-            <RadzenButton ButtonType="Radzen.ButtonType.Submit" Text="Nuevo Usuario" ButtonStyle="Radzen.ButtonStyle.Secondary" class="btn-block" mr-2 />*@
+                <RadzenButton ButtonType="Radzen.ButtonType.Submit" Text="Registarse" ButtonStyle="Radzen.ButtonStyle.Primary" class="btn-block" mr-2 />
+                <RadzenButton ButtonType="Radzen.ButtonType.Submit" Text="Nuevo Usuario" ButtonStyle="Radzen.ButtonStyle.Secondary" class="btn-block" mr-2 />*@
 
         </EditForm>
 
