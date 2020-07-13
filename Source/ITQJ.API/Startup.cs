@@ -60,11 +60,19 @@ namespace ITQJ.API
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
+            })
+                .AddJwtBearer(options =>
             {
                 options.Authority = Configuration["AuthorityAuth0"];
                 options.Audience = Configuration["AudienceURL"];
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Profesional", p => p.RequireClaim("scope", "registered_profesional"));
+                options.AddPolicy("Contratist", p => p.RequireClaim("scope", "registered_contratits"));
             });
 
             var migrationsAssembly = typeof(Startup).Assembly.GetName().FullName;
