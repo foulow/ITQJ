@@ -1,6 +1,5 @@
 ﻿namespace ITQJ.Domain.Models
 {
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,12 +13,13 @@
         [ForeignKey(nameof(User))]
         public int UserId { get; set; }
 
-        public virtual ICollection<User> Users { get; set; }
+        public virtual User User { get; set; }
 
         [Required]
         [ForeignKey(nameof(Project))]
         public int ProjectId { get; set; }
 
+        public virtual Project Project { get; set; }
 
     }
 }

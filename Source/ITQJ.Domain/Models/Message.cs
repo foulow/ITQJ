@@ -3,11 +3,15 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("Message")]
+    [Table("Messages")]
     public class Message
     {
         [Key]
         public int Id { get; set; }
+
+        [Required]
+        [StringLength(500)]
+        public string Text { get; set; }
 
         [Required]
         [ForeignKey(nameof(User))]
@@ -19,6 +23,6 @@
 
         public virtual User User { get; set; }
 
-        public virtual Project  Project { get; set; }
+        public virtual Project Project { get; set; }
     }
 }

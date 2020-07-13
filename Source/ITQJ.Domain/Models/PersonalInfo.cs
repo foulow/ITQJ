@@ -28,9 +28,6 @@
         [StringLength(25)]
         public string PagLink { get; set; }
 
-        [Required]
-        [StringLength(25)]
-        public string LegalDocumentNumber { get; set; }
 
         [Required]
         [ForeignKey(nameof(LegalDocument))]

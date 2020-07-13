@@ -5,7 +5,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("Project")]
+    [Table("Projects")]
     public class Project
     {
         [Key]
@@ -38,8 +38,8 @@
         public int UserId { get; set; }
         public virtual User User { get; set; }
 
-        public ICollection<Postulant> Postulants { get; set; }
+        public virtual ICollection<Postulant> Postulants { get; set; }
 
-        public ICollection<Message> Messages { get; set; }
+        public virtual ICollection<Message> Messages { get; set; }
     }
 }

@@ -3,7 +3,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("LegalDocument")]
+    [Table("LegalDocuments")]
     public class LegalDocument
     {
         [Key]
