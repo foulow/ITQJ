@@ -2,6 +2,8 @@
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin:0px;
+    height:100%;
 }
 
 a, .btn-link {
