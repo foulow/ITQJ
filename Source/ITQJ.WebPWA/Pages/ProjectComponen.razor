@@ -1,0 +1,36 @@
+﻿@typeparam TElemento
+
+@if(Lista == null)
+{
+    @Cargando
+    <label>Cargando...</label>
+}
+else if(Lista.Count == 0)
+{
+    @SinElementos
+    <label>No hay proyectos para mostrar</label>
+}
+else
+{
+    foreach(var dato in Lista)
+    {
+        @Elementos(dato)
+    }
+}
+
+
+@code
+{
+    [Parameter]
+    public List<TElemento> Lista { get; set; }
+
+    [Parameter]
+    public RenderFragment<TElemento> Elementos { get; set; }
+
+    [Parameter]
+    public RenderFragment Cargando { get; set; }
+
+    [Parameter]
+    public RenderFragment SinElementos { get; set; }
+
+}

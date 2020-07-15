@@ -2,6 +2,117 @@
 @*@layout AuthLayout*@
 
 <br />
-<br />
-<P_FiltroBusqueda />
 
+<FiltroBusquedaComponen />
+
+<br />
+<br />
+
+<ProjectComponen Lista="ListPer">
+
+    <Elementos>
+
+        <br />
+
+        <button>
+
+            <div style="
+            height: 100px;
+            box-shadow: 5px 10px 18px #888888;
+            border-radius: 20px;">
+
+                <div class="col d-inline-block">
+
+                    <div class="col d-inline"><span> <strong>Titulo del Proyecto: </strong> </span>@context.nombre </div>
+
+                    <div class="col d-inline"><span> <strong>Publicacdo por: </strong> </span>@context.empleador </div>
+
+                </div>
+
+                <div class="col d-inline-block">
+                    <span> <strong>Descripción:</strong> </span>
+                    @context.descriccionEmpleo
+
+                </div>
+
+                <div class="col d-inline-block">
+
+                    <div class="col d-inline"><span> <strong>Publicado: </strong> </span>@context.fechaPublicacion</div>
+
+                    <div class="col d-inline"><span> <strong>Cierre de la publicacion: </strong> </span>@context.fechaCierre </div>
+
+                </div>
+
+            </div>
+
+        </button>
+
+        <br />
+
+    </Elementos>
+
+</ProjectComponen>
+
+
+@code
+{
+    public void llamada()
+    {
+
+    }
+
+    class project
+    {
+        public string nombre { get; set; }
+        public string fechaPublicacion { get; set; }
+        public string fechaCierre { get; set; }
+        public string empleador { get; set; }
+        public string descriccionEmpleo { get; set; }
+    }
+
+
+    List<project> ListPer = new List<project>()
+{
+        new project()
+        {
+            nombre = "pagina web",
+            fechaPublicacion = "14/7/2020",
+            fechaCierre = "20/7/2020",
+            empleador = "Jian contrerar",
+            descriccionEmpleo = "Requiero una pagina web para mi dienda de ropa,la esperanza."
+        },
+        new project()
+        {
+            nombre = "desarrollar software",
+            fechaPublicacion = "11/7/2020",
+            fechaCierre = "5/8/2020",
+            empleador = "marlon martines",
+            descriccionEmpleo = "buscon persona con esperiencia como programador en c# para programar sistema de escritorio."
+        },
+        new project()
+        {
+            nombre = "aplicacion movil",
+            fechaPublicacion = "5/7/2020",
+            fechaCierre = "15/7/2020",
+            empleador = "maria",
+            descriccionEmpleo = "hacer una aplicacion para el movil."
+        },
+        new project()
+        {
+            nombre = "Game Unit",
+            fechaPublicacion = "20/6/2020",
+            fechaCierre = "",
+            empleador = "Team Cherry",
+            descriccionEmpleo = "Buscamos programador en Unit con minimo 2 años de experiencia creando juegos."
+        },
+        new project()
+        {
+            nombre = "pagina web",
+            fechaPublicacion = "12/7/2020",
+            fechaCierre = "15/8/2020",
+            empleador = "jose luis ledesma",
+            descriccionEmpleo = "Requiero una pagina web para vender mis productos."
+        }
+    };
+
+}
