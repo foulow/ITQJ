@@ -1,5 +1,9 @@
-﻿function DimencionesPantalla()
+﻿function ScrollUp()
 {
 
-    alert("La resolución de tu pantalla es: " + screen.width + " x " + screen.height);
+    window.scroll({
+        top: 0,
+        behavior: 'smooth'
+    });
+
 }

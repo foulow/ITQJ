@@ -1,0 +1,119 @@
+﻿@*<BSPagination>
+    <BSPaginationItem>
+        <BSPaginationLink Href="#" PaginationLinkType="PaginationLinkType.PreviousText" />
+    </BSPaginationItem>
+    <BSPaginationItem>
+        <BSPaginationLink Href="#" PaginationLinkType="PaginationLinkType.Custom">1</BSPaginationLink>
+    </BSPaginationItem>
+    <BSPaginationItem>
+        <BSPaginationLink Href="#" PaginationLinkType="PaginationLinkType.Custom">2</BSPaginationLink>
+    </BSPaginationItem>
+    <BSPaginationItem>
+        <BSPaginationLink Href="#" PaginationLinkType="PaginationLinkType.Custom">3</BSPaginationLink>
+    </BSPaginationItem>
+    <BSPaginationItem>
+        <BSPaginationLink Href="#" PaginationLinkType="PaginationLinkType.NextText" />
+    </BSPaginationItem>
+</BSPagination>*@
+
+<nav aria-label="Page navigation exmple">
+
+    <ul class="pagination justify-content-center">
+
+        @foreach (var pagina in paginas)
+        {
+
+            <li @onclick="@(() => PaginaSeleccionadaInterno(pagina) )"
+                style="cursor: pointer;" class="page-item @(pagina.Habilitada ? null : "disabled") @(pagina.Activa ? "active" : null)">
+                
+                <span class="page-link"> @pagina.Texto </span>
+            
+            </li>
+
+        }
+
+    </ul>
+
+</nav>
+
+@code {
+
+    [Parameter] public int PaginaActual { get; set; } = 1;
+    [Parameter] public int PaginasTotales { get; set; }
+    [Parameter] public int Radio { get; set; } = 3;
+    [Parameter] public EventCallback<int> PaginaSeleccionada { get; set; }
+    List<PaginaModel> paginas = new List<PaginaModel>();
+
+    protected override void OnParametersSet()
+    {
+        CargarPaginas();
+    }
+
+
+    private async Task PaginaSeleccionadaInterno(PaginaModel pagina)
+    {
+        if (pagina.Pagina == PaginaActual)
+        {
+            return;
+        }
+
+        if (!pagina.Habilitada)
+        {
+            return;
+        }
+
+        PaginaActual = pagina.Pagina;
+
+        CargarPaginas();
+
+        await PaginaSeleccionada.InvokeAsync(pagina.Pagina);
+    }
+
+
+    private void CargarPaginas()
+    {
+        paginas = new List<PaginaModel>();
+        var PaginaAnteriorHabilitada = PaginaActual != 1;
+        var paginaAnterior = (PaginaActual == 1) ? 1 : PaginaActual - 1;
+        paginas.Add(new PaginaModel(paginaAnterior, PaginaAnteriorHabilitada, "Anterior"));
+
+        for(int i = 1; i <= PaginasTotales; i++)
+        {
+            if(i >= PaginaActual - Radio && i <= PaginaActual + Radio)
+            {
+                paginas.Add(new PaginaModel(i) { Activa = PaginaActual == i });
+            }
+        }
+
+        var paginaSiguienteHabilitada = PaginaActual != PaginasTotales;
+        var paginaSiguiente = (PaginaActual == PaginasTotales) ? PaginasTotales : PaginaActual + 1;
+        paginas.Add(new PaginaModel(paginaSiguiente, paginaSiguienteHabilitada, "Siguiente"));
+    }
+
+    class PaginaModel
+    {
+        public PaginaModel(int pagina) : this(pagina, true)
+        {
+
+        }
+
+        public PaginaModel(int pagina, bool habilitada) : this(pagina, habilitada, pagina.ToString())
+        {
+
+        }
+
+        public PaginaModel(int pagina, bool habilitada, string texto)
+        {
+            Pagina = pagina;
+            Habilitada = habilitada;
+            Texto = texto;
+        }
+
+        public string Texto { get; set; }
+        public int Pagina { get; set; }
+        public bool Habilitada { get; set; }
+        public bool Activa { get; set; }
+
+    }
+
+}

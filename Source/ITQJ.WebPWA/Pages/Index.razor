@@ -1,5 +1,6 @@
 ﻿@page "/"
-@*@layout AuthLayout*@
+
+@inject IJSRuntime js
 
 <br />
 
@@ -8,6 +9,10 @@
 <br />
 <br />
 <br />
+<br />
+
+<PaginationComponen PaginasTotales="10" PaginaActual="1" />
+
 <br />
 
 <div>
@@ -84,13 +89,14 @@
 
 </div>
 
-
+<img src="/assets/flecha-hacia-arriba.svg" alt="flecha hacia arriba" @onclick="GoUp" style=" background-color:white; border:1px double white; border-radius: 50%; height:60px; width:60px; float:right; cursor:pointer; position:relative; bottom:40px; " />
 
 @code
 {
-    public void llamada()
-    {
 
+    private async void GoUp()
+    {
+        await js.InvokeVoidAsync(identifier: "ScrollUp");
     }
 
     class project
