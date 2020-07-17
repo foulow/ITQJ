@@ -1,0 +1,191 @@
+﻿@page "/ProfesionalSkillPage"
+@using ITQJ.WebPWA.Models;
+
+<br />
+<br />
+<br />
+
+<h1> Habilidades profesional </h1>
+
+<hr />
+
+<br />
+<br />
+<br />
+
+
+<div class="icon-pack4">
+
+    <div class="ContSkill1">
+
+        <div class="conte" @onclick="( () => { check_CShart = check_CShart == false ? true : false; })">
+
+            <div class="ContSkill2">
+
+                <label> C# </label>
+
+                <input type="checkbox" @bind="check_CShart" value="C#">
+
+                <div id="Estellas"><a onclick=""><i aria-hidden="true"><img src="/icon-Tecnology/c_sharp.png" /></i></a> </div>
+
+            </div>
+
+            <div class="ContPorcen">
+
+                <label> % </label>
+
+                <input type="number" checked="checked"  value="10" min="10" max="100" class="Procen">
+
+            </div>
+
+        </div>
+
+
+        <div class="conte" @onclick="( () => { check_CShart = check_CShart == false ? true : false; })">
+
+            <div class="ContSkill2">
+
+                <label> C++ </label>
+
+                <input type="checkbox" value="C++">
+
+                <div><a><i aria-hidden="true"> <img src="/icon-Tecnology/atom.png" /></i></a> </div>
+
+            </div>
+
+            <div class="ContPorcen">
+
+                <label> % </label>
+
+                <input type="number" value="10" min="10" max="100" class="Procen">
+
+            </div>
+
+        </div>
+
+
+        <div class="conte" @onclick="( () => { check_CShart = check_CShart == false ? true : false; })">
+
+            <div class="ContSkill2">
+
+                <label> Java </label>
+
+                <input type="checkbox" value="Java">
+
+                <div><a><i aria-hidden="true"> <img src="/icon-Tecnology/java.png" /></i></a> </div>
+
+            </div>
+
+            <div class="ContPorcen">
+
+                <label> % </label>
+
+                <input type="number" value="10" min="10" max="100" class="Procen">
+
+            </div>
+
+        </div>
+
+        <div class="conte" @onclick="( () => { check_CShart = check_CShart == false ? true : false; })">
+
+            <div class="ContSkill2">
+
+                <label> Objective C </label>
+
+                <input type="checkbox" value="Objective C">
+
+                <div><a><i aria-hidden="true"> <img src="/icon-Tecnology/Objective-C.png" /></i></a> </div>
+
+            </div>
+
+            <div class="ContPorcen">
+
+                <label> % </label>
+
+                <input type="number" value="10" min="10" max="100" class="Procen">
+
+            </div>
+
+        </div>
+
+        <div class="conte" @onclick="( () => { check_CShart = check_CShart == false ? true : false; })">
+
+            <div class="ContSkill2">
+
+                <label> Python </label>
+
+                <input type="checkbox" value="Python">
+
+                <div><a><i aria-hidden="true"> <img src="/icon-Tecnology/python.png" /></i></a> </div>
+
+            </div>
+
+            <div class="ContPorcen" @onclick="( () => { check_CShart = check_CShart == false ? true : false; })">
+
+                <label> % </label>
+
+                <input type="number" value="10" min="10" max="100" class="Procen">
+
+            </div>
+
+        </div>
+
+        <div class="conte" @onclick="( () => { check_CShart = check_CShart == false ? true : false; })">
+
+            <div class="ContSkill2">
+
+                <label> PHP </label>
+
+                <input type="checkbox" value="PHP">
+
+                <div><a><i aria-hidden="true"> <img src="/icon-Tecnology/php.png" /></i></a> </div>
+
+            </div>
+
+            <div class="ContPorcen">
+
+                <label> % </label>
+
+                <input type="number" value="10" min="10" max="100" class="Procen">
+
+            </div>
+
+        </div>
+
+        <div class="conte" @onclick="( () => { check_CShart = check_CShart == false ? true : false; })">
+
+            <div class="ContSkill2">
+
+                <label> Angular </label>
+
+                <input type="checkbox" value="Angular">
+
+                <div><a><i aria-hidden="true"> <img src="/icon-Tecnology/angularjs.png" /></i> </a> </div>
+
+            </div>
+
+            <div class="ContPorcen">
+
+                <label> % </label>
+
+                <input type="number" value="10" min="10" max="100" class="Procen">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<br />
+<br />
+<br />
+
+
+@code
+{
+    ProfesionalSkill profesionalSkill = new ProfesionalSkill();
+
+    bool check_CShart, check_ang;
+}

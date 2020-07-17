@@ -1,0 +1,10 @@
+﻿
+<div class="progress-bar1 blue stripes shine">
+    <span style=" width: @(Convert.ToString(Porciento) + "%")"></span>
+</div>
+
+@code 
+{
+    [Parameter] 
+    public int Porciento { get; set; } = 0;
+}

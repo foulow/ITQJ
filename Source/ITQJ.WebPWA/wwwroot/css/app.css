@@ -216,20 +216,6 @@ app {
     transition: .2s;
 }
 
-.show{
-    z-index: 10;
-}
-
-.show .go-top-button{
-    animation: popup .3s ease-in-out;
-    width: 6.6rem;
-    height: 6.6rem;
-    z-index: 11;
-}
-
-.show i{
-    transform: translate(-50%,-50%) scale(1);
-}
 
 @keyframes popup{
     0%{
@@ -245,3 +231,7 @@ app {
         height: 6.6rem;
     }
 }
+
+
+
+   
