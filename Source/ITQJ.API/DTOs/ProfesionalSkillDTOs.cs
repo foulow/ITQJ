@@ -1,6 +1,4 @@
-﻿using ITQJ.Domain.Models;
-
-namespace ITQJ.API.DTOs
+﻿namespace ITQJ.API.DTOs
 {
     public class ProfesionalSkillCreateDTO
     {
@@ -11,6 +9,6 @@ namespace ITQJ.API.DTOs
 
     public class ProfesionalSkillResponseDTO : ProfesionalSkillCreateDTO
     {
-        public Skill Skill { get; set; }
+        public SkillDTO Skill { get; set; }
     }
 }

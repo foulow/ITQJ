@@ -1,0 +1,7 @@
+2020-07-18 03:51:52.773 -04:00 [FTL] Server-side Error: IDX20803: Unable to obtain configuration from: '[PII is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+2020-07-18 04:07:19.508 -04:00 [FTL] Server-side Error: IDX20803: Unable to obtain configuration from: '[PII is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+2020-07-18 04:18:10.638 -04:00 [FTL] Server-side Error: IDX20803: Unable to obtain configuration from: '[PII is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+2020-07-18 05:03:23.709 -04:00 [ERR] Database data is not fetched.
+Error: Connection Timeout Expired.  The timeout period elapsed while attempting to consume the pre-login handshake acknowledgement.  This could be because the pre-login handshake failed or the server was unable to respond back in time.  The duration spent while attempting to connect to this server was - [Pre-Login] initialization=16741; handshake=207; .
+2020-07-18 05:03:23.853 -04:00 [ERR] Database data is not fetched.
+Error: Connection Timeout Expired.  The timeout period elapsed while attempting to consume the pre-login handshake acknowledgement.  This could be because the pre-login handshake failed or the server was unable to respond back in time.  The duration spent while attempting to connect to this server was - [Pre-Login] initialization=16741; handshake=207; .

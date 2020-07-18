@@ -1,8 +1,12 @@
 using AutoMapper;
 using FluentValidation.AspNetCore;
+
+using IdentityServer4.AccessTokenValidation;
+//using Microsoft.AspNetCore.Authentication.JwtBearer;
+
 using ITQJ.API.DTOs;
 using ITQJ.EFCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -15,16 +19,17 @@ using Serilog;
 using System;
 using System.Threading.Tasks;
 
+
 namespace ITQJ.API
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -32,7 +37,7 @@ namespace ITQJ.API
             services.AddHttpsRedirection(options =>
             {
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-                options.HttpsPort = 44388;
+                options.HttpsPort = 44338;
             });
 
             services.AddCors(options =>
@@ -46,34 +51,26 @@ namespace ITQJ.API
                     });
             });
 
-            services.AddDbContext<ApplicationDBContext>(Option =>
-            {
-                Option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            });
-
             services.AddControllers()
                     .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<UserCreateDTO>());
             ;
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-                .AddJwtBearer(options =>
-            {
-                options.Authority = Configuration["AuthorityAuth0"];
-                options.Audience = Configuration["AudienceURL"];
-            });
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddJwtBearer("Bearer", options =>
+                {
+                    options.RequireHttpsMetadata = true;
+                    options.Authority = Configuration["AuthorityURL"];
+                    options.Audience = Configuration["APIResourceName"];
+                });
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Profesional", p => p.RequireClaim("scope", "registered_profesional"));
-                options.AddPolicy("Contratist", p => p.RequireClaim("scope", "registered_contratits"));
-            });
+            // TODO: enable user role base authorization.
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("Profesional", p => p.RequireClaim("scope", "rol_profesional"));
+            //    options.AddPolicy("Contratista", p => p.RequireClaim("scope", "rol_contratista"));
+            //});
 
             var migrationsAssembly = typeof(Startup).Assembly.GetName().FullName;
             services.AddDbContext<ApplicationDBContext>(options =>
@@ -107,10 +104,12 @@ namespace ITQJ.API
 
             app.UseHttpsRedirection();
 
+
             app.UseRouting();
 
             app.UseCors();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

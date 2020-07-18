@@ -1,6 +1,4 @@
-﻿using ITQJ.Domain.Models;
-
-namespace ITQJ.API.DTOs
+﻿namespace ITQJ.API.DTOs
 {
     public class LegalDocumentCreateDTO
     {
@@ -15,6 +13,6 @@ namespace ITQJ.API.DTOs
 
     public class LegalDocumentResponseDTO : LegalDocumentCreateDTO
     {
-        public DocumentType DocumentType { get; set; }
+        public DocumentTypeDTO DocumentType { get; set; }
     }
 }

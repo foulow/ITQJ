@@ -19,7 +19,7 @@ namespace ITQJ.API
                 .MinimumLevel.Override("System", LogEventLevel.Warning)
                 .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
                 .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Literate)
-                .WriteTo.File("server_e_logs", Serilog.Events.LogEventLevel.Error, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+                .WriteTo.File("serverAPI_e_logs", Serilog.Events.LogEventLevel.Error, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
                 .CreateLogger();
 
             try
@@ -45,6 +45,10 @@ namespace ITQJ.API
             {
                 Log.Fatal("Host stoped: {0}", ex.Message);
                 throw;
+            }
+            finally
+            {
+                Log.CloseAndFlush();
             }
         }
 

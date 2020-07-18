@@ -1,6 +1,4 @@
-﻿using ITQJ.Domain.Models;
-
-namespace ITQJ.API.DTOs
+﻿namespace ITQJ.API.DTOs
 {
     public class UserCreateDTO
     {
@@ -24,6 +22,6 @@ namespace ITQJ.API.DTOs
 
         public string Email { get; set; }
 
-        public Rol Rol { get; set; }
+        public RolDTO Rol { get; set; }
     }
 }
