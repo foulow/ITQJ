@@ -48,9 +48,9 @@ namespace ITQJ.OAuth
 
                     AllowedScopes = new[]
                     {
-                        "itqj_api",
                         IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "itqj_api"
                     }
                 }
             };

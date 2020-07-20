@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ITQJ.OAuth
@@ -38,6 +39,7 @@ namespace ITQJ.OAuth
 
             // uncomment, if you want to add an MVC-based UI
             services.AddControllersWithViews();
+            services.AddMvc(options => { options.EnableEndpointRouting = false; });
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
@@ -71,6 +73,8 @@ namespace ITQJ.OAuth
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
             })
+                // this adds the test user root password root to the IDP server.
+                .AddTestUsers(Config.Users.ToList())
                 // this adds the config data from DB (clients, resources, CORS)
                 .AddConfigurationStore(options =>
                 {
@@ -126,10 +130,7 @@ namespace ITQJ.OAuth
 
             // uncomment, if you want to add MVC
             app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapDefaultControllerRoute();
-            });
+            app.UseMvcWithDefaultRoute();
         }
     }
 }

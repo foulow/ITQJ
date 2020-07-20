@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System;
 using System.Threading.Tasks;
@@ -57,20 +58,32 @@ namespace ITQJ.API
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+            //services.AddAuthentication(options =>
+            //{
+            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //})
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddJwtBearer("Bearer", options =>
                 {
                     options.RequireHttpsMetadata = true;
                     options.Authority = Configuration["AuthorityURL"];
-                    options.Audience = Configuration["APIResourceName"];
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false
+                    };
                 });
 
             // TODO: enable user role base authorization.
-            //services.AddAuthorization(options =>
-            //{
-            //    options.AddPolicy("Profesional", p => p.RequireClaim("scope", "rol_profesional"));
-            //    options.AddPolicy("Contratista", p => p.RequireClaim("scope", "rol_contratista"));
-            //});
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ApiScope", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", Configuration["ApiResources:Name"]);
+                });
+            });
 
             var migrationsAssembly = typeof(Startup).Assembly.GetName().FullName;
             services.AddDbContext<ApplicationDBContext>(options =>
@@ -109,11 +122,19 @@ namespace ITQJ.API
 
             app.UseCors();
 
+            //app.UseIdentityServerAuthenticarion(new IdentityServerAuthenticationOptions
+            //{
+            //    RequireHttpsMetadata = true,
+            //    Authority = Configuration["AuthorityURL"],
+            //    ApiName = Configuration["APIResourceName"]
+            //});
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
+                //endpoints.MapControllers()
+                //    .RequireAuthorization("ApiScope");
                 endpoints.MapControllers();
             });
         }

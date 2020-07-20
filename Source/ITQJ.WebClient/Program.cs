@@ -1,13 +1,11 @@
-using ITQJ.EFCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using System;
 
-namespace ITQJ.API
+namespace ITQJ.WebClient
 {
     public class Program
     {
@@ -28,16 +26,7 @@ namespace ITQJ.API
                 var host = CreateHostBuilder(args).Build();
                 Log.Information("Host builded.");
 
-                using (var serviceScope = host.Services.CreateScope())
-                {
-                    var services = serviceScope.ServiceProvider;
-                    var dbConfigContext = services.GetRequiredService<ApplicationDBContext>();
 
-                    if (dbConfigContext.IsDataFetched() != DBState.Fetched)
-                    {
-                        dbConfigContext.FetchDataBase();
-                    }
-                }
                 Log.Information("Host runing...");
                 host.Run();
             }

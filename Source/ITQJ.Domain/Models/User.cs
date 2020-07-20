@@ -17,7 +17,7 @@
 
         [Required]
         [DataType(DataType.Password)]
-        [StringLength(25)]
+        [StringLength(500)]
         public string Password { get; set; }
 
         [Required]
