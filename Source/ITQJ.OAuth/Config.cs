@@ -38,12 +38,12 @@ namespace ITQJ.OAuth
                 new Client
                 {
                     ClientId = "itqj_web_client",
-                    ClientName = "ITQJ-WebPWA",
+                    ClientName = "ITQJ-WebClient",
                     ClientSecrets = { new Secret("AAE3727D-88FA-44B8-B406-0CA2AE75C7C3".Sha256()) },
                     UpdateAccessTokenClaimsOnRefresh = true,
                     AccessTokenLifetime = 43200,
 
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
+                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
                     RequirePkce = true,
 
                     AllowedScopes = new[]
@@ -51,7 +51,38 @@ namespace ITQJ.OAuth
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         "itqj_api"
-                    }
+                    },
+
+                    RedirectUris = new[]
+                    {
+                        "https://localhost:44348/signin-oidc"
+                    },
+                    PostLogoutRedirectUris = { "https://localhost:44348/signout-callback-oidc" }
+                },
+
+                new Client
+                {
+                    ClientId = "itqj_implicit_web_client",
+                    ClientName = "ITQJ-WebClient-Implicit",
+                    ClientSecrets = { new Secret("AAE3727D-88FA-44B8-B406-0CA2AE75C7C3".Sha256()) },
+                    UpdateAccessTokenClaimsOnRefresh = true,
+                    AccessTokenLifetime = 43200,
+
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    RequirePkce = true,
+
+                    AllowedScopes = new[]
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "itqj_api"
+                    },
+
+                    RedirectUris = new[]
+                    {
+                        "https://localhost:44348/signin-oidc"
+                    },
+                    PostLogoutRedirectUris = { "https://localhost:44348/signout-callback-oidc" }
                 }
             };
 
