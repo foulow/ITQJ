@@ -6,6 +6,7 @@ using IdentityServer4;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace ITQJ.OAuth
 {
@@ -43,9 +44,10 @@ namespace ITQJ.OAuth
                     UpdateAccessTokenClaimsOnRefresh = true,
                     AccessTokenLifetime = 43200,
 
-                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
+                    //AlwaysIncludeUserClaimsInIdToken = true,
+                    RequireConsent = true,
+                    AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,
-
                     AllowedScopes = new[]
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
@@ -68,7 +70,7 @@ namespace ITQJ.OAuth
                     UpdateAccessTokenClaimsOnRefresh = true,
                     AccessTokenLifetime = 43200,
 
-                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
                     RequirePkce = true,
 
                     AllowedScopes = new[]
@@ -93,7 +95,40 @@ namespace ITQJ.OAuth
                 {
                     SubjectId = "1",
                     Username = "jeffrey",
-                    Password = "password"
+                    Password = "password",
+
+                    Claims =
+                    {
+                        new Claim("scope", "openid"),
+                        new Claim("scope", "profile"),
+                        new Claim("scope", "itqj_api")
+                    }
+                },
+                new TestUser
+                {
+                    SubjectId = "2",
+                    Username = "issaul",
+                    Password = "password",
+
+                    Claims =
+                    {
+                        new Claim("scope", "openid"),
+                        new Claim("scope", "profile"),
+                        new Claim("scope", "itqj_api")
+                    }
+                },
+                new TestUser
+                {
+                    SubjectId = "3",
+                    Username = "luis",
+                    Password = "password",
+
+                    Claims =
+                    {
+                        new Claim("scope", "openid"),
+                        new Claim("scope", "profile"),
+                        new Claim("scope", "itqj_api")
+                    }
                 }
             };
     }

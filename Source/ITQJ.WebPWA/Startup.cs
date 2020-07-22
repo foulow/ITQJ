@@ -1,3 +1,4 @@
+using ITQJ.WebPWA.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -48,6 +49,8 @@ namespace ITQJ.WebPWA
                         options.Scope.Add(scope.Value);
                     }
                 });
+
+            services.AddScoped<APIClientService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

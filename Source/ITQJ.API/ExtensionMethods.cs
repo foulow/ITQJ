@@ -18,7 +18,7 @@ namespace ITQJ.EFCore
         {
             try
             {
-                return (context.DocumentTypes.Any()) ? DBState.Fetched : DBState.Unfetched;
+                return (context.ProfesionalSkills.Any()) ? DBState.Fetched : DBState.Unfetched;
             }
             catch (Exception ex)
             {
@@ -71,6 +71,54 @@ namespace ITQJ.EFCore
             else
             {
                 Log.Debug("Skills already populated.");
+            }
+
+            if (!context.Users.Any())
+            {
+                Log.Debug("Users being populated...");
+                context.Users.AddRange(DataConfig.Users);
+                context.SaveChanges();
+                Log.Debug("Users populated.");
+            }
+            else
+            {
+                Log.Debug("ProfesionalSkills already populated.");
+            }
+
+            if (!context.LegalDocuments.Any())
+            {
+                Log.Debug("LegalDocuments being populated...");
+                context.LegalDocuments.AddRange(DataConfig.LegalDocuments);
+                context.SaveChanges();
+                Log.Debug("LegalDocuments populated.");
+            }
+            else
+            {
+                Log.Debug("PersonalInfos already populated.");
+            }
+
+            if (!context.PersonalInfos.Any())
+            {
+                Log.Debug("PersonalInfos being populated...");
+                context.PersonalInfos.AddRange(DataConfig.PersonalInfos);
+                context.SaveChanges();
+                Log.Debug("PersonalInfos populated.");
+            }
+            else
+            {
+                Log.Debug("PersonalInfos already populated.");
+            }
+
+            if (!context.ProfesionalSkills.Any())
+            {
+                Log.Debug("ProfesionalSkills being populated...");
+                context.ProfesionalSkills.AddRange(DataConfig.ProfesionalSkills);
+                context.SaveChanges();
+                Log.Debug("ProfesionalSkills populated.");
+            }
+            else
+            {
+                Log.Debug("ProfesionalSkills already populated.");
             }
             Log.Information("Data feched.");
         }

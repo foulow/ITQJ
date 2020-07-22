@@ -1,86 +1,60 @@
 ﻿@page
 @model ITQJ.WebPWA.Pages.ProfesionalSkillModel
-@{
-    ViewData["Title"] = "ProfesionalSkill";
-}
+@{ ViewData["Title"] = "ProfesionalSkill"; }
 
-    <img src="/Image/gestion-del-conocimiento.png" style="opacity:0.2; border-radius:0%; position:absolute; top:50px; left:0px; width:100%; height:100%; display:inline-block; " />
+<img src="/Image/gestion-del-conocimiento.png" style="opacity:0.2; border-radius:0%; position:absolute; top:50px; left:0px; width:100%; height:100%; display:inline-block; " />
 
-    <div  style="position:relative;">
+<div style="position:relative;">
 
-        <h1>Profesional Skill</h1>
+    <h1>Profesional Skill</h1>
 
 
-        @foreach (var dic in Model.ListListSkill)
-        {
+    @foreach (var dic in Model.ListListSkill)
+    {
 
-            @foreach (ITQJ.WebPWA.Entitdades.Skill skill in dic.Value)
-            {
+@foreach (ITQJ.WebPWA.VMs.ProfesionalSkillVM skill in dic.Value)
+{
 
-                <div class="icon-skill">
+<div class="icon-skill">
 
-                    <div class="ContSkill1">
+    <div class="ContSkill1">
 
-                        <div class="conte">
+        <div class="conte">
 
-                            <div class="ContSkill2">
+            <div class="ContSkill2">
 
-                                <div class="titulo">
+                <div class="titulo">
 
-                                    <strong> @skill.Name </strong>
-
-                                </div>
-
-                                <div id="Estellas"><a onclick=""><i aria-hidden="true"><img src="@skill.Path" /></i></a> </div>
-
-                            </div>
-
-                            <div>
-
-                                <div class="progress-bar blue stripes shine ">
-                                    <span style=" width: @(Convert.ToString(skill.Percentage) + "%")"></span>
-                                </div>
-
-                                <strong class="d-inline float-right">
-
-                                    @if (skill.Percentage <= 25)
-                                    { Model.Rango = "Junior " + Convert.ToString(skill.Percentage) + "%"; }
-                                    else if (skill.Percentage <= 50)
-                                    { Model.Rango = "Avanzado " + Convert.ToString(skill.Percentage) + "%"; }
-                                    else if (skill.Percentage <= 75)
-                                    { Model.Rango = "Pos-Senior " + Convert.ToString(skill.Percentage) + "%"; }
-                                    else if (skill.Percentage <= 100)
-                                    { Model.Rango = "Senior " + Convert.ToString(skill.Percentage) + "%"; }
-
-                                    @Model.Rango
-
-                                </strong>
-
-                            </div>
-
-                            <br />
-                            <br />
-
-                        </div>
-
-                    </div>
+                    <strong> @skill.Name </strong>
 
                 </div>
 
+                <div id="Estellas"><a onclick=""><i aria-hidden="true"><img src="@skill.Path" /></i></a> </div>
 
+            </div>
 
-            }
+            <div>
 
-        }
+                <div class="progress-bar blue stripes shine ">
+                    <span style=" width: @(Convert.ToString(skill.Percentage) + "%")"></span>
+                </div>
 
+                <strong class="d-inline float-right">
 
-        <div style="position:relative; bottom:0px;">
+                    @if (skill.Percentage <= 25)
+                    { Model.Rango = "Junior " + Convert.ToString(skill.Percentage) + "%"; }
+                    else if (skill.Percentage <= 50)
+                    { Model.Rango = "Avanzado " + Convert.ToString(skill.Percentage) + "%"; }
+                    else if (skill.Percentage <= 75)
+                    { Model.Rango = "Pos-Senior " + Convert.ToString(skill.Percentage) + "%"; }
+                    else if (skill.Percentage <= 100)
+                    { Model.Rango = "Senior " + Convert.ToString(skill.Percentage) + "%"; }
 
-            <hr />
-            <br />
-            <br />
+                    @Model.Rango
 
-            <button class="btn btn-dark"> <a style="color: white; text-decoration: none;}" asp-page="/ProfesionalSkillEdict"> Editar Skills </a> </button>
+                </strong>
+
+            </div>
 
             <br />
             <br />
@@ -88,3 +62,21 @@
         </div>
 
     </div>
+
+</div>}}
+
+
+    <div style="position:relative; bottom:0px;">
+
+        <hr />
+        <br />
+        <br />
+
+        <button class="btn btn-dark"> <a style="color: white; text-decoration: none;}" asp-page="/ProfesionalSkillEdict"> Editar Skills </a> </button>
+
+        <br />
+        <br />
+
+    </div>
+
+</div>

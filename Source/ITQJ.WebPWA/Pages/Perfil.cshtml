@@ -1,8 +1,11 @@
 ﻿@page
 @model ITQJ.WebPWA.Pages.PerfilModel
-@{
-    ViewData["Title"] = "Perfil";
-}
+@{ ViewData["Title"] = "Perfil"; }
 
+<p>Id=@Model.PersonalInfo.Id</p>
+<p>Name=@Model.PersonalInfo.Name</p>
+<p>PH=@Model.PersonalInfo.PhoneNumber</p>
+<p>Link=@Model.PersonalInfo.PagLink</p>
+<p>Description=@Model.PersonalInfo.Description</p>
 <h1>InformationPage</h1>
 
