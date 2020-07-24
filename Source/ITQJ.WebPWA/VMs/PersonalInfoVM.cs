@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ITQJ.WebPWA.Entidades;
+using System.Collections.Generic;
 
 namespace ITQJ.WebPWA.VMs
 {
@@ -18,6 +19,6 @@ namespace ITQJ.WebPWA.VMs
 
         public virtual UserVM User { get; set; }
 
-        public virtual ICollection<ProfesionalSkillVM> ProfesionalSkills { get; set; }
+        public virtual ICollection<Skill> ProfesionalSkills { get; set; }
     }
 }

@@ -176,6 +176,9 @@ namespace ITQJ.API.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("Percentage")
+                        .HasColumnType("int");
+
                     b.Property<int>("PersonalInfoId")
                         .HasColumnType("int");
 
@@ -288,6 +291,9 @@ namespace ITQJ.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(25)")
                         .HasMaxLength(25);
+
+                    b.Property<string>("Path")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

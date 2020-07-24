@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -8,20 +6,19 @@ using System.Threading.Tasks;
 
 namespace ITQJ.WebPWA.Services
 {
-    public class APIClientService : Controller
+    public class APIClientService
     {
         // Metodo generico para extraer los datos de un endpoint del API.
-        public async Task<T> CallApiGetMethod<T>(string uri, bool needJWT = false) where T : class
+        public async Task<T> CallApiGetMethod<T>(string uri, string bearer = "", bool needJWT = false) where T : class
         {
             var client = new HttpClient();
             if (needJWT)
             {
-                var accessToken = await HttpContext.GetTokenAsync("access_token");
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearer);
             }
 
             var content = await client.GetStringAsync(uri);
-            var json = new JObject(content);
+            var json = JObject.Parse(content);
 
             T result = null;
             if (json.ContainsKey("result"))

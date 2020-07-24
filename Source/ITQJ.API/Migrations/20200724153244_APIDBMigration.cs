@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 
-namespace ITQJ.EFCore.Migrations
+namespace ITQJ.API.Migrations
 {
-    public partial class intitalmigration : Migration
+    public partial class APIDBMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -39,7 +39,8 @@ namespace ITQJ.EFCore.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(maxLength: 25, nullable: false)
+                    Name = table.Column<string>(maxLength: 25, nullable: false),
+                    Path = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -75,7 +76,7 @@ namespace ITQJ.EFCore.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserName = table.Column<string>(maxLength: 25, nullable: false),
-                    Password = table.Column<string>(maxLength: 25, nullable: false),
+                    Password = table.Column<string>(maxLength: 500, nullable: false),
                     Email = table.Column<string>(maxLength: 50, nullable: false),
                     RolId = table.Column<int>(nullable: false)
                 },
@@ -174,6 +175,7 @@ namespace ITQJ.EFCore.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Percentage = table.Column<int>(nullable: false),
                     PersonalInfoId = table.Column<int>(nullable: false),
                     SkillId = table.Column<int>(nullable: false),
                     SkillId1 = table.Column<int>(nullable: true)

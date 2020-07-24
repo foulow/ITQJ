@@ -1,6 +1,10 @@
-﻿using ITQJ.WebPWA.VMs;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using ITQJ.WebPWA.Entitdades;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ITQJ.WebPWA.Pages
 {
@@ -13,36 +17,36 @@ namespace ITQJ.WebPWA.Pages
 
         }
 
-        public Dictionary<string, List<ProfesionalSkillVM>> ListListSkill = new Dictionary<string, List<ProfesionalSkillVM>>()
+        public  Dictionary<string, List<Skill>> ListListSkill = new Dictionary<string, List<Skill>>()
         {
 
-            { "Lenguajes de Programacion", new List<ProfesionalSkillVM>()
+            { "Lenguajes de Programacion", new List<Skill>()
             {
-                new ProfesionalSkillVM()
+                new Skill()
                 {
                     Name="C++",
                     Path="/icon-Tecnology/CPlus.png",
                     Percentage=26
                 },
-                new ProfesionalSkillVM()
+                new Skill()
                 {
                     Name="C#",
                     Path="/icon-Tecnology/CSharp.png",
-                    Percentage=64
+                    Percentage=64   
                 },
-                new ProfesionalSkillVM()
+                new Skill()
                 {
                     Name="Java",
                     Path="/icon-Tecnology/java.png",
                     Percentage=15
                 },
-                new ProfesionalSkillVM()
+                new Skill()
                 {
                     Name="Php",
                     Path="/icon-Tecnology/php.png",
                     Percentage=15
                 },
-                new ProfesionalSkillVM()
+                new Skill()
                 {
                     Name="Delphi",
                     Path="/icon-Tecnology/delphi.png",
@@ -50,27 +54,27 @@ namespace ITQJ.WebPWA.Pages
                 }
             }},
 
-            { "Lenguaje de Programacion, Marcado y Estilo. Front End", new List<ProfesionalSkillVM>()
+            { "Lenguaje de Programacion, Marcado y Estilo. Front End", new List<Skill>()
                 {
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Java Script",
                         Path="/icon-Tecnology/javascript.png",
                         Percentage=45
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Html 5",
                         Path="/icon-Tecnology/html5.png",
                         Percentage=76
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Css 3",
                         Path="/icon-Tecnology/css3.png",
                         Percentage=85
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="BooStrp",
                         Path="/icon-Tecnology/bootstrap.png",

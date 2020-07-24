@@ -1,4 +1,5 @@
-﻿using ITQJ.Domain.Models;
+﻿using IdentityModel;
+using ITQJ.Domain.Models;
 using System.Collections.Generic;
 
 namespace ITQJ.EFCore
@@ -23,26 +24,26 @@ namespace ITQJ.EFCore
         public static IEnumerable<Skill> Skills =>
             new Skill[]
             {
-                new Skill { Name = "C"},
-                new Skill { Name = "C++"},
-                new Skill { Name = "C#"},
-                new Skill { Name = "VB.Net"},
-                new Skill { Name = "Objective-C"},
-                new Skill { Name = "Swift"},
-                new Skill { Name = "Java"},
-                new Skill { Name = "JavaScript"},
-                new Skill { Name = "Python"},
-                new Skill { Name = "PHP"},
-                new Skill { Name = "Go"},
-                new Skill { Name = "Dark"},
-                new Skill { Name = "SQL"},
-                new Skill { Name = "T-SQL"},
-                new Skill { Name = "MySQL"},
-                new Skill { Name = "PostgreSQL"},
-                new Skill { Name = "Git"},
-                new Skill { Name = "HTML"},
-                new Skill { Name = "CSS"},
-                new Skill { Name = "Boostrap"},
+                new Skill { Name = "C", Path = "/icon-Tecnology/C.png"},
+                new Skill { Name = "C++", Path = "/icon-Tecnology/CPlus.png"},
+                new Skill { Name = "C#", Path = "/icon-Tecnology/CSharp.png"},
+                new Skill { Name = "VB.Net", Path = "/icon-Tecnology/CPlus.png"},
+                new Skill { Name = "Objective-C", Path = "/icon-Tecnology/visual-basic.png"},
+                new Skill { Name = "Swift", Path = "/icon-Tecnology/swift.png"},
+                new Skill { Name = "Java", Path = "/icon-Tecnology/java.png"},
+                new Skill { Name = "JavaScript", Path = "/icon-Tecnology/javascript.png"},
+                new Skill { Name = "Python", Path = "/icon-Tecnology/python.png"},
+                new Skill { Name = "PHP", Path = "/icon-Tecnology/php.png"},
+                new Skill { Name = "Go", Path = "/icon-Tecnology/Go.png"},
+                new Skill { Name = "Dark", Path = "/icon-Tecnology/Dart.png"},
+                new Skill { Name = "SQL", Path = "/icon-Tecnology/SQL.png"},
+                new Skill { Name = "T-SQL", Path = "/icon-Tecnology/T-SQL.png"},
+                new Skill { Name = "MySQL", Path = "/icon-Tecnology/CPlus.png"},
+                new Skill { Name = "PostgreSQL", Path = "/icon-Tecnology/mysql.png"},
+                new Skill { Name = "Git", Path = "/icon-Tecnology/github.png"},
+                new Skill { Name = "HTML5", Path = "/icon-Tecnology/html5.png"},
+                new Skill { Name = "CSS3", Path = "/icon-Tecnology/css3.png"},
+                new Skill { Name = "Boostrap", Path = "/icon-Tecnology/bootstrap.png"},
             };
 
         public static IEnumerable<User> Users =>
@@ -52,16 +53,14 @@ namespace ITQJ.EFCore
                 {
                     Email = "jeffreyissaul@hotmail.com",
                     UserName = "issaul",
-                    //Password = "password".ToSha256(),
-                    Password = "password",
+                    Password = "password".ToSha256(),
                     RolId = 1
                 },
                 new User
                 {
                     Email = "luis@hotmail.com",
                     UserName = "luis",
-                    //Password = "password".ToSha256(),
-                    Password = "password",
+                    Password = "password".ToSha256(),
                     RolId = 2
                 }
             };
@@ -110,16 +109,19 @@ namespace ITQJ.EFCore
             {
                 new ProfesionalSkill
                 {
+                    Percentage = 70,
                     PersonalInfoId = 1,
                     SkillId = 1
                 },
                 new ProfesionalSkill
                 {
+                    Percentage = 80,
                     PersonalInfoId = 1,
                     SkillId = 5
                 },
                 new ProfesionalSkill
                 {
+                    Percentage = 50,
                     PersonalInfoId = 1,
                     SkillId = 12
                 }

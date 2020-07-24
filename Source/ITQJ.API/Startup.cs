@@ -6,7 +6,6 @@ using IdentityServer4.AccessTokenValidation;
 
 using ITQJ.API.DTOs;
 using ITQJ.EFCore;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -46,9 +45,14 @@ namespace ITQJ.API
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.AllowAnyOrigin();
+                        builder.WithOrigins(new string[]
+                            {
+                                Configuration["AudienceURL"],
+                                Configuration["AuthorityURL"]
+                            });
                         builder.AllowAnyHeader();
                         builder.AllowAnyMethod();
+                        builder.AllowCredentials();
                     });
             });
 
@@ -58,18 +62,14 @@ namespace ITQJ.API
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            //services.AddAuthentication(options =>
-            //{
-            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //})
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddJwtBearer("Bearer", options =>
                 {
                     options.RequireHttpsMetadata = true;
                     options.Authority = Configuration["AuthorityURL"];
+                    options.Audience = Configuration["AudienceURL"];
 
-                    options.TokenValidationParameters = new TokenValidationParameters
+                    options.TokenValidationParameters = new TokenValidationParameters()
                     {
                         ValidateAudience = false
                     };
@@ -87,9 +87,9 @@ namespace ITQJ.API
 
             var migrationsAssembly = typeof(Startup).Assembly.GetName().FullName;
             services.AddDbContext<ApplicationDBContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString(name: "DefaultConnection"),
-                    sql => sql.MigrationsAssembly(migrationsAssembly))
-                    .UseLazyLoadingProxies());
+                            options.UseSqlServer(Configuration.GetConnectionString(name: "DefaultConnection"),
+                                sql => sql.MigrationsAssembly(migrationsAssembly))
+                                .UseLazyLoadingProxies());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -117,24 +117,15 @@ namespace ITQJ.API
 
             app.UseHttpsRedirection();
 
-
             app.UseRouting();
 
             app.UseCors();
 
-            //app.UseIdentityServerAuthenticarion(new IdentityServerAuthenticationOptions
-            //{
-            //    RequireHttpsMetadata = true,
-            //    Authority = Configuration["AuthorityURL"],
-            //    ApiName = Configuration["APIResourceName"]
-            //});
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapControllers()
-                //    .RequireAuthorization("ApiScope");
                 endpoints.MapControllers();
             });
         }

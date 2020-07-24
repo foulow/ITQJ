@@ -1,0 +1,23 @@
+﻿@page
+@model ITQJ.WebPWA.Pages.AboutModel
+@using Microsoft.AspNetCore.Authentication
+
+<div>
+    <strong>id_token</strong>
+    <span>@await ViewContext.HttpContext.GetTokenAsync("id_token")</span>
+</div>
+<div>
+    <strong>access_token</strong>
+    <span>@await ViewContext.HttpContext.GetTokenAsync("access_token")</span>
+</div>
+
+@foreach (var claim in User.Claims)
+{
+    <div>
+        <strong>@claim.Type</strong>
+        <span>@claim.Value</span>
+    </div>
+}
+
+@{
+}

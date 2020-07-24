@@ -1,5 +1,6 @@
 ﻿using ITQJ.WebPWA.Services;
 using ITQJ.WebPWA.VMs;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Threading.Tasks;
@@ -19,7 +20,11 @@ namespace ITQJ.WebPWA.Pages
 
         public async Task OnGet()
         {
-            PersonalInfo = await APIClient.CallApiGetMethod<PersonalInfoVM>("https://localhost:44338/api/personalInfo/" + "1");
+            string accessToken = await HttpContext.GetTokenAsync("access_token");
+
+            PersonalInfo = await APIClient.CallApiGetMethod<PersonalInfoVM>(
+                uri: "https://localhost:44338/api/personalInfo/" + "1",
+                bearer: accessToken, needJWT: true);
         }
     }
 }

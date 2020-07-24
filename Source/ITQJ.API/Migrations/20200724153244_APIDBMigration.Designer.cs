@@ -7,17 +7,17 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace ITQJ.EFCore.Migrations
+namespace ITQJ.API.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20200713011041_intital-migration")]
-    partial class intitalmigration
+    [Migration("20200724153244_APIDBMigration")]
+    partial class APIDBMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.5")
+                .HasAnnotation("ProductVersion", "3.1.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -178,6 +178,9 @@ namespace ITQJ.EFCore.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("Percentage")
+                        .HasColumnType("int");
+
                     b.Property<int>("PersonalInfoId")
                         .HasColumnType("int");
 
@@ -291,6 +294,9 @@ namespace ITQJ.EFCore.Migrations
                         .HasColumnType("nvarchar(25)")
                         .HasMaxLength(25);
 
+                    b.Property<string>("Path")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Skills");
@@ -310,8 +316,8 @@ namespace ITQJ.EFCore.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(25)")
-                        .HasMaxLength(25);
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
 
                     b.Property<int>("RolId")
                         .HasColumnType("int");

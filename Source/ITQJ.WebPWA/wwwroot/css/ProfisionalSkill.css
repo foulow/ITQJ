@@ -3,6 +3,8 @@
     padding: 0px;
 }
 
+
+
 .conte {
     float: left;
     display: inline-block;
@@ -16,10 +18,26 @@
     margin: 7px;
 }
 
+.titulo {
+    margin: 0px;
+    padding: 0px;
+    width: 130px;
+}
+
+.Check {
+    position: relative;
+    top: 5px;
+    float: right;
+    margin-right: 20px;
+}
+
 .ContSkill2 {
     height: 110px;
     text-align: center;
     cursor: pointer;
+    padding: 0px;
+    margin: 0px;
+    align-content: center;
 }
 
 .ContPorcen {
@@ -36,6 +54,9 @@
     border: 0;
 }
 
+.DivIMG{
+    margin-left: 16px;
+}
 
 img {
     border-radius: 50%;

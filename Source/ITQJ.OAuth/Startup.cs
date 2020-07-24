@@ -2,17 +2,19 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using ITQJ.EFCore;
+using ITQJ.OAuth.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ITQJ.OAuth
@@ -48,6 +50,13 @@ namespace ITQJ.OAuth
                 options.KnownProxies.Clear();
             });
 
+            services.AddTransient<IUserValidator, UserValidator>();
+            var apiConnectionString = Configuration.GetConnectionString("APIConnection");
+            var migrationsAssembly = typeof(Startup).Assembly.GetName().FullName;
+            services.AddDbContext<ApplicationDBContext>(options =>
+                            options.UseSqlServer(apiConnectionString,
+                                sql => sql.MigrationsAssembly(migrationsAssembly)));
+
             //// Use this for in memory data test. (not connection string needed)
             services.AddIdentityServer(options =>
             {
@@ -59,7 +68,8 @@ namespace ITQJ.OAuth
                 options.Events.RaiseSuccessEvents = true;
             })
                 .AddDeveloperSigningCredential()
-                .AddTestUsers(Config.Users.ToList())
+                //.AddTestUsers(Config.Users.ToList())
+                .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
                 .AddInMemoryIdentityResources(Config.IdentityResources)
                 .AddInMemoryApiScopes(Config.ApiScopes)
                 .AddInMemoryApiResources(Config.ApiResources)
@@ -67,7 +77,6 @@ namespace ITQJ.OAuth
 
             // Use this for real db implementation.
             //var connectionString = Configuration.GetConnectionString("DefaultConnection");
-            //var migrationsAssembly = typeof(Startup).Assembly.GetName().FullName;
             //var builder = services.AddIdentityServer(options =>
             //{
             //    options.EmitStaticAudienceClaim = true;
@@ -76,8 +85,7 @@ namespace ITQJ.OAuth
             //    options.Events.RaiseFailureEvents = true;
             //    options.Events.RaiseSuccessEvents = true;
             //})
-            //    // this adds the test user root password root to the IDP server.
-            //    .AddTestUsers(Config.Users.ToList())
+            //    .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
             //    // this adds the config data from DB (clients, resources, CORS)
             //    .AddConfigurationStore(options =>
             //    {
@@ -96,6 +104,21 @@ namespace ITQJ.OAuth
             //// not recommended for production - you need to store your key material somewhere secure
             //builder.AddDeveloperSigningCredential();
             //////builder.AddSigningCredential(new X509Certificate2(@"C:\Projects\Visual Studio\Pidelo\Repositorios\Pidelo-API\pidelo.pfx", "Paravailarla.1"));
+
+            // If enabled allows third paty authentication to get access to IdentityServer.
+            //services.AddAuthentication()
+            //    .AddMicrosoftAccount(microsoftOptions =>
+            //    {
+            //        microsoftOptions.ClientId = Configuration["Authentication:Microsoft:ClientId"];
+            //        microsoftOptions.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"];
+            //        microsoftOptions.CallbackPath = Configuration["CallbackURL"] + "/signin-microsoft";
+            //    }).AddGoogle(googleOptions =>
+            //    {
+            //        googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+            //        googleOptions.ClientSecret = Configuration["Authentication:Google:ClientId"];
+            //        googleOptions.CallbackPath = Configuration["CallbackURL"] + "/signin-google";
+            //    });
+
         }
 
         public void Configure(IApplicationBuilder app)

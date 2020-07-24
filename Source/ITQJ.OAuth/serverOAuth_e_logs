@@ -1,146 +1,87 @@
-2020-07-20 14:25:38.982 -04:00 [FTL] Host terminated unexpectedly.
-System.InvalidOperationException: Endpoint Routing does not support 'IApplicationBuilder.UseMvc(...)'. To use 'IApplicationBuilder.UseMvc' set 'MvcOptions.EnableEndpointRouting = false' inside 'ConfigureServices(...).
-   at Microsoft.AspNetCore.Builder.MvcApplicationBuilderExtensions.UseMvc(IApplicationBuilder app, Action`1 configureRoutes)
-   at Microsoft.AspNetCore.Builder.MvcApplicationBuilderExtensions.UseMvcWithDefaultRoute(IApplicationBuilder app)
-   at ITQJ.OAuth.Startup.Configure(IApplicationBuilder app) in C:\Projects\Visual Studio\ITSC\ITQJ\Source\ITQJ.OAuth\Startup.cs:line 129
-   at System.RuntimeMethodHandle.InvokeMethod(Object target, Object[] arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
-   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
-   at Microsoft.AspNetCore.Hosting.ConfigureBuilder.Invoke(Object instance, IApplicationBuilder builder)
-   at Microsoft.AspNetCore.Hosting.ConfigureBuilder.<>c__DisplayClass4_0.<Build>b__0(IApplicationBuilder builder)
-   at Microsoft.AspNetCore.Hosting.GenericWebHostBuilder.<>c__DisplayClass13_0.<UseStartup>b__2(IApplicationBuilder app)
-   at Microsoft.AspNetCore.Mvc.Filters.MiddlewareFilterBuilderStartupFilter.<>c__DisplayClass0_0.<Configure>g__MiddlewareFilterBuilder|0(IApplicationBuilder builder)
-   at Microsoft.AspNetCore.HostFilteringStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder app)
-   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
-   at Microsoft.Extensions.Hosting.Internal.Host.StartAsync(CancellationToken cancellationToken)
-   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
-   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
-   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Run(IHost host)
-   at ITQJ.OAuth.Program.Main(String[] args) in C:\Projects\Visual Studio\ITSC\ITQJ\Source\ITQJ.OAuth\Program.cs:line 67
-2020-07-20 14:25:39.621 -04:00 [FTL] Host stoped: Endpoint Routing does not support 'IApplicationBuilder.UseMvc(...)'. To use 'IApplicationBuilder.UseMvc' set 'MvcOptions.EnableEndpointRouting = false' inside 'ConfigureServices(...).
-2020-07-20 20:02:44.709 -04:00 [ERR] An error occurred using the connection to database 'ITQJ_AUTH_DB' on server '(localdb)\MSSQLLocalDB'.
-2020-07-20 20:02:49.473 -04:00 [ERR] An exception occurred while iterating over the results of a query for context type 'IdentityServer4.EntityFramework.DbContexts.PersistedGrantDbContext'.
-Microsoft.Data.SqlClient.SqlException (0x80131904): Connection Timeout Expired.  The timeout period elapsed while attempting to consume the pre-login handshake acknowledgement.  This could be because the pre-login handshake failed or the server was unable to respond back in time.  The duration spent while attempting to connect to this server was - [Pre-Login] initialization=18469; handshake=957; 
- ---> System.ComponentModel.Win32Exception (258): The wait operation timed out.
-   at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, DbConnectionPool pool, SqlAuthenticationProviderManager sqlAuthProviderManager)
-   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
-   at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
-   at Microsoft.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
-   at Microsoft.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
-   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
-   at Microsoft.Data.ProviderBase.DbConnectionPool.WaitForPendingOpen()
+2020-07-24 17:28:12.910 -04:00 [FTL] Host terminated unexpectedly.
+System.FormatException: Could not parse the JSON file.
+ ---> System.Text.Json.JsonReaderException: '{' is invalid after a property name. Expected a ':'. LineNumber: 9 | BytePositionInLine: 19.
+   at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+   at System.Text.Json.Utf8JsonReader.ConsumePropertyName()
+   at System.Text.Json.Utf8JsonReader.ConsumeNextTokenUntilAfterAllCommentsAreSkipped(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextToken(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextTokenOrRollback(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+   at System.Text.Json.Utf8JsonReader.Read()
+   at System.Text.Json.JsonDocument.Parse(ReadOnlySpan`1 utf8JsonSpan, Utf8JsonReader reader, MetadataDb& database, StackRowStack& stack)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 utf8Json, JsonReaderOptions readerOptions, Byte[] extraRentedBytes)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 json, JsonDocumentOptions options)
+   at System.Text.Json.JsonDocument.Parse(String json, JsonDocumentOptions options)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationFileParser.ParseStream(Stream input)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
 --- End of stack trace from previous location where exception was thrown ---
-   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
-   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
-   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
-   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
-   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(DbContext _, Boolean result, CancellationToken cancellationToken)
-   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
-   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
-ClientConnectionId:86533d9f-639a-4c93-bf1c-68e0cc4a471c
-Error Number:-2,State:0,Class:11
-Microsoft.Data.SqlClient.SqlException (0x80131904): Connection Timeout Expired.  The timeout period elapsed while attempting to consume the pre-login handshake acknowledgement.  This could be because the pre-login handshake failed or the server was unable to respond back in time.  The duration spent while attempting to connect to this server was - [Pre-Login] initialization=18469; handshake=957; 
- ---> System.ComponentModel.Win32Exception (258): The wait operation timed out.
-   at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, DbConnectionPool pool, SqlAuthenticationProviderManager sqlAuthProviderManager)
-   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
-   at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
-   at Microsoft.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
-   at Microsoft.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
-   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
-   at Microsoft.Data.ProviderBase.DbConnectionPool.WaitForPendingOpen()
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.HandleException(ExceptionDispatchInfo info)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load()
+   at Microsoft.Extensions.Configuration.ConfigurationRoot..ctor(IList`1 providers)
+   at Microsoft.Extensions.Configuration.ConfigurationBuilder.Build()
+   at Microsoft.Extensions.Hosting.HostBuilder.BuildAppConfiguration()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at ITQJ.OAuth.Program.Main(String[] args) in C:\Projects\Visual Studio\ITSC\ITQJ\Source\ITQJ.OAuth\Program.cs:line 39
+2020-07-24 17:28:15.858 -04:00 [FTL] Host stoped: Could not parse the JSON file.
+2020-07-24 17:30:02.810 -04:00 [FTL] Host terminated unexpectedly.
+System.FormatException: Could not parse the JSON file.
+ ---> System.Text.Json.JsonReaderException: '{' is invalid after a property name. Expected a ':'. LineNumber: 9 | BytePositionInLine: 19.
+   at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+   at System.Text.Json.Utf8JsonReader.ConsumePropertyName()
+   at System.Text.Json.Utf8JsonReader.ConsumeNextTokenUntilAfterAllCommentsAreSkipped(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextToken(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextTokenOrRollback(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+   at System.Text.Json.Utf8JsonReader.Read()
+   at System.Text.Json.JsonDocument.Parse(ReadOnlySpan`1 utf8JsonSpan, Utf8JsonReader reader, MetadataDb& database, StackRowStack& stack)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 utf8Json, JsonReaderOptions readerOptions, Byte[] extraRentedBytes)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 json, JsonDocumentOptions options)
+   at System.Text.Json.JsonDocument.Parse(String json, JsonDocumentOptions options)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationFileParser.ParseStream(Stream input)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
 --- End of stack trace from previous location where exception was thrown ---
-   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
-   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
-   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
-   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
-   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(DbContext _, Boolean result, CancellationToken cancellationToken)
-   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
-   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
-ClientConnectionId:86533d9f-639a-4c93-bf1c-68e0cc4a471c
-Error Number:-2,State:0,Class:11
-2020-07-20 20:02:49.572 -04:00 [ERR] Exception removing expired grants: Connection Timeout Expired.  The timeout period elapsed while attempting to consume the pre-login handshake acknowledgement.  This could be because the pre-login handshake failed or the server was unable to respond back in time.  The duration spent while attempting to connect to this server was - [Pre-Login] initialization=18469; handshake=957; 
-2020-07-20 22:03:24.524 -04:00 [ERR] An error occurred using the connection to database 'ITQJ_AUTH_DB' on server '(localdb)\MSSQLLocalDB'.
-2020-07-20 22:03:30.719 -04:00 [ERR] An exception occurred while iterating over the results of a query for context type 'IdentityServer4.EntityFramework.DbContexts.PersistedGrantDbContext'.
-Microsoft.Data.SqlClient.SqlException (0x80131904): Connection Timeout Expired.  The timeout period elapsed while attempting to consume the pre-login handshake acknowledgement.  This could be because the pre-login handshake failed or the server was unable to respond back in time.  The duration spent while attempting to connect to this server was - [Pre-Login] initialization=24166; handshake=72; 
- ---> System.ComponentModel.Win32Exception (258): The wait operation timed out.
-   at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, DbConnectionPool pool, SqlAuthenticationProviderManager sqlAuthProviderManager)
-   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
-   at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
-   at Microsoft.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
-   at Microsoft.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
-   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
-   at Microsoft.Data.ProviderBase.DbConnectionPool.WaitForPendingOpen()
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.HandleException(ExceptionDispatchInfo info)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load()
+   at Microsoft.Extensions.Configuration.ConfigurationRoot..ctor(IList`1 providers)
+   at Microsoft.Extensions.Configuration.ConfigurationBuilder.Build()
+   at Microsoft.Extensions.Hosting.HostBuilder.BuildAppConfiguration()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at ITQJ.OAuth.Program.Main(String[] args) in C:\Projects\Visual Studio\ITSC\ITQJ\Source\ITQJ.OAuth\Program.cs:line 39
+2020-07-24 17:30:02.944 -04:00 [FTL] Host stoped: Could not parse the JSON file.
+2020-07-24 17:31:33.659 -04:00 [FTL] Host terminated unexpectedly.
+System.FormatException: Could not parse the JSON file.
+ ---> System.Text.Json.JsonReaderException: '{' is invalid after a property name. Expected a ':'. LineNumber: 9 | BytePositionInLine: 19.
+   at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+   at System.Text.Json.Utf8JsonReader.ConsumePropertyName()
+   at System.Text.Json.Utf8JsonReader.ConsumeNextTokenUntilAfterAllCommentsAreSkipped(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextToken(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextTokenOrRollback(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+   at System.Text.Json.Utf8JsonReader.Read()
+   at System.Text.Json.JsonDocument.Parse(ReadOnlySpan`1 utf8JsonSpan, Utf8JsonReader reader, MetadataDb& database, StackRowStack& stack)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 utf8Json, JsonReaderOptions readerOptions, Byte[] extraRentedBytes)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 json, JsonDocumentOptions options)
+   at System.Text.Json.JsonDocument.Parse(String json, JsonDocumentOptions options)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationFileParser.ParseStream(Stream input)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
 --- End of stack trace from previous location where exception was thrown ---
-   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
-   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
-   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
-   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
-   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(DbContext _, Boolean result, CancellationToken cancellationToken)
-   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
-   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
-ClientConnectionId:c5a7a316-11fa-418d-9822-ed68d78e6d52
-Error Number:-2,State:0,Class:11
-Microsoft.Data.SqlClient.SqlException (0x80131904): Connection Timeout Expired.  The timeout period elapsed while attempting to consume the pre-login handshake acknowledgement.  This could be because the pre-login handshake failed or the server was unable to respond back in time.  The duration spent while attempting to connect to this server was - [Pre-Login] initialization=24166; handshake=72; 
- ---> System.ComponentModel.Win32Exception (258): The wait operation timed out.
-   at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, DbConnectionPool pool, SqlAuthenticationProviderManager sqlAuthProviderManager)
-   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
-   at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
-   at Microsoft.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
-   at Microsoft.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
-   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
-   at Microsoft.Data.ProviderBase.DbConnectionPool.WaitForPendingOpen()
---- End of stack trace from previous location where exception was thrown ---
-   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
-   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
-   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
-   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
-   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(DbContext _, Boolean result, CancellationToken cancellationToken)
-   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
-   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
-ClientConnectionId:c5a7a316-11fa-418d-9822-ed68d78e6d52
-Error Number:-2,State:0,Class:11
-2020-07-20 22:03:31.306 -04:00 [ERR] Exception removing expired grants: Connection Timeout Expired.  The timeout period elapsed while attempting to consume the pre-login handshake acknowledgement.  This could be because the pre-login handshake failed or the server was unable to respond back in time.  The duration spent while attempting to connect to this server was - [Pre-Login] initialization=24166; handshake=72; 
-2020-07-20 22:52:23.981 -04:00 [FTL] Host terminated unexpectedly.
-System.InvalidOperationException: No service for type 'IdentityServer4.EntityFramework.DbContexts.ConfigurationDbContext' has been registered.
-   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
-   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
-   at ITQJ.OAuth.Program.Main(String[] args) in C:\Projects\Visual Studio\ITSC\ITQJ\Source\ITQJ.OAuth\Program.cs:line 47
-2020-07-20 22:52:24.216 -04:00 [FTL] Host stoped: No service for type 'IdentityServer4.EntityFramework.DbContexts.ConfigurationDbContext' has been registered.
-2020-07-20 23:05:41.741 -04:00 [FTL] Host terminated unexpectedly.
-System.InvalidOperationException: No service for type 'IdentityServer4.EntityFramework.DbContexts.ConfigurationDbContext' has been registered.
-   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
-   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
-   at ITQJ.OAuth.Program.Main(String[] args) in C:\Projects\Visual Studio\ITSC\ITQJ\Source\ITQJ.OAuth\Program.cs:line 47
-2020-07-20 23:05:41.848 -04:00 [FTL] Host stoped: No service for type 'IdentityServer4.EntityFramework.DbContexts.ConfigurationDbContext' has been registered.
-2020-07-20 23:14:15.329 -04:00 [ERR] Unknown client or not enabled: itqj_implicit_web_client
-{"ClientId":null,"ClientName":null,"RedirectUri":null,"AllowedRedirectUris":null,"SubjectId":"anonymous","ResponseType":null,"ResponseMode":null,"GrantType":null,"RequestedScopes":"","State":null,"UiLocales":null,"Nonce":null,"AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":"","MaxAge":null,"LoginHint":null,"SessionId":null,"Raw":{"client_id":"itqj_implicit_web_client","redirect_uri":"https://localhost:44348/signin-oidc","response_type":"code","scope":"openid profile itqj_api","code_challenge":"wxCYFp4D-RbNYlO7LyeM0tNu-JJth66vJohgyX-tWUc","code_challenge_method":"S256","response_mode":"form_post","nonce":"637308980547993416.ZDk4YmQ2MGYtNzI4Yi00NmM4LTliNTgtMjQ0YTQ5MzE3NjZjMjc2MDlmZGItN2Q0MS00YmJmLTljMmMtZDVkMTQ4YWI4MGU4","state":"CfDJ8Hkxc75gaC9Ol-lD2U2LwvAl8xHF1CrByA2jiwp78FiZSE7S0pWx-8SGQP7iOwugiExWAtbeUNZMlNLQqDH0OsM9huY4_bj-xJzn6WGZpau6bEuMF-Ii5cA6LMvM411KogAEV8-H9nvTMjv3QDiXhuqd0cDPPpDfpa7Oocmb3TEV6a9Uyxhi1tmHH5ww8ZACAMHaSQTUP4i_bxYTjA4gq7DFpOJHOMlRmQh_MIjkHAww96BFcKIlNsB_g2Jicj4brN0vDq1krUHYz7jyNm3j96H2AqBudY-pr8OkWDArYAUeYRw0puV-8dW56g4g7d0C69Ok-J-IpyITpXIw_RLun7R1dGuuXBHloUxbpBkhAnB54k4dAd807bOxlKIPrRTSEaPWDyYwf8JCt8i3rS_HE6W8xxPiznum5Ws1_dsibczU","x-client-SKU":"ID_NETSTANDARD2_0","x-client-ver":"5.5.0.0"},"$type":"AuthorizeRequestValidationLog"}
-2020-07-20 23:14:15.427 -04:00 [ERR] Request validation failed
-2020-07-20 23:20:28.563 -04:00 [ERR] Invalid grant type for client: authorization_code
-{"ClientId":"itqj_implicit_web_client","ClientName":"ITQJ-WebClient-Implicit","RedirectUri":"https://localhost:44348/signin-oidc","AllowedRedirectUris":["https://localhost:44348/signin-oidc"],"SubjectId":"anonymous","ResponseType":"code","ResponseMode":"form_post","GrantType":"authorization_code","RequestedScopes":"","State":"CfDJ8Hkxc75gaC9Ol-lD2U2LwvBRjnJajdUZNlFIpKFFBGwnOBE4RVUAMfgCBph97kB4QU5Ez9jSQlYVxZHcnbGImlFP1U9Hm4quyHyHXYo_FOf4HusEP0B8qpbekZMYDZekrfIkwpFAHy_TzxieZSd0Qj3okuXrdoRenDZZCTk_oRQcJf0lSzPIx9-Ixi2cgD2MLoj0qGDKzl1bqvJN6iAQD8aqRtmN2GNLFEeU-4ZMu7MaoXtI_ngbriikKUeQnLV7l0_sBuhHG6YQ0vqA6roluOMX_7On-_OBzaO31hjXqHaKjZ2CkNXEp0JfEt174nxNphCsC7Y5hfuLVtssqieM25lvxkbkkhMrGddRMdM7LBMYe1ZzE5V5dEac_SdTZw63Edt3Xdeb1JaTbQDhWW9WDrVxw1d9L-aG_MussgVuplZS","UiLocales":null,"Nonce":null,"AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":"","MaxAge":null,"LoginHint":null,"SessionId":null,"Raw":{"client_id":"itqj_implicit_web_client","redirect_uri":"https://localhost:44348/signin-oidc","response_type":"code","scope":"openid profile itqj_api","code_challenge":"a7CrjWMh08bWp_Ke7y9QDVeg5RoYJZSDXIeAkvvSmfE","code_challenge_method":"S256","response_mode":"form_post","nonce":"637308984271944710.MTVkYjRlMTYtY2MzYi00Y2JiLTgwNGItNGFjYzMxMzMyMTAyNWI0NzkwZmItYTQ4ZC00Y2M0LWJlYWQtNTY0MzFiNTA3Nzkw","state":"CfDJ8Hkxc75gaC9Ol-lD2U2LwvBRjnJajdUZNlFIpKFFBGwnOBE4RVUAMfgCBph97kB4QU5Ez9jSQlYVxZHcnbGImlFP1U9Hm4quyHyHXYo_FOf4HusEP0B8qpbekZMYDZekrfIkwpFAHy_TzxieZSd0Qj3okuXrdoRenDZZCTk_oRQcJf0lSzPIx9-Ixi2cgD2MLoj0qGDKzl1bqvJN6iAQD8aqRtmN2GNLFEeU-4ZMu7MaoXtI_ngbriikKUeQnLV7l0_sBuhHG6YQ0vqA6roluOMX_7On-_OBzaO31hjXqHaKjZ2CkNXEp0JfEt174nxNphCsC7Y5hfuLVtssqieM25lvxkbkkhMrGddRMdM7LBMYe1ZzE5V5dEac_SdTZw63Edt3Xdeb1JaTbQDhWW9WDrVxw1d9L-aG_MussgVuplZS","x-client-SKU":"ID_NETSTANDARD2_0","x-client-ver":"5.5.0.0"},"$type":"AuthorizeRequestValidationLog"}
-2020-07-20 23:20:28.637 -04:00 [ERR] Request validation failed
-2020-07-20 23:23:16.819 -04:00 [ERR] Response type not supported: implicit
-{"ClientId":"itqj_implicit_web_client","ClientName":"ITQJ-WebClient-Implicit","RedirectUri":"https://localhost:44348/signin-oidc","AllowedRedirectUris":["https://localhost:44348/signin-oidc"],"SubjectId":"anonymous","ResponseType":null,"ResponseMode":null,"GrantType":null,"RequestedScopes":"","State":"CfDJ8Hkxc75gaC9Ol-lD2U2LwvCS4ebV7jxR_Aykr3i-6MvN5OdylbP3ZjqtcsxFpWV6dRpMD7KbtTLyfK_c5JOdBaam3M0caIY-tlIMb1xiDJbZuBc8ksMKQNxJXyM2NPzhU6CQQzEeBu9MxaPsuInkSgG1vdJNC5wC3hijHUqkoV7mB-NWXiNDdI4AwwE6oV1mi1wEm79H3xLVr0gZldX_47nRPvVj58FEO3NYWSJOUah3MARNI1K-nk9goNbJrKk8AAD2TwUfm8Sj0Vsk-dLsXlHHYXsx2hBMfZ3SOD-ZlkFT69o45yfQlc0VMiArj7UiaNsUdn3PstkKvn08fqtZMb4","UiLocales":null,"Nonce":null,"AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":"","MaxAge":null,"LoginHint":null,"SessionId":null,"Raw":{"client_id":"itqj_implicit_web_client","redirect_uri":"https://localhost:44348/signin-oidc","response_type":"implicit","scope":"openid profile itqj_api","response_mode":"form_post","nonce":"637308985955734032.NTk4OWJjZWQtMjNkNC00MjU2LTlmZTQtN2FhNWRiOTk1NDQ4OGQyZmU3YzEtMThiYS00NTk3LWJlNTItODhhYTRmOWY1ZDU3","state":"CfDJ8Hkxc75gaC9Ol-lD2U2LwvCS4ebV7jxR_Aykr3i-6MvN5OdylbP3ZjqtcsxFpWV6dRpMD7KbtTLyfK_c5JOdBaam3M0caIY-tlIMb1xiDJbZuBc8ksMKQNxJXyM2NPzhU6CQQzEeBu9MxaPsuInkSgG1vdJNC5wC3hijHUqkoV7mB-NWXiNDdI4AwwE6oV1mi1wEm79H3xLVr0gZldX_47nRPvVj58FEO3NYWSJOUah3MARNI1K-nk9goNbJrKk8AAD2TwUfm8Sj0Vsk-dLsXlHHYXsx2hBMfZ3SOD-ZlkFT69o45yfQlc0VMiArj7UiaNsUdn3PstkKvn08fqtZMb4","x-client-SKU":"ID_NETSTANDARD2_0","x-client-ver":"5.5.0.0"},"$type":"AuthorizeRequestValidationLog"}
-2020-07-20 23:23:16.894 -04:00 [ERR] Request validation failed
-2020-07-20 23:24:01.154 -04:00 [ERR] Invalid grant type for client: authorization_code
-{"ClientId":"itqj_implicit_web_client","ClientName":"ITQJ-WebClient-Implicit","RedirectUri":"https://localhost:44348/signin-oidc","AllowedRedirectUris":["https://localhost:44348/signin-oidc"],"SubjectId":"anonymous","ResponseType":"code","ResponseMode":"form_post","GrantType":"authorization_code","RequestedScopes":"","State":"CfDJ8Hkxc75gaC9Ol-lD2U2LwvA_pq_wN8ZaPTrEMKbOtAvimnnbvCxnnsl7h8n0xHWXbdxumDDHpQb4BQLxWcDnGp-pHuozLqAtzW54uZMGDqvAcsq_jlKU23lEDzEYpV7gRTNw6Qpsxbc4ef65SP1gtqzxN7Y9g_6of4xFp51UHkClyjPQErlqwz0IMt_RO7aijvHd_FsU9YHcLY3s9HDI4kJB_ek09-kbsomoeSpg2a1YFj4ynOdfx9YaE6Vk7lWTRWiyQfI6zJKfWsdNFJVM_NIvCNiaTdz1c4Kdn0uGsd2eg7qJ7DB_k782aRFZv-labQFm83py4l4XC2FoevhWC64iG1yKOPLxVQ3DC4rR2vNT7HPCe06Q9ymbfJwHN_k1nqOl5_4P-X9YqiDJCUxoKsanYNSXZ_i1FO_Az3jIGY-L","UiLocales":null,"Nonce":null,"AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":"","MaxAge":null,"LoginHint":null,"SessionId":null,"Raw":{"client_id":"itqj_implicit_web_client","redirect_uri":"https://localhost:44348/signin-oidc","response_type":"code","scope":"openid profile itqj_api","code_challenge":"WjVz8Jk1kUS4tpeV2-1gl2P2ohxjqqaPNlO4_O2Bmac","code_challenge_method":"S256","response_mode":"form_post","nonce":"637308986409662706.OGZlM2EzZDAtZjgxNC00OGFhLThhZjMtY2JjMzU4ZTI0NTNlYjMyNmRhYmYtMjcwYS00YzkyLWE4ZjQtNWU0ZDM1ZDE0ODk0","state":"CfDJ8Hkxc75gaC9Ol-lD2U2LwvA_pq_wN8ZaPTrEMKbOtAvimnnbvCxnnsl7h8n0xHWXbdxumDDHpQb4BQLxWcDnGp-pHuozLqAtzW54uZMGDqvAcsq_jlKU23lEDzEYpV7gRTNw6Qpsxbc4ef65SP1gtqzxN7Y9g_6of4xFp51UHkClyjPQErlqwz0IMt_RO7aijvHd_FsU9YHcLY3s9HDI4kJB_ek09-kbsomoeSpg2a1YFj4ynOdfx9YaE6Vk7lWTRWiyQfI6zJKfWsdNFJVM_NIvCNiaTdz1c4Kdn0uGsd2eg7qJ7DB_k782aRFZv-labQFm83py4l4XC2FoevhWC64iG1yKOPLxVQ3DC4rR2vNT7HPCe06Q9ymbfJwHN_k1nqOl5_4P-X9YqiDJCUxoKsanYNSXZ_i1FO_Az3jIGY-L","x-client-SKU":"ID_NETSTANDARD2_0","x-client-ver":"5.5.0.0"},"$type":"AuthorizeRequestValidationLog"}
-2020-07-20 23:24:01.163 -04:00 [ERR] Request validation failed
-2020-07-20 23:37:12.669 -04:00 [ERR] Invalid client configuration for client itqj_web_client: No redirect URI configured.
-2020-07-20 23:37:12.763 -04:00 [ERR] Unknown client or not enabled: itqj_web_client
-{"ClientId":null,"ClientName":null,"RedirectUri":null,"AllowedRedirectUris":null,"SubjectId":"anonymous","ResponseType":null,"ResponseMode":null,"GrantType":null,"RequestedScopes":"","State":null,"UiLocales":null,"Nonce":null,"AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":"","MaxAge":null,"LoginHint":null,"SessionId":null,"Raw":{"client_id":"itqj_web_client","redirect_uri":"https://localhost:44348/signin-oidc","response_type":"code","scope":"openid profile itqj_api","code_challenge":"GvWZwX4aWTrtPwvw6Wfk-vRuN3ohzFZSiBRHd8ZV67k","code_challenge_method":"S256","response_mode":"form_post","nonce":"637308994314808323.MmViZTgwOTYtYjc2My00NjhhLThiZGQtNDI5MGY4MDFjYzJjN2FiMmU2YTAtMGI5Yy00MWI4LWE0ZjctNGI1M2VhOTRmOTZk","state":"CfDJ8Hkxc75gaC9Ol-lD2U2LwvBOCpHJeOHZoPlYHZu3c4FxqdtLbYlsCtmk6Vqkblei0FEECNdqetUOitLm1kVK7bmSomHJV7C4hEGzJOT9JLeGWU9YimjqTh0R715DBkxafSdin4jpbrTd0AhahM2TtLBvvXDxu1DYa87sKVIj6xLciBnW22xBxX9PnwJq8LdPDFs_PhuDDiKNYfKUMlX7FNAYD58Ip2rz6QV-AGzeOAMvlILcPNw4m1V72Z9BEiidzH_kAYLwBWVaakL90qrYfZPUOairk_S2DUaOKf7lTJZWG0598XzhivUTsf8aV5rpxVrpcGpepIrkx9zO73aViLL_kP4IORHq8zj5UoqN55TayzvRigHNXTHUNPyCD2cPkoe3CnXh9JewYaXwk6ZtyeijWb4mghNL-qFkcG4XK0PZ","x-client-SKU":"ID_NETSTANDARD2_0","x-client-ver":"5.5.0.0"},"$type":"AuthorizeRequestValidationLog"}
-2020-07-20 23:37:12.791 -04:00 [ERR] Request validation failed
-2020-07-21 16:58:40.480 -04:00 [ERR] Invalid grant type for client: authorization_code
-{"ClientId":"itqj_web_client","ClientName":"ITQJ-WebClient","RedirectUri":"https://localhost:44348/signin-oidc","AllowedRedirectUris":["https://localhost:44348/signin-oidc"],"SubjectId":"anonymous","ResponseType":"code","ResponseMode":"form_post","GrantType":"authorization_code","RequestedScopes":"","State":"CfDJ8Hkxc75gaC9Ol-lD2U2LwvB2vtPBn28knzdC9WowR-nFbbV-Oyd2Iew8s6LAV0dGJF13pumTIdKPZCmRRX9ec7uLgRCmrx0H0Mvc4n92sa1gxX9XejI3XaX55xSTbtSpDXSXntufXWjDIJWqfrG_mL30Ur5z0caKTSEgoUXZR3oClkzBK6taDcf8E-Bj7uuOFZ1U2-iJ9rjjErbgTKyhbhiBDHtNZc88QFwu7lZwwobfDVjAd7uZB3sOa9CFSGuqf02Q-ASWgPNAqHZAapyEN_304zKyDWwveEv7-d3ErbiuD585_uthTdI_rQMYoGg9lqOUHxMWDAr-K4flvO5sYNfXQM4CQ9N57HQWB9JuNn0RjQaCAWCNVOX-pthHoVZXoG3mZihlUODthqYFBOTQ0v3DzFf87otGzRlpzBtX_5QL","UiLocales":null,"Nonce":null,"AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":"","MaxAge":null,"LoginHint":null,"SessionId":null,"Raw":{"client_id":"itqj_web_client","redirect_uri":"https://localhost:44348/signin-oidc","response_type":"code","scope":"openid profile itqj_api","code_challenge":"bJOPTedLT86Ql6tcf2RnuVithNR6jE-bH0hDzGs6hdw","code_challenge_method":"S256","response_mode":"form_post","nonce":"637309619201048781.MGViMjFlM2EtZGFiNC00YmUwLWFmMGUtNTBhNjI2MGRiZTMyNDNjY2Q0MzYtYjkxZS00MDljLTgwODAtYTE3NzNmNjYwOGQz","state":"CfDJ8Hkxc75gaC9Ol-lD2U2LwvB2vtPBn28knzdC9WowR-nFbbV-Oyd2Iew8s6LAV0dGJF13pumTIdKPZCmRRX9ec7uLgRCmrx0H0Mvc4n92sa1gxX9XejI3XaX55xSTbtSpDXSXntufXWjDIJWqfrG_mL30Ur5z0caKTSEgoUXZR3oClkzBK6taDcf8E-Bj7uuOFZ1U2-iJ9rjjErbgTKyhbhiBDHtNZc88QFwu7lZwwobfDVjAd7uZB3sOa9CFSGuqf02Q-ASWgPNAqHZAapyEN_304zKyDWwveEv7-d3ErbiuD585_uthTdI_rQMYoGg9lqOUHxMWDAr-K4flvO5sYNfXQM4CQ9N57HQWB9JuNn0RjQaCAWCNVOX-pthHoVZXoG3mZihlUODthqYFBOTQ0v3DzFf87otGzRlpzBtX_5QL","x-client-SKU":"ID_NETSTANDARD2_0","x-client-ver":"5.5.0.0"},"$type":"AuthorizeRequestValidationLog"}
-2020-07-21 16:58:40.627 -04:00 [ERR] Request validation failed
-2020-07-21 16:59:44.041 -04:00 [ERR] Client itqj_web_client is not allowed access to scope openid.
-2020-07-21 16:59:44.110 -04:00 [ERR] Client itqj_web_client is not allowed access to scope profile.
-2020-07-21 16:59:44.129 -04:00 [ERR] Request validation failed
-2020-07-21 22:38:11.440 -04:00 [ERR] Invalid grant type for client: authorization_code
-{"ClientId":"itqj_web_client","ClientName":"ITQJ-WebClient","RedirectUri":"https://localhost:44348/signin-oidc","AllowedRedirectUris":["https://localhost:44348/signin-oidc"],"SubjectId":"anonymous","ResponseType":"code","ResponseMode":"form_post","GrantType":"authorization_code","RequestedScopes":"","State":"CfDJ8Hkxc75gaC9Ol-lD2U2LwvDRpgL9oWViOSA13QlsNOlKlbxaeu-iKp5wgTbEBCGUumIWriNo9xqf-sISgNglkcpY5kH_6DqFsW4dFuhIXKXXVtHnPQz2LnhpSIbBGHaD2gw7gbq8pWZjiM2qbgX_DzeAkms9xC-YDDKlYFjShGcWhGK_M1kPG1LZ2IUOBqts4L0xzZyWxZ2vYdHeaGRdwvlkeWAXTymAhdS87ms-xdjOV6-OCKn8GBzsmoadkh1YAtYW5W8-OWjViwCMXadlzfj4GHJ6rw5ml4V_QCc6uxUeQ99lrE-XfzW9uqMxAIf5LMy9TfM4gr2qG9kH-UW5-utc0xXGXUoevQuaGOs47geqpZmlb8aKZ4nBjg4256QSWA","UiLocales":null,"Nonce":null,"AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":"","MaxAge":null,"LoginHint":null,"SessionId":null,"Raw":{"client_id":"itqj_web_client","redirect_uri":"https://localhost:44348/signin-oidc","response_type":"code","scope":"openid profile itqj_api","code_challenge":"6WZUker0fXXC1c6D7Xe3jneqDrfBBF5iCNf1Su34apo","code_challenge_method":"S256","response_mode":"form_post","nonce":"637309822893720855.MzZhMjc0ZDgtNjVmYS00MDQwLTgxMjMtY2Y4YTNiMGRhZjE5YWE2Njk5MDktNjc2Yy00M2EwLTg5NjUtZTA0NTQ0ZWZkMTRk","state":"CfDJ8Hkxc75gaC9Ol-lD2U2LwvDRpgL9oWViOSA13QlsNOlKlbxaeu-iKp5wgTbEBCGUumIWriNo9xqf-sISgNglkcpY5kH_6DqFsW4dFuhIXKXXVtHnPQz2LnhpSIbBGHaD2gw7gbq8pWZjiM2qbgX_DzeAkms9xC-YDDKlYFjShGcWhGK_M1kPG1LZ2IUOBqts4L0xzZyWxZ2vYdHeaGRdwvlkeWAXTymAhdS87ms-xdjOV6-OCKn8GBzsmoadkh1YAtYW5W8-OWjViwCMXadlzfj4GHJ6rw5ml4V_QCc6uxUeQ99lrE-XfzW9uqMxAIf5LMy9TfM4gr2qG9kH-UW5-utc0xXGXUoevQuaGOs47geqpZmlb8aKZ4nBjg4256QSWA","x-client-SKU":"ID_NETSTANDARD2_0","x-client-ver":"5.5.0.0"},"$type":"AuthorizeRequestValidationLog"}
-2020-07-21 22:38:11.614 -04:00 [ERR] Request validation failed
-2020-07-21 22:40:43.325 -04:00 [ERR] Response type not supported: access_token
-{"ClientId":"itqj_web_client","ClientName":"ITQJ-WebClient","RedirectUri":"https://localhost:44348/signin-oidc","AllowedRedirectUris":["https://localhost:44348/signin-oidc"],"SubjectId":"anonymous","ResponseType":null,"ResponseMode":null,"GrantType":null,"RequestedScopes":"","State":"CfDJ8Hkxc75gaC9Ol-lD2U2LwvDTj7wGq0bnCWqSfFrAHdu_yGnRO8z52V-wkFYKdECihPAJlgmn6qnQkRTGwD-orT3QjP2VVBkzYWXCu-UeeoyudmKr-mA9YbXXE4lhgGrqSEtLfk8_0znnIXM1UH0D9ulTcnStA148C6eEwNjhLXfeDnbf0yahRHhqVI0RbhACndRWCzAAjotZ4fxY7f2fBQzgWNVm6g-A8CsEAd9GOGqf41BqeQCnTInQW5CjkbLbxMQ-qXNoyC3H1fuXWfevWzvPwSsh_-qQ4zfmax98IPC9","UiLocales":null,"Nonce":null,"AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":"","MaxAge":null,"LoginHint":null,"SessionId":null,"Raw":{"client_id":"itqj_web_client","redirect_uri":"https://localhost:44348/signin-oidc","response_type":"access_token","scope":"openid profile itqj_api","response_mode":"form_post","nonce":"637309824430853555.MDU3NGUwZjYtNGE3My00ZTQ5LWE4ZTctMWFiNzAzN2M5ZmU4ZjU0ZGU5ODYtMTllOC00ZmQ0LWFiMmEtN2E5M2U1MmRiYzY2","state":"CfDJ8Hkxc75gaC9Ol-lD2U2LwvDTj7wGq0bnCWqSfFrAHdu_yGnRO8z52V-wkFYKdECihPAJlgmn6qnQkRTGwD-orT3QjP2VVBkzYWXCu-UeeoyudmKr-mA9YbXXE4lhgGrqSEtLfk8_0znnIXM1UH0D9ulTcnStA148C6eEwNjhLXfeDnbf0yahRHhqVI0RbhACndRWCzAAjotZ4fxY7f2fBQzgWNVm6g-A8CsEAd9GOGqf41BqeQCnTInQW5CjkbLbxMQ-qXNoyC3H1fuXWfevWzvPwSsh_-qQ4zfmax98IPC9","x-client-SKU":"ID_NETSTANDARD2_0","x-client-ver":"5.5.0.0"},"$type":"AuthorizeRequestValidationLog"}
-2020-07-21 22:40:43.374 -04:00 [ERR] Request validation failed
-2020-07-21 22:43:10.035 -04:00 [ERR] Requests for id_token response type only must not include resource scopes
-2020-07-21 22:43:10.037 -04:00 [ERR] Request validation failed
-2020-07-21 22:45:30.052 -04:00 [ERR] Invalid grant type for client: authorization_code
-{"ClientId":"itqj_web_client","ClientName":"ITQJ-WebClient","RedirectUri":"https://localhost:44348/signin-oidc","AllowedRedirectUris":["https://localhost:44348/signin-oidc"],"SubjectId":"anonymous","ResponseType":"code","ResponseMode":"form_post","GrantType":"authorization_code","RequestedScopes":"","State":"CfDJ8Hkxc75gaC9Ol-lD2U2LwvAjI-WRDTzvcldWsje953MGt2qahpW8gT1RZ9abvkfJhK2-TCNaXcwGZu0BlbUOB7RJL0YBUNW4rgoGGFjqjD5DyKDonZfMN66Khv_DVDAH2jil2auj7dEOrOhUkrUyuFpqEfUfnCOsrDRCXtG_V4ndMeEQztgew25kB9ge_xUy6QT1C9huFpcJSXmoqNZwtFHvjbdtNVpnk37AgXe7BXCplxnoyb0vvHFBxtbVxKopC4CwXrfv1DcB8iodeo3XlCOo1_FkgJ9_p2Pvh85-VS3bG-f6Q_JB-ZgG03rm4tbNFBc3CMFEgpYan2464Ojeln-Se7OKeNPLdS0zhvpY6SnzVXxuVfs0sDL3vg15LjVCOQ","UiLocales":null,"Nonce":null,"AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":"","MaxAge":null,"LoginHint":null,"SessionId":null,"Raw":{"client_id":"itqj_web_client","redirect_uri":"https://localhost:44348/signin-oidc","response_type":"code","scope":"openid profile itqj_api","code_challenge":"XdX6LBWHmPdiVO4OtVqabZl5B2Dqq2HC7lXgfAwT6p0","code_challenge_method":"S256","response_mode":"form_post","nonce":"637309827292865655.YjU2NjdiOWUtMzQ5Mi00OWVhLThhZTEtYzc5YWM5YzdmZjUyNDc0YjEwNzItMDZmZS00Y2M1LTg3MWUtMzkxNmNkNWI1YWU2","state":"CfDJ8Hkxc75gaC9Ol-lD2U2LwvAjI-WRDTzvcldWsje953MGt2qahpW8gT1RZ9abvkfJhK2-TCNaXcwGZu0BlbUOB7RJL0YBUNW4rgoGGFjqjD5DyKDonZfMN66Khv_DVDAH2jil2auj7dEOrOhUkrUyuFpqEfUfnCOsrDRCXtG_V4ndMeEQztgew25kB9ge_xUy6QT1C9huFpcJSXmoqNZwtFHvjbdtNVpnk37AgXe7BXCplxnoyb0vvHFBxtbVxKopC4CwXrfv1DcB8iodeo3XlCOo1_FkgJ9_p2Pvh85-VS3bG-f6Q_JB-ZgG03rm4tbNFBc3CMFEgpYan2464Ojeln-Se7OKeNPLdS0zhvpY6SnzVXxuVfs0sDL3vg15LjVCOQ","x-client-SKU":"ID_NETSTANDARD2_0","x-client-ver":"5.5.0.0"},"$type":"AuthorizeRequestValidationLog"}
-2020-07-21 22:45:30.232 -04:00 [ERR] Request validation failed
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.HandleException(ExceptionDispatchInfo info)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load()
+   at Microsoft.Extensions.Configuration.ConfigurationRoot..ctor(IList`1 providers)
+   at Microsoft.Extensions.Configuration.ConfigurationBuilder.Build()
+   at Microsoft.Extensions.Hosting.HostBuilder.BuildAppConfiguration()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at ITQJ.OAuth.Program.Main(String[] args) in C:\Projects\Visual Studio\ITSC\ITQJ\Source\ITQJ.OAuth\Program.cs:line 39
+2020-07-24 17:31:33.775 -04:00 [FTL] Host stoped: Could not parse the JSON file.

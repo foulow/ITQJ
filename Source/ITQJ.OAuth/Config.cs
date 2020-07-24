@@ -16,21 +16,29 @@ namespace ITQJ.OAuth
             new IdentityResource[]
             {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
+                new IdentityResources.Profile(),
+                new IdentityResources.Email(),
+                new IdentityResources.Phone()
             };
 
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
-                new ApiScope("itqj_api", "ITQJ.API")
+                new ApiScope("itqj_api", "ITQJ.API"),
             };
 
         public static IEnumerable<ApiResource> ApiResources =>
             new ApiResource[]
             {
-                new ApiResource("itqj_api", "ITQJ.API"),
-                new ApiResource("rol_profesional", "Profesional"),
-                new ApiResource("rol_contratista", "Contratista")
+                new ApiResource("itqj_api", "ITQJ.API")
+                {
+                    UserClaims = new[]
+                    {
+                        "email",
+                        "phone",
+                        //"role"
+                    }
+                }
             };
 
         public static IEnumerable<Client> Clients =>
@@ -44,22 +52,75 @@ namespace ITQJ.OAuth
                     UpdateAccessTokenClaimsOnRefresh = true,
                     AccessTokenLifetime = 43200,
 
-                    //AlwaysIncludeUserClaimsInIdToken = true,
-                    RequireConsent = true,
-                    AllowedGrantTypes = GrantTypes.Code,
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
                     RequirePkce = true,
+
+                    AllowedScopes = new[]
+                    {
+                        "itqj_api"
+                    }
+                },
+
+                new Client
+                {
+                    ClientId = "itqj_code_web_client",
+                    ClientName = "ITQJ-WebClient",
+                    ClientSecrets = { new Secret("AAE3727D-88FA-44B8-B406-0CA2AE75C7C3".Sha256()) },
+                    UpdateAccessTokenClaimsOnRefresh = true,
+                    AccessTokenLifetime = 43200,
+
+                    AllowedGrantTypes = GrantTypes.Code,
+                    AlwaysIncludeUserClaimsInIdToken = true,
+                    AllowOfflineAccess = true,
+                    RequireConsent = true,
+                    RequirePkce = true,
+
                     AllowedScopes = new[]
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "itqj_api"
+                        IdentityServerConstants.StandardScopes.Email,
+                        IdentityServerConstants.StandardScopes.Phone,
+                        //"role",
+                        "itqj_api",
+                        IdentityServerConstants.StandardScopes.OfflineAccess
                     },
 
-                    RedirectUris = new[]
+                    RedirectUris = new[] { "https://localhost:44348/signin-oidc" },
+                    FrontChannelLogoutUri = new string("https://localhost:44348/signout-oidc"),
+                    PostLogoutRedirectUris = { "https://localhost:44348/signout-callback-oidc" },
+                    AllowAccessTokensViaBrowser = true
+                },
+
+                new Client
+                {
+                    ClientId = "itqj_hybrid_web_client",
+                    ClientName = "ITQJ-WebClient",
+                    ClientSecrets = { new Secret("AAE3727D-88FA-44B8-B406-0CA2AE75C7C3".Sha256()) },
+                    UpdateAccessTokenClaimsOnRefresh = true,
+                    AccessTokenLifetime = 43200,
+
+                    AllowedGrantTypes = GrantTypes.Hybrid,
+                    AlwaysIncludeUserClaimsInIdToken = true,
+                    AllowOfflineAccess = true,
+                    RequireConsent = true,
+                    RequirePkce = true,
+
+                    AllowedScopes = new[]
                     {
-                        "https://localhost:44348/signin-oidc"
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                        IdentityServerConstants.StandardScopes.Phone,
+                        //"role",
+                        "itqj_api",
+                        IdentityServerConstants.StandardScopes.OfflineAccess
                     },
-                    PostLogoutRedirectUris = { "https://localhost:44348/signout-callback-oidc" }
+
+                    RedirectUris = new[] { "https://localhost:44348/signin-oidc" },
+                    FrontChannelLogoutUri = new string("https://localhost:44348/signout-oidc"),
+                    PostLogoutRedirectUris = { "https://localhost:44348/signout-callback-oidc" },
+                    AllowAccessTokensViaBrowser = true
                 },
 
                 new Client
@@ -70,21 +131,25 @@ namespace ITQJ.OAuth
                     UpdateAccessTokenClaimsOnRefresh = true,
                     AccessTokenLifetime = 43200,
 
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AlwaysIncludeUserClaimsInIdToken = true,
+                    RequireConsent = true,
                     RequirePkce = true,
 
                     AllowedScopes = new[]
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                        //"role",
+                        IdentityServerConstants.StandardScopes.Phone,
                         "itqj_api"
                     },
 
-                    RedirectUris = new[]
-                    {
-                        "https://localhost:44348/signin-oidc"
-                    },
-                    PostLogoutRedirectUris = { "https://localhost:44348/signout-callback-oidc" }
+                    RedirectUris = new[] { "https://localhost:44348/signin-oidc" },
+                    FrontChannelLogoutUri = new string("https://localhost:44348/signout-oidc"),
+                    PostLogoutRedirectUris = { "https://localhost:44348/signout-callback-oidc" },
+                    AllowAccessTokensViaBrowser = true
                 }
             };
 
@@ -97,37 +162,24 @@ namespace ITQJ.OAuth
                     Username = "jeffrey",
                     Password = "password",
 
-                    Claims =
-                    {
-                        new Claim("scope", "openid"),
-                        new Claim("scope", "profile"),
-                        new Claim("scope", "itqj_api")
+                    Claims = new Claim[]  {
+                        new Claim("scope", "itqj_api"),
+                        new Claim("email", "jeffreyissaul@hotmail.com"),
+                        new Claim("phone", "+1(849)586-7932"),
+                        //new Claim("role", "rol_profesional")
                     }
                 },
                 new TestUser
                 {
                     SubjectId = "2",
-                    Username = "issaul",
-                    Password = "password",
-
-                    Claims =
-                    {
-                        new Claim("scope", "openid"),
-                        new Claim("scope", "profile"),
-                        new Claim("scope", "itqj_api")
-                    }
-                },
-                new TestUser
-                {
-                    SubjectId = "3",
                     Username = "luis",
                     Password = "password",
 
-                    Claims =
-                    {
-                        new Claim("scope", "openid"),
-                        new Claim("scope", "profile"),
-                        new Claim("scope", "itqj_api")
+                    Claims = new Claim[]  {
+                        new Claim("scope", "itqj_api"),
+                        new Claim("email", "luiseduardofrias27@gmail.com"),
+                        new Claim("phone", "+1(849)228-0058"),
+                        //new Claim("role", "rol_contratista")
                     }
                 }
             };

@@ -1,0 +1,70 @@
+﻿@page  "/ProfesionalSkillEdict-2/AllSkill"
+@model ITQJ.WebPWA.Pages.ProfesionalSkillEdict2Model
+
+@{
+    ViewData["Title"] = "Profesional Skill Edict";
+    int cont = 0;
+    string _Key = string.Empty;
+}
+
+<form action="/ProfesionalSkillEdict2/OnPostAsync" method="post">
+
+    <div style="float: none; clear:both;">
+
+        <hr />
+        <br />
+        <br />
+
+        @for (int i = 0; i < Model.DisctListSkill2.Count; i++)
+        {
+
+            cont = 0;
+
+            @foreach (var key in Model.DisctListSkill2.Keys)
+            {
+
+
+                if (cont == i)
+                {
+                    <h3> @key </h3>
+
+                    _Key = key;
+                }
+
+                cont++;
+
+            }
+
+            <hr />
+
+            <div>
+
+                @for (int j = 0; j < @Model.DisctListSkill2[_Key].Count; j++)
+                {
+                    if (!@Model.DisctListSkill2[_Key][j].Name.Equals(string.Empty))
+                    {
+                        <input hidden asp-for="@Model.DisctListSkill2[_Key][j].Name" />
+
+                        <input type="checkbox" asp-for="@Model.DisctListSkill2[_Key][j].Active" /> <label> @Model.DisctListSkill2[_Key][j].Name</label> <br />
+                    }
+                    else
+                    {
+                        <br />
+                    }
+
+                }
+
+            </div>
+
+            <br />
+            <br />
+            <br />
+
+        }
+
+    </div>
+
+    <input type="submit" class="btn badge-dark" value="Completar Habilidades" />
+
+</form>
+

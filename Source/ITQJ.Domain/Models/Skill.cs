@@ -13,6 +13,8 @@
         [StringLength(25)]
         public string Name { get; set; }
 
+        public string Path { get; set; }
+
         public virtual ProfesionalSkill ProfesionalSkill { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿
-using ITQJ.WebPWA.VMs;
+using ITQJ.WebPWA.Entidades;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
 
@@ -18,14 +18,14 @@ namespace ITQJ.WebPWA.Pages
         }
 
 
-        private List<ProfesionalSkillVM> OctenerProfesionalSkillVM()
+        private List<Skill> OctenerProfesionalSkillVM()
         {
-            List<ProfesionalSkillVM> AllSkill = new List<ProfesionalSkillVM>();
+            List<Skill> AllSkill = new List<Skill>();
 
             foreach (var skills in ListListSkill)
             {
 
-                foreach (ProfesionalSkillVM skill in skills.Value)
+                foreach (Skill skill in skills.Value)
                 {
                     if (skill.Active == true)
                         AllSkill.Add(skill);
@@ -38,930 +38,930 @@ namespace ITQJ.WebPWA.Pages
 
         #region Listas de Skill
 
-        public Dictionary<string, List<ProfesionalSkillVM>> ListListSkill = new Dictionary<string, List<ProfesionalSkillVM>>()
+        public Dictionary<string, List<Skill>> ListListSkill = new Dictionary<string, List<Skill>>()
         {
 
-            { "Lenguajes de Programacion", new List<ProfesionalSkillVM>()
+            { "Lenguajes de Programacion", new List<Skill>()
             {
-                new ProfesionalSkillVM()
+                new Skill()
                 {
                     Name="C++",
                     Path="/icon-Tecnology/CPlus.png"
                 },
-                new ProfesionalSkillVM()
+                new Skill()
                 {
                     Name="C#",
                     Path="/icon-Tecnology/CSharp.png"
                 },
-                new ProfesionalSkillVM()
+                new Skill()
                 {
                     Name="Objective C",
                     Path="/icon-Tecnology/Objective-C.png"
                 },
-                new ProfesionalSkillVM()
+                new Skill()
                 {
                     Name="Ruby",
                     Path="/icon-Tecnology/ruby.png"
                 },
-                new ProfesionalSkillVM()
+                new Skill()
                 {
                     Name="Java",
                     Path="/icon-Tecnology/java.png"
                 },
-                new ProfesionalSkillVM()
+                new Skill()
                 {
                     Name="Kotlin",
                     Path="/icon-Tecnology/kotlin.png"
                 },
-                new ProfesionalSkillVM()
+                new Skill()
                 {
                     Name="Php",
                     Path="/icon-Tecnology/php.png"
                 },
-                new ProfesionalSkillVM()
+                new Skill()
                 {
                     Name="Python",
                     Path="/icon-Tecnology/python.png"
                 },
-                new ProfesionalSkillVM()
+                new Skill()
                 {
                     Name="Go",
                     Path="/icon-Tecnology/Go.png"
                 },
-                new ProfesionalSkillVM()
+                new Skill()
                 {
                     Name="Dart",
                     Path="/icon-Tecnology/Dart.png"
                 },
-                new ProfesionalSkillVM()
+                new Skill()
                 {
                     Name="Switf",
                     Path="/icon-Tecnology/swift.png"
                 },
-                new ProfesionalSkillVM()
+                new Skill()
                 {
                     Name="Delphi",
                     Path="/icon-Tecnology/delphi.png"
                 },
-                new ProfesionalSkillVM()
+                new Skill()
                 {
                     Name="VBasic",
                     Path="/icon-Tecnology/visual-basic.png"
                 },
-                new ProfesionalSkillVM()
+                new Skill()
                 {
                     Name="Perl",
                     Path="/icon-Tecnology/Perl.jpg"
                 }
             }},
 
-            { "Lenguaje de Programacion, Marcado y Estilo. Front End", new List<ProfesionalSkillVM>()
+            { "Lenguaje de Programacion, Marcado y Estilo. Front End", new List<Skill>()
                 {
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Java Script",
                         Path="/icon-Tecnology/javascript.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Html 5",
                         Path="/icon-Tecnology/html5.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Css 3",
                         Path="/icon-Tecnology/css3.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Sass",
                         Path="/icon-Tecnology/sass.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Less",
                         Path="/icon-Tecnology/less.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Babel",
                         Path="/icon-Tecnology/babel.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="BooStrp",
                         Path="/icon-Tecnology/bootstrap.png"
                     }
                 }},
 
-            { "Framework y Librerias de Java Script", new List<ProfesionalSkillVM>()
+            { "Framework y Librerias de Java Script", new List<Skill>()
                 {
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="C++",
                         Path="/icon-Tecnology/CPlus.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="C#",
                         Path="/icon-Tecnology/CSharp.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Objective C",
                         Path="/icon-Tecnology/Objective-C.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Ruby",
                         Path="/icon-Tecnology/ruby.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Java",
                         Path="/icon-Tecnology/java.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Kotlin",
                         Path="/icon-Tecnology/kotlin.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Php",
                         Path="/icon-Tecnology/php.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Python",
                         Path="/icon-Tecnology/python.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Go",
                         Path="/icon-Tecnology/Go.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Dart",
                         Path="/icon-Tecnology/Dart.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Switf",
                         Path="/icon-Tecnology/swift.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Delphi",
                         Path="/icon-Tecnology/delphi.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="VBasic",
                         Path="/icon-Tecnology/visual-basic.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Perl",
                         Path="/icon-Tecnology/Perl.jpg"
                     }
                 }},
 
-            { "Framework de C#", new List<ProfesionalSkillVM>()
+            { "Framework de C#", new List<Skill>()
                 {
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="C++",
                         Path="/icon-Tecnology/CPlus.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="C#",
                         Path="/icon-Tecnology/CSharp.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Objective C",
                         Path="/icon-Tecnology/Objective-C.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Ruby",
                         Path="/icon-Tecnology/ruby.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Java",
                         Path="/icon-Tecnology/java.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Kotlin",
                         Path="/icon-Tecnology/kotlin.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Php",
                         Path="/icon-Tecnology/php.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Python",
                         Path="/icon-Tecnology/python.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Go",
                         Path="/icon-Tecnology/Go.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Dart",
                         Path="/icon-Tecnology/Dart.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Switf",
                         Path="/icon-Tecnology/swift.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Delphi",
                         Path="/icon-Tecnology/delphi.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="VBasic",
                         Path="/icon-Tecnology/visual-basic.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Perl",
                         Path="/icon-Tecnology/Perl.jpg"
                     }
                 }},
 
-            { "Tecnologias Moviles", new List<ProfesionalSkillVM>()
+            { "Tecnologias Moviles", new List<Skill>()
                 {
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="C++",
                         Path="/icon-Tecnology/CPlus.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="C#",
                         Path="/icon-Tecnology/CSharp.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Objective C",
                         Path="/icon-Tecnology/Objective-C.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Ruby",
                         Path="/icon-Tecnology/ruby.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Java",
                         Path="/icon-Tecnology/java.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Kotlin",
                         Path="/icon-Tecnology/kotlin.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Php",
                         Path="/icon-Tecnology/php.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Python",
                         Path="/icon-Tecnology/python.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Go",
                         Path="/icon-Tecnology/Go.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Dart",
                         Path="/icon-Tecnology/Dart.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Switf",
                         Path="/icon-Tecnology/swift.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Delphi",
                         Path="/icon-Tecnology/delphi.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="VBasic",
                         Path="/icon-Tecnology/visual-basic.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Perl",
                         Path="/icon-Tecnology/Perl.jpg"
                     }
                 }},
 
-            { "Sistemas Gestores de Base de Datos", new List<ProfesionalSkillVM>()
+            { "Sistemas Gestores de Base de Datos", new List<Skill>()
                 {
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="C++",
                         Path="/icon-Tecnology/CPlus.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="C#",
                         Path="/icon-Tecnology/CSharp.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Objective C",
                         Path="/icon-Tecnology/Objective-C.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Ruby",
                         Path="/icon-Tecnology/ruby.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Java",
                         Path="/icon-Tecnology/java.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Kotlin",
                         Path="/icon-Tecnology/kotlin.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Php",
                         Path="/icon-Tecnology/php.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Python",
                         Path="/icon-Tecnology/python.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Go",
                         Path="/icon-Tecnology/Go.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Dart",
                         Path="/icon-Tecnology/Dart.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Switf",
                         Path="/icon-Tecnology/swift.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Delphi",
                         Path="/icon-Tecnology/delphi.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="VBasic",
                         Path="/icon-Tecnology/visual-basic.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Perl",
                         Path="/icon-Tecnology/Perl.jpg"
                     }
                 }},
 
-            { "CMS", new List<ProfesionalSkillVM>()
+            { "CMS", new List<Skill>()
                 {
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="C++",
                         Path="/icon-Tecnology/CPlus.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="C#",
                         Path="/icon-Tecnology/CSharp.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Objective C",
                         Path="/icon-Tecnology/Objective-C.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Ruby",
                         Path="/icon-Tecnology/ruby.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Java",
                         Path="/icon-Tecnology/java.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Kotlin",
                         Path="/icon-Tecnology/kotlin.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Php",
                         Path="/icon-Tecnology/php.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Python",
                         Path="/icon-Tecnology/python.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Go",
                         Path="/icon-Tecnology/Go.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Dart",
                         Path="/icon-Tecnology/Dart.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Switf",
                         Path="/icon-Tecnology/swift.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Delphi",
                         Path="/icon-Tecnology/delphi.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="VBasic",
                         Path="/icon-Tecnology/visual-basic.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Perl",
                         Path="/icon-Tecnology/Perl.jpg"
                     }
                 }},
 
-            { "Navegadores Web", new List<ProfesionalSkillVM>()
+            { "Navegadores Web", new List<Skill>()
                 {
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="C++",
                         Path="/icon-Tecnology/CPlus.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="C#",
                         Path="/icon-Tecnology/CSharp.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Objective C",
                         Path="/icon-Tecnology/Objective-C.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Ruby",
                         Path="/icon-Tecnology/ruby.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Java",
                         Path="/icon-Tecnology/java.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Kotlin",
                         Path="/icon-Tecnology/kotlin.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Php",
                         Path="/icon-Tecnology/php.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Python",
                         Path="/icon-Tecnology/python.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Go",
                         Path="/icon-Tecnology/Go.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Dart",
                         Path="/icon-Tecnology/Dart.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Switf",
                         Path="/icon-Tecnology/swift.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Delphi",
                         Path="/icon-Tecnology/delphi.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="VBasic",
                         Path="/icon-Tecnology/visual-basic.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Perl",
                         Path="/icon-Tecnology/Perl.jpg"
                     }
                 }},
 
-            { "Sistemas Operativo", new List<ProfesionalSkillVM>()
+            { "Sistemas Operativo", new List<Skill>()
                 {
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="C++",
                         Path="/icon-Tecnology/CPlus.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="C#",
                         Path="/icon-Tecnology/CSharp.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Objective C",
                         Path="/icon-Tecnology/Objective-C.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Ruby",
                         Path="/icon-Tecnology/ruby.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Java",
                         Path="/icon-Tecnology/java.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Kotlin",
                         Path="/icon-Tecnology/kotlin.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Php",
                         Path="/icon-Tecnology/php.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Python",
                         Path="/icon-Tecnology/python.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Go",
                         Path="/icon-Tecnology/Go.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Dart",
                         Path="/icon-Tecnology/Dart.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Switf",
                         Path="/icon-Tecnology/swift.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Delphi",
                         Path="/icon-Tecnology/delphi.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="VBasic",
                         Path="/icon-Tecnology/visual-basic.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Perl",
                         Path="/icon-Tecnology/Perl.jpg"
                     }
                 }},
 
-            { "Repositorios, Sistemas Integracion Continua y Sistemas de DevOps", new List<ProfesionalSkillVM>()
+            { "Repositorios, Sistemas Integracion Continua y Sistemas de DevOps", new List<Skill>()
                 {
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="C++",
                         Path="/icon-Tecnology/CPlus.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="C#",
                         Path="/icon-Tecnology/CSharp.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Objective C",
                         Path="/icon-Tecnology/Objective-C.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Ruby",
                         Path="/icon-Tecnology/ruby.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Java",
                         Path="/icon-Tecnology/java.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Kotlin",
                         Path="/icon-Tecnology/kotlin.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Php",
                         Path="/icon-Tecnology/php.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Python",
                         Path="/icon-Tecnology/python.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Go",
                         Path="/icon-Tecnology/Go.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Dart",
                         Path="/icon-Tecnology/Dart.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Switf",
                         Path="/icon-Tecnology/swift.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Delphi",
                         Path="/icon-Tecnology/delphi.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="VBasic",
                         Path="/icon-Tecnology/visual-basic.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Perl",
                         Path="/icon-Tecnology/Perl.jpg"
                     }
                 }},
 
-            { "IDE y Editores de Codigo", new List<ProfesionalSkillVM>()
+            { "IDE y Editores de Codigo", new List<Skill>()
                 {
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="C++",
                         Path="/icon-Tecnology/CPlus.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="C#",
                         Path="/icon-Tecnology/CSharp.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Objective C",
                         Path="/icon-Tecnology/Objective-C.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Ruby",
                         Path="/icon-Tecnology/ruby.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Java",
                         Path="/icon-Tecnology/java.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Kotlin",
                         Path="/icon-Tecnology/kotlin.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Php",
                         Path="/icon-Tecnology/php.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Python",
                         Path="/icon-Tecnology/python.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Go",
                         Path="/icon-Tecnology/Go.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Dart",
                         Path="/icon-Tecnology/Dart.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Switf",
                         Path="/icon-Tecnology/swift.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Delphi",
                         Path="/icon-Tecnology/delphi.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="VBasic",
                         Path="/icon-Tecnology/visual-basic.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Perl",
                         Path="/icon-Tecnology/Perl.jpg"
                     }
                 }},
 
-            { "Otros Frameworks", new List<ProfesionalSkillVM>()
+            { "Otros Frameworks", new List<Skill>()
                 {
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="C++",
                         Path="/icon-Tecnology/CPlus.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="C#",
                         Path="/icon-Tecnology/CSharp.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Objective C",
                         Path="/icon-Tecnology/Objective-C.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Ruby",
                         Path="/icon-Tecnology/ruby.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Java",
                         Path="/icon-Tecnology/java.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Kotlin",
                         Path="/icon-Tecnology/kotlin.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Php",
                         Path="/icon-Tecnology/php.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Python",
                         Path="/icon-Tecnology/python.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Go",
                         Path="/icon-Tecnology/Go.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Dart",
                         Path="/icon-Tecnology/Dart.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Switf",
                         Path="/icon-Tecnology/swift.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Delphi",
                         Path="/icon-Tecnology/delphi.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="VBasic",
                         Path="/icon-Tecnology/visual-basic.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Perl",
                         Path="/icon-Tecnology/Perl.jpg"
                     }
                 }},
 
-            { "Otras Tecnologias", new List<ProfesionalSkillVM>()
+            { "Otras Tecnologias", new List<Skill>()
                 {
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="C++",
                         Path="/icon-Tecnology/CPlus.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="C#",
                         Path="/icon-Tecnology/CSharp.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Objective C",
                         Path="/icon-Tecnology/Objective-C.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Ruby",
                         Path="/icon-Tecnology/ruby.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Java",
                         Path="/icon-Tecnology/java.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Kotlin",
                         Path="/icon-Tecnology/kotlin.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Php",
                         Path="/icon-Tecnology/php.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Python",
                         Path="/icon-Tecnology/python.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Go",
                         Path="/icon-Tecnology/Go.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Dart",
                         Path="/icon-Tecnology/Dart.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Switf",
                         Path="/icon-Tecnology/swift.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Delphi",
                         Path="/icon-Tecnology/delphi.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="VBasic",
                         Path="/icon-Tecnology/visual-basic.png"
                     },
-                    new ProfesionalSkillVM()
+                    new Skill()
                     {
                         Name="Perl",
                         Path="/icon-Tecnology/Perl.jpg"

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ITQJ.WebPWA.VMs;
+using ITQJ.WebPWA.Entitdades;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -24,7 +24,7 @@ namespace ITQJ.WebPWA.Pages
         public EventCallback<int> PaginaSeleccionada { get; set; }
 
         public List<PaginaModel> paginas = new List<PaginaModel>();
-        public readonly List<ProjectVM> listproject;
+        public readonly List<Project> listproject;
 
         protected void OnParametersSet()
         {

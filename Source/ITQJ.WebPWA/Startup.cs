@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 
 namespace ITQJ.WebPWA
@@ -23,7 +24,10 @@ namespace ITQJ.WebPWA
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
             services.AddRazorPages();
+
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             var authority = Configuration["AuthorityURL"];
             var scopes = Configuration.GetSection("ClientConfiguration:AllowedScopes").GetChildren();
@@ -41,13 +45,17 @@ namespace ITQJ.WebPWA
 
                     options.ClientId = Configuration["ClientConfiguration:ClientId"];
                     options.ClientSecret = Configuration["ClientConfiguration:ClientSecret"];
-                    options.ResponseType = "code";
+                    options.ResponseType = "id_token token";
+                    options.UsePkce = true;
 
-                    options.SaveTokens = true;
+                    //options.ResponseMode = "form_post";
+                    options.Scope.Clear();
                     foreach (var scope in scopes)
                     {
                         options.Scope.Add(scope.Value);
                     }
+                    options.GetClaimsFromUserInfoEndpoint = true;
+                    options.SaveTokens = true;
                 });
 
             services.AddScoped<APIClientService>();
@@ -83,7 +91,6 @@ namespace ITQJ.WebPWA
                 });
             }
             app.UseHsts();
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
