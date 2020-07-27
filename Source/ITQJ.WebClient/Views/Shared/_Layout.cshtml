@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - ITQJ.WebClient</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
@@ -57,9 +57,28 @@
             &copy; 2020 - ITQJ.WebClient - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <partial name="_Chat" />
+
+    <div style="width: 300px; position: fixed; bottom: 12px; right: 12px;">
+        <div id="alert-container" style="width: 100%;"></div>
+    </div>
+
+    <div id="loader" class="loading-indicator">
+        <div class="d-flex justify-content-center align-items-center">
+            <img alt="loading"
+                 src="https://media.giphy.com/media/feN0YJbVs0fwA/giphy.gif"
+                 width="500"
+                 height="500" />
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/lib/jquery/jquery-dateformat.js"></script>
+    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/chat.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

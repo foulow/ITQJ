@@ -13,7 +13,6 @@ namespace ITQJ.WebClient.Controllers
 {
     public class HomeController : BaseController
     {
-
         public HomeController(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
         public IActionResult Index()
@@ -31,6 +30,11 @@ namespace ITQJ.WebClient.Controllers
             return View();
         }
 
+        public IActionResult PageNotFound()
+        {
+            return View();
+        }
+
         public async Task LogOut()
         {
             await HttpContext.SignOutAsync("Cookies");
@@ -38,10 +42,10 @@ namespace ITQJ.WebClient.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> LogIn()
+        public IActionResult LogIn()
         {
             // If enabled allow re-access with refresh token.
-            await RefreshTokensAsync();
+            // await RefreshTokensAsync();
 
             return View("About");
         }

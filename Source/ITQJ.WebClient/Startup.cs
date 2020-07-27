@@ -1,4 +1,5 @@
 using AutoMapper;
+using ITQJ.WebClient.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -25,6 +26,19 @@ namespace ITQJ.WebClient
         {
             services.AddControllersWithViews();
 
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowAnyOrigin();
+                    });
+            });
+
+            services.AddSignalR();
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.Configure<ClientCredentials>(Configuration.GetSection("ClientConfiguration"));
@@ -45,7 +59,7 @@ namespace ITQJ.WebClient
 
                     options.ClientId = Configuration["ClientConfiguration:ClientId"];
                     options.ClientSecret = Configuration["ClientConfiguration:ClientSecret"];
-                    options.ResponseType = "id_token token";
+                    options.ResponseType = "code";
 
                     options.SaveTokens = true;
                     foreach (var scope in scopes)
@@ -99,7 +113,15 @@ namespace ITQJ.WebClient
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "allLinks",
+                    pattern: "{*a}",
+                    defaults: new { controller = "Home", action = "PageNotFound" });
+
+                endpoints.MapHub<ChatHub>("/chatHub");
             });
+
         }
     }
 }
