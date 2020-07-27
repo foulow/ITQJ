@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<img src="/Image/gestion-del-conocimiento.png" style="opacity:0.2; border-radius:0%; position:absolute; top:50px; left:0px; width:100%; height:100%; display:inline-block; " />
+
+<div style="position:relative;">
+
+    <h1>Habilidades Profesionales</h1>
+
+    @foreach (ITQJ.WebClient.Models.SkillM skill in Model.Skills)
+    {
+
+        <div class="icon-skill">
+
+            <div class="ContSkill1">
+
+                <div class="conte">
+
+                    <div class="ContSkill2">
+
+                        <div class="titulo">
+
+                            <strong> @skill.Name </strong>
+
+                        </div>
+
+                        <div id="Estellas"><a onclick=""><i aria-hidden="true"><img src="@skill.Path" /></i></a> </div>
+
+                    </div>
+
+                    <div>
+
+                        <div class="progress-bar blue stripes shine ">
+                            <span style=" width: @(Convert.ToString(skill.Percentage) + "%")"></span>
+                        </div>
+
+                        <strong class="d-inline float-right">
+
+                            @if (skill.Percentage <= 25)
+                            { Model.Rango = "Junior " + Convert.ToString(skill.Percentage) + "%"; }
+                            else if (skill.Percentage <= 75)
+                            { Model.Rango = "Avanzado " + Convert.ToString(skill.Percentage) + "%"; }
+                            else if (skill.Percentage <= 100)
+                            { Model.Rango = "Senior " + Convert.ToString(skill.Percentage) + "%"; }
+
+                            @Model.Rango
+
+                        </strong>
+
+                    </div>
+
+                    <br />
+                    <br />
+
+                </div>
+
+            </div>
+
+        </div>
+
+    }
+
+    <div style="position:relative; bottom:0px;">
+
+        <hr />
+        <br />
+        <br />
+
+        <a style="color: white; text-decoration: none;}" class="btn btn-dark" asp-page="/ProfesionalSkillEdict-1"> Editar Skills </a>
+
+        <br />
+        <br />
+
+    </div>
+
+</div>
+
