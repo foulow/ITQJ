@@ -24,6 +24,7 @@ namespace ITQJ.WebClient
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+       
             services.AddControllersWithViews();
 
             services.AddCors(options =>
@@ -44,7 +45,9 @@ namespace ITQJ.WebClient
             services.Configure<ClientCredentials>(Configuration.GetSection("ClientConfiguration"));
 
             var authority = Configuration["AuthorityURL"];
+
             var scopes = Configuration.GetSection("ClientConfiguration:AllowedScopes").GetChildren();
+
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = "Cookies";

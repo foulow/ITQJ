@@ -1,56 +1,145 @@
 ﻿@using Microsoft.AspNetCore.Authentication
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ITQJ.WebClient</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ITQJ.WebClient</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About</a>
-                        </li>
-                        @if (User.Claims.Any())
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="LogOut">Log Out</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="LogIn">Log In</a>
-                            </li>
-                        }
 
-                    </ul>
+    <head>
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] - ITQJ.WebClient</title>
+
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+        <link rel="stylesheet" href="~/css/site.css" />
+        <link href="/css/ProfisionalSkill.css" rel="stylesheet" />
+        <link href="/css/BarraConocimiento.css" rel="stylesheet" />
+
+    </head>
+
+    <body>
+
+        <header style="margin:0px; padding:0px; height:160px; margin-bottom:20px;">
+
+            <div class="top-row bg-dark d-block col" style="width:100%; padding:0px; margin:0px; height:65px;">
+
+                <div class="position-relative  bg-primary" style="width:100%; top:30px; z-index:2; height:30px; bottom:0px;"></div>
+
+                <div style="display:inline-block; bottom:-15px; left:15px; z-index:3; position:absolute; ">
+
+                    <div>
+
+                        <a class="btn btn-sm btn-dark" asp-action="Register" asp-controller="Home"> Registarse / Inicio Sección </a>
+
+                    </div>
+
                 </div>
+
+                <div style="left:50%; z-index:3; transform:translate(-50%,-20%); position:absolute;  display:inline-block; ">
+
+                    <div>
+
+                        <a   asp-action="Index" asp-controller="Home">
+                            <img src="/Image/Logo.png" style="
+                             width: 125px;
+                             height: 125px;
+                             " />
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <div class="d-inline-block" style="position:absolute; z-index:3; right:5%; ">
+
+                    <nav class="navbar navbar-expand-md">
+
+
+                        <div class="navbar-collapse">
+
+                            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+
+                                <div class="btn-group" role="group">
+
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Perfil
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+
+                                        <a class="dropdown-item" asp-action="PersonalInfo" asp-controller="PersonalInfo">Informacion Personal</a>
+
+                                        <a class="dropdown-item" asp-action="ProfessionalSkill" asp-controller="PersonalInfo">habilidad</a>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="btn-group" role="group">
+
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Mensaje
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+
+                                        <a class="dropdown-item" asp-action="Index" asp-controller="PersonalInfo">Mensajes</a>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="btn-group" role="group">
+
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Proyectos
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+
+                                        <a class="dropdown-item" asp-action="Index" asp-controller="PersonalInfo">Proyectos</a>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="btn-group" role="group">
+
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Ayuda
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+
+                                        <a class="dropdown-item" asp-action="Index" asp-controller="PersonalInfo">About</a>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </nav>
+
+                </div>
+
+
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+
+
+        </header>
+
+        <div class="container">
+
+            <main role="main" class="pb-3">
+
+                @RenderBody()
+
+            </main>
+
+        </div>
 
     <footer class="border-top footer text-muted">
         <div class="container">
@@ -81,4 +170,23 @@
     <script src="~/js/chat.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
+        <footer class="border-top footer text-muted" style="height:50px;">
+
+            <div class="container">
+
+                &copy; 2020 - ITQJ.  WebPWA -<a class="dropdown-item text-center" asp-action="Index" asp-controller="PersonalInfo">Privacidad</a>
+
+            </div>
+
+        </footer>
+
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/js/Funciones.js" asp-append-version="true"></script>
+
+        @RenderSection("Scripts", required: false)
+
+    </body>
+
 </html>

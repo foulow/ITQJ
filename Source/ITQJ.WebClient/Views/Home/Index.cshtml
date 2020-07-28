@@ -1,9 +1,130 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+
+    var listpro = Model[0];
+    var listpag = Model[1];
+
+
 }
 @using ITQJ.WebClient
 
-<div class="text-center">
-    <h1 class="display-4">Hola Mundo!</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<br />
+
+<br />
+<br />
+
+<h3>Filtro de Busqueda</h3>
+
+<hr />
+
+<br />
+<div class="p-2  d-inline-block">
+
+    <label class="h4"> Buscar por titulo </label>
+
+    <input type="text" width="100" />
+
+    <input type="submit" value="Buscar" class="btn btn-sm btn-outline-dark" />
+
 </div>
+
+<br />
+<br />
+<br />
+<br />
+
+<nav aria-label="Page navigation exmple">
+
+    <ul class="pagination justify-content-center">
+
+        @foreach (var pagina in listpag)
+        {
+
+            <li style="cursor: pointer;" class="page-item @(pagina.Habilitada ? null : "disabled") @(pagina.Activa ? "active" : null)">
+
+                <span class="page-link"> @pagina.Texto </span>
+
+            </li>
+
+        }
+
+    </ul>
+
+</nav>
+
+
+<br />
+
+<div>
+
+    <h4>Proyectos Recientes</h4>
+    <hr />
+
+
+    @foreach (var dato in listpro)
+    {
+        <a href="#" style="color:black; text-shadow:5px 5px 5px gray">
+
+            <div style="border: 2px solid gray;
+                        box-shadow: 6px 6px 18px #888888;
+                        border-radius: 20px;">
+
+                <div class="col d-inline-block JobSearchCard-primary-heading">
+
+                    <div class="col d-inline">
+
+                        <a href="#" class="JobSearchCard-primary-heading-link"
+                           data-qtsb-section="page-job-search-new"
+                           data-qtsb-subsection="card-job"
+                           data-qtsb-label="link-project-title"
+                           data-heading-link="true" style="color:black">
+
+                            Titulo del Proyecto: @dato.nombre
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <div class="col d-inline-block mb-4">
+
+                    <div class="col d-inline">
+
+                        <p class="JobSearchCard-primary-description">
+                            Descripción:
+                        </p>
+
+                        @dato.descriccionEmpleo
+
+                    </div>
+
+                </div>
+
+                <div class="col d-inline-block">
+
+                    <div class="col d-inline">
+
+                        <text>Publicado: @dato.fechaPublicacion </text>
+
+                    </div>
+
+                    <div class="col d-inline">
+
+                        <text>Cierre de la publicacion: @dato.fechaCierre </text>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </a>
+
+        <br />
+
+    }
+
+</div>
+
+<button onclick="ScrollUp()" class="ButtonUp"></button>
