@@ -2,7 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
@@ -39,27 +42,27 @@ namespace ITQJ.OAuth
                 var host = CreateHostBuilder(args).Build();
 
                 // Do a automatid db migration on startud in case the database does not exits.
-                //using (var serviceScope = host.Services.CreateScope())
-                //{
-                //    var services = serviceScope.ServiceProvider;
-                //    var dbConfig = services.GetRequiredService<ConfigurationDbContext>();
+                using (var serviceScope = host.Services.CreateScope())
+                {
+                    var services = serviceScope.ServiceProvider;
+                    var dbConfig = services.GetRequiredService<ConfigurationDbContext>();
 
-                //    var config = host.Services.GetRequiredService<IConfiguration>();
-                //    var connectionString = config.GetConnectionString("DefaultConnection");
+                    var config = host.Services.GetRequiredService<IConfiguration>();
+                    var connectionString = config.GetConnectionString("DefaultConnection");
 
-                //    if (!dbConfig.Database.CanConnect())
-                //    {
-                //        Log.Information("Seeding database...");
-                //        InitializeDatabase.EnsureSeedData(connectionString);
-                //        Log.Information("Done seeding database.");
-                //    }
-                //    else if (!dbConfig.IsDataFetched())
-                //    {
-                //        Log.Information("Seeding database...");
-                //        InitializeDatabase.EnsureSeedData(connectionString);
-                //        Log.Information("Done seeding database.");
-                //    }
-                //}
+                    if (!dbConfig.Database.CanConnect())
+                    {
+                        Log.Information("Seeding database...");
+                        InitializeDatabase.EnsureSeedData(connectionString);
+                        Log.Information("Done seeding database.");
+                    }
+                    else if (!dbConfig.IsDataFetched())
+                    {
+                        Log.Information("Seeding database...");
+                        InitializeDatabase.EnsureSeedData(connectionString);
+                        Log.Information("Done seeding database.");
+                    }
+                }
 
                 Log.Information("Starting host...");
                 host.Run();

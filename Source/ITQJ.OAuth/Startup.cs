@@ -58,52 +58,52 @@ namespace ITQJ.OAuth
                                 sql => sql.MigrationsAssembly(migrationsAssembly)));
 
             //// Use this for in memory data test. (not connection string needed)
-            services.AddIdentityServer(options =>
-            {
-                // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
-                options.EmitStaticAudienceClaim = true;
-                options.Events.RaiseErrorEvents = true;
-                options.Events.RaiseInformationEvents = true;
-                options.Events.RaiseFailureEvents = true;
-                options.Events.RaiseSuccessEvents = true;
-            })
-                .AddDeveloperSigningCredential()
-                //.AddTestUsers(Config.Users.ToList())
-                .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
-                .AddInMemoryIdentityResources(Config.IdentityResources)
-                .AddInMemoryApiScopes(Config.ApiScopes)
-                .AddInMemoryApiResources(Config.ApiResources)
-                .AddInMemoryClients(Config.Clients);
-
-            // Use this for real db implementation.
-            //var connectionString = Configuration.GetConnectionString("DefaultConnection");
-            //var builder = services.AddIdentityServer(options =>
+            //services.AddIdentityServer(options =>
             //{
+            //    // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
             //    options.EmitStaticAudienceClaim = true;
             //    options.Events.RaiseErrorEvents = true;
             //    options.Events.RaiseInformationEvents = true;
             //    options.Events.RaiseFailureEvents = true;
             //    options.Events.RaiseSuccessEvents = true;
             //})
+            //    .AddDeveloperSigningCredential()
+            //    //.AddTestUsers(Config.Users.ToList())
             //    .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
-            //    // this adds the config data from DB (clients, resources, CORS)
-            //    .AddConfigurationStore(options =>
-            //    {
-            //        options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString,
-            //            sql => sql.MigrationsAssembly(migrationsAssembly));
-            //    })
-            //    // this adds the operational data from DB (codes, tokens, consents)
-            //    .AddOperationalStore(options =>
-            //    {
-            //        options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString,
-            //            sql => sql.MigrationsAssembly(migrationsAssembly));
+            //    .AddInMemoryIdentityResources(Config.IdentityResources)
+            //    .AddInMemoryApiScopes(Config.ApiScopes)
+            //    .AddInMemoryApiResources(Config.ApiResources)
+            //    .AddInMemoryClients(Config.Clients);
 
-            //        // this enables automatic token cleanup. this is optional.
-            //        options.EnableTokenCleanup = true;
-            //    });
-            //// not recommended for production - you need to store your key material somewhere secure
-            //builder.AddDeveloperSigningCredential();
-            //////builder.AddSigningCredential(new X509Certificate2(@"C:\Projects\Visual Studio\Pidelo\Repositorios\Pidelo-API\pidelo.pfx", "Paravailarla.1"));
+            // Use this for real db implementation.
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            var builder = services.AddIdentityServer(options =>
+            {
+                options.EmitStaticAudienceClaim = true;
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseSuccessEvents = true;
+            })
+                .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
+                // this adds the config data from DB (clients, resources, CORS)
+                .AddConfigurationStore(options =>
+                {
+                    options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString,
+                        sql => sql.MigrationsAssembly(migrationsAssembly));
+                })
+                // this adds the operational data from DB (codes, tokens, consents)
+                .AddOperationalStore(options =>
+                {
+                    options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString,
+                        sql => sql.MigrationsAssembly(migrationsAssembly));
+
+                    // this enables automatic token cleanup. this is optional.
+                    options.EnableTokenCleanup = true;
+                });
+            // not recommended for production - you need to store your key material somewhere secure
+            builder.AddDeveloperSigningCredential();
+            ////builder.AddSigningCredential(new X509Certificate2(@"C:\Projects\Visual Studio\Pidelo\Repositorios\Pidelo-API\pidelo.pfx", "Paravailarla.1"));
 
             // If enabled allows third paty authentication to get access to IdentityServer.
             //services.AddAuthentication()

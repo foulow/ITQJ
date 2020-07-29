@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ITQJ.WebClient
@@ -24,7 +25,7 @@ namespace ITQJ.WebClient
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-       
+
             services.AddControllersWithViews();
 
             services.AddCors(options =>
@@ -40,6 +41,7 @@ namespace ITQJ.WebClient
 
             services.AddSignalR();
 
+            services.AddTransient<HttpClient>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.Configure<ClientCredentials>(Configuration.GetSection("ClientConfiguration"));

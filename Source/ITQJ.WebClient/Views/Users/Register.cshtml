@@ -1,0 +1,61 @@
+﻿@model ITQJ.WebClient.ViewModels.UserVM;
+
+@{
+    ViewBag.Title = "Register";
+}
+
+<div class="row">
+
+    <div class="col m-0 p-0" style="height:600px">
+
+        <img src="/Image/Empleos-Y-Negocios-.png" style=" position:relative; top:0px; left:0px; width:100%; height:100%; display:inline-block; " />
+
+        <div style="
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            display: block;
+            transform: translate(-50%,-50%);
+            width: 360px;
+            padding: 30px;
+            box-shadow: 5px 10px 18px #888888;
+            border-radius: 20px;">
+
+            <h2>Crear nuevo usuario</h2>
+
+            <form asp-controller="User" asp-action="Register" class="col text-sm-left">
+                <div class="form-group">
+                    <label asp-for="UserName">Nombre de Usuario</label>
+                    <input type="text" asp-for="UserName" class="form-control" required />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Password">Contraseña</label>
+                    <input type="password" asp-for="Password" class="form-control" required />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label">Email</label>
+                    <input type="email" asp-for="Email" class="form-control" required />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Roles" class="control-label">Rol</label>
+                    <section asp-for="RolId"
+                             class="form-control" required
+                             asp-items="@(new SelectList(Model.Roles, "Id", "Name"))"></section>
+                </div>
+
+                <input class="btn btn-dark col" type="submit" value="Registarse">
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
