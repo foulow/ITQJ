@@ -42,6 +42,7 @@ namespace ITQJ.WebClient
             services.AddSignalR();
 
             services.AddTransient<HttpClient>();
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.Configure<ClientCredentials>(Configuration.GetSection("ClientConfiguration"));

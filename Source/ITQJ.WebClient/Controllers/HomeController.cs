@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 namespace ITQJ.WebClient.Controllers
 {
+
     public class HomeController : BaseController
     {
         public HomeController(IServiceProvider serviceProvider) : base(serviceProvider) { }
@@ -24,21 +25,24 @@ namespace ITQJ.WebClient.Controllers
             return View(listobject);
         }
 
+
         public IActionResult Privacy()
         {
             return View();
         }
+
 
         public IActionResult About()
         {
             return View();
         }
 
+
         public List<projectt> ListPer = new List<projectt>()
         {
             new projectt()
             {
-                nombre = "En una cartulina grande, necesito una pintura o un dibujo de un anillo de compromiso y un arte romántico que lo rodea. Necesito poder recoger esto en el área del DMV antes del viernes por la tarde.",
+                nombre = "En una cartulina grande, necesito una pintura o un dibujo de un anillo de compromiso y un.",
                 fechaPublicacion = "14/7/2020",
                 fechaCierre = "20/7/2020",
                 empleador = "Jian contrerar",
@@ -100,6 +104,7 @@ namespace ITQJ.WebClient.Controllers
                 descriccionEmpleo = "Hola, Necesitamos que se haga un sitio web rápidamente. Necesito personas con experiencia."
             }
         };
+
 
     }
 

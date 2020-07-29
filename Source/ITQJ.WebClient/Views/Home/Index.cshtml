@@ -63,25 +63,23 @@
 
     @foreach (var dato in listpro)
     {
-        <a href="#" style="color:black; text-shadow:5px 5px 5px gray">
+        <a asp-action="Register" asp-controller="Home" style="color:black; text-shadow:5px 5px 5px gray">
 
-            <div style="border: 2px solid gray;
-                        box-shadow: 6px 6px 18px #888888;
-                        border-radius: 20px;">
+            <div style="border: 2px solid gray; box-shadow: 6px 6px 18px #888888; border-radius: 20px;">
 
                 <div class="col d-inline-block JobSearchCard-primary-heading">
 
                     <div class="col d-inline">
 
-                        <a href="#" class="JobSearchCard-primary-heading-link"
+                        <strong href="#" class="JobSearchCard-primary-heading-link"
                            data-qtsb-section="page-job-search-new"
                            data-qtsb-subsection="card-job"
                            data-qtsb-label="link-project-title"
                            data-heading-link="true" style="color:black">
 
-                            Titulo del Proyecto: @dato.nombre
+                        @dato.nombre
 
-                        </a>
+                        </strong>
 
                     </div>
 
@@ -91,11 +89,7 @@
 
                     <div class="col d-inline">
 
-                        <p class="JobSearchCard-primary-description">
-                            Descripción:
-                        </p>
-
-                        @dato.descriccionEmpleo
+                    @dato.descriccionEmpleo
 
                     </div>
 

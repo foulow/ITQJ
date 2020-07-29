@@ -32,6 +32,7 @@ namespace ITQJ.WebClient.Controllers
             this._configuration = serviceProvider.GetRequiredService<IConfiguration>();
             this._clientConfiguration = serviceProvider.GetRequiredService<IOptionsMonitor<ClientCredentials>>();
         }
+
         protected async Task<T> CallApiGETAsync<T>(string uri, bool needJWT = false) where T : class
         {
             if (needJWT)
@@ -116,10 +117,12 @@ namespace ITQJ.WebClient.Controllers
             return View(nameof(PageNotFound));
         }
 
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }
