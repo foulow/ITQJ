@@ -9,7 +9,7 @@ using System.Linq;
 namespace ITQJ.API.Controllers
 {
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     public class UsersController : BaseController
     {

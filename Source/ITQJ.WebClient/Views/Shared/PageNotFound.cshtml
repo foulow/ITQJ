@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Page not found";
+}
+
+
+<div class="d-flex align-items-center justify-content-center">
+
+    <div class="text-center m-5">
+       
+        <img src="~/Image/error-404-foxplay.png" style="width:75%; height:75%; margin:0px; position:relative; padding:0px; top:-160px;" />
+
+        <hr  style="position:relative;  top:-250px;" />
+
+        <h1 class="text-danger position-relative" style="top:-250px;">La Página que intentas solicitar no esta disponible (Error).</h1>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            loader.hide();
+        });
+    </script>
+}
+
+

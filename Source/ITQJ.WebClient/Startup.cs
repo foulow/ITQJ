@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ITQJ.WebClient
@@ -39,6 +40,8 @@ namespace ITQJ.WebClient
             });
 
             services.AddSignalR();
+
+            services.AddTransient<HttpClient>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
