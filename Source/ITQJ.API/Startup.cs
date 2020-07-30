@@ -4,7 +4,7 @@ using FluentValidation.AspNetCore;
 using IdentityServer4.AccessTokenValidation;
 //using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-using ITQJ.API.DTOs;
+using ITQJ.Domain.DTOs;
 using ITQJ.EFCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -20,7 +20,7 @@ using System;
 using System.Threading.Tasks;
 
 
-namespace ITQJ.API
+namespace ITQJ.Domain
 {
     public class Startup
     {

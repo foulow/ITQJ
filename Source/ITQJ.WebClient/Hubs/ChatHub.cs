@@ -1,5 +1,5 @@
 ﻿using ITQJ.WebClient.Data;
-using ITQJ.WebClient.Models;
+using ITQJ.WebClient.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System;
@@ -16,26 +16,26 @@ namespace ITQJ.WebClient.Hubs
 
         private static readonly object Locker = new object();
 
-        private static List<UserDetail> _connectedUsers;
-        public static List<UserDetail> ConnectedUsers
+        private static List<ChatUserM> _connectedUsers;
+        public static List<ChatUserM> ConnectedUsers
         {
             get
             {
                 lock (Locker)
                 {
-                    return _connectedUsers ??= new List<UserDetail>();
+                    return _connectedUsers ??= new List<ChatUserM>();
                 }
             }
         }
 
-        private static List<MessageDetail> _currentMessage;
-        public static List<MessageDetail> CurrentMessages
+        private static List<ChatMessageM> _currentMessage;
+        public static List<ChatMessageM> CurrentMessages
         {
             get
             {
                 lock (Locker)
                 {
-                    return _currentMessage ??= new List<MessageDetail>();
+                    return _currentMessage ??= new List<ChatMessageM>();
                 }
             }
         }
@@ -52,7 +52,7 @@ namespace ITQJ.WebClient.Hubs
             if (ConnectedUsers.Any(x => x.ConnectionId.Equals(Context.ConnectionId)))
                 throw new InvalidOperationException(Resources.UserIsConnected);
 
-            var user = new UserDetail
+            var user = new ChatUserM
             {
                 UserId = Guid.NewGuid(),
                 ConnectionId = Context.ConnectionId,
@@ -94,7 +94,7 @@ namespace ITQJ.WebClient.Hubs
 
         #region Message Methods
 
-        public async Task<IActionResult> CacheMessage(MessageDetail message)
+        public async Task<IActionResult> CacheMessage(ChatMessageM message)
         {
             if (!ConnectedUsers.Any(x => x.UserId.Equals(message.FromUserId)))
                 throw new InvalidOperationException(Resources.UserIsDisconnected);
@@ -108,7 +108,7 @@ namespace ITQJ.WebClient.Hubs
             return new OkResult();
         }
 
-        public async Task<IActionResult> SendPrivateMessage(MessageDetail message)
+        public async Task<IActionResult> SendPrivateMessage(ChatMessageM message)
         {
             if (!ConnectedUsers.Any(x => x.UserId.Equals(message.FromUserId)))
                 throw new InvalidOperationException(Resources.UserIsDisconnected);
@@ -201,7 +201,7 @@ namespace ITQJ.WebClient.Hubs
 
         #region Auxiliary Methods
 
-        private static void AddMessageInCache(MessageDetail _MessageDetail)
+        private static void AddMessageInCache(ChatMessageM _MessageDetail)
         {
             CurrentMessages.Add(_MessageDetail);
             if (CurrentMessages.Count > 1000)

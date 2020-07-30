@@ -1,5 +1,6 @@
 using AutoMapper;
 using ITQJ.WebClient.Hubs;
+using ITQJ.WebClient.ViewModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -45,7 +46,7 @@ namespace ITQJ.WebClient
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.Configure<ClientCredentials>(Configuration.GetSection("ClientConfiguration"));
+            services.Configure<ClientCredentialsM>(Configuration.GetSection("ClientConfiguration"));
 
             var authority = Configuration["AuthorityURL"];
 

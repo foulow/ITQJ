@@ -1,12 +1,13 @@
 ﻿using IdentityModel;
-using ITQJ.API.DTOs;
+using ITQJ.Domain.DTOs;
 using ITQJ.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
-namespace ITQJ.API.Controllers
+namespace ITQJ.Domain.Controllers
 {
     [ApiController]
     //[Authorize]
@@ -16,10 +17,13 @@ namespace ITQJ.API.Controllers
         public UsersController(IServiceProvider serviceProvider)
             : base(serviceProvider) { }
 
+        [Authorize]
         [HttpGet("{userName}")]
         public ActionResult GetUser([FromRoute] string userName)
         {
             var user = this._appDBContext.Users
+                .Include(i => i.Role)
+                .Include(i => i.Messages)
                 .FirstOrDefault(x => x.UserName == userName);
 
             if (user is null)

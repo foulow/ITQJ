@@ -1,11 +1,11 @@
-﻿using ITQJ.API.DTOs;
+﻿using ITQJ.Domain.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ITQJ.API.Controllers
+namespace ITQJ.Domain.Controllers
 {
     [ApiController]
     [AllowAnonymous]

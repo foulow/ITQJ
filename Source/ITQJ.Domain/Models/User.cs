@@ -26,10 +26,10 @@
         public string Email { get; set; }
 
         [Required]
-        [ForeignKey(nameof(Rol))]
-        public int RolId { get; set; }
+        [ForeignKey("Roles")]
+        public int RoleId { get; set; }
 
-        public virtual Rol Rol { get; set; }
+        public virtual Role Role { get; set; }
 
         public virtual PersonalInfo PersonalInfo { get; set; }
 

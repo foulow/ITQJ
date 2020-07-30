@@ -1,6 +1,6 @@
 ﻿@model ITQJ.WebClient.ViewModels.UserVM;
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Registro de Usuario";
 }
 
 <div class="row">
@@ -56,13 +56,12 @@
 
                 <div class="form-group">
 
-                    <label asp-for="Rol">Rol</label>
-                    <br>
+                    <label asp-for="RolId">Rol</label>
 
-                    <select asp-for="RolId" class="dropdown" required asp-items="@(new SelectList(Model.Roles, "Id", "Name"))">
+                    <select asp-for="RolId"
+                            class="dropdown"
+                            asp-items="@(new SelectList(Model.Roles, "Id", "Name"))" required>
                     </select>
-                    
-                    <br>
 
                 </div>
 

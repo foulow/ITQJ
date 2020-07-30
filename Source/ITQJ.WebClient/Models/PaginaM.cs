@@ -1,4 +1,4 @@
-﻿namespace ITQJ.WebClient.Models
+﻿namespace ITQJ.WebClient.ViewModels
 {
     public class PaginaM
     {

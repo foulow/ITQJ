@@ -1,6 +1,6 @@
-﻿namespace ITQJ.WebClient
+﻿namespace ITQJ.WebClient.ViewModels
 {
-    public class ClientCredentials
+    public class ClientCredentialsM
     {
         public string Authority { get; set; }
         public string ClientId { get; set; }

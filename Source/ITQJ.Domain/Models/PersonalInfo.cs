@@ -30,12 +30,12 @@
 
 
         [Required]
-        [ForeignKey(nameof(LegalDocument))]
+        [ForeignKey("LegalDocuments")]
         public int LegalDocumentId { get; set; }
         public virtual LegalDocument LegalDocument { get; set; }
 
         [Required]
-        [ForeignKey(nameof(User))]
+        [ForeignKey("Users")]
         public int UserId { get; set; }
         public virtual User User { get; set; }
 

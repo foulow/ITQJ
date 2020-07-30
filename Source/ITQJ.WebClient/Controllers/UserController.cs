@@ -1,4 +1,5 @@
 ﻿using IdentityModel.Client;
+using ITQJ.Domain.DTOs;
 using ITQJ.WebClient.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -36,7 +37,7 @@ namespace ITQJ.WebClient.Controllers
                 return View(user);
             }
 
-            var newuser = await CallApiPOSTAsync<UserVM>("/api/users/", user, true);
+            var newuser = await CallApiPOSTAsync<UserCreateDTO>("/api/users/", user, true);
 
             return RedirectToAction("LogIn");
         }
@@ -56,9 +57,9 @@ namespace ITQJ.WebClient.Controllers
             return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
 
-        private async Task<List<RolVM>> GetRoles()
+        private async Task<List<RolDTO>> GetRoles()
         {
-            return await CallApiGETAsync<List<RolVM>>("/api/roles");
+            return await CallApiGETAsync<List<RolDTO>>("/api/roles");
         }
 
         private async Task RefreshTokensAsync()

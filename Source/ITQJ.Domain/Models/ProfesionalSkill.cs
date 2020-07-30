@@ -13,12 +13,12 @@
         public int Percentage { get; set; }
 
         [Required]
-        [ForeignKey(nameof(PersonalInfo))]
+        [ForeignKey("PersonalInfos")]
         public int PersonalInfoId { get; set; }
         public virtual PersonalInfo PersonalInfo { get; set; }
 
         [Required]
-        [ForeignKey(nameof(Skill))]
+        [ForeignKey("Skills")]
         public int SkillId { get; set; }
         public virtual Skill Skill { get; set; }
     }

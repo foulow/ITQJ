@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 
-namespace ITQJ.API.Controllers
+namespace ITQJ.Domain.Controllers
 {
     [ApiController]
     [Authorize]

@@ -1,4 +1,4 @@
-﻿using ITQJ.WebClient.Models;
+﻿using ITQJ.WebClient.ViewModels;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;

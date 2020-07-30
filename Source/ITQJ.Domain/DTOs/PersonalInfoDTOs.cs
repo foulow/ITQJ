@@ -1,8 +1,15 @@
 ﻿using System.Collections.Generic;
 
-namespace ITQJ.API.DTOs
+namespace ITQJ.Domain.DTOs
 {
-    public class PersonalInfoCreateDTOs
+    public class PersonalInfoCreateDTO : PersonalInfoUpdateDTO
+    {
+        public int UserId { get; set; }
+
+        public int LegalDocumentId { get; set; }
+    }
+
+    public class PersonalInfoUpdateDTO
     {
         public string Name { get; set; }
 
@@ -11,17 +18,14 @@ namespace ITQJ.API.DTOs
         public string Description { get; set; }
 
         public string PagLink { get; set; }
-
-        public int UserId { get; set; }
     }
 
-    public class PersonalInfoUpdateDTOs : PersonalInfoCreateDTOs
+    public class PersonalInfoResponseDTO : PersonalInfoCreateDTO
     {
-        public int LegalDocumentId { get; set; }
-    }
+        public int Id { get; set; }
 
-    public class PersonalInfoResponseDTOs : PersonalInfoUpdateDTOs
-    {
+        public UserResponseDTO User { get; set; }
+
         public LegalDocumentResponseDTO LegalDocument { get; set; }
 
         public ICollection<ProfesionalSkillResponseDTO> ProfesionalSkills { get; set; }

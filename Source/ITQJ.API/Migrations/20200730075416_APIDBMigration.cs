@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 
-namespace ITQJ.API.Migrations
+namespace ITQJ.Domain.Migrations
 {
     public partial class APIDBMigration : Migration
     {
@@ -55,18 +55,17 @@ namespace ITQJ.API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Number = table.Column<string>(maxLength: 25, nullable: false),
                     Image = table.Column<byte[]>(maxLength: 2097152, nullable: false),
-                    DocumentTypeId = table.Column<int>(nullable: false),
-                    DocumentTypeId1 = table.Column<int>(nullable: true)
+                    DocumentTypeId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_LegalDocuments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_LegalDocuments_DocumentTypes_DocumentTypeId1",
-                        column: x => x.DocumentTypeId1,
+                        name: "FK_LegalDocuments_DocumentTypes_DocumentTypeId",
+                        column: x => x.DocumentTypeId,
                         principalTable: "DocumentTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -78,14 +77,14 @@ namespace ITQJ.API.Migrations
                     UserName = table.Column<string>(maxLength: 25, nullable: false),
                     Password = table.Column<string>(maxLength: 500, nullable: false),
                     Email = table.Column<string>(maxLength: 50, nullable: false),
-                    RolId = table.Column<int>(nullable: false)
+                    RoleId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Roles_RolId",
-                        column: x => x.RolId,
+                        name: "FK_Users_Roles_RoleId",
+                        column: x => x.RoleId,
                         principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -102,25 +101,23 @@ namespace ITQJ.API.Migrations
                     Description = table.Column<string>(maxLength: 500, nullable: false),
                     PagLink = table.Column<string>(maxLength: 25, nullable: false),
                     LegalDocumentId = table.Column<int>(nullable: false),
-                    LegalDocumentId1 = table.Column<int>(nullable: true),
-                    UserId = table.Column<int>(nullable: false),
-                    UserId1 = table.Column<int>(nullable: true)
+                    UserId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PersonalInfos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PersonalInfos_LegalDocuments_LegalDocumentId1",
-                        column: x => x.LegalDocumentId1,
+                        name: "FK_PersonalInfos_LegalDocuments_LegalDocumentId",
+                        column: x => x.LegalDocumentId,
                         principalTable: "LegalDocuments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PersonalInfos_Users_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_PersonalInfos_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -177,8 +174,7 @@ namespace ITQJ.API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Percentage = table.Column<int>(nullable: false),
                     PersonalInfoId = table.Column<int>(nullable: false),
-                    SkillId = table.Column<int>(nullable: false),
-                    SkillId1 = table.Column<int>(nullable: true)
+                    SkillId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -190,11 +186,11 @@ namespace ITQJ.API.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProfesionalSkills_Skills_SkillId1",
-                        column: x => x.SkillId1,
+                        name: "FK_ProfesionalSkills_Skills_SkillId",
+                        column: x => x.SkillId,
                         principalTable: "Skills",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -251,11 +247,10 @@ namespace ITQJ.API.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_LegalDocuments_DocumentTypeId1",
+                name: "IX_LegalDocuments_DocumentTypeId",
                 table: "LegalDocuments",
-                column: "DocumentTypeId1",
-                unique: true,
-                filter: "[DocumentTypeId1] IS NOT NULL");
+                column: "DocumentTypeId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_ProjectId",
@@ -268,18 +263,16 @@ namespace ITQJ.API.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PersonalInfos_LegalDocumentId1",
+                name: "IX_PersonalInfos_LegalDocumentId",
                 table: "PersonalInfos",
-                column: "LegalDocumentId1",
-                unique: true,
-                filter: "[LegalDocumentId1] IS NOT NULL");
+                column: "LegalDocumentId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_PersonalInfos_UserId1",
+                name: "IX_PersonalInfos_UserId",
                 table: "PersonalInfos",
-                column: "UserId1",
-                unique: true,
-                filter: "[UserId1] IS NOT NULL");
+                column: "UserId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Postulants_ProjectId",
@@ -297,11 +290,10 @@ namespace ITQJ.API.Migrations
                 column: "PersonalInfoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProfesionalSkills_SkillId1",
+                name: "IX_ProfesionalSkills_SkillId",
                 table: "ProfesionalSkills",
-                column: "SkillId1",
-                unique: true,
-                filter: "[SkillId1] IS NOT NULL");
+                column: "SkillId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Projects_UserId",
@@ -314,9 +306,9 @@ namespace ITQJ.API.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_RolId",
+                name: "IX_Users_RoleId",
                 table: "Users",
-                column: "RolId");
+                column: "RoleId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

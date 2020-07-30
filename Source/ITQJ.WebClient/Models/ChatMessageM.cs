@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace ITQJ.WebClient.Models
+namespace ITQJ.WebClient.ViewModels
 {
-    public class MessageDetail
+    public class ChatMessageM
     {
         public Guid FromUserId { get; set; }
         public Guid ToUserId { get; set; }

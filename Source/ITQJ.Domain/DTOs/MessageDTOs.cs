@@ -1,4 +1,4 @@
-﻿namespace ITQJ.API.DTOs
+﻿namespace ITQJ.Domain.DTOs
 {
     public class MessageCreateDTO
     {

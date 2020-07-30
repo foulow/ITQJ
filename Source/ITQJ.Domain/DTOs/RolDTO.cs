@@ -1,6 +1,6 @@
-﻿namespace ITQJ.WebClient.ViewModels
+﻿namespace ITQJ.Domain.DTOs
 {
-    public class RolVM
+    public class RolDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }

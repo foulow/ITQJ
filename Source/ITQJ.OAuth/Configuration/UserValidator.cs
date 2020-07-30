@@ -35,7 +35,7 @@ namespace ITQJ.OAuth.Configuration
                 UserName = username,
                 Password = userId.ToSha256() + username.ToSha256() + email.ToSha256(),
                 Email = email,
-                RolId = rolId
+                RoleId = rolId
             };
 
             var newUser = await this._applicationDBContext.Users.AddAsync(user);

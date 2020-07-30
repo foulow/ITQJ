@@ -6,11 +6,11 @@ namespace ITQJ.EFCore
 {
     public class DataConfig
     {
-        public static IEnumerable<Rol> Roles =>
-            new Rol[]
+        public static IEnumerable<Role> Roles =>
+            new Role[]
             {
-                new Rol { Name = "Profesional" },
-                new Rol { Name = "Contratista" }
+                new Role { Name = "Profesional" },
+                new Role { Name = "Contratista" }
             };
 
         public static IEnumerable<DocumentType> DocumentTypes =>
@@ -54,14 +54,14 @@ namespace ITQJ.EFCore
                     Email = "jeffreyissaul@hotmail.com",
                     UserName = "issaul",
                     Password = "password".ToSha256(),
-                    RolId = 1
+                    RoleId = 1
                 },
                 new User
                 {
                     Email = "luis@hotmail.com",
                     UserName = "luis",
                     Password = "password".ToSha256(),
-                    RolId = 2
+                    RoleId = 2
                 }
             };
 

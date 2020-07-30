@@ -7,7 +7,7 @@ using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using System;
 
-namespace ITQJ.API
+namespace ITQJ.Domain
 {
     public class Program
     {

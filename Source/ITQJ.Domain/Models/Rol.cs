@@ -5,7 +5,7 @@
     using System.ComponentModel.DataAnnotations.Schema;
 
     [Table("Roles")]
-    public class Rol
+    public class Role
     {
         [Key]
         public int Id { get; set; }

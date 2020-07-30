@@ -1,0 +1,52 @@
+﻿@model ITQJ.WebClient.ViewModels.PersonalInfoVM;
+@{
+    ViewData["Title"] = "Registro de Informacion Personal";
+}
+
+<form asp-action="Register" method="post">
+    <h3>Seleccione las habilidades tecnicas que conoce</h3>
+
+    @foreach (var skill in Model.Skills)
+    {
+        <div class="icon-skill-edict">
+
+            <div class="ContSkill1">
+
+                <div class="conte-Edict">
+
+                    <div class="ContSkill2">
+
+                        <div class="titulo" style="">
+
+                            <label>@skill.Name</label> <input class="Check" type="checkbox" />
+
+                        </div>
+
+                        <div class="DivIMG" style="">
+                            <a onclick="">
+                                <i aria-hidden="true">
+                                    <img src="@skill.Path" asp-append-version="true" />
+                                </i>
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <div class="ContPorcen">
+
+                        <label asp-for="@skill.Percentage"> % </label>
+
+                        <input type="number" asp-for="@skill.Percentage" min="0" max="100" class="Procen">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+    <input type="submit" class="btn badge-dark" value="Siguiente Habilidades" />
+
+</form>

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ITQJ.Domain.DTOs;
 using ITQJ.WebClient.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -23,14 +24,14 @@ namespace ITQJ.WebClient.Controllers
         protected readonly HttpClient _client;
         protected readonly IMapper _mapper;
         protected readonly IConfiguration _configuration;
-        protected readonly IOptionsMonitor<ClientCredentials> _clientConfiguration;
+        protected readonly IOptionsMonitor<ClientCredentialsM> _clientConfiguration;
 
         public BaseController(IServiceProvider serviceProvider)
         {
             this._client = serviceProvider.GetRequiredService<HttpClient>();
             this._mapper = serviceProvider.GetRequiredService<IMapper>();
             this._configuration = serviceProvider.GetRequiredService<IConfiguration>();
-            this._clientConfiguration = serviceProvider.GetRequiredService<IOptionsMonitor<ClientCredentials>>();
+            this._clientConfiguration = serviceProvider.GetRequiredService<IOptionsMonitor<ClientCredentialsM>>();
         }
 
         protected async Task<T> CallApiGETAsync<T>(string uri, bool needJWT = false) where T : class
@@ -44,7 +45,7 @@ namespace ITQJ.WebClient.Controllers
             T result = null;
             var content = await this._client.GetStringAsync(_configuration["APIURL"] + uri);
 
-            if (content != null || content.Contains("result"))
+            if (content != null && content.Contains("result"))
             {
                 var jsonObject = JObject.Parse(content);
                 result = jsonObject["result"].ToObject<T>();
@@ -70,7 +71,7 @@ namespace ITQJ.WebClient.Controllers
 
             var response = await content.Content.ReadAsStringAsync();
 
-            if (content != null || response.Contains("result"))
+            if (content != null && response.Contains("result"))
             {
                 var jsonObject = JObject.Parse(response);
                 result = jsonObject["result"].ToObject<T>();
@@ -124,5 +125,13 @@ namespace ITQJ.WebClient.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        protected async Task<int> GetUserIdByName(string userName)
+        {
+            var user = await CallApiGETAsync<UserResponseDTO>("/api/users/" + userName);
+            if (user == null)
+                return 0;
+
+            return user.Id;
+        }
     }
 }

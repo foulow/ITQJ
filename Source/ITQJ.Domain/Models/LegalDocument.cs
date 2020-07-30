@@ -18,7 +18,7 @@
         public byte[] Image { get; set; }
 
         [Required]
-        [ForeignKey(nameof(DocumentType))]
+        [ForeignKey("DocumenTypes")]
         public int DocumentTypeId { get; set; }
         public virtual DocumentType DocumentType { get; set; }
 

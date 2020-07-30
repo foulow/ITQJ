@@ -14,15 +14,13 @@
         public string Text { get; set; }
 
         [Required]
-        [ForeignKey(nameof(User))]
+        [ForeignKey("Users")]
         public int UserId { get; set; }
-
-        [Required]
-        [ForeignKey(nameof(Project))]
-        public int ProjectId { get; set; }
-
         public virtual User User { get; set; }
 
+        [Required]
+        [ForeignKey("Projects")]
+        public int ProjectId { get; set; }
         public virtual Project Project { get; set; }
     }
 }

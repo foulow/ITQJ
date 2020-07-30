@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace ITQJ.API.Migrations
+namespace ITQJ.Domain.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
     partial class ApplicationDBContextModelSnapshot : ModelSnapshot
@@ -46,9 +46,6 @@ namespace ITQJ.API.Migrations
                     b.Property<int>("DocumentTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DocumentTypeId1")
-                        .HasColumnType("int");
-
                     b.Property<byte[]>("Image")
                         .IsRequired()
                         .HasColumnType("varbinary(max)")
@@ -61,9 +58,8 @@ namespace ITQJ.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DocumentTypeId1")
-                        .IsUnique()
-                        .HasFilter("[DocumentTypeId1] IS NOT NULL");
+                    b.HasIndex("DocumentTypeId")
+                        .IsUnique();
 
                     b.ToTable("LegalDocuments");
                 });
@@ -110,9 +106,6 @@ namespace ITQJ.API.Migrations
                     b.Property<int>("LegalDocumentId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("LegalDocumentId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
@@ -131,18 +124,13 @@ namespace ITQJ.API.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("LegalDocumentId1")
-                        .IsUnique()
-                        .HasFilter("[LegalDocumentId1] IS NOT NULL");
+                    b.HasIndex("LegalDocumentId")
+                        .IsUnique();
 
-                    b.HasIndex("UserId1")
-                        .IsUnique()
-                        .HasFilter("[UserId1] IS NOT NULL");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("PersonalInfos");
                 });
@@ -185,16 +173,12 @@ namespace ITQJ.API.Migrations
                     b.Property<int>("SkillId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SkillId1")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PersonalInfoId");
 
-                    b.HasIndex("SkillId1")
-                        .IsUnique()
-                        .HasFilter("[SkillId1] IS NOT NULL");
+                    b.HasIndex("SkillId")
+                        .IsUnique();
 
                     b.ToTable("ProfesionalSkills");
                 });
@@ -263,7 +247,7 @@ namespace ITQJ.API.Migrations
                     b.ToTable("Reviews");
                 });
 
-            modelBuilder.Entity("ITQJ.Domain.Models.Rol", b =>
+            modelBuilder.Entity("ITQJ.Domain.Models.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -317,7 +301,7 @@ namespace ITQJ.API.Migrations
                         .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
-                    b.Property<int>("RolId")
+                    b.Property<int>("RoleId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")
@@ -327,7 +311,7 @@ namespace ITQJ.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RolId");
+                    b.HasIndex("RoleId");
 
                     b.ToTable("Users");
                 });
@@ -336,7 +320,9 @@ namespace ITQJ.API.Migrations
                 {
                     b.HasOne("ITQJ.Domain.Models.DocumentType", "DocumentType")
                         .WithOne("LegalDocument")
-                        .HasForeignKey("ITQJ.Domain.Models.LegalDocument", "DocumentTypeId1");
+                        .HasForeignKey("ITQJ.Domain.Models.LegalDocument", "DocumentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ITQJ.Domain.Models.Message", b =>
@@ -358,11 +344,15 @@ namespace ITQJ.API.Migrations
                 {
                     b.HasOne("ITQJ.Domain.Models.LegalDocument", "LegalDocument")
                         .WithOne("PersonalInfo")
-                        .HasForeignKey("ITQJ.Domain.Models.PersonalInfo", "LegalDocumentId1");
+                        .HasForeignKey("ITQJ.Domain.Models.PersonalInfo", "LegalDocumentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ITQJ.Domain.Models.User", "User")
                         .WithOne("PersonalInfo")
-                        .HasForeignKey("ITQJ.Domain.Models.PersonalInfo", "UserId1");
+                        .HasForeignKey("ITQJ.Domain.Models.PersonalInfo", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ITQJ.Domain.Models.Postulant", b =>
@@ -390,7 +380,9 @@ namespace ITQJ.API.Migrations
 
                     b.HasOne("ITQJ.Domain.Models.Skill", "Skill")
                         .WithOne("ProfesionalSkill")
-                        .HasForeignKey("ITQJ.Domain.Models.ProfesionalSkill", "SkillId1");
+                        .HasForeignKey("ITQJ.Domain.Models.ProfesionalSkill", "SkillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ITQJ.Domain.Models.Project", b =>
@@ -413,9 +405,9 @@ namespace ITQJ.API.Migrations
 
             modelBuilder.Entity("ITQJ.Domain.Models.User", b =>
                 {
-                    b.HasOne("ITQJ.Domain.Models.Rol", "Rol")
+                    b.HasOne("ITQJ.Domain.Models.Role", "Role")
                         .WithMany("Users")
-                        .HasForeignKey("RolId")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

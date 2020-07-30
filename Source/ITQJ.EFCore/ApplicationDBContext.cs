@@ -39,7 +39,7 @@
 
         public virtual DbSet<Review> Reviews { get; set; }
 
-        public virtual DbSet<Rol> Roles { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
 
         public virtual DbSet<Skill> Skills { get; set; }
 
@@ -49,14 +49,13 @@
         {
 
             modelBuilder.Entity<User>()
-                .HasOne(m => m.Rol)
+                .HasOne(m => m.Role)
                 .WithMany(m => m.Users)
-                .HasForeignKey(r => r.RolId);
+                .HasForeignKey(r => r.RoleId);
             modelBuilder.Entity<User>()
                 .HasMany(m => m.Projects)
                 .WithOne(M => M.User)
                 .HasForeignKey(r => r.UserId);
-
 
             modelBuilder.Entity<PersonalInfo>()
                 .HasOne(m => m.User)

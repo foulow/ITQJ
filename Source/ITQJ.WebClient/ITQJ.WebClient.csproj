@@ -24,6 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ITQJ.Domain\ITQJ.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="wwwroot\media\audios\new_message.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

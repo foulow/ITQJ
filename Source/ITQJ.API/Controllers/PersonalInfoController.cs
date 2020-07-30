@@ -1,10 +1,11 @@
 ﻿using ITQJ.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
-namespace ITQJ.API.Controllers
+namespace ITQJ.Domain.Controllers
 {
     [ApiController]
     [Authorize]
@@ -15,9 +16,16 @@ namespace ITQJ.API.Controllers
             : base(serviceProvider) { }
 
         [HttpGet("{userId}")]
-        public ActionResult GetPersonalInfo([FromRoute] int userId)
+        public ActionResult GetPersonalInfo([FromRoute] string userName)
         {
-            var personalInfo = this._appDBContext.PersonalInfos.FirstOrDefault(x => x.UserId == userId);
+            var user = this._appDBContext.Users
+                .FirstOrDefault(x => x.UserName == userName);
+
+            var personalInfo = this._appDBContext.PersonalInfos
+                .Include(i => i.User)
+                .Include(i => i.LegalDocument)
+                .Include(i => i.ProfesionalSkills)
+                .FirstOrDefault(x => x.UserId == user.Id);
             var personalInfoModel = this._mapper.Map<PersonalInfo>(personalInfo);
 
             return Ok(new

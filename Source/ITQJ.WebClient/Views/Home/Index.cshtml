@@ -1,124 +1,126 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 
-    var listpro = Model[0];
-    var listpag = Model[1];
+    //var listpro = Model[0];
+    //var listpag = Model[1];
 
 
 }
-@using ITQJ.WebClient
 
-<br />
+<h2>Hola @ViewBag.UserName!</h2>
 
-<br />
-<br />
+@*
+    <br />
 
-<h3>Filtro de Busqueda</h3>
+    <br />
+    <br />
 
-<hr />
+    <h3>Filtro de Busqueda</h3>
 
-<br />
-<div class="p-2  d-inline-block">
-
-    <label class="h4"> Buscar por titulo </label>
-
-    <input type="text" width="100" />
-
-    <input type="submit" value="Buscar" class="btn btn-sm btn-outline-dark" />
-
-</div>
-
-<br />
-<br />
-<br />
-<br />
-
-<nav aria-label="Page navigation exmple">
-
-    <ul class="pagination justify-content-center">
-
-        @foreach (var pagina in listpag)
-        {
-
-            <li style="cursor: pointer;" class="page-item @(pagina.Habilitada ? null : "disabled") @(pagina.Activa ? "active" : null)">
-
-                <span class="page-link"> @pagina.Texto </span>
-
-            </li>
-
-        }
-
-    </ul>
-
-</nav>
-
-
-<br />
-
-<div>
-
-    <h4>Proyectos Recientes</h4>
     <hr />
 
+    <br />
+    <div class="p-2  d-inline-block">
 
-    @foreach (var dato in listpro)
-    {
-        <a asp-action="Register" asp-controller="Home" style="color:black; text-shadow:5px 5px 5px gray">
+        <label class="h4"> Buscar por titulo </label>
 
-            <div style="border: 2px solid gray; box-shadow: 6px 6px 18px #888888; border-radius: 20px;">
+        <input type="text" width="100" />
 
-                <div class="col d-inline-block JobSearchCard-primary-heading">
+        <input type="submit" value="Buscar" class="btn btn-sm btn-outline-dark" />
 
-                    <div class="col d-inline">
+    </div>
 
-                        <strong href="#" class="JobSearchCard-primary-heading-link"
-                           data-qtsb-section="page-job-search-new"
-                           data-qtsb-subsection="card-job"
-                           data-qtsb-label="link-project-title"
-                           data-heading-link="true" style="color:black">
+    <br />
+    <br />
+    <br />
+    <br />
 
-                        @dato.nombre
+    <nav aria-label="Page navigation exmple">
 
-                        </strong>
+            <ul class="pagination justify-content-center">
 
-                    </div>
+                @foreach (var pagina in listpag)
+                {
 
-                </div>
+                    <li style="cursor: pointer;" class="page-item @(pagina.Habilitada ? null : "disabled") @(pagina.Activa ? "active" : null)">
 
-                <div class="col d-inline-block mb-4">
+                        <span class="page-link"> @pagina.Texto </span>
 
-                    <div class="col d-inline">
+                    </li>
 
-                    @dato.descriccionEmpleo
+                }
 
-                    </div>
+            </ul>
 
-                </div>
+        </nav>
 
-                <div class="col d-inline-block">
+    <br />
 
-                    <div class="col d-inline">
+    <div>
 
-                        <text>Publicado: @dato.fechaPublicacion </text>
+                <h4>Proyectos Recientes</h4>
+                <hr />
 
-                    </div>
 
-                    <div class="col d-inline">
+                @foreach (var dato in listpro)
+                {
+                    <a asp-action="Register" asp-controller="Home" style="color:black; text-shadow:5px 5px 5px gray">
 
-                        <text>Cierre de la publicacion: @dato.fechaCierre </text>
+                        <div style="border: 2px solid gray; box-shadow: 6px 6px 18px #888888; border-radius: 20px;">
 
-                    </div>
+                            <div class="col d-inline-block JobSearchCard-primary-heading">
 
-                </div>
+                                <div class="col d-inline">
+
+                                    <strong href="#" class="JobSearchCard-primary-heading-link"
+                                            data-qtsb-section="page-job-search-new"
+                                            data-qtsb-subsection="card-job"
+                                            data-qtsb-label="link-project-title"
+                                            data-heading-link="true" style="color:black">
+
+                                        @dato.nombre
+
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col d-inline-block mb-4">
+
+                                <div class="col d-inline">
+
+                                    @dato.descriccionEmpleo
+
+                                </div>
+
+                            </div>
+
+                            <div class="col d-inline-block">
+
+                                <div class="col d-inline">
+
+                                    <text>Publicado: @dato.fechaPublicacion </text>
+
+                                </div>
+
+                                <div class="col d-inline">
+
+                                    <text>Cierre de la publicacion: @dato.fechaCierre </text>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                    <br />
+
+                }
 
             </div>
 
-        </a>
-
-        <br />
-
-    }
-
-</div>
-
-<button onclick="ScrollUp()" class="ButtonUp"></button>
+        <button onclick="ScrollUp()" class="ButtonUp"></button>
+*@
