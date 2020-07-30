@@ -56,9 +56,9 @@
 
                 <div class="form-group">
 
-                    <label asp-for="RolId">Rol</label>
+                    <label asp-for="RoleId">Rol</label>
 
-                    <select asp-for="RolId"
+                    <select asp-for="RoleId"
                             class="dropdown"
                             asp-items="@(new SelectList(Model.Roles, "Id", "Name"))" required>
                     </select>

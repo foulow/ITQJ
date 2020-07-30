@@ -1,15 +1,13 @@
 ﻿namespace ITQJ.Domain.Models
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
     [Table("PersonalInfos")]
-    public class PersonalInfo
+    public class PersonalInfo : BaseEntity
     {
-        [Key]
-        public int Id { get; set; }
-
         [Required]
         [StringLength(50)]
         public string Name { get; set; }
@@ -28,16 +26,13 @@
         [StringLength(25)]
         public string PagLink { get; set; }
 
-
-        [Required]
-        [ForeignKey("LegalDocuments")]
-        public int LegalDocumentId { get; set; }
+        [ForeignKey("LegalDocumentId")]
         public virtual LegalDocument LegalDocument { get; set; }
+        public Guid LegalDocumentId { get; set; }
 
-        [Required]
-        [ForeignKey("Users")]
-        public int UserId { get; set; }
+        [ForeignKey("UserId")]
         public virtual User User { get; set; }
+        public Guid UserId { get; set; }
 
         public virtual ICollection<ProfesionalSkill> ProfesionalSkills { get; set; }
 

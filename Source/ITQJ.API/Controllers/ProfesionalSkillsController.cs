@@ -17,7 +17,7 @@ namespace ITQJ.Domain.Controllers
             : base(serviceProvider) { }
 
         [HttpGet("{personalInfoId}")]
-        public ActionResult GetProfesionalSkills([FromRoute] int personalInfoId)
+        public ActionResult GetProfesionalSkills([FromRoute] Guid personalInfoId)
         {
             var profesionalSkills = this._appDBContext.ProfesionalSkills
                 .Where(x => x.PersonalInfoId == personalInfoId)

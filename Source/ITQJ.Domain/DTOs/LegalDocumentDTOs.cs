@@ -1,4 +1,6 @@
-﻿namespace ITQJ.Domain.DTOs
+﻿using System;
+
+namespace ITQJ.Domain.DTOs
 {
     public class LegalDocumentCreateDTO
     {
@@ -16,7 +18,7 @@
 
     public class LegalDocumentResponseDTO : LegalDocumentCreateDTO
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public DocumentTypeDTO DocumentType { get; set; }
     }
 }

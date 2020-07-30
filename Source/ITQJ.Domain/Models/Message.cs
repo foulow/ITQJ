@@ -1,26 +1,22 @@
 ﻿namespace ITQJ.Domain.Models
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
     [Table("Messages")]
-    public class Message
+    public class Message : BaseEntity
     {
-        [Key]
-        public int Id { get; set; }
-
         [Required]
         [StringLength(500)]
         public string Text { get; set; }
 
-        [Required]
-        [ForeignKey("Users")]
-        public int UserId { get; set; }
+        [ForeignKey("UserId")]
         public virtual User User { get; set; }
+        public Guid UserId { get; set; }
 
-        [Required]
-        [ForeignKey("Projects")]
-        public int ProjectId { get; set; }
+        [ForeignKey("ProjectId")]
         public virtual Project Project { get; set; }
+        public Guid ProjectId { get; set; }
     }
 }

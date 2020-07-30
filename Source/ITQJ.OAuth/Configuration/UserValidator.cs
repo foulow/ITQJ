@@ -2,6 +2,7 @@
 using ITQJ.Domain.Models;
 using ITQJ.EFCore;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -27,8 +28,10 @@ namespace ITQJ.OAuth.Configuration
             };
             var username = (claimsValues.ContainsKey("surname")) ? claimsValues["sub"] : userId;
             var email = (claimsValues.ContainsKey("emailadress")) ? claimsValues["email"] : "annonymous@unknown.com";
-            var rolName = (claimsValues.ContainsKey("role")) ? claimsValues["role"] : "rol_profesional";
-            var rolId = (rolName == "rol_profesional") ? 1 : 2;
+            var rolName = (claimsValues.ContainsKey("role")) ? claimsValues["role"] : "Profesional";
+            var rolId = (rolName == "Profesional") ?
+                Guid.Parse("31BE72FD-BE58-492A-8976-57FF74DAEB7A") :
+                Guid.Parse("3D3B586A-EC26-42A3-A63A-026492FFC298");
 
             var user = new User
             {
@@ -66,11 +69,11 @@ namespace ITQJ.OAuth.Configuration
         public async Task<bool> ValidateCredentialsAsync(string username, string password)
         {
             var user = await this._applicationDBContext.Users
-                .FirstOrDefaultAsync(x => x.UserName == username);
+                .FirstOrDefaultAsync(x => x.UserName == username && x.Password == password.ToSha256());
 
             if (user == null)
                 user = await this._applicationDBContext.Users
-                .FirstOrDefaultAsync(x => x.Email == username);
+                .FirstOrDefaultAsync(x => x.Email == username && x.Password == password.ToSha256());
 
             return user != null;
         }

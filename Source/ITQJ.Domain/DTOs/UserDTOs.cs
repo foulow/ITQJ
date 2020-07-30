@@ -1,11 +1,13 @@
-﻿namespace ITQJ.Domain.DTOs
+﻿using System;
+
+namespace ITQJ.Domain.DTOs
 {
     public class UserCreateDTO
     {
         public string UserName { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
-        public int RolId { get; set; }
+        public Guid RoleId { get; set; }
 
     }
 
@@ -17,8 +19,8 @@
 
     public class UserResponseDTO : UserCreateDTO
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
-        public RolDTO Rol { get; set; }
+        public RoleDTO Role { get; set; }
     }
 }

@@ -1,13 +1,15 @@
-﻿namespace ITQJ.Domain.DTOs
+﻿using System;
+
+namespace ITQJ.Domain.DTOs
 {
     public class PostulantCreateDTO
     {
-        public int UserId { get; set; }
-        public int ProjectId { get; set; }
+        public Guid UserId { get; set; }
+        public Guid ProjectId { get; set; }
     }
 
     public class PostulantResponseDTO : PostulantCreateDTO
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
     }
 }

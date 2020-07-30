@@ -15,7 +15,7 @@ namespace ITQJ.Domain.Controllers
             : base(serviceProvider) { }
 
         [HttpGet("{legalDocumentId}")]
-        public ActionResult GetPersonalInfo([FromRoute] int legalDocumentId)
+        public ActionResult GetPersonalInfo([FromRoute] Guid legalDocumentId)
         {
             var legalDocument = this._appDBContext.LegalDocuments.FirstOrDefault(x => x.Id == legalDocumentId);
             var legalDocumentModel = this._mapper.Map<LegalDocument>(legalDocument);

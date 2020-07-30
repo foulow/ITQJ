@@ -44,7 +44,7 @@ namespace ITQJ.Domain.Controllers
         }
 
         [HttpGet("{projectId}")]
-        public ActionResult GetProject([FromRoute] int projectId)
+        public ActionResult GetProject([FromRoute] Guid projectId)
         {
             var project = this._appDBContext.Projects
                 .FirstOrDefault(x => x.Id == projectId);
@@ -63,7 +63,7 @@ namespace ITQJ.Domain.Controllers
 
         [Authorize]
         [HttpGet("{projectId}")]
-        public ActionResult GetProject([FromRoute] int projectId, [FromRoute] string userName)
+        public ActionResult GetProject([FromRoute] Guid projectId, [FromRoute] string userName)
         {
             var project = this._appDBContext.Projects
                 .Include(i => i.Postulants)

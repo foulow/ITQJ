@@ -4,11 +4,8 @@
     using System.ComponentModel.DataAnnotations.Schema;
 
     [Table("Skills")]
-    public class Skill
+    public class Skill : BaseEntity
     {
-        [Key]
-        public int Id { get; set; }
-
         [Required]
         [StringLength(25)]
         public string Name { get; set; }

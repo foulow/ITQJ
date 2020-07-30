@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ITQJ.Domain.DTOs
 {
     public class PersonalInfoCreateDTO : PersonalInfoUpdateDTO
     {
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
 
-        public int LegalDocumentId { get; set; }
+        public Guid LegalDocumentId { get; set; }
     }
 
     public class PersonalInfoUpdateDTO
@@ -22,7 +23,7 @@ namespace ITQJ.Domain.DTOs
 
     public class PersonalInfoResponseDTO : PersonalInfoCreateDTO
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public UserResponseDTO User { get; set; }
 

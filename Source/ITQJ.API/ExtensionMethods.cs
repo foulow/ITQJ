@@ -82,7 +82,7 @@ namespace ITQJ.EFCore
             }
             else
             {
-                Log.Debug("ProfesionalSkills already populated.");
+                Log.Debug("Users already populated.");
             }
 
             if (!context.LegalDocuments.Any())
@@ -94,7 +94,7 @@ namespace ITQJ.EFCore
             }
             else
             {
-                Log.Debug("PersonalInfos already populated.");
+                Log.Debug("LegalDocuments already populated.");
             }
 
             if (!context.PersonalInfos.Any())

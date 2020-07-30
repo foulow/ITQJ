@@ -43,11 +43,10 @@ namespace ITQJ.Domain.Controllers
         {
 
             if (this._appDBContext.Users.Any(x => x.UserName == userData.UserName))
-                return NotFound(new { Error = $"El nombre de usuario '{userData.UserName}' no esta disponible." });
+                return BadRequest(new { Error = $"El nombre de usuario '{userData.UserName}' no esta disponible." });
             userData.Password = userData.Password.ToSha256();
 
-            var newUser = new User();
-            this._mapper.Map<UserCreateDTO, User>(userData, newUser);
+            var newUser = this._mapper.Map<User>(userData);
 
             var tempUser = this._appDBContext.Users.Add(newUser);
             this._appDBContext.SaveChanges();

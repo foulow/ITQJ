@@ -8,7 +8,7 @@ namespace ITQJ.Domain.DTOs
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime PublishDate { get; set; }
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
     }
 
     public class ProjectUpdateDTO
@@ -22,7 +22,7 @@ namespace ITQJ.Domain.DTOs
 
     public class ProjectResponseDTO : ProjectCreateDTO
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public ICollection<PostulantResponseDTO> Postulants { get; set; }
         public ICollection<MessageResponseDTO> Messages { get; set; }
 

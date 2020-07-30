@@ -1,12 +1,15 @@
 using AutoMapper;
 using ITQJ.WebClient.Hubs;
 using ITQJ.WebClient.ViewModels;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Net.Http.Headers;
 using Serilog;
 using System;
 using System.Net.Http;
@@ -42,6 +45,12 @@ namespace ITQJ.WebClient
 
             services.AddSignalR();
 
+            services.AddHttpClient("APIClient", client =>
+            {
+                client.BaseAddress = new Uri(Configuration["APIURL"]);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+            });
             services.AddTransient<HttpClient>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -53,26 +62,23 @@ namespace ITQJ.WebClient
             var scopes = Configuration.GetSection("ClientConfiguration:AllowedScopes").GetChildren();
 
             services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = "Cookies";
-                options.DefaultChallengeScheme = "oidc";
-            })
-                .AddCookie("Cookies")
-                .AddOpenIdConnect("oidc", options =>
                 {
-                    options.SignInScheme = "Cookies";
+                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme; //oidc
+                })
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options => //oidc
+                {
+                    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     options.Authority = authority;
-                    options.RequireHttpsMetadata = true;
-
                     options.ClientId = Configuration["ClientConfiguration:ClientId"];
                     options.ClientSecret = Configuration["ClientConfiguration:ClientSecret"];
                     options.ResponseType = "code";
-
-                    options.SaveTokens = true;
                     foreach (var scope in scopes)
                     {
                         options.Scope.Add(scope.Value);
                     }
+                    options.SaveTokens = true;
                 });
         }
 

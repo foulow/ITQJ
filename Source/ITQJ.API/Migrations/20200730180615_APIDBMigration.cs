@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ITQJ.Domain.Migrations
+namespace ITQJ.API.Migrations
 {
     public partial class APIDBMigration : Migration
     {
@@ -11,8 +11,8 @@ namespace ITQJ.Domain.Migrations
                 name: "DocumentTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(nullable: false),
+                    DeletedFlag = table.Column<bool>(nullable: false),
                     Name = table.Column<string>(maxLength: 25, nullable: false)
                 },
                 constraints: table =>
@@ -24,8 +24,8 @@ namespace ITQJ.Domain.Migrations
                 name: "Roles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(nullable: false),
+                    DeletedFlag = table.Column<bool>(nullable: false),
                     Name = table.Column<string>(maxLength: 25, nullable: false)
                 },
                 constraints: table =>
@@ -37,8 +37,8 @@ namespace ITQJ.Domain.Migrations
                 name: "Skills",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(nullable: false),
+                    DeletedFlag = table.Column<bool>(nullable: false),
                     Name = table.Column<string>(maxLength: 25, nullable: false),
                     Path = table.Column<string>(nullable: true)
                 },
@@ -51,11 +51,11 @@ namespace ITQJ.Domain.Migrations
                 name: "LegalDocuments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(nullable: false),
+                    DeletedFlag = table.Column<bool>(nullable: false),
                     Number = table.Column<string>(maxLength: 25, nullable: false),
                     Image = table.Column<byte[]>(maxLength: 2097152, nullable: false),
-                    DocumentTypeId = table.Column<int>(nullable: false)
+                    DocumentTypeId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -72,12 +72,12 @@ namespace ITQJ.Domain.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(nullable: false),
+                    DeletedFlag = table.Column<bool>(nullable: false),
                     UserName = table.Column<string>(maxLength: 25, nullable: false),
                     Password = table.Column<string>(maxLength: 500, nullable: false),
                     Email = table.Column<string>(maxLength: 50, nullable: false),
-                    RoleId = table.Column<int>(nullable: false)
+                    RoleId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -94,14 +94,14 @@ namespace ITQJ.Domain.Migrations
                 name: "PersonalInfos",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(nullable: false),
+                    DeletedFlag = table.Column<bool>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     PhoneNumber = table.Column<string>(maxLength: 25, nullable: false),
                     Description = table.Column<string>(maxLength: 500, nullable: false),
                     PagLink = table.Column<string>(maxLength: 25, nullable: false),
-                    LegalDocumentId = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
+                    LegalDocumentId = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -124,15 +124,15 @@ namespace ITQJ.Domain.Migrations
                 name: "Projects",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(nullable: false),
+                    DeletedFlag = table.Column<bool>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Description = table.Column<string>(maxLength: 500, nullable: false),
                     PublishDate = table.Column<DateTime>(nullable: false),
                     CloseDate = table.Column<DateTime>(nullable: false),
                     PostulantsLimit = table.Column<int>(nullable: false),
                     IsOpen = table.Column<bool>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -149,11 +149,11 @@ namespace ITQJ.Domain.Migrations
                 name: "Reviews",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(nullable: false),
+                    DeletedFlag = table.Column<bool>(nullable: false),
                     Points = table.Column<int>(nullable: false),
                     Description = table.Column<string>(maxLength: 500, nullable: false),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -170,11 +170,11 @@ namespace ITQJ.Domain.Migrations
                 name: "ProfesionalSkills",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(nullable: false),
+                    DeletedFlag = table.Column<bool>(nullable: false),
                     Percentage = table.Column<int>(nullable: false),
-                    PersonalInfoId = table.Column<int>(nullable: false),
-                    SkillId = table.Column<int>(nullable: false)
+                    PersonalInfoId = table.Column<Guid>(nullable: false),
+                    SkillId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -197,11 +197,11 @@ namespace ITQJ.Domain.Migrations
                 name: "Messages",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(nullable: false),
+                    DeletedFlag = table.Column<bool>(nullable: false),
                     Text = table.Column<string>(maxLength: 500, nullable: false),
-                    UserId = table.Column<int>(nullable: false),
-                    ProjectId = table.Column<int>(nullable: false)
+                    UserId = table.Column<Guid>(nullable: false),
+                    ProjectId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -216,18 +216,17 @@ namespace ITQJ.Domain.Migrations
                         name: "FK_Messages_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Postulants",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(nullable: false),
-                    ProjectId = table.Column<int>(nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    DeletedFlag = table.Column<bool>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
+                    ProjectId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -236,21 +235,19 @@ namespace ITQJ.Domain.Migrations
                         name: "FK_Postulants_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Postulants_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_LegalDocuments_DocumentTypeId",
                 table: "LegalDocuments",
-                column: "DocumentTypeId",
-                unique: true);
+                column: "DocumentTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_ProjectId",
@@ -309,6 +306,12 @@ namespace ITQJ.Domain.Migrations
                 name: "IX_Users_RoleId",
                 table: "Users",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_UserName",
+                table: "Users",
+                column: "UserName",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

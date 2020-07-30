@@ -1,25 +1,21 @@
 ﻿namespace ITQJ.Domain.Models
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
     [Table("ProfesionalSkills")]
-    public class ProfesionalSkill
+    public class ProfesionalSkill : BaseEntity
     {
-        [Key]
-        public int Id { get; set; }
-
         [Required]
         public int Percentage { get; set; }
 
-        [Required]
-        [ForeignKey("PersonalInfos")]
-        public int PersonalInfoId { get; set; }
+        [ForeignKey("PersonalInfoId")]
         public virtual PersonalInfo PersonalInfo { get; set; }
+        public Guid PersonalInfoId { get; set; }
 
-        [Required]
-        [ForeignKey("Skills")]
-        public int SkillId { get; set; }
+        [ForeignKey("SkillId")]
         public virtual Skill Skill { get; set; }
+        public Guid SkillId { get; set; }
     }
 }

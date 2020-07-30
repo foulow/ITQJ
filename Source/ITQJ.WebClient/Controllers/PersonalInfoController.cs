@@ -45,9 +45,9 @@ namespace ITQJ.WebClient.Controllers
 
             if (UserHasPersonalInfo(user))
             {
-                if (user.Rol.Name != "Profesional")
+                if (user.Role.Name != "Profesional")
                     return RedirectToAction("Profesional");
-                else if (user.Rol.Name != "Contratist")
+                else if (user.Role.Name != "Contratist")
                     return RedirectToAction("Contratist");
 
                 return Error();
@@ -55,7 +55,7 @@ namespace ITQJ.WebClient.Controllers
 
             var personalInfo = new PersonalInfoVM();
             personalInfo.UserId = user.Id;
-            if (user.Rol.Name != "Profesional")
+            if (user.Role.Name != "Profesional")
             {
                 var tempSkills = await CallApiGETAsync<List<SkillDTO>>("/api/skills");
                 foreach (var skill in tempSkills)
@@ -85,7 +85,7 @@ namespace ITQJ.WebClient.Controllers
             var newPersonalInfo = await CallApiPOSTAsync<PersonalInfoResponseDTO>("/api/personailInfo", tempPersonalInfo, true);
 
 
-            if (newPersonalInfo.User.Rol.Name != "Profesional")
+            if (newPersonalInfo.User.Role.Name != "Profesional")
             {
                 // Registra los skills de dicho profesional.
                 var temProfesionalSkills = new List<ProfesionalSkillCreateDTO>();
@@ -103,7 +103,7 @@ namespace ITQJ.WebClient.Controllers
 
                 return RedirectToAction("Profesional");
             }
-            else if (newPersonalInfo.User.Rol.Name != "Contratist")
+            else if (newPersonalInfo.User.Role.Name != "Contratist")
             {
                 return RedirectToAction("Contratist");
             }

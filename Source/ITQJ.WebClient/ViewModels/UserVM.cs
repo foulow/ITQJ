@@ -5,6 +5,6 @@ namespace ITQJ.WebClient.ViewModels
 {
     public class UserVM : UserResponseDTO
     {
-        public ICollection<RolDTO> Roles { get; set; }
+        public ICollection<RoleDTO> Roles { get; set; }
     }
 }

@@ -1,16 +1,13 @@
 ﻿namespace ITQJ.Domain.Models
 {
-
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
     [Table("Users")]
-    public class User
+    public class User : BaseEntity
     {
-        [Key]
-        public int Id { get; set; }
-
         [Required]
         [StringLength(25)]
         public string UserName { get; set; }
@@ -25,11 +22,9 @@
         [StringLength(50)]
         public string Email { get; set; }
 
-        [Required]
-        [ForeignKey("Roles")]
-        public int RoleId { get; set; }
-
+        [ForeignKey("RoleId")]
         public virtual Role Role { get; set; }
+        public Guid RoleId { get; set; }
 
         public virtual PersonalInfo PersonalInfo { get; set; }
 

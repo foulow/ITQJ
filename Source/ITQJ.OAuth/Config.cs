@@ -52,7 +52,7 @@ namespace ITQJ.OAuth
                     UpdateAccessTokenClaimsOnRefresh = true,
                     AccessTokenLifetime = 43200,
 
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
                     RequirePkce = true,
 
                     AllowedScopes = new[]

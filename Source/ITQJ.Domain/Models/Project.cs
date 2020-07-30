@@ -6,11 +6,8 @@
     using System.ComponentModel.DataAnnotations.Schema;
 
     [Table("Projects")]
-    public class Project
+    public class Project : BaseEntity
     {
-        [Key]
-        public int Id { get; set; }
-
         [Required]
         [StringLength(50)]
         public string Name { get; set; }
@@ -33,10 +30,9 @@
         [Required]
         public bool IsOpen { get; set; }
 
-        [Required]
-        [ForeignKey("Users")]
-        public int UserId { get; set; }
+        [ForeignKey("UserId")]
         public virtual User User { get; set; }
+        public Guid UserId { get; set; }
 
         public virtual ICollection<Postulant> Postulants { get; set; }
 

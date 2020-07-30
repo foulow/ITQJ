@@ -1,15 +1,21 @@
 ﻿using AutoMapper;
+using IdentityModel.Client;
 using ITQJ.Domain.DTOs;
 using ITQJ.WebClient.ViewModels;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -38,7 +44,7 @@ namespace ITQJ.WebClient.Controllers
         {
             if (needJWT)
             {
-                var accessToken = await HttpContext.GetTokenAsync("access_token");
+                var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
                 this._client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             }
 
@@ -58,7 +64,7 @@ namespace ITQJ.WebClient.Controllers
         {
             if (needJWT)
             {
-                var accessToken = await HttpContext.GetTokenAsync("access_token");
+                var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
                 this._client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             }
 
@@ -82,7 +88,7 @@ namespace ITQJ.WebClient.Controllers
 
         protected async Task<T> CallApiPUTAsync<T>(string uri, T body) where T : class
         {
-            var accessToken = await HttpContext.GetTokenAsync("access_token");
+            var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
             this._client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
             T result = null;
@@ -105,7 +111,7 @@ namespace ITQJ.WebClient.Controllers
 
         protected async Task<bool> CallApiDELETEAsync(string uri)
         {
-            var accessToken = await HttpContext.GetTokenAsync("access_token");
+            var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
             this._client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
             var content = await this._client.DeleteAsync(_configuration["APIURL"] + uri);
@@ -125,13 +131,87 @@ namespace ITQJ.WebClient.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        protected async Task<int> GetUserIdByName(string userName)
+        protected async Task<Guid> GetUserIdByName(string userName)
         {
             var user = await CallApiGETAsync<UserResponseDTO>("/api/users/" + userName);
             if (user == null)
-                return 0;
+                return Guid.Empty;
 
             return user.Id;
+        }
+
+        public async Task LogOut()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> LogIn()
+        {
+            // If enabled allow re-access with refresh token.
+            await RefreshTokensAsync();
+
+            return RedirectToRoute(new { controller = "Home", action = "Index" });
+        }
+
+        private async Task RefreshTokensAsync()
+        {
+            var clientCredentials = this._clientConfiguration.CurrentValue;
+
+            var response = await this._client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+            {
+                Address = clientCredentials.Authority + "/connect/token",
+
+                ClientId = clientCredentials.ClientId,
+                ClientSecret = clientCredentials.ClientSecret,
+
+                Scope = clientCredentials.APIName
+            });
+
+            var refreshToken = await HttpContext.GetTokenAsync("refresh_token");
+
+            var tokenResponse = await this._client
+                .RequestRefreshTokenAsync(new RefreshTokenRequest()
+                {
+                    RefreshToken = refreshToken,
+                });
+
+            var identityToken = await HttpContext.GetTokenAsync("id_token");
+
+            var expiresAt = DateTime.UtcNow + TimeSpan.FromSeconds(tokenResponse.ExpiresIn);
+
+            var tokens = new[]
+            {
+                new AuthenticationToken
+                {
+                    Name = OpenIdConnectParameterNames.IdToken,
+                    Value = identityToken
+                },
+                new AuthenticationToken
+                {
+                    Name = OpenIdConnectParameterNames.AccessToken,
+                    Value = tokenResponse.AccessToken
+                },
+                new AuthenticationToken
+                {
+                    Name = OpenIdConnectParameterNames.RefreshToken,
+                    Value = tokenResponse.RefreshToken
+                },
+                new AuthenticationToken
+                {
+                    Name = "expires_at",
+                    Value = expiresAt.ToString("o", CultureInfo.InvariantCulture)
+                }
+            };
+
+            var authenticationInformation = await HttpContext.AuthenticateAsync("Cookies");
+
+            authenticationInformation.Properties.StoreTokens(tokens);
+
+            await HttpContext.SignInAsync("Cookies",
+                authenticationInformation.Principal,
+                authenticationInformation.Properties);
         }
     }
 }

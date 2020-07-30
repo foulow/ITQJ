@@ -21,7 +21,7 @@ namespace ITQJ.Domain.Controllers
             var roles = this._appDBContext.Roles
                 .Where(x => true)
                 .ToList();
-            var rolesModels = this._mapper.Map<IEnumerable<RolDTO>>(roles);
+            var rolesModels = this._mapper.Map<IEnumerable<RoleDTO>>(roles);
 
             return Ok(new
             {

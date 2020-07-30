@@ -47,61 +47,54 @@
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             modelBuilder.Entity<User>()
                 .HasOne(m => m.Role)
-                .WithMany(m => m.Users)
-                .HasForeignKey(r => r.RoleId);
+                .WithMany(m => m.Users);
             modelBuilder.Entity<User>()
-                .HasMany(m => m.Projects)
-                .WithOne(M => M.User)
-                .HasForeignKey(r => r.UserId);
-
-            modelBuilder.Entity<PersonalInfo>()
-                .HasOne(m => m.User)
-                .WithOne(m => m.PersonalInfo)
-                .HasForeignKey(nameof(PersonalInfo));
-            modelBuilder.Entity<PersonalInfo>()
-                .HasMany(m => m.ProfesionalSkills)
-                .WithOne(m => m.PersonalInfo)
-                .HasForeignKey(r => r.PersonalInfoId);
-            modelBuilder.Entity<PersonalInfo>()
-                .HasOne(m => m.LegalDocument)
-                .WithOne(m => m.PersonalInfo)
-                .HasForeignKey(nameof(PersonalInfo));
-
-            modelBuilder.Entity<ProfesionalSkill>()
-                .HasOne(m => m.Skill)
-                .WithOne(m => m.ProfesionalSkill)
-                .HasForeignKey(nameof(ProfesionalSkill));
+                .HasIndex(u => u.UserName)
+                .IsUnique();
 
             modelBuilder.Entity<LegalDocument>()
                 .HasOne(m => m.DocumentType)
-                .WithOne(m => m.LegalDocument)
-                .HasForeignKey(nameof(LegalDocument));
+                .WithMany(m => m.LegalDocuments);
+
+            modelBuilder.Entity<PersonalInfo>()
+                .HasOne(m => m.User)
+                .WithOne(m => m.PersonalInfo);
+            modelBuilder.Entity<PersonalInfo>()
+                .HasOne(m => m.LegalDocument)
+                .WithOne(m => m.PersonalInfo);
+
+            modelBuilder.Entity<ProfesionalSkill>()
+                .HasOne(m => m.PersonalInfo)
+                .WithMany(m => m.ProfesionalSkills);
+            modelBuilder.Entity<ProfesionalSkill>()
+                .HasOne(m => m.Skill)
+                .WithOne(m => m.ProfesionalSkill);
+
+            modelBuilder.Entity<Project>()
+                .HasOne(M => M.User)
+                .WithMany(m => m.Projects);
 
             modelBuilder.Entity<Postulant>()
                 .HasOne(m => m.Project)
                 .WithMany(m => m.Postulants)
-                .HasForeignKey(r => r.ProjectId);
+                .OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Postulant>()
                 .HasOne(m => m.User)
-                .WithMany(m => m.Postulants)
-                .HasForeignKey(r => r.UserId);
+                .WithMany(m => m.Postulants);
 
             modelBuilder.Entity<Message>()
                 .HasOne(m => m.User)
                 .WithMany(m => m.Messages)
-                .HasForeignKey(r => r.UserId);
+                .OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Message>()
                 .HasOne(m => m.Project)
-                .WithMany(m => m.Messages)
-                .HasForeignKey(r => r.ProjectId);
+                .WithMany(m => m.Messages);
 
             modelBuilder.Entity<Review>()
                 .HasOne(m => m.User)
-                .WithMany(m => m.Reviews)
-                .HasForeignKey(r => r.UserId);
+                .WithMany(m => m.Reviews);
 
             base.OnModelCreating(modelBuilder);
         }
