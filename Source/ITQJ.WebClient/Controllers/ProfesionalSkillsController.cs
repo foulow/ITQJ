@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using ITQJ.Domain.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ITQJ.Domain.DTOs;
+using System;
+using System.Threading.Tasks;
 
 namespace ITQJ.WebClient.Controllers
 {
@@ -13,7 +13,7 @@ namespace ITQJ.WebClient.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> EdictSkills()
+        public async Task<IActionResult> EdictSkills(string userName)
         {
             var profesionalSkills = await CallApiGETAsync<ProfesionalSkillResponseDTO>("/api/ProfesionalSkills/" + userName);
 

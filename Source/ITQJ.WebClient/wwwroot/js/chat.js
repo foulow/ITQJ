@@ -2,7 +2,7 @@
 const connection = new signalR.HubConnectionBuilder()
 	.withUrl("/chatHub")
 	.configureLogging(signalR.LogLevel.Error)
-	// .withAutomaticReconnect([0, 2000, 10000, 30000]) // yields the default behavior
+	//.withAutomaticReconnect([0, 2000, 10000, 30000]) // yields the default behavior
 	.withAutomaticReconnect()
 	.build(),
 	userNameInput = $("#user-name"),
@@ -155,8 +155,12 @@ $(document).ready(async () => {
 
 function getErrorMessages() {
 	fetch("chat/getErrorMessages", { method: "GET" })
-		.then(response => response.json())
-		.then(data => errorMessages = data)
+		.then(response => {
+			return response.json();
+		})
+		.then(data => {
+			errorMessages = data;
+		})
 		.catch(e => error(e));
 }
 
@@ -202,7 +206,9 @@ function connect(isNewRoom = false) {
 					showAlert(errorMessages['UserIsConnected'], "alert-danger", 5000);
 				});
 		})
-		.catch(e => showAlert(e.toString(), "alert-danger", 5000));
+		.catch(e => {
+			showAlert(e.toString(), "alert-danger", 5000);
+		});
 }
 
 function showRoom(isNewRoom) {
@@ -218,6 +224,7 @@ function showRoom(isNewRoom) {
 		}));
 
 		chatPlaceholder.hide();
+		messageInput.val("").focus();
 	} else {
 		$("#fixed-bottom-chat").width(800);
 		userListContainer.show();
@@ -287,11 +294,14 @@ function getConnectedUsers() {
 }
 
 function createMessage(data) {
+	let formattedDate = "";
+	if (data.messageDate)
+		formattedDate = $.format.date(data.messageDate, "dd/MM/yy hh:mm:ss a");
+
 	const message = data.message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"),
 		userName = data.fromUserName,
 		messageColor = (userName === "") ? "bg-secondary" : (userName === "Me") ? "bg-success" : "bg-primary",
 		messageSender = `<p class="mb-0">${userName}</p>`,
-		formattedDate = $.format.date(data.messageDate, "dd/MM/yy hh:mm:ss a"),
 		messageDate = `<p class="mb-0">${formattedDate}</p>`,
 		messageHeader = `<div class="d-flex justify-content-between">${messageSender}${messageDate}</div>`,
 		messageText = `<p class="mb-0">${message}</p>`,

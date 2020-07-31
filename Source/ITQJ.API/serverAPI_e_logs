@@ -1343,3 +1343,4 @@ Error Number:547,State:0,Class:16
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
 2020-07-30 16:03:49.588 -04:00 [FTL] Server-side Error: An error occurred while updating the entries. See the inner exception for details.
+2020-07-31 11:22:37.032 -04:00 [FTL] Host stoped: The operation was canceled.

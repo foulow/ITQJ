@@ -1,1 +1,12 @@
 2020-07-30 18:30:27.239 -04:00 [ERR] Client not authorized for client credentials flow, check the AllowedGrantTypes setting{"clientId":"itqj_web_client"}, details: {"ClientId":"itqj_web_client","ClientName":"ITQJ-WebClient","GrantType":"client_credentials","Scopes":null,"AuthorizationCode":null,"RefreshToken":null,"UserName":null,"AuthenticationContextReferenceClasses":null,"Tenant":null,"IdP":null,"Raw":{"client_id":"itqj_web_client","client_secret":"***REDACTED***","grant_type":"client_credentials"},"$type":"TokenRequestValidationLog"}
+2020-07-30 22:28:26.466 -04:00 [ERR] Client not authorized for client credentials flow, check the AllowedGrantTypes setting{"clientId":"itqj_code_web_client"}, details: {"ClientId":"itqj_code_web_client","ClientName":"ITQJ-WebClient","GrantType":"client_credentials","Scopes":null,"AuthorizationCode":null,"RefreshToken":null,"UserName":null,"AuthenticationContextReferenceClasses":null,"Tenant":null,"IdP":null,"Raw":{"grant_type":"client_credentials","scope":"itqj_api","client_id":"itqj_code_web_client","client_secret":"***REDACTED***"},"$type":"TokenRequestValidationLog"}
+2020-07-31 11:22:31.974 -04:00 [FTL] Host terminated unexpectedly.
+System.OperationCanceledException: The operation was canceled.
+   at System.Threading.CancellationToken.ThrowOperationCanceledException()
+   at Microsoft.Extensions.Hosting.Internal.Host.StopAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.WaitForShutdownAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Run(IHost host)
+   at ITQJ.OAuth.Program.Main(String[] args) in C:\Projects\Visual Studio\ITSC\ITQJ\Source\ITQJ.OAuth\Program.cs:line 68
+2020-07-31 11:22:56.890 -04:00 [FTL] Host stoped: The operation was canceled.
