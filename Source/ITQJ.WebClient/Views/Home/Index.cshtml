@@ -1,9 +1,6 @@
 ﻿@model ITQJ.WebClient.ViewModels.ProjectVM
 @{
     ViewData["Title"] = "Home Page";
-
-    //var listpro = Model[0];
-    //var listpag = Model[1];
 }
 
 @if (!User.Identity.IsAuthenticated)
@@ -15,50 +12,25 @@ else
     <h2>Hola @ViewBag.UserName!</h2>
 }
 
-@* Ejemplo de lista de proyectos
-    <br />
 
-    <br />
-    <br />
+@*<nav aria-label="Page navigation exmple">
 
-    <h3>Filtro de Busqueda</h3>
+    <ul class="pagination justify-content-center">
 
-    <hr />
+        @foreach (var pagina in Model.ResultCount)
+        {
 
-    <br />
-    <div class="p-2  d-inline-block">
+            <li style="cursor: pointer;" class="page-item @(pagina.Habilitada ? null : "disabled") @(pagina.Activa ? "active" : null)">
 
-        <label class="h4"> Buscar por titulo </label>
+                <span class="page-link"> @pagina.Texto </span>
 
-        <input type="text" width="100" />
+            </li>
 
-        <input type="submit" value="Buscar" class="btn btn-sm btn-outline-dark" />
+        }
 
-    </div>
+    </ul>
 
-    <br />
-    <br />
-    <br />
-    <br />
-
-    <nav aria-label="Page navigation exmple">
-
-            <ul class="pagination justify-content-center">
-
-                @foreach (var pagina in listpag)
-                {
-
-                    <li style="cursor: pointer;" class="page-item @(pagina.Habilitada ? null : "disabled") @(pagina.Activa ? "active" : null)">
-
-                        <span class="page-link"> @pagina.Texto </span>
-
-                    </li>
-
-                }
-
-            </ul>
-
-        </nav>
+</nav>*@
 
     <br />
 
@@ -68,7 +40,7 @@ else
                 <hr />
 
 
-                @foreach (var dato in listpro)
+                @foreach (var dato in Model.Projects)
                 {
                     <a asp-action="Register" asp-controller="Home" style="color:black; text-shadow:5px 5px 5px gray">
 
@@ -84,7 +56,7 @@ else
                                             data-qtsb-label="link-project-title"
                                             data-heading-link="true" style="color:black">
 
-                                        @dato.nombre
+                                        @dato.Name
 
                                     </strong>
 
@@ -96,7 +68,7 @@ else
 
                                 <div class="col d-inline">
 
-                                    @dato.descriccionEmpleo
+                                    @dato.Description
 
                                 </div>
 
@@ -106,13 +78,13 @@ else
 
                                 <div class="col d-inline">
 
-                                    <text>Publicado: @dato.fechaPublicacion </text>
+                                    <text>Publicado: @dato.PublishDate </text>
 
                                 </div>
 
                                 <div class="col d-inline">
 
-                                    <text>Cierre de la publicacion: @dato.fechaCierre </text>
+                                    <text>Cierre de la publicacion: @dato.CloseDate </text>
 
                                 </div>
 
@@ -129,4 +101,4 @@ else
             </div>
 
         <button onclick="ScrollUp()" class="ButtonUp"></button>
-*@
+

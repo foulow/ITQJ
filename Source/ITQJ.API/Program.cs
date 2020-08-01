@@ -44,7 +44,7 @@ namespace ITQJ.Domain
             catch (Exception ex)
             {
                 Log.Fatal("Host stoped: {0}", ex.Message);
-                throw;
+                //throw;
             }
             finally
             {
