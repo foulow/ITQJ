@@ -18,13 +18,17 @@ namespace ITQJ.OAuth
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResources.Email(),
-                new IdentityResources.Phone()
+                new IdentityResources.Phone(),
+                new IdentityResource(
+                    "roles",
+                    "Your role(s)",
+                    new List<string>() { "role" })
             };
 
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
-                new ApiScope("itqj_api", "ITQJ.API"),
+                new ApiScope("itqj_api", "ITQJ.API", new List<string> { "role" }),
             };
 
         public static IEnumerable<ApiResource> ApiResources =>
@@ -36,7 +40,7 @@ namespace ITQJ.OAuth
                     {
                         "email",
                         "phone",
-                        //"role"
+                        "role"
                     }
                 }
             };
@@ -50,14 +54,15 @@ namespace ITQJ.OAuth
                     ClientName = "ITQJ-WebClient",
                     ClientSecrets = { new Secret("AAE3727D-88FA-44B8-B406-0CA2AE75C7C3".Sha256()) },
                     UpdateAccessTokenClaimsOnRefresh = true,
-                    AccessTokenLifetime = 43200,
+                    AccessTokenLifetime = 1800,
 
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     RequirePkce = true,
 
                     AllowedScopes = new[]
                     {
-                        "itqj_api"
+                        "itqj_api",
+                        "roles"
                     }
                 },
 
@@ -67,12 +72,11 @@ namespace ITQJ.OAuth
                     ClientName = "ITQJ-WebClient",
                     ClientSecrets = { new Secret("AAE3727D-88FA-44B8-B406-0CA2AE75C7C3".Sha256()) },
                     UpdateAccessTokenClaimsOnRefresh = true,
-                    AccessTokenLifetime = 43200,
+                    AccessTokenLifetime = 1800,
 
-                    AllowedGrantTypes = GrantTypes.Code,
+                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
                     AlwaysIncludeUserClaimsInIdToken = true,
                     AllowOfflineAccess = true,
-                    RequireConsent = true,
                     RequirePkce = true,
 
                     AllowedScopes = new[]
@@ -81,8 +85,8 @@ namespace ITQJ.OAuth
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
                         IdentityServerConstants.StandardScopes.Phone,
-                        //"role",
                         "itqj_api",
+                        "roles",
                         IdentityServerConstants.StandardScopes.OfflineAccess
                     },
 
@@ -98,12 +102,11 @@ namespace ITQJ.OAuth
                     ClientName = "ITQJ-WebClient",
                     ClientSecrets = { new Secret("AAE3727D-88FA-44B8-B406-0CA2AE75C7C3".Sha256()) },
                     UpdateAccessTokenClaimsOnRefresh = true,
-                    AccessTokenLifetime = 43200,
+                    AccessTokenLifetime = 1800,
 
                     AllowedGrantTypes = GrantTypes.Hybrid,
                     AlwaysIncludeUserClaimsInIdToken = true,
                     AllowOfflineAccess = true,
-                    RequireConsent = true,
                     RequirePkce = true,
 
                     AllowedScopes = new[]
@@ -112,8 +115,8 @@ namespace ITQJ.OAuth
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
                         IdentityServerConstants.StandardScopes.Phone,
-                        //"role",
                         "itqj_api",
+                        "roles",
                         IdentityServerConstants.StandardScopes.OfflineAccess
                     },
 
@@ -129,11 +132,10 @@ namespace ITQJ.OAuth
                     ClientName = "ITQJ-WebClient-Implicit",
                     ClientSecrets = { new Secret("AAE3727D-88FA-44B8-B406-0CA2AE75C7C3".Sha256()) },
                     UpdateAccessTokenClaimsOnRefresh = true,
-                    AccessTokenLifetime = 43200,
+                    AccessTokenLifetime = 1800,
 
                     AllowedGrantTypes = GrantTypes.Implicit,
                     AlwaysIncludeUserClaimsInIdToken = true,
-                    RequireConsent = true,
                     RequirePkce = true,
 
                     AllowedScopes = new[]
@@ -141,9 +143,9 @@ namespace ITQJ.OAuth
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
-                        //"role",
                         IdentityServerConstants.StandardScopes.Phone,
-                        "itqj_api"
+                        "itqj_api",
+                        "roles"
                     },
 
                     RedirectUris = new[] { "https://localhost:44348/signin-oidc" },
@@ -158,7 +160,7 @@ namespace ITQJ.OAuth
             {
                 new TestUser
                 {
-                    SubjectId = "1",
+                    SubjectId = "7A5B3C6E-7E95-435E-B46F-1F449F49BE04",
                     Username = "jeffrey",
                     Password = "password",
 
@@ -166,12 +168,12 @@ namespace ITQJ.OAuth
                         new Claim("scope", "itqj_api"),
                         new Claim("email", "jeffreyissaul@hotmail.com"),
                         new Claim("phone", "+1(849)586-7932"),
-                        //new Claim("role", "rol_profesional")
+                        new Claim("role", "Profesional")
                     }
                 },
                 new TestUser
                 {
-                    SubjectId = "2",
+                    SubjectId = "E80F88AF-C61E-4500-A77E-8EDE80538B84",
                     Username = "luis",
                     Password = "password",
 
@@ -179,7 +181,7 @@ namespace ITQJ.OAuth
                         new Claim("scope", "itqj_api"),
                         new Claim("email", "luiseduardofrias27@gmail.com"),
                         new Claim("phone", "+1(849)228-0058"),
-                        //new Claim("role", "rol_contratista")
+                        new Claim("role", "Contratista")
                     }
                 }
             };

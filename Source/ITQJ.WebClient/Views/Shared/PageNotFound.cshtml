@@ -1,19 +1,22 @@
 ﻿@{
-	ViewData["Title"] = "Page not found";
+    ViewData["Title"] = "Page not found";
 }
 
 <div class="d-flex align-items-center justify-content-center">
-	<div class="text-center m-5">
-		<h1 style="font-size: 200px; font-weight: bold;">404</h1>
-		<h1>@ViewData["Title"]</h1>
-		<p>The resource you are trying to access was not found.</p>
-	</div>
+    <div class="text-center m-5">
+        <h1 style="font-size: 200px; font-weight: bold;">404</h1>
+        <h1>@ViewData["Title"]</h1>
+        <p>
+            The resource you are trying to access was not found.
+            <div>Or the access is denied, Would you prefer to <a asp-controller="Home" asp-action="LogOut">log in with other type of account</a> to visit this page?</div>
+        </p>
+    </div>
 </div>
 
 @section Scripts {
-	<script>
-		$(document).ready(function () {
-			loader.hide();
-		});
-	</script>
+    <script>
+        $(document).ready(function () {
+            loader.hide();
+        });
+    </script>
 }

@@ -1,15 +1,21 @@
-﻿@{
+﻿@model ITQJ.WebClient.ViewModels.ProjectVM
+@{
     ViewData["Title"] = "Home Page";
 
     //var listpro = Model[0];
     //var listpag = Model[1];
-
-
 }
 
-<h2>Hola @ViewBag.UserName!</h2>
+@if (!User.Identity.IsAuthenticated)
+{
+    <h2>Bienvenido!</h2>
+}
+else 
+{
+    <h2>Hola @ViewBag.UserName!</h2>
+}
 
-@*
+@* Ejemplo de lista de proyectos
     <br />
 
     <br />

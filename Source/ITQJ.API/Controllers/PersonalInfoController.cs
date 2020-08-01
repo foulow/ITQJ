@@ -1,4 +1,5 @@
-﻿using ITQJ.Domain.Models;
+﻿using ITQJ.Domain.DTOs;
+using ITQJ.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,17 +17,35 @@ namespace ITQJ.Domain.Controllers
             : base(serviceProvider) { }
 
         [HttpGet("{userId}")]
-        public ActionResult GetPersonalInfo([FromRoute] string userName)
+        public ActionResult GetPersonalInfo([FromRoute] string userId)
         {
-            var user = this._appDBContext.Users
-                .FirstOrDefault(x => x.UserName == userName);
+            var userIdGuid = Guid.Parse(userId);
 
             var personalInfo = this._appDBContext.PersonalInfos
                 .Include(i => i.User)
                 .Include(i => i.LegalDocument)
                 .Include(i => i.ProfesionalSkills)
-                .FirstOrDefault(x => x.UserId == user.Id);
+                .FirstOrDefault(x => x.UserId == userIdGuid);
             var personalInfoModel = this._mapper.Map<PersonalInfo>(personalInfo);
+
+            return Ok(new
+            {
+                Message = "Ok",
+                Result = personalInfoModel
+            });
+        }
+
+        [HttpPost]
+        public ActionResult RegisterPersonalInfo([FromBody] PersonalInfoCreateDTO personalInfoData)
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var newPersonalInfo = this._mapper.Map<PersonalInfo>(personalInfoData);
+            newPersonalInfo.UserId = Guid.Parse(userId);
+
+            var tempPersonalInfo = this._appDBContext.PersonalInfos.Add(newPersonalInfo);
+            this._appDBContext.SaveChanges();
+
+            var personalInfoModel = this._mapper.Map<UserResponseDTO>(tempPersonalInfo.Entity);
 
             return Ok(new
             {

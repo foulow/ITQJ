@@ -2,6 +2,7 @@
 using ITQJ.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +18,13 @@ namespace ITQJ.Domain.Controllers
             : base(serviceProvider) { }
 
         [HttpGet("{personalInfoId}")]
-        public ActionResult GetProfesionalSkills([FromRoute] Guid personalInfoId)
+        public ActionResult GetProfesionalSkills([FromRoute] string personalInfoId)
         {
+            var personalInfoIdGuid = Guid.Parse(personalInfoId);
+
             var profesionalSkills = this._appDBContext.ProfesionalSkills
-                .Where(x => x.PersonalInfoId == personalInfoId)
+                .Include(i => i.Skill)
+                .Where(x => x.PersonalInfoId == personalInfoIdGuid)
                 .ToList();
             var profesionalSkillModels = this._mapper
                 .Map<IEnumerable<ProfesionalSkill>>(profesionalSkills);

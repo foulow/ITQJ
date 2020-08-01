@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using ITQJ.WebClient.Models;
 
 namespace ITQJ.WebClient.Controllers
 {
@@ -10,7 +11,7 @@ namespace ITQJ.WebClient.Controllers
     {
         public HomeController(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(UserInfoM userInfoModel)
         {
             //PaginaVM paginaVM = new PaginaVM();
             //paginaVM.PaginaActual = 1;
@@ -26,10 +27,16 @@ namespace ITQJ.WebClient.Controllers
 
             var projects = await CallApiGETAsync<ProjectVM>("/api/projects");
 
+            
             if (User.Identity.IsAuthenticated)
-                ViewBag.UserName = User.Identity.Name;
-            else
-                ViewBag.UserName = "\r";
+            {
+                if (userInfoModel != null)
+                    userInfoModel = GetUserInfo();
+                
+                ViewBag.UserId = userInfoModel.Id
+                ViewBag.UserName = userInfoModel.UserName;
+                ViewBag.Role = Role;
+            }
 
             return View(projects);
         }

@@ -57,7 +57,7 @@ namespace ITQJ.OAuth
                             options.UseSqlServer(apiConnectionString,
                                 sql => sql.MigrationsAssembly(migrationsAssembly)));
 
-            //// Use this for in memory data test. (not connection string needed)
+            // Use this for in memory data test. (not connection string needed)
             //services.AddIdentityServer(options =>
             //{
             //    // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
@@ -68,7 +68,7 @@ namespace ITQJ.OAuth
             //    options.Events.RaiseSuccessEvents = true;
             //})
             //    .AddDeveloperSigningCredential()
-            //    //.AddTestUsers(Config.Users.ToList())
+            //    .AddTestUsers(Config.Users.ToList())
             //    .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
             //    .AddInMemoryIdentityResources(Config.IdentityResources)
             //    .AddInMemoryApiScopes(Config.ApiScopes)
@@ -103,7 +103,6 @@ namespace ITQJ.OAuth
                 });
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
-            ////builder.AddSigningCredential(new X509Certificate2(@"C:\Projects\Visual Studio\Pidelo\Repositorios\Pidelo-API\pidelo.pfx", "Paravailarla.1"));
 
             // If enabled allows third paty authentication to get access to IdentityServer.
             //services.AddAuthentication()

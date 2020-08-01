@@ -26,12 +26,22 @@ namespace ITQJ.OAuth.Configuration
             {
                 claimsValues.Add(claim.Type, claim.Value);
             };
-            var username = (claimsValues.ContainsKey("surname")) ? claimsValues["sub"] : userId;
-            var email = (claimsValues.ContainsKey("emailadress")) ? claimsValues["email"] : "annonymous@unknown.com";
-            var rolName = (claimsValues.ContainsKey("role")) ? claimsValues["role"] : "Profesional";
-            var rolId = (rolName == "Profesional") ?
-                Guid.Parse("31BE72FD-BE58-492A-8976-57FF74DAEB7A") :
-                Guid.Parse("3D3B586A-EC26-42A3-A63A-026492FFC298");
+
+            var username = (claimsValues.ContainsKey("name"))
+                ? claimsValues["name"]
+                : Guid.NewGuid().ToString();
+
+            var email = (claimsValues.ContainsKey("email"))
+                ? claimsValues["email"]
+                : "annonymous@unknown.com";
+
+            var rolName = (claimsValues.ContainsKey("role"))
+                ? claimsValues["role"]
+                : "Profesional";
+
+            var rolId = (rolName == "Profesional")
+                ? Guid.Parse("31BE72FD-BE58-492A-8976-57FF74DAEB7A")
+                : Guid.Parse("3D3B586A-EC26-42A3-A63A-026492FFC298");
 
             var user = new User
             {
@@ -58,6 +68,10 @@ namespace ITQJ.OAuth.Configuration
         {
             var user = await this._applicationDBContext.Users
                 .FirstOrDefaultAsync(x => x.UserName == username);
+
+            if (user == null)
+                user = await this._applicationDBContext.Users
+                .FirstOrDefaultAsync(x => x.Id == Guid.Parse(username));
 
             if (user == null)
                 user = await this._applicationDBContext.Users

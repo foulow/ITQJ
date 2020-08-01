@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using IdentityModel.Client;
-using ITQJ.Domain.DTOs;
+using ITQJ.WebClient.Models;
 using ITQJ.WebClient.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,10 +16,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
-using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,29 +27,27 @@ namespace ITQJ.WebClient.Controllers
     public class BaseController : Controller
     {
         protected readonly IServiceProvider _serviceProvider;
-        protected readonly HttpClient _client;
+        //protected readonly IHttpContextAccessor _httpContextAccessor;
+        protected readonly IHttpClientFactory _clientFactory;
         protected readonly IMapper _mapper;
         protected readonly IConfiguration _configuration;
         protected readonly IOptionsMonitor<ClientCredentialsM> _clientConfiguration;
 
         public BaseController(IServiceProvider serviceProvider)
         {
-            this._client = serviceProvider.GetRequiredService<HttpClient>();
+            //this._httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+            this._clientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
             this._mapper = serviceProvider.GetRequiredService<IMapper>();
             this._configuration = serviceProvider.GetRequiredService<IConfiguration>();
             this._clientConfiguration = serviceProvider.GetRequiredService<IOptionsMonitor<ClientCredentialsM>>();
         }
 
-        protected async Task<T> CallApiGETAsync<T>(string uri, bool needJWT = false) where T : class
+        protected async Task<T> CallApiGETAsync<T>(string uri) where T : class
         {
-            if (needJWT)
-            {
-                var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
-                this._client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            }
+            var apiClient = this._clientFactory.CreateClient("APIClient");
 
             T result = null;
-            var content = await this._client.GetStringAsync(_configuration["APIURL"] + uri);
+            var content = await apiClient.GetStringAsync(uri);
 
             if (content != null && content.Contains("result"))
             {
@@ -60,18 +58,39 @@ namespace ITQJ.WebClient.Controllers
             return result;
         }
 
-        protected async Task<T> CallApiPOSTAsync<T>(string uri, T body, bool needJWT = false) where T : class
+        protected async Task<T> CallSecuredApiGETAsync<T>(string uri) where T : class
         {
-            if (needJWT)
+            var apiClient = this._clientFactory.CreateClient("SecuredAPIClient");
+
+            var request = new HttpRequestMessage(HttpMethod.Get, uri);
+
+            var response = await apiClient.SendAsync(
+                request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+
+            if (response.IsSuccessStatusCode)
             {
-                var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
-                this._client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                var responseString = await response.Content.ReadAsStringAsync();
+                var jsonObject = JObject.Parse(responseString);
+
+                return jsonObject["result"].ToObject<T>();
             }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized ||
+                response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                return null;
+            }
+
+            throw new Exception("Problem accessing the API");
+        }
+
+        protected async Task<T> CallApiPOSTAsync<T>(string uri, T body) where T : class
+        {
+            var apiClient = this._clientFactory.CreateClient("APIClient");
 
             T result = null;
 
-            var content = await this._client
-                .PostAsync(_configuration["APIURL"] + uri,
+            var content = await apiClient
+                .PostAsync(uri,
                 new StringContent(JsonConvert.SerializeObject(body),
                     Encoding.UTF8, "application/json"));
 
@@ -86,15 +105,40 @@ namespace ITQJ.WebClient.Controllers
             return result;
         }
 
+        protected async Task<T> CallSecuredApiPOSTAsync<T>(string uri, T body) where T : class
+        {
+            var apiClient = this._clientFactory.CreateClient("SecuredAPIClient");
+
+            var request = new HttpRequestMessage(HttpMethod.Post, uri);
+            request.Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8);
+
+            var response = await apiClient.SendAsync(
+                request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseString = await response.Content.ReadAsStringAsync();
+                var jsonObject = JObject.Parse(responseString);
+
+                return jsonObject["result"].ToObject<T>();
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized ||
+                response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                return null;
+            }
+
+            throw new Exception("Problem accessing the API");
+        }
+
         protected async Task<T> CallApiPUTAsync<T>(string uri, T body) where T : class
         {
-            var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
-            this._client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            var apiClient = this._clientFactory.CreateClient("APIClient");
 
             T result = null;
 
-            var content = await this._client
-                .PostAsync(_configuration["APIURL"] + uri,
+            var content = await apiClient
+                .PutAsync(uri,
                 new StringContent(JsonConvert.SerializeObject(body),
                     Encoding.UTF8, "application/json"));
 
@@ -109,14 +153,64 @@ namespace ITQJ.WebClient.Controllers
             return result;
         }
 
+        protected async Task<T> CallSecuredApiPUTAsync<T>(string uri, T body) where T : class
+        {
+            var apiClient = this._clientFactory.CreateClient("SecuredAPIClient");
+
+            var request = new HttpRequestMessage(HttpMethod.Put, uri);
+            request.Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8);
+
+            var response = await apiClient.SendAsync(
+                request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseString = await response.Content.ReadAsStringAsync();
+                var jsonObject = JObject.Parse(responseString);
+
+                return jsonObject["result"].ToObject<T>();
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized ||
+                response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                return null;
+            }
+
+            throw new Exception("Problem accessing the API");
+        }
+
         protected async Task<bool> CallApiDELETEAsync(string uri)
         {
-            var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
-            this._client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            var apiClient = this._clientFactory.CreateClient("APIClient");
 
-            var content = await this._client.DeleteAsync(_configuration["APIURL"] + uri);
+            var content = await apiClient.DeleteAsync(uri);
 
             return content.StatusCode == HttpStatusCode.OK;
+        }
+
+        protected async Task<T> CallSecuredApiDELETEAsync<T>(string uri) where T : class
+        {
+            var apiClient = this._clientFactory.CreateClient("SecuredAPIClient");
+
+            var request = new HttpRequestMessage(HttpMethod.Delete, uri);
+
+            var response = await apiClient.SendAsync(
+                request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseString = await response.Content.ReadAsStringAsync();
+                var jsonObject = JObject.Parse(responseString);
+
+                return jsonObject["result"].ToObject<T>();
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized ||
+                response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                return null;
+            }
+
+            throw new Exception("Problem accessing the API");
         }
 
         public IActionResult PageNotFound()
@@ -131,17 +225,48 @@ namespace ITQJ.WebClient.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        protected async Task<Guid> GetUserIdByName(string userName)
-        {
-            var user = await CallApiGETAsync<UserResponseDTO>("/api/users/" + userName);
-            if (user == null)
-                return Guid.Empty;
-
-            return user.Id;
-        }
-
         public async Task LogOut()
         {
+            #region Logout config for Reference Tokens
+            //var idpClient = this._clientFactory.CreateClient("IDPClient");
+
+            //var discoveryDocumentResponse = await idpClient.GetDiscoveryDocumentAsync();
+            //if (discoveryDocumentResponse.IsError)
+            //{
+            //    throw new Exception(
+            //        "Problem accessing the Discovery endpoint.",
+            //        discoveryDocumentResponse.Exception);
+            //}
+
+            //var clientCredentials = _clientConfiguration.CurrentValue;
+
+            //var accessTokenRevocationResponse = await idpClient.RevokeTokenAsync(
+            //    new TokenRevocationRequest
+            //    {
+            //        Address = discoveryDocumentResponse.RevocationEndpoint,
+            //        ClientId = clientCredentials.ClientId,
+            //        ClientSecret = clientCredentials.ClientSecret,
+            //        Token = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken)
+            //    });
+            //if (accessTokenRevocationResponse.IsError)
+            //{
+            //    throw new Exception(accessTokenRevocationResponse.Error);
+            //}
+
+            //var refreshTokenRevocationResponse = await idpClient.RevokeTokenAsync(
+            //    new TokenRevocationRequest
+            //    {
+            //        Address = discoveryDocumentResponse.RevocationEndpoint,
+            //        ClientId = clientCredentials.ClientId,
+            //        ClientSecret = clientCredentials.ClientSecret,
+            //        Token = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken)
+            //    });
+            //if (refreshTokenRevocationResponse.IsError)
+            //{
+            //    throw new Exception(refreshTokenRevocationResponse.Error);
+            //}
+            #endregion
+
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
         }
@@ -149,69 +274,47 @@ namespace ITQJ.WebClient.Controllers
         [Authorize]
         public async Task<IActionResult> LogIn()
         {
-            // If enabled allow re-access with refresh token.
-            await RefreshTokensAsync();
+            // Get the currently authorized user claims information.
+            var userInfo = await GetUserInfo();
 
-            return RedirectToRoute(new { controller = "Home", action = "Index" });
+            return RedirectToRoute(new { controller = "Home", action = "Index", userInfoModel = userInfo });
         }
 
-        private async Task RefreshTokensAsync()
+        public async Task<UserInfoM> GetUserInfo()
         {
-            var clientCredentials = this._clientConfiguration.CurrentValue;
+            var idpClient = this._clientFactory.CreateClient("IDPClient");
 
-            var response = await this._client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+            var discoveryDocumentResponse = await idpClient.GetDiscoveryDocumentAsync();
+            if (discoveryDocumentResponse.IsError)
             {
-                Address = clientCredentials.Authority + "/connect/token",
+                throw new Exception(
+                    "Problem accessing the Discovery endpoint.",
+                    discoveryDocumentResponse.Exception);
+            }
 
-                ClientId = clientCredentials.ClientId,
-                ClientSecret = clientCredentials.ClientSecret,
+            var accessToken = await HttpContext
+                .GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
 
-                Scope = clientCredentials.APIName
-            });
-
-            var refreshToken = await HttpContext.GetTokenAsync("refresh_token");
-
-            var tokenResponse = await this._client
-                .RequestRefreshTokenAsync(new RefreshTokenRequest()
+            var userInfoResponse = await idpClient.GetUserInfoAsync(
+                new UserInfoRequest
                 {
-                    RefreshToken = refreshToken,
+                    Address = discoveryDocumentResponse.UserInfoEndpoint,
+                    Token = accessToken
                 });
 
-            var identityToken = await HttpContext.GetTokenAsync("id_token");
-
-            var expiresAt = DateTime.UtcNow + TimeSpan.FromSeconds(tokenResponse.ExpiresIn);
-
-            var tokens = new[]
+            if (userInfoResponse.IsError)
             {
-                new AuthenticationToken
-                {
-                    Name = OpenIdConnectParameterNames.IdToken,
-                    Value = identityToken
-                },
-                new AuthenticationToken
-                {
-                    Name = OpenIdConnectParameterNames.AccessToken,
-                    Value = tokenResponse.AccessToken
-                },
-                new AuthenticationToken
-                {
-                    Name = OpenIdConnectParameterNames.RefreshToken,
-                    Value = tokenResponse.RefreshToken
-                },
-                new AuthenticationToken
-                {
-                    Name = "expires_at",
-                    Value = expiresAt.ToString("o", CultureInfo.InvariantCulture)
-                }
+                throw new Exception(
+                    "Problem accessing the UserInfo endpoint.",
+                    userInfoResponse.Exception);
+            }
+
+            return new UserInfoM
+            {
+                Id = Guid.Parse(userInfoResponse.Claims.FirstOrDefault(c => c.Type == "sub")?.Value),
+                UserName = userInfoResponse.Claims.FirstOrDefault(c => c.Type == "name")?.Value,
+                Role = userInfoResponse.Claims.FirstOrDefault(c => c.Type == "role")?.Value
             };
-
-            var authenticationInformation = await HttpContext.AuthenticateAsync("Cookies");
-
-            authenticationInformation.Properties.StoreTokens(tokens);
-
-            await HttpContext.SignInAsync("Cookies",
-                authenticationInformation.Principal,
-                authenticationInformation.Properties);
         }
     }
 }

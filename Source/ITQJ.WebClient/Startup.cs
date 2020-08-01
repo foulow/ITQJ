@@ -1,6 +1,9 @@
 using AutoMapper;
+using IdentityModel;
+using ITQJ.WebClient.HttpHandlers;
 using ITQJ.WebClient.Hubs;
 using ITQJ.WebClient.ViewModels;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
@@ -9,10 +12,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Serilog;
 using System;
-using System.Net.Http;
+using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 
 namespace ITQJ.WebClient
@@ -22,6 +26,7 @@ namespace ITQJ.WebClient
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         }
 
         public IConfiguration Configuration { get; }
@@ -33,31 +38,49 @@ namespace ITQJ.WebClient
             services.AddControllersWithViews();
 
             services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(
-                    builder =>
-                    {
-                        builder.AllowAnyMethod()
-                            .AllowAnyHeader()
-                            .AllowAnyOrigin();
-                    });
-            });
+                {
+                    options.AddDefaultPolicy(
+                        builder =>
+                        {
+                            builder.AllowAnyMethod()
+                                .AllowAnyHeader()
+                                .AllowAnyOrigin();
+                        });
+                });
 
             services.AddSignalR();
 
+            services.AddHttpContextAccessor();
+            services.AddTransient<BearerTokenHandler>();
+
+            var apiURL = Configuration["APIURL"];
+            services.AddHttpClient("SecuredAPIClient", client =>
+                {
+                    client.BaseAddress = new Uri(apiURL);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+                })
+                .AddHttpMessageHandler<BearerTokenHandler>();
+
             services.AddHttpClient("APIClient", client =>
-            {
-                client.BaseAddress = new Uri(Configuration["APIURL"]);
-                client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
-            });
-            services.AddTransient<HttpClient>();
+                {
+                    client.BaseAddress = new Uri(apiURL);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+                });
+
+            var authorityURL = Configuration["AuthorityURL"];
+            services.AddHttpClient("IDPClient", client =>
+                {
+                    client.BaseAddress = new Uri(authorityURL);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+                });
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.Configure<ClientCredentialsM>(Configuration.GetSection("ClientConfiguration"));
 
-            var authority = Configuration["AuthorityURL"];
 
             var scopes = Configuration.GetSection("ClientConfiguration:AllowedScopes").GetChildren();
 
@@ -66,11 +89,14 @@ namespace ITQJ.WebClient
                     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme; //oidc
                 })
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+                {
+                    options.AccessDeniedPath = "/Authorization/AccessDenied";
+                })
                 .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options => //oidc
                 {
                     options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.Authority = authority;
+                    options.Authority = authorityURL;
                     options.ClientId = Configuration["ClientConfiguration:ClientId"];
                     options.ClientSecret = Configuration["ClientConfiguration:ClientSecret"];
                     options.ResponseType = "code";
@@ -78,7 +104,16 @@ namespace ITQJ.WebClient
                     {
                         options.Scope.Add(scope.Value);
                     }
+                    options.ClaimActions.MapUniqueJsonKey("email", "email");
+                    options.ClaimActions.MapUniqueJsonKey("phone", "phone");
+                    options.ClaimActions.MapUniqueJsonKey("role", "role");
                     options.SaveTokens = true;
+                    options.GetClaimsFromUserInfoEndpoint = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        NameClaimType = JwtClaimTypes.GivenName,
+                        RoleClaimType = JwtClaimTypes.Role
+                    };
                 });
         }
 

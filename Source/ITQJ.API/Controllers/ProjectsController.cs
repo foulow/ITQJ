@@ -63,12 +63,16 @@ namespace ITQJ.Domain.Controllers
 
         [Authorize]
         [HttpGet("{projectId}")]
-        public ActionResult GetProject([FromRoute] Guid projectId, [FromRoute] string userName)
+        public ActionResult GetProject([FromRoute] Guid projectId, [FromRoute] string userId)
         {
+            var ownerId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            if (userId != ownerId)
+                return BadRequest(new { Error = "El projecto al que esta intentando editar no es de su autoria." });
+
             var project = this._appDBContext.Projects
                 .Include(i => i.Postulants)
                 .Include(i => i.Messages)
-                .FirstOrDefault(x => x.Id == projectId);
+                .FirstOrDefault(x => x.Id == projectId && x.UserId == Guid.Parse(userId));
 
             if (project is null)
                 return NotFound(new { Error = "El recurso no ha sido encontrado." });

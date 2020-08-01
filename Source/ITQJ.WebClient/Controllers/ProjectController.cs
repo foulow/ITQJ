@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 
 namespace ITQJ.WebClient.Controllers
@@ -8,6 +9,12 @@ namespace ITQJ.WebClient.Controllers
         public ProjectController(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Contratist")]
+        public IActionResult Publish()
         {
             return View();
         }

@@ -14,7 +14,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System;
 using System.Threading.Tasks;
@@ -63,17 +62,22 @@ namespace ITQJ.Domain
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-                .AddJwtBearer("Bearer", options =>
-                {
-                    options.RequireHttpsMetadata = true;
-                    options.Authority = Configuration["AuthorityURL"];
-                    options.Audience = Configuration["AudienceURL"];
+            .AddIdentityServerAuthentication(options =>
+            {
+                options.Authority = Configuration["AuthorityURL"];
+                options.ApiName = Configuration["ApiResources:Name"];
+            });
+            //.AddJwtBearer(IdentityServerAuthenticationDefaults.AuthenticationScheme, options =>
+            //{
+            //    options.RequireHttpsMetadata = true;
+            //    options.Authority = Configuration["AuthorityURL"];
+            //    options.Audience = Configuration["AudienceURL"];
 
-                    options.TokenValidationParameters = new TokenValidationParameters()
-                    {
-                        ValidateAudience = false
-                    };
-                });
+            //    options.TokenValidationParameters = new TokenValidationParameters()
+            //    {
+            //        ValidateAudience = false
+            //    };
+            //});
 
             // TODO: enable user role base authorization.
             services.AddAuthorization(options =>
