@@ -18,7 +18,7 @@ namespace ITQJ.EFCore
         {
             try
             {
-                return (context.ProfesionalSkills.Any()) ? DBState.Fetched : DBState.Unfetched;
+                return (context.Projects.Any()) ? DBState.Fetched : DBState.Unfetched;
             }
             catch (Exception ex)
             {
@@ -121,6 +121,21 @@ namespace ITQJ.EFCore
                 Log.Debug("ProfesionalSkills already populated.");
             }
             Log.Information("Data feched.");
+
+
+            if (!context.Projects.Any())
+            {
+                Log.Debug("Projects being populated...");
+                context.Projects.AddRange(DataConfig.Projects);
+                context.SaveChanges();
+                Log.Debug("Projects populated.");
+            }
+            else
+            {
+                Log.Debug("Projects already populated.");
+            }
+            Log.Information("Data feched.");
+
         }
     }
 }

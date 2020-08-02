@@ -64,16 +64,17 @@ body {
 }
 
 .ButtonUp {
+    outline: none;
+    float: left;
     background-color: white;
     border: 1px double white;
     border-radius: 50%;
     height: 60px;
     width: 60px;
-    float: right;
     position: relative;
     bottom: 40px;
+    text-decoration: none;
     background-image: url(/Image/flecha-hacia-arriba.svg);
-    outline: none;
 }
 
 .footer {

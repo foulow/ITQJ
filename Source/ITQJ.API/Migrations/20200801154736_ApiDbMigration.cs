@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ITQJ.API.Migrations
 {
-    public partial class APIDBMigration : Migration
+    public partial class ApiDbMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -126,8 +126,8 @@ namespace ITQJ.API.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     DeletedFlag = table.Column<bool>(nullable: false),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    Description = table.Column<string>(maxLength: 500, nullable: false),
+                    Name = table.Column<string>(maxLength: 150, nullable: false),
+                    Description = table.Column<string>(maxLength: 2500, nullable: false),
                     PublishDate = table.Column<DateTime>(nullable: false),
                     CloseDate = table.Column<DateTime>(nullable: false),
                     PostulantsLimit = table.Column<int>(nullable: false),

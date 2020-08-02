@@ -11,7 +11,7 @@ namespace ITQJ.WebClient.Controllers
     {
         public HomeController(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
-        public async Task<IActionResult> Index(UserInfoM userInfoModel)
+        public async Task<IActionResult> Index(UserInfoM userInfoModel,int PageIndex)
         {
             var projects = await CallApiGETAsync<ProjectVM>("/api/projects");
 

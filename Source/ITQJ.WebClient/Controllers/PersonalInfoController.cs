@@ -112,6 +112,7 @@ namespace ITQJ.WebClient.Controllers
             var personalInfo = new PersonalInfoVM();
             personalInfo.Skills = new List<SkillM>();
             personalInfo.UserId = Guid.Parse(userId);
+
             if (role == "Profesional")
             {
                 var tempSkills = await CallApiGETAsync<List<SkillDTO>>("/api/skills");

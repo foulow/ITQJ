@@ -74,8 +74,7 @@ namespace ITQJ.WebClient.Controllers
 
                 return jsonObject["result"].ToObject<T>();
             }
-            else if (response.StatusCode == HttpStatusCode.Unauthorized ||
-                response.StatusCode == HttpStatusCode.Forbidden)
+            else if (response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden)
             {
                 return null;
             }
