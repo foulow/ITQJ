@@ -1,7 +1,8 @@
-﻿using ITQJ.WebClient.Models;
-using ITQJ.WebClient.ViewModels;
+﻿using ITQJ.WebClient.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ITQJ.WebClient.Controllers
@@ -11,19 +12,28 @@ namespace ITQJ.WebClient.Controllers
     {
         public HomeController(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
-        public async Task<IActionResult> Index(UserInfoM userInfoModel,int PageIndex)
+        public async Task<IActionResult> Index(int pageIndex = 1, int maxResults = 20)
         {
-            var projects = await CallApiGETAsync<ProjectVM>("/api/projects");
+            string currentPage = (pageIndex < 1) ? "1" : pageIndex.ToString();
+            string maxProjectsCount = (maxResults < 20) ? "20" : (maxResults < 100) ? "100" : maxResults.ToString();
+            var queryResult = new Dictionary<string, string>
+            {
+                { nameof(pageIndex), currentPage },
+                { nameof(maxResults), maxProjectsCount }
+            };
 
+            var projects = await CallApiGETAsync<ProjectVM>("/api/projects/" + QueryString.Create(queryResult));
 
             if (User.Identity.IsAuthenticated)
             {
-                if (userInfoModel != null)
-                    userInfoModel = await GetUserInfo();
+                var userInfoModel = await GetUserInfo();
 
-                ViewBag.UserId = userInfoModel.Id;
-                ViewBag.UserName = userInfoModel.UserName;
-                ViewBag.Role = userInfoModel.Role;
+                if (userInfoModel != null)
+                {
+                    ViewBag.UserId = userInfoModel.Id;
+                    ViewBag.UserName = userInfoModel.UserName;
+                    ViewBag.Role = userInfoModel.Role;
+                }
             }
 
             return View(projects);

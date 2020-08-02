@@ -20,7 +20,7 @@ namespace ITQJ.WebClient.Controllers
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var user = await CallSecuredApiGETAsync<UserResponseDTO>("/api/users/" + userName);
-            if (user is null)
+            if (user is null || user.Role.Name == "Contratista")
                 return PageNotFound();
 
             var personalInfoDTO = await UserHasPersonalInfo(user.Id.ToString());
@@ -39,7 +39,7 @@ namespace ITQJ.WebClient.Controllers
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var user = await CallSecuredApiGETAsync<UserResponseDTO>("/api/users/" + userName);
-            if (user is null)
+            if (user is null || user.Role.Name == "Contratista")
                 return PageNotFound();
 
             if (userId != user.Id.ToString())
@@ -58,7 +58,7 @@ namespace ITQJ.WebClient.Controllers
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var user = await CallSecuredApiGETAsync<UserResponseDTO>("/api/users/" + userName);
-            if (user is null)
+            if (user is null || user.Role.Name == "Profesional")
                 return PageNotFound();
 
             var personalInfoDTO = await UserHasPersonalInfo(user.Id.ToString());
@@ -77,7 +77,7 @@ namespace ITQJ.WebClient.Controllers
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var user = await CallSecuredApiGETAsync<UserResponseDTO>("/api/users/" + userName);
-            if (user is null)
+            if (user is null || user.Role.Name == "Profesional")
                 return PageNotFound();
 
             if (userId != user.Id.ToString())
@@ -92,11 +92,13 @@ namespace ITQJ.WebClient.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Register()
+        public async Task<IActionResult> Register(string role = "Profesional")
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var userName = User.Claims.FirstOrDefault(c => c.Type == "name")?.Value;
-            var role = User.Claims.FirstOrDefault(c => c.Type == "role")?.Value;
+
+            // TODO: todavia falta agregarle el role a los Claims del usuario en el JWT.
+            //var role = User.Claims.FirstOrDefault(c => c.Type == "role")?.Value;
 
             var personalInfoDTO = await UserHasPersonalInfo(userId);
             if (!(personalInfoDTO is null))

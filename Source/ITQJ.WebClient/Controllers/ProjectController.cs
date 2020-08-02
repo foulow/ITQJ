@@ -21,7 +21,7 @@ namespace ITQJ.WebClient.Controllers
                 return PageNotFound();
             }
 
-            return View( new { projectInfo = projectInfo, userId = userId });
+            return View(projectInfo);
         }
 
         [Authorize(Roles = "Contratista")]
@@ -47,7 +47,7 @@ namespace ITQJ.WebClient.Controllers
 
             var repuesta = await CallSecuredApiPOSTAsync<PostulantCreateDTO>("/api/postulants/", newPostulant);
 
-            if(repuesta.Equals(null))
+            if (repuesta.Equals(null))
             {
                 ViewBag.ErrorMesseger = "Error al Postularte. \n Reintente.";
 
