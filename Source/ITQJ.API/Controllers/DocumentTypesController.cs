@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ITQJ.Domain.Controllers
+namespace ITQJ.API.Controllers
 {
     [ApiController]
     [AllowAnonymous]

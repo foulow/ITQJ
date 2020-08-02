@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ITQJ.API.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20200730180615_APIDBMigration")]
-    partial class APIDBMigration
+    [Migration("20200801154736_ApiDbMigration")]
+    partial class ApiDbMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -210,16 +210,16 @@ namespace ITQJ.API.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
+                        .HasColumnType("nvarchar(2500)")
+                        .HasMaxLength(2500);
 
                     b.Property<bool>("IsOpen")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(150)")
+                        .HasMaxLength(150);
 
                     b.Property<int>("PostulantsLimit")
                         .HasColumnType("int");

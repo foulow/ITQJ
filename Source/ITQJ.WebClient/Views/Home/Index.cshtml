@@ -1,6 +1,7 @@
 ﻿@model ITQJ.WebClient.ViewModels.ProjectVM
 @{
     ViewData["Title"] = "Home Page";
+    string Descr = "";
 }
 
 @if (!User.Identity.IsAuthenticated)
@@ -35,70 +36,106 @@ else
     <br />
 
     <div>
+        
+        <h4>Proyectos Recientes</h4>
+        <hr />
 
-                <h4>Proyectos Recientes</h4>
-                <hr />
 
+        @foreach (var dato in Model.Projects)
+        {
+             <a asp-route-projectId="@dato.Id" asp-controller="Project" asp-action="Index" onmouseover="ProjectOver('@dato.Id')" onmouseout="ProjectDown('@dato.Id')">
 
-                @foreach (var dato in Model.Projects)
-                {
-                    <a asp-action="Register" asp-controller="Home" style="color:black; text-shadow:5px 5px 5px gray">
+                 <div style="border: 2px solid lightgray; border-radius: 6px;" id="@dato.Id">
 
-                        <div style="border: 2px solid gray; box-shadow: 6px 6px 18px #888888; border-radius: 20px;">
+                     <div class="col d-inline-block p-2 m-0  border badge-dark" style="border-radius: 6px;">
 
-                            <div class="col d-inline-block JobSearchCard-primary-heading">
+                         <div class="col d-inline m-0 p-0">
 
-                                <div class="col d-inline">
+                             <strong class="h4 m-0 p-0">
 
-                                    <strong href="#" class="JobSearchCard-primary-heading-link"
-                                            data-qtsb-section="page-job-search-new"
-                                            data-qtsb-subsection="card-job"
-                                            data-qtsb-label="link-project-title"
-                                            data-heading-link="true" style="color:black">
+                                 @dato.Name
 
-                                        @dato.Name
+                             </strong>
 
-                                    </strong>
+                         </div>
 
-                                </div>
+                     </div>
 
-                            </div>
+                     <div class="col d-inline-block m-0 mb-1 p-2">
 
-                            <div class="col d-inline-block mb-4">
+                         <div class="col d-inline m-0 p-0 ">
 
-                                <div class="col d-inline">
+                             @if (!dato.Description.Equals(null))
+                             {
+                                 if (dato.Description.Length >= 100)
+                                 {
+                                     Descr = dato.Description.Substring(0, 150);
+                                     Descr += "...";
+                                 }
+                                 else if (dato.Description.Equals(string.Empty))
+                                 {
+                                     Descr = "Sin Descripción.";
+                                 }
+                                 else
+                                 {
+                                     Descr = dato.Description;
+                                 }
 
-                                    @dato.Description
+                             }
 
-                                </div>
+                             <strong class="h6 m-0 p-0">
 
-                            </div>
+                                 @Descr
 
-                            <div class="col d-inline-block">
+                             </strong>
 
-                                <div class="col d-inline">
+                         </div>
 
-                                    <text>Publicado: @dato.PublishDate </text>
+                     </div>
 
-                                </div>
+                     <div class="col d-inline-block m-0 mb-1 p-2">
 
-                                <div class="col d-inline">
+                         <div class="col d-inline m-0 p-0 ">
 
-                                    <text>Cierre de la publicacion: @dato.CloseDate </text>
+                             <strong class="h6 m-0 p-0">
 
-                                </div>
+                                 Publicado: <text class="text-info">@dato.PublishDate</text>
 
-                            </div>
+                             </strong>
 
-                        </div>
+                         </div>
 
-                    </a>
+                         <div class="col d-inline  ml-lg-3 p-0 ">
 
-                    <br />
+                             <strong class="h6 m-0 p-0">
 
-                }
+                                 Cierra: <text class="text-danger">@dato.CloseDate</text>
 
-            </div>
+                             </strong>
 
-        <button onclick="ScrollUp()" class="ButtonUp"></button>
+                         </div>
+
+                         <div class="col d-inline  ml-lg-3 p-0 ">
+
+                             <strong class="h6 m-0 p-0">
+
+                                 Postaciones restante: <text class="text-danger">@dato.PostulantsLimit</text>
+
+                             </strong>
+
+                         </div>
+
+                     </div>
+
+                 </div>
+
+             </a>
+ 
+            <br />
+            <br />
+        }
+
+    </div>
+
+        <button onclick="ScrollUp()" class="ButtonUp" style="outline: none; float: left;"></button>
 

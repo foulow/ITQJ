@@ -74,8 +74,7 @@ namespace ITQJ.WebClient.Controllers
 
                 return jsonObject["result"].ToObject<T>();
             }
-            else if (response.StatusCode == HttpStatusCode.Unauthorized ||
-                response.StatusCode == HttpStatusCode.Forbidden)
+            else if (response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden)
             {
                 return null;
             }
@@ -110,7 +109,10 @@ namespace ITQJ.WebClient.Controllers
             var apiClient = this._clientFactory.CreateClient("SecuredAPIClient");
 
             var request = new HttpRequestMessage(HttpMethod.Post, uri);
-            request.Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8);
+
+            var ff = JsonConvert.SerializeObject(body);
+
+            request.Content = new StringContent(ff, Encoding.UTF8, "application/json");
 
             var response = await apiClient.SendAsync(
                 request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);

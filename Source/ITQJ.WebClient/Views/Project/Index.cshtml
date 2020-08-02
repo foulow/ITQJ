@@ -1,5 +1,88 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿
 @{
+    ViewData["Title"] = "Projecto";
 }
+
+@model ITQJ.Domain.DTOs.ProjectResponseDTO;
+
+@{
+    var Id = "id" + Model.Id;
+    var Div = "div" + @Model.Id;
+    var Fcta = "fcta" + @Model.Id;
+
+    if (ViewBag.ErrorMesseger != null)
+    {
+        <script>
+            alert(ViewBag.ErrorMesseger);
+        </script>
+    }
+
+}
+
+<div class="col d-inline-block p-2 m-0  border badge-dark">
+
+    <div class="col d-inline m-0 p-0">
+
+        <strong class="h4 m-0 p-0">
+
+            <h1 class="h2"> @Model.Name </h1>
+
+        </strong>
+
+    </div>
+
+</div>
+
+<div class="border badge-light mt-lg-3 p-2" id="Div">
+
+    <div class="border-bottom border-dark mb-3">
+
+        <strong>Descripción </strong>
+
+    </div>
+
+    <text>@Model.Description</text>
+
+    <div class="mt-lg-4 mb-lg-4">
+
+        <div class="d-inline m-0 p-0 ">
+
+            <strong class="h6 m-0 p-0">
+
+                Publicado: <text class="text-info">@Model.PublishDate</text>
+
+            </strong>
+
+        </div>
+
+        <div class="col d-inline  ml-lg-3 p-0 ">
+
+            <strong class="h6 m-0 p-0">
+
+                Cierra: <text class="text-danger">@Model.CloseDate</text>
+
+            </strong>
+
+        </div>
+
+        <div class="col d-inline  ml-lg-3 p-0 ">
+
+            <strong class="h6 m-0 p-0">
+
+                Postaciones restante: <text class="text-danger">@Model.PostulantsLimit</text>
+
+            </strong>
+
+        </div>
+
+    </div>
+
+    <form method="post" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
+
+        <input id="Submit" type="submit" value="Postularse" class="btn btn-dark m-3" />
+
+    </form>
+
+</div>
+
+

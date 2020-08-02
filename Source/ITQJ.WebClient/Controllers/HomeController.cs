@@ -20,7 +20,7 @@ namespace ITQJ.WebClient.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 if (userInfoModel != null)
-                    userInfoModel = (UserInfoM)(await  GetUserInfo());
+                    userInfoModel = await  GetUserInfo();
 
                 ViewBag.UserId = userInfoModel.Id;
                 ViewBag.UserName = userInfoModel.UserName;

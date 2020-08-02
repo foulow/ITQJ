@@ -163,7 +163,7 @@ namespace ITQJ.EFCore
             };
 
 
-            public static IEnumerable<Project> Project =>
+            public static IEnumerable<Project> Projects =>
             new Project[]
             {
                  new Project
@@ -174,11 +174,11 @@ namespace ITQJ.EFCore
 
                    PublishDate = DateTime.Now,
 
-                   UserId = Guid.Parse(""),
+                   UserId = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84"),
 
-                   PostulantsLimit = 0,
+                   PostulantsLimit = 10,
 
-                   CloseDate = DateTime.Now,
+                   CloseDate = DateTime.Now + TimeSpan.FromDays(15),
 
                    IsOpen = true
 
@@ -191,11 +191,11 @@ namespace ITQJ.EFCore
 
                    PublishDate = DateTime.Now,
 
-                   UserId = Guid.Parse(""),
+                   UserId = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84"),
 
-                   PostulantsLimit = 0,
+                   PostulantsLimit = 10,
 
-                   CloseDate = DateTime.Now,
+                   CloseDate = DateTime.Now + TimeSpan.FromDays(15),
 
                    IsOpen = true
 
@@ -208,11 +208,11 @@ namespace ITQJ.EFCore
 
                    PublishDate = DateTime.Now,
 
-                   UserId = Guid.Parse(""),
+                   UserId = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84"),
 
-                   PostulantsLimit = 0,
+                   PostulantsLimit = 10,
 
-                   CloseDate = DateTime.Now,
+                   CloseDate = DateTime.Now + TimeSpan.FromDays(15),
 
                    IsOpen = true
 
@@ -225,11 +225,11 @@ namespace ITQJ.EFCore
 
                    PublishDate = DateTime.Now,
 
-                   UserId = Guid.Parse(""),
+                   UserId = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84"),
 
-                   PostulantsLimit = 0,
+                   PostulantsLimit = 10,
 
-                   CloseDate = DateTime.Now,
+                   CloseDate = DateTime.Now + TimeSpan.FromDays(15),
 
                    IsOpen = true
 
@@ -242,11 +242,11 @@ namespace ITQJ.EFCore
 
                    PublishDate = DateTime.Now,
 
-                   UserId = Guid.Parse(""),
+                   UserId = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84"),
 
-                   PostulantsLimit = 0,
+                   PostulantsLimit = 10,
 
-                   CloseDate = DateTime.Now,
+                   CloseDate = DateTime.Now + TimeSpan.FromDays(15),
 
                    IsOpen = true
 
@@ -259,11 +259,11 @@ namespace ITQJ.EFCore
 
                    PublishDate = DateTime.Now,
 
-                   UserId = Guid.Parse(""),
+                   UserId = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84"),
 
-                   PostulantsLimit = 0,
+                   PostulantsLimit = 10,
 
-                   CloseDate = DateTime.Now,
+                   CloseDate = DateTime.Now + TimeSpan.FromDays(15),
 
                    IsOpen = true
 
@@ -276,11 +276,11 @@ namespace ITQJ.EFCore
 
                    PublishDate = DateTime.Now,
 
-                   UserId = Guid.Parse(""),
+                   UserId = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84"),
 
-                   PostulantsLimit = 0,
+                   PostulantsLimit = 10,
 
-                   CloseDate = DateTime.Now,
+                   CloseDate = DateTime.Now + TimeSpan.FromDays(15),
 
                    IsOpen = true
 
@@ -293,11 +293,11 @@ namespace ITQJ.EFCore
 
                    PublishDate = DateTime.Now,
 
-                   UserId = Guid.Parse(""),
+                   UserId = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84"),
 
-                   PostulantsLimit = 0,
+                   PostulantsLimit = 10,
 
-                   CloseDate = DateTime.Now,
+                   CloseDate = DateTime.Now + TimeSpan.FromDays(15),
 
                    IsOpen = true
 
@@ -310,11 +310,11 @@ namespace ITQJ.EFCore
 
                    PublishDate = DateTime.Now,
 
-                   UserId = Guid.Parse(""),
+                   UserId = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84"),
 
-                   PostulantsLimit = 0,
+                   PostulantsLimit = 10,
 
-                   CloseDate = DateTime.Now,
+                   CloseDate = DateTime.Now + TimeSpan.FromDays(15),
 
                    IsOpen = true
 
@@ -327,11 +327,11 @@ namespace ITQJ.EFCore
 
                    PublishDate = DateTime.Now,
 
-                   UserId = Guid.Parse(""),
+                   UserId = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84"),
 
-                   PostulantsLimit = 0,
+                   PostulantsLimit = 10,
 
-                   CloseDate = DateTime.Now,
+                   CloseDate = DateTime.Now + TimeSpan.FromDays(15),
 
                    IsOpen = true
 
@@ -344,11 +344,11 @@ namespace ITQJ.EFCore
 
                    PublishDate = DateTime.Now,
 
-                   UserId = Guid.Parse(""),
+                   UserId = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84"),
 
-                   PostulantsLimit = 0,
+                   PostulantsLimit = 10,
 
-                   CloseDate = DateTime.Now,
+                   CloseDate = DateTime.Now + TimeSpan.FromDays(15),
 
                    IsOpen = true
 
@@ -383,11 +383,11 @@ namespace ITQJ.EFCore
 
                    PublishDate = DateTime.Now,
 
-                   UserId = Guid.Parse(""),
+                   UserId = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84"),
 
-                   PostulantsLimit = 0,
+                   PostulantsLimit = 10,
 
-                   CloseDate = DateTime.Now,
+                   CloseDate = DateTime.Now + TimeSpan.FromDays(15),
 
                    IsOpen = true
 
@@ -425,11 +425,11 @@ namespace ITQJ.EFCore
 
                    PublishDate = DateTime.Now,
 
-                   UserId = Guid.Parse(""),
+                   UserId = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84"),
 
-                   PostulantsLimit = 0,
+                   PostulantsLimit = 10,
 
-                   CloseDate = DateTime.Now,
+                   CloseDate = DateTime.Now + TimeSpan.FromDays(15),
 
                    IsOpen = true
 
@@ -473,11 +473,11 @@ namespace ITQJ.EFCore
 
                    PublishDate = DateTime.Now,
 
-                   UserId = Guid.Parse(""),
+                   UserId = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84"),
 
-                   PostulantsLimit = 0,
+                   PostulantsLimit = 10,
 
-                   CloseDate = DateTime.Now,
+                   CloseDate = DateTime.Now + TimeSpan.FromDays(15),
 
                    IsOpen = true
 
@@ -494,11 +494,11 @@ namespace ITQJ.EFCore
 
                    PublishDate = DateTime.Now,
 
-                   UserId = Guid.Parse(""),
+                   UserId = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84"),
 
-                   PostulantsLimit = 0,
+                   PostulantsLimit = 10,
 
-                   CloseDate = DateTime.Now,
+                   CloseDate = DateTime.Now + TimeSpan.FromDays(15),
 
                    IsOpen = true
 
@@ -538,11 +538,54 @@ namespace ITQJ.EFCore
 
                    PublishDate = DateTime.Now,
 
-                   UserId = Guid.Parse(""),
+                   UserId = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84"),
 
-                   PostulantsLimit = 0,
+                   PostulantsLimit = 10,
 
-                   CloseDate = DateTime.Now,
+                   CloseDate = DateTime.Now + TimeSpan.FromDays(15),
+
+                   IsOpen = true
+
+                 },
+                 new Project
+                 {
+                   Name = "Graphic Designer - Mid",
+
+                   Description =@"GBH is a company with specialized divisions in software (mobile, web, big data), information technology, consulting and execution of digital marketing initiatives. In GBH, we develop initiatives that provide measurable results to our clients in the aforementioned business units. We strive to serve as a strategic ally in the pursue of innovation, development and growth of their businesses.
+
+                         Description
+
+                        The Graphic Designer is responsible for preparing (designing) the posts and publications for the different accounts that the company manages. He/she must also make internal and external modifications(as requested by the client) of the parts produced by him/her or any of his colleagues.
+
+
+                        Objectives
+
+
+                        Help build or improve the graphic line of each of the brands you will work with.
+                        Create as many memorable designs for the brand you work with.
+                        Ensure the care and understanding of each of their designs, considering visual sensitivity and good taste.
+                        Responsibilities
+
+                        Make sketches and other graphic designs of your competition.
+                        Make drawings and / or paintings for the preparation of advertising pieces.
+                        Make illustrations, notices, articles and general advertising for the different media.
+                        Create animated pieces like gifts or videos.
+                        Review and correct the designed material.
+                        Coordinate with the authors of the texts (community), the graphic design of the publications.
+                        Comply with the rules and procedures on comprehensive security, established by the organization.
+                        Keep equipment and work site in order, reporting any anomaly.
+                        Participate in the creation or design of presentations to offer or sell products or services to clients or potential clients.
+                        Stay up-to-date on the latest trends in the design area and news on the tools you use
+                        Requirements
+                        ",
+
+                   PublishDate = DateTime.Now,
+
+                   UserId = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84"),
+
+                   PostulantsLimit = 10,
+
+                   CloseDate = DateTime.Now + TimeSpan.FromDays(15),
 
                    IsOpen = true
 

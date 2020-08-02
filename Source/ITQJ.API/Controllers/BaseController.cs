@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace ITQJ.Domain.Controllers
+namespace ITQJ.API.Controllers
 {
     public class BaseController : ControllerBase
     {

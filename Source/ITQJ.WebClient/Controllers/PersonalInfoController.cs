@@ -46,10 +46,10 @@ namespace ITQJ.WebClient.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Register(string userId)
+        public async Task<IActionResult> Register(string userId,string role)
         {
             var ownerId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var role = User.Claims.FirstOrDefault(c => c.Type == "role")?.Value;
+            //var role = User.Claims.FirstOrDefault(c => c.Type == "role")?.Value;
 
             if (ownerId != userId)
                 return PageNotFound();
@@ -65,13 +65,24 @@ namespace ITQJ.WebClient.Controllers
             }
 
             var personalInfo = new PersonalInfoVM();
+            personalInfo.Skills = new List<SkillM>();
             personalInfo.UserId = Guid.Parse(ownerId);
+
             if (role == "Profesional")
             {
                 var tempSkills = await CallApiGETAsync<List<SkillDTO>>("/api/skills");
                 foreach (var skill in tempSkills)
                 {
-                    personalInfo.Skills.Add((SkillM)skill);
+                    personalInfo.Skills.Add(
+                        
+                        new SkillM()
+                        {
+                            Id= skill.Id,
+                            Name = skill.Name,
+                            Path = skill.Path
+                        }
+                        
+                        );
                 }
             }
 

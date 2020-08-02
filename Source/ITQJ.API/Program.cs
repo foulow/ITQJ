@@ -43,7 +43,7 @@ namespace ITQJ.Domain
             }
             catch (Exception ex)
             {
-                Log.Fatal("Host stoped: {0}", ex.Message);
+                Log.Fatal("--Host stoped: {0}  \n\n --InnerException: {1}", ex.Message, ex.InnerException);
                 //throw;
             }
             finally

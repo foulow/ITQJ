@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
-namespace ITQJ.Domain.Controllers
+namespace ITQJ.API.Controllers
 {
     [ApiController]
     [Authorize]
