@@ -23,10 +23,10 @@ namespace ITQJ.API.Controllers
                 .Skip((pageIndex - 1) * maxResults)
                 .Take(maxResults)
                 .ToList();
+
             var projectsCount = this._appDBContext.Projects
                 .Where(x => x.PostulantsLimit > x.Postulants.Count() && x.IsOpen == true)
                 .Count();
-
 
             var pagesCount = (projectsCount == 0) ? 0
                            : (maxResults == 0) ? 0

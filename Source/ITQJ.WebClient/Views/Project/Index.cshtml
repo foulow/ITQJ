@@ -10,6 +10,9 @@
     var Div = "div" + @Model.Id;
     var Fcta = "fcta" + @Model.Id;
 
+    if (User.Identity.IsAuthenticated)
+        ViewBag.userId = User.Claims.FirstOrDefault(c => c.Type == "sub").Value;
+
     if (ViewBag.ErrorMesseger != null)
     {
         <script>

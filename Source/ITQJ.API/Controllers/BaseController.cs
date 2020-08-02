@@ -14,9 +14,9 @@ namespace ITQJ.API.Controllers
 
         public BaseController(IServiceProvider serviceProvider)
         {
-            this._serviceProvider = serviceProvider;
-            this._appDBContext = serviceProvider.GetRequiredService<ApplicationDBContext>();
-            this._mapper = serviceProvider.GetRequiredService<IMapper>();
+            _serviceProvider = serviceProvider;
+            _appDBContext = serviceProvider.GetRequiredService<ApplicationDBContext>();
+            _mapper = serviceProvider.GetRequiredService<IMapper>();
         }
     }
 }

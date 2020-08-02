@@ -3,6 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Text.Json.Serialization;
 
     [Table("LegalDocuments")]
     public class LegalDocument : BaseEntity
@@ -19,6 +20,7 @@
         public virtual DocumentType DocumentType { get; set; }
         public Guid DocumentTypeId { get; set; }
 
+        [JsonIgnore]
         public virtual PersonalInfo PersonalInfo { get; set; }
     }
 }

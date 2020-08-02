@@ -8,7 +8,7 @@ namespace ITQJ.Domain.DTOs
 
         public byte[] Image { get; set; }
 
-        public int DocumentTypeId { get; set; }
+        public Guid DocumentTypeId { get; set; }
     }
 
     public class LegalDocumentUpdateDTO : LegalDocumentCreateDTO

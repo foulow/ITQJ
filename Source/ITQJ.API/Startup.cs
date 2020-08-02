@@ -2,10 +2,12 @@ using AutoMapper;
 using FluentValidation.AspNetCore;
 
 using IdentityServer4.AccessTokenValidation;
+using ITQJ.API.Authorization;
 //using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 using ITQJ.Domain.DTOs;
 using ITQJ.EFCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -33,6 +35,12 @@ namespace ITQJ.Domain
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var migrationsAssembly = typeof(Startup).Assembly.GetName().FullName;
+            services.AddDbContext<ApplicationDBContext>(options =>
+                            options.UseSqlServer(Configuration.GetConnectionString(name: "DefaultConnection"),
+                                sql => sql.MigrationsAssembly(migrationsAssembly))
+                                .UseLazyLoadingProxies());
+
             services.AddHttpsRedirection(options =>
             {
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
@@ -57,9 +65,28 @@ namespace ITQJ.Domain
 
             services.AddControllers()
                     .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<UserCreateDTO>());
-            ;
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddHttpContextAccessor();
+            services.AddTransient<HttpContextAccessor>();
+            services.AddScoped<IAuthorizationHandler, MustBePublisherHandler>();
+
+            // TODO: enable user role base authorization.
+            services.AddAuthorization(authorizationOptions =>
+            {
+                //authorizationOptions.AddPolicy("ApiScope", policyBuilder =>
+                //{
+                //    policyBuilder.RequireAuthenticatedUser();
+                //    policyBuilder.RequireClaim("scope", Configuration["ApiResources:Name"]);
+                //});
+
+                authorizationOptions.AddPolicy("MustBePublisher", policyBuilder =>
+                {
+                    policyBuilder.RequireAuthenticatedUser();
+                    policyBuilder.AddRequirements(new MustBePublisherRequirement());
+                });
+            });
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
             .AddIdentityServerAuthentication(options =>
@@ -78,22 +105,6 @@ namespace ITQJ.Domain
             //        ValidateAudience = false
             //    };
             //});
-
-            // TODO: enable user role base authorization.
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("ApiScope", policy =>
-                {
-                    policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("scope", Configuration["ApiResources:Name"]);
-                });
-            });
-
-            var migrationsAssembly = typeof(Startup).Assembly.GetName().FullName;
-            services.AddDbContext<ApplicationDBContext>(options =>
-                            options.UseSqlServer(Configuration.GetConnectionString(name: "DefaultConnection"),
-                                sql => sql.MigrationsAssembly(migrationsAssembly))
-                                .UseLazyLoadingProxies());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

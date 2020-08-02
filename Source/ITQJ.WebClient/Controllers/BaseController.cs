@@ -109,10 +109,7 @@ namespace ITQJ.WebClient.Controllers
             var apiClient = this._clientFactory.CreateClient("SecuredAPIClient");
 
             var request = new HttpRequestMessage(HttpMethod.Post, uri);
-
-            var ff = JsonConvert.SerializeObject(body);
-
-            request.Content = new StringContent(ff, Encoding.UTF8, "application/json");
+            request.Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
 
             var response = await apiClient.SendAsync(
                 request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
@@ -160,7 +157,7 @@ namespace ITQJ.WebClient.Controllers
             var apiClient = this._clientFactory.CreateClient("SecuredAPIClient");
 
             var request = new HttpRequestMessage(HttpMethod.Put, uri);
-            request.Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8);
+            request.Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
 
             var response = await apiClient.SendAsync(
                 request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
@@ -279,11 +276,25 @@ namespace ITQJ.WebClient.Controllers
             // Get the currently authorized user claims information.
             var userInfo = await GetUserInfo();
 
-            return RedirectToRoute(new { controller = "Home", action = "Index", userInfoModel = userInfo });
+            return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
 
         public async Task<UserInfoM> GetUserInfo()
         {
+            if (!User.Identity.IsAuthenticated)
+                return null;
+
+            var id = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var userName = User.Claims.FirstOrDefault(c => c.Type == "name")?.Value;
+            var role = User.Claims.FirstOrDefault(c => c.Type == "role")?.Value;
+            if (!string.IsNullOrWhiteSpace(id) && !string.IsNullOrWhiteSpace(userName) && !string.IsNullOrWhiteSpace(role))
+                return new UserInfoM
+                {
+                    Id = id,
+                    UserName = userName,
+                    Role = role
+                };
+
             var idpClient = this._clientFactory.CreateClient("IDPClient");
 
             var discoveryDocumentResponse = await idpClient.GetDiscoveryDocumentAsync();
@@ -313,7 +324,7 @@ namespace ITQJ.WebClient.Controllers
 
             return new UserInfoM
             {
-                Id = Guid.Parse(userInfoResponse.Claims.FirstOrDefault(c => c.Type == "sub")?.Value),
+                Id = userInfoResponse.Claims.FirstOrDefault(c => c.Type == "sub")?.Value,
                 UserName = userInfoResponse.Claims.FirstOrDefault(c => c.Type == "name")?.Value,
                 Role = userInfoResponse.Claims.FirstOrDefault(c => c.Type == "role")?.Value
             };

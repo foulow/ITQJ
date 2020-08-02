@@ -2,6 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Text.Json.Serialization;
 
     [Table("Skills")]
     public class Skill : BaseEntity
@@ -12,6 +13,7 @@
 
         public string Path { get; set; }
 
+        [JsonIgnore]
         public virtual ProfesionalSkill ProfesionalSkill { get; set; }
     }
 }
