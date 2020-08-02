@@ -92,7 +92,7 @@ namespace ITQJ.WebClient.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Register(string role = "Profesional")
+        public async Task<IActionResult> Register(string role )
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var userName = User.Claims.FirstOrDefault(c => c.Type == "name")?.Value;
