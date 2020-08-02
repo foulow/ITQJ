@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace ITQJ.Domain.Controllers
+namespace ITQJ.API.Controllers
 {
     public class BaseController : ControllerBase
     {
@@ -14,9 +14,9 @@ namespace ITQJ.Domain.Controllers
 
         public BaseController(IServiceProvider serviceProvider)
         {
-            this._serviceProvider = serviceProvider;
-            this._appDBContext = serviceProvider.GetRequiredService<ApplicationDBContext>();
-            this._mapper = serviceProvider.GetRequiredService<IMapper>();
+            _serviceProvider = serviceProvider;
+            _appDBContext = serviceProvider.GetRequiredService<ApplicationDBContext>();
+            _mapper = serviceProvider.GetRequiredService<IMapper>();
         }
     }
 }

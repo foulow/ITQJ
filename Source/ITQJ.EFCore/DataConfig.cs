@@ -121,7 +121,7 @@ namespace ITQJ.EFCore
                     Id = Guid.Parse("73415AAD-60B5-4179-8E2E-C76D9CA64529"),
                     Name = "Jeffrey Jose",
                     PhoneNumber = "8091234567",
-                    Description = "abc",
+                    Description = @"Jeffrey es un experimentado desarrollador full stack especializado en                  seguridad informatica y desarrollo multiplataformas",
                     PagLink = "www.abc.com",
                     LegalDocumentId = Guid.Parse("8B817101-C051-4BF4-8A1E-ECC2BB32B613"),
                     UserId = Guid.Parse("7A5B3C6E-7E95-435E-B46F-1F449F49BE04")
@@ -131,7 +131,8 @@ namespace ITQJ.EFCore
                     Id = Guid.Parse("02F30D25-73D1-47DA-83FB-07753ED4DD83"),
                     Name = "Luis Eduardo",
                     PhoneNumber = "8097654321",
-                    Description = "def",
+                    Description = @"Luis es un desarrollador de software con 5 años de experiencia como 
+                                   full stack web developer",
                     PagLink = "www.def.com",
                     LegalDocumentId = Guid.Parse("CE3695B2-CCF1-4521-A3EB-DAE703FFBDFB"),
                     UserId = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84")

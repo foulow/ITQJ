@@ -13,7 +13,7 @@ namespace ITQJ.WebClient.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Contratist")]
+        [Authorize(Roles = "Contratista")]
         public IActionResult Publish()
         {
             return View();

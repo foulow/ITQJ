@@ -110,7 +110,7 @@ namespace ITQJ.WebClient.Controllers
             var apiClient = this._clientFactory.CreateClient("SecuredAPIClient");
 
             var request = new HttpRequestMessage(HttpMethod.Post, uri);
-            request.Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8);
+            request.Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
 
             var response = await apiClient.SendAsync(
                 request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
@@ -158,7 +158,7 @@ namespace ITQJ.WebClient.Controllers
             var apiClient = this._clientFactory.CreateClient("SecuredAPIClient");
 
             var request = new HttpRequestMessage(HttpMethod.Put, uri);
-            request.Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8);
+            request.Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
 
             var response = await apiClient.SendAsync(
                 request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);

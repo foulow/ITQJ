@@ -16,62 +16,113 @@ namespace ITQJ.WebClient.Controllers
         public PersonalInfoController(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
         [Authorize]
-        public async Task<IActionResult> Profesional(string userId)
+        public async Task<IActionResult> Profesional(string userName)
         {
-            var ownerId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            if (ownerId == userId)
-                return RedirectToAction("EditProfesional");
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var user = await CallSecuredApiGETAsync<UserResponseDTO>("/api/users/" + userName);
+            if (user is null)
+                return PageNotFound();
 
-            var personalInfo = await CallSecuredApiGETAsync<PersonalInfoResponseDTO>("/api/personalInfo/" + userId);
+            var personalInfoDTO = await UserHasPersonalInfo(user.Id.ToString());
+            if ((personalInfoDTO is null) && (userId == user.Id.ToString()))
+                return RedirectToAction("Register");
+            else if (userId == user.Id.ToString())
+                return RedirectToRoute(new { controller = "PersonalInfo", action = "EditProfesional", userName = userName });
+            else if (personalInfoDTO == null)
+                return PageNotFound();
+
+            return View(personalInfoDTO);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> EditProfesional(string userName)
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var user = await CallSecuredApiGETAsync<UserResponseDTO>("/api/users/" + userName);
+            if (user is null)
+                return PageNotFound();
+
+            if (userId != user.Id.ToString())
+                return RedirectToAction("AccessDenied", "Authorization");
+
+            var personalInfo = await CallSecuredApiGETAsync<PersonalInfoResponseDTO>("/api/personalInfo/" + user.Id);
 
             if (personalInfo == null)
-                return PageNotFound();
+                return RedirectToAction("Register");
 
             return View(personalInfo);
         }
 
         [Authorize]
-        public async Task<IActionResult> Contratist(string userId)
+        public async Task<IActionResult> Contratist(string userName)
         {
-            var ownerId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            if (ownerId == userId)
-                return RedirectToAction("EditContratist");
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var user = await CallSecuredApiGETAsync<UserResponseDTO>("/api/users/" + userName);
+            if (user is null)
+                return PageNotFound();
 
-            var personalInfo = await CallSecuredApiGETAsync<PersonalInfoResponseDTO>("/api/personalInfo/" + userId);
+            var personalInfoDTO = await UserHasPersonalInfo(user.Id.ToString());
+            if ((personalInfoDTO is null) && (userId == user.Id.ToString()))
+                return RedirectToAction("Register");
+            else if (userId == user.Id.ToString())
+                return RedirectToRoute(new { controller = "PersonalInfo", action = "EditContratist", userName = userName });
+            else if (personalInfoDTO == null)
+                return PageNotFound();
+
+            return View(personalInfoDTO);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> EditContratist(string userName)
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var user = await CallSecuredApiGETAsync<UserResponseDTO>("/api/users/" + userName);
+            if (user is null)
+                return PageNotFound();
+
+            if (userId != user.Id.ToString())
+                return RedirectToAction("AccessDenied", "Authorization");
+
+            var personalInfo = await CallSecuredApiGETAsync<PersonalInfoResponseDTO>("/api/personalInfo/" + user.Id);
 
             if (personalInfo == null)
-                return PageNotFound();
+                return RedirectToAction("Register");
 
             return View(personalInfo);
         }
 
         [Authorize]
-        public async Task<IActionResult> Register(string userId)
+        public async Task<IActionResult> Register()
         {
-            var ownerId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var userName = User.Claims.FirstOrDefault(c => c.Type == "name")?.Value;
             var role = User.Claims.FirstOrDefault(c => c.Type == "role")?.Value;
 
-            if (ownerId != userId)
-                return PageNotFound();
-
-            if (UserHasPersonalInfo(ownerId))
+            var personalInfoDTO = await UserHasPersonalInfo(userId);
+            if (!(personalInfoDTO is null))
             {
                 if (role == "Profesional")
-                    return RedirectToAction("EditProfesional");
-                else if (role == "Contratist")
-                    return RedirectToAction("EditContratist");
+                    return RedirectToRoute(new { controller = "PersonalInfo", action = "EditProfesional", userName = userName });
+                else if (role == "Contratista")
+                    return RedirectToRoute(new { controller = "PersonalInfo", action = "EditContratist", userName = userName });
 
-                return Error();
+                return RedirectToAction("AccessDenied", "Authorization");
             }
 
             var personalInfo = new PersonalInfoVM();
-            personalInfo.UserId = Guid.Parse(ownerId);
+            personalInfo.Skills = new List<SkillM>();
+            personalInfo.UserId = Guid.Parse(userId);
             if (role == "Profesional")
             {
                 var tempSkills = await CallApiGETAsync<List<SkillDTO>>("/api/skills");
                 foreach (var skill in tempSkills)
                 {
-                    personalInfo.Skills.Add((SkillM)skill);
+                    personalInfo.Skills.Add(new SkillM
+                    {
+                        Id = skill.Id,
+                        Name = skill.Name,
+                        Path = skill.Path
+                    });
                 }
             }
 
@@ -96,7 +147,7 @@ namespace ITQJ.WebClient.Controllers
             var newPersonalInfo = await CallSecuredApiPOSTAsync<PersonalInfoResponseDTO>("/api/personailInfo", tempPersonalInfo);
 
 
-            if (newPersonalInfo.User.Role.Name != "Profesional")
+            if (newPersonalInfo.User.Role.Name == "Profesional")
             {
                 // Registra los skills de dicho profesional.
                 var temProfesionalSkills = new List<ProfesionalSkillCreateDTO>();
@@ -112,21 +163,22 @@ namespace ITQJ.WebClient.Controllers
                 }
                 var newProfesionalSkills = await CallSecuredApiPOSTAsync("/api/profesionalSkills/", temProfesionalSkills);
 
-                return RedirectToAction("Profesional");
+                return RedirectToRoute(new { controller = "PersonalInfo", action = "EditProfesional", userName = newPersonalInfo.User.UserName });
+
             }
-            else if (newPersonalInfo.User.Role.Name != "Contratist")
+            else if (newPersonalInfo.User.Role.Name == "Contratista")
             {
-                return RedirectToAction("Contratist");
+                return RedirectToRoute(new { controller = "PersonalInfo", action = "EditContratist", userName = newPersonalInfo.User.UserName });
             }
 
             return Error();
         }
 
-        private bool UserHasPersonalInfo(string userId)
+        private Task<PersonalInfoResponseDTO> UserHasPersonalInfo(string userId)
         {
             var personalInfo = CallSecuredApiGETAsync<PersonalInfoResponseDTO>("/api/personalInfo/" + userId);
 
-            return personalInfo == null;
+            return personalInfo;
         }
     }
 }

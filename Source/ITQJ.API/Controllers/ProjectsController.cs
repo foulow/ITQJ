@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ITQJ.Domain.Controllers
+namespace ITQJ.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -19,10 +19,14 @@ namespace ITQJ.Domain.Controllers
         public ActionResult GetProjects([FromQuery] int pageIndex = 1, [FromQuery] int maxResults = 20)
         {
             var projects = this._appDBContext.Projects
+                .Where(x => x.PostulantsLimit > x.Postulants.Count() && x.IsOpen == true)
                 .Skip((pageIndex - 1) * maxResults)
                 .Take(maxResults)
                 .ToList();
-            var projectsCount = this._appDBContext.Projects.Count();
+
+            var projectsCount = this._appDBContext.Projects
+                .Where(x => x.PostulantsLimit > x.Postulants.Count() && x.IsOpen == true)
+                .Count();
 
             var pagesCount = (projectsCount == 0) ? 0
                            : (maxResults == 0) ? 0
@@ -62,17 +66,15 @@ namespace ITQJ.Domain.Controllers
         }
 
         [Authorize]
-        [HttpGet("{projectId}")]
-        public ActionResult GetProject([FromRoute] Guid projectId, [FromRoute] string userId)
+        [HttpGet("/myprojects/{projectId}")]
+        public ActionResult GetUserProject([FromRoute] Guid projectId)
         {
             var ownerId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            if (userId != ownerId)
-                return BadRequest(new { Error = "El projecto al que esta intentando editar no es de su autoria." });
 
             var project = this._appDBContext.Projects
                 .Include(i => i.Postulants)
                 .Include(i => i.Messages)
-                .FirstOrDefault(x => x.Id == projectId && x.UserId == Guid.Parse(userId));
+                .FirstOrDefault(x => x.Id == projectId && x.UserId == Guid.Parse(ownerId));
 
             if (project is null)
                 return NotFound(new { Error = "El recurso no ha sido encontrado." });
