@@ -23,6 +23,7 @@ namespace ITQJ.Domain.DTOs
     public class ProjectResponseDTO : ProjectCreateDTO
     {
         public Guid Id { get; set; }
+        public ICollection<SkillDTO> Skills { get; set; }
         public ICollection<PostulantResponseDTO> Postulants { get; set; }
         public ICollection<MessageResponseDTO> Messages { get; set; }
 

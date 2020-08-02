@@ -37,7 +37,7 @@ namespace ITQJ.EFCore
             }
 
             Log.Debug("Fetching database...");
-            if (!context.Skills.Any())
+            if (!context.Roles.Any())
             {
                 Log.Debug("Roles being populated...");
                 context.Roles.AddRange(DataConfig.Roles);
