@@ -1,5 +1,5 @@
 ﻿using ITQJ.Domain.DTOs;
-using ITQJ.Domain.Models;
+using ITQJ.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -38,27 +38,49 @@ namespace ITQJ.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult RegisterProfesionalSkills([FromBody] List<ProfesionalSkillCreateDTO> profesionalSkills)
+        public ActionResult RegisterProfesionalSkill([FromBody] ProfesionalSkillCreateDTO profesionalSkill)
         {
-            var newProfesionalSkills = new List<ProfesionalSkill>();
-            this._mapper.Map<List<ProfesionalSkillCreateDTO>, List<ProfesionalSkill>>(
-                profesionalSkills, newProfesionalSkills);
-
-            foreach (var profesionalSkill in newProfesionalSkills)
+            if (!ModelState.IsValid)
             {
-                var tempProfecionalSkills = _appDBContext
-                    .ProfesionalSkills.Add(profesionalSkill);
+                return BadRequest(new
+                {
+                    Message = "La informacion de registro de skills de usuario invalidos.",
+                    ErrorsCount = ModelState.ErrorCount,
+                    Errors = ModelState.Select(x => x.Value.Errors)
+                });
             }
+
+            var newProfesionalSkill = this._mapper.Map<ProfesionalSkill>(profesionalSkill);
+
+            if (newProfesionalSkill == null)
+                return BadRequest(new { Error = "No se enviaron los datos esperados." });
+
+            var temporalProfesionalSkill = this._appDBContext.ProfesionalSkills.Add(newProfesionalSkill);
             this._appDBContext.SaveChanges();
 
-            var profesionalSkillModels = this._mapper
-                .Map<List<ProfesionalSkillCreateDTO>>(newProfesionalSkills);
+            var profesionalSkillModel = this._mapper.Map<ProfesionalSkillCreateDTO>(temporalProfesionalSkill.Entity);
 
             return Ok(new
             {
                 Message = "Ok",
-                ResultCount = profesionalSkillModels.Count(),
-                Result = profesionalSkillModels
+                Result = profesionalSkillModel
+            });
+        }
+
+        [HttpPost]
+        public ActionResult RegisterProfesionalSkills([FromBody] List<ProfesionalSkillCreateDTO> profesionalSkills)
+        {
+            var newProfesionalSkills = this._mapper.Map<List<ProfesionalSkill>>(profesionalSkills);
+
+            if (newProfesionalSkills == null)
+                return BadRequest(new { Error = "No se enviaros los datos esperados." });
+
+            _appDBContext.ProfesionalSkills.AddRange(newProfesionalSkills);
+            this._appDBContext.SaveChanges();
+
+            return Ok(new
+            {
+                Message = "Ok"
             });
         }
     }

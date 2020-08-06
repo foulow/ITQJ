@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ITQJ.EFCore.Configurations;
+using ITQJ.EFCore.DbContexts;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System;
 using System.Linq;
@@ -34,19 +36,6 @@ namespace ITQJ.EFCore
                 Log.Debug("Migrating database...");
                 context.Database.Migrate();
                 Log.Debug("Database migrated.");
-            }
-
-            Log.Debug("Fetching database...");
-            if (!context.Roles.Any())
-            {
-                Log.Debug("Roles being populated...");
-                context.Roles.AddRange(DataConfig.Roles);
-                context.SaveChanges();
-                Log.Debug("Roles populated.");
-            }
-            else
-            {
-                Log.Debug("Roles already populated.");
             }
 
             if (!context.DocumentTypes.Any())

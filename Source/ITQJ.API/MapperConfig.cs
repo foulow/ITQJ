@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ITQJ.Domain.DTOs;
-using ITQJ.Domain.Models;
+using ITQJ.Domain.Entities;
 
 namespace ITQJ.Domain
 {
@@ -9,13 +9,10 @@ namespace ITQJ.Domain
         public MapperConfig()
         {
             #region User Data Mapping
-            // Mapeo de datos modelo Rol.
-            CreateMap<Role, RoleDTO>();
             // Mapeo de datos modelo User.
             CreateMap<UserCreateDTO, User>()
                 .ForMember(dest => dest.Id, act => act.Ignore());
-            CreateMap<User, UserResponseDTO>()
-                .ForMember(dest => dest.Password, act => act.Ignore());
+            CreateMap<User, UserResponseDTO>();
 
             // Mapeo de datos modelo Review.
             CreateMap<ReviewCreateDTO, Review>()

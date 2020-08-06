@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ITQJ.WebClient.Controllers
@@ -14,6 +15,18 @@ namespace ITQJ.WebClient.Controllers
 
         public async Task<IActionResult> Index(int pageIndex = 1, int maxResults = 20)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userCredentials = await EnsureUserCreated();
+                if (userCredentials.Role == "Desconosido")
+                    return RedirectToRoute(new { controller = "User", action = "Register", userName = userCredentials.Email });
+
+                ViewBag.UserId = userCredentials.Id;
+                ViewBag.UserName = userCredentials.Email.Split("@").First();
+                ViewBag.UserRole = userCredentials.Role;
+                ViewBag.UserEmail = userCredentials.Email;
+            }
+
             string currentPage = (pageIndex < 1) ? "1" : pageIndex.ToString();
             string maxProjectsCount = (maxResults < 20) ? "20" : (maxResults < 100) ? "100" : maxResults.ToString();
             var queryResult = new Dictionary<string, string>
@@ -23,18 +36,6 @@ namespace ITQJ.WebClient.Controllers
             };
 
             var projects = await CallApiGETAsync<ProjectVM>("/api/projects/" + QueryString.Create(queryResult));
-
-            if (User.Identity.IsAuthenticated)
-            {
-                var userInfoModel = await GetUserInfo();
-
-                if (userInfoModel != null)
-                {
-                    ViewBag.UserId = userInfoModel.Id;
-                    ViewBag.UserName = userInfoModel.UserName;
-                    ViewBag.Role = userInfoModel.Role;
-                }
-            }
 
             return View(projects);
         }

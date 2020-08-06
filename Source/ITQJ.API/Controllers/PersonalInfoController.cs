@@ -1,5 +1,5 @@
 ﻿using ITQJ.Domain.DTOs;
-using ITQJ.Domain.Models;
+using ITQJ.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -38,9 +38,17 @@ namespace ITQJ.API.Controllers
         [HttpPost]
         public ActionResult RegisterPersonalInfo([FromBody] PersonalInfoCreateDTO personalInfoData)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var newPersonalInfo = this._mapper.Map<PersonalInfo>(personalInfoData);
-            newPersonalInfo.UserId = Guid.Parse(userId);
+            if (personalInfoData.UserId != null)
+            {
+                var subject = HttpContext.User.Claims.FirstOrDefault(c =>
+                    c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
+
+                var user = this._appDBContext.Users
+                    .FirstOrDefault(x => x.Subject == subject);
+
+                newPersonalInfo.UserId = user.Id;
+            }
 
             var tempPersonalInfo = this._appDBContext.PersonalInfos.Add(newPersonalInfo);
             this._appDBContext.SaveChanges();

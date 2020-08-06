@@ -9,15 +9,17 @@ namespace ITQJ.WebClient.Controllers
 {
     public class UserController : BaseController
     {
-        public UserController(IServiceProvider serviceProvider) : base(serviceProvider)
-        {
+        public UserController(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
-        }
-
-        public async Task<IActionResult> Register()
+        [HttpGet]
+        public IActionResult Register([FromQuery] string userName)
         {
-            var user = new UserVM();
-            user.Roles = await GetRoles();
+            var user = new UserVM
+            {
+                Email = userName,
+                Role = "Desconosido"
+            };
+            user.Roles = new List<string> { "Profesional", "Contratista" };
 
             return View(user);
         }
@@ -28,18 +30,13 @@ namespace ITQJ.WebClient.Controllers
         {
             if (!ModelState.IsValid)
             {
-                user.Roles = await GetRoles();
                 return View(user);
             }
 
-            var newuser = await CallApiPOSTAsync<UserCreateDTO>("/api/users/", user);
+            var newUser = await CallSecuredApiPOSTAsync<UserCreateDTO>("/api/users/", user);
 
-            return RedirectToAction("LogIn");
+            return RedirectToAction("Index", "Home");
         }
 
-        private async Task<List<RoleDTO>> GetRoles()
-        {
-            return await CallApiGETAsync<List<RoleDTO>>("/api/roles");
-        }
     }
 }

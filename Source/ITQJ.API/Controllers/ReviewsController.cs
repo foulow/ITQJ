@@ -18,7 +18,7 @@ namespace ITQJ.API.Controllers
         public ActionResult GetReviews([FromRoute] string userName)
         {
             var user = this._appDBContext.Users
-                .FirstOrDefault(x => x.UserName == userName);
+                .FirstOrDefault(x => x.Subject == userName);
 
             if (user is null)
                 return NotFound(new { Error = "El recurso no ha sido encontrado." });
