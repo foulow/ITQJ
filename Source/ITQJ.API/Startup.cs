@@ -1,12 +1,11 @@
 using AutoMapper;
 using FluentValidation.AspNetCore;
-
-using IdentityServer4.AccessTokenValidation;
 using ITQJ.API.Authorization;
 //using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 using ITQJ.Domain.DTOs;
-using ITQJ.EFCore;
+using ITQJ.EFCore.DbContexts;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -70,41 +69,43 @@ namespace ITQJ.Domain
 
             services.AddHttpContextAccessor();
             services.AddTransient<HttpContextAccessor>();
-            services.AddScoped<IAuthorizationHandler, MustBePublisherHandler>();
+            services.AddScoped<IAuthorizationHandler, SubjectMustBePublisherHandler>();
+            services.AddScoped<IAuthorizationHandler, SubjectMustMatchUserHandler>();
 
             // TODO: enable user role base authorization.
             services.AddAuthorization(authorizationOptions =>
             {
-                //authorizationOptions.AddPolicy("ApiScope", policyBuilder =>
-                //{
-                //    policyBuilder.RequireAuthenticatedUser();
-                //    policyBuilder.RequireClaim("scope", Configuration["ApiResources:Name"]);
-                //});
+                authorizationOptions.AddPolicy("MustMatchUser", policyBuilder =>
+                {
+                    policyBuilder.RequireAuthenticatedUser();
+                    policyBuilder.AddRequirements(new SubjectMustMatchUserRequirement());
+                });
 
                 authorizationOptions.AddPolicy("MustBePublisher", policyBuilder =>
                 {
                     policyBuilder.RequireAuthenticatedUser();
-                    policyBuilder.AddRequirements(new MustBePublisherRequirement());
+                    policyBuilder.AddRequirements(new SubjectMustBePublisherRequirement());
                 });
+
             });
 
-            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-            .AddIdentityServerAuthentication(options =>
-            {
-                options.Authority = Configuration["AuthorityURL"];
-                options.ApiName = Configuration["ApiResources:Name"];
-            });
-            //.AddJwtBearer(IdentityServerAuthenticationDefaults.AuthenticationScheme, options =>
+            // Configuration of Authentication with IdentityServer
+            //services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+            //.AddIdentityServerAuthentication(options =>
             //{
-            //    options.RequireHttpsMetadata = true;
             //    options.Authority = Configuration["AuthorityURL"];
-            //    options.Audience = Configuration["AudienceURL"];
-
-            //    options.TokenValidationParameters = new TokenValidationParameters()
-            //    {
-            //        ValidateAudience = false
-            //    };
+            //    options.ApiName = Configuration["ApiResources:IdentityServer:Name"];
             //});
+            // Configuration of Authentication with Auth0
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = Configuration["ApiResources:Auth0:Authority"];
+                options.Audience = Configuration["ApiResources:Auth0:Audience"];
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

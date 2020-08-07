@@ -1,4 +1,4 @@
-﻿namespace ITQJ.WebClient.ViewModels
+﻿namespace ITQJ.WebClient.Models
 {
     public class ClientCredentialsM
     {

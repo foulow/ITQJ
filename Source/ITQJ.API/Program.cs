@@ -1,5 +1,7 @@
 using ITQJ.EFCore;
+using ITQJ.EFCore.DbContexts;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -32,6 +34,11 @@ namespace ITQJ.Domain
                 {
                     var services = serviceScope.ServiceProvider;
                     var dbConfigContext = services.GetRequiredService<ApplicationDBContext>();
+
+                    if (!dbConfigContext.Database.CanConnect())
+                    {
+                        dbConfigContext.Database.Migrate();
+                    }
 
                     if (dbConfigContext.IsDataFetched() != DBState.Fetched)
                     {

@@ -65,17 +65,17 @@
                                            asp-controller="Home"
                                            asp-action="LogIn">Informacion Personal</a>
                                     }
-                                    else if (User.IsInRole("Profesional"))
+                                    else if (ViewBag.UserRole == "Profesional")
                                     {
                                         <a class="dropdown-item"
                                            asp-controller="PersonalInfo"
-                                           asp-action="Profesional">Informacion Personal</a>
+                                           asp-action="EditProfesional">Informacion Personal</a>
                                     }
-                                    else if (User.IsInRole("Contratista"))
+                                    else if (ViewBag.UserRole == "Contratista")
                                     {
                                         <a class="dropdown-item"
                                            asp-controller="PersonalInfo"
-                                           asp-action="Contratist">Informacion Personal</a>
+                                           asp-action="EditContratist">Informacion Personal</a>
                                     }
 
                                 </div>
@@ -112,17 +112,17 @@
                                     {
                                         <a class="dropdown-item" asp-controller="Home" asp-action="LogIn">Mis proyectos</a>
                                     }
-                                    else if (User.IsInRole("Profesional"))
+                                    else if (ViewBag.UserRole == "Profesional")
                                     {
                                         <a class="dropdown-item"
-                                           asp-controller="Projects"
-                                           asp-action="Index">Mis postulaciones</a>
+                                           asp-controller="Postulant"
+                                           asp-action="MyPostulations">Mis postulaciones</a>
                                     }
-                                    else if (User.IsInRole("Contratista"))
+                                    else if (ViewBag.UserRole == "Contratista")
                                     {
                                         <a class="dropdown-item"
-                                           asp-controller="Projects"
-                                           asp-action="Index">Mis proyectos</a>
+                                           asp-controller="Project"
+                                           asp-action="MyProjects">Mis proyectos</a>
                                     }
                                 </div>
 
@@ -137,8 +137,7 @@
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                     @if (!User.Identity.IsAuthenticated)
                                     {
-                                        <a class="dropdown-item" asp-action="LogIn">Iniciar sección</a>
-                                        <a class="dropdown-item" asp-controller="User" asp-action="Register">Registarse </a>
+                                        <a class="dropdown-item" asp-action="LogIn">Acceder con Auth0</a>
 
                                     }
                                     else

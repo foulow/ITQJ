@@ -1,8 +1,7 @@
 using AutoMapper;
-using IdentityModel;
 using ITQJ.WebClient.HttpHandlers;
 using ITQJ.WebClient.Hubs;
-using ITQJ.WebClient.ViewModels;
+using ITQJ.WebClient.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -13,8 +12,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.Net.Http.Headers;
 using Serilog;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -49,72 +46,134 @@ namespace ITQJ.WebClient
                         });
                 });
 
-            services.AddSignalR();
-
-            services.AddHttpContextAccessor();
-            services.AddTransient<HttpContextAccessor>();
-            services.AddTransient<BearerTokenHandler>();
-
             var apiURL = Configuration["APIURL"];
             services.AddHttpClient("SecuredAPIClient", client =>
                 {
                     client.BaseAddress = new Uri(apiURL);
                     client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+                    client.DefaultRequestHeaders.Add(Microsoft.Net.Http.Headers.HeaderNames.Accept, "application/json");
                 })
-                .AddHttpMessageHandler<BearerTokenHandler>();
+                //.AddHttpMessageHandler<IdentityServerBearerTokenHandler>();
+                .AddHttpMessageHandler<Auth0BearerTokenHandler>();
 
             services.AddHttpClient("APIClient", client =>
                 {
                     client.BaseAddress = new Uri(apiURL);
                     client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+                    client.DefaultRequestHeaders.Add(Microsoft.Net.Http.Headers.HeaderNames.Accept, "application/json");
                 });
 
-            var authorityURL = Configuration["AuthorityURL"];
-            services.AddHttpClient("IDPClient", client =>
-                {
-                    client.BaseAddress = new Uri(authorityURL);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
-                });
-
+            services.AddSignalR();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddHttpContextAccessor();
+            services.AddTransient<HttpContextAccessor>();
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
 
-            services.Configure<ClientCredentialsM>(Configuration.GetSection("ClientConfiguration"));
+            // IdentityServer client configuration.
+            //services.AddTransient<IdentityServerBearerTokenHandler>();
+            //var authorityURL = Configuration["AuthorityURL"];
+            //services.AddHttpClient("IDPClient", client =>
+            //    {
+            //        client.BaseAddress = new Uri(authorityURL);
+            //        client.DefaultRequestHeaders.Clear();
+            //        client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+            //    });
+            //services.Configure<ClientCredentialsM>(Configuration.GetSection("ClientConfiguration:IdentityServer"));
+            //var scopes = Configuration.GetSection("ClientConfiguration:Auth0:AllowedScopes").GetChildren();
 
-
-            var scopes = Configuration.GetSection("ClientConfiguration:AllowedScopes").GetChildren();
+            // Auth0 client configuration.
+            services.AddTransient<Auth0BearerTokenHandler>();
+            services.Configure<ClientCredentialsM>(Configuration.GetSection("ClientConfiguration:Auth0"));
+            var scopes = Configuration.GetSection("ClientConfiguration:Auth0:AllowedScopes").GetChildren();
 
             services.AddAuthentication(options =>
                 {
-                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme; //oidc
+                    // IdentityServer client configuration.
+                    //options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    //options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme; //oidc
+
+                    // Auth0 client configuration.
+                    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 })
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                 {
                     options.AccessDeniedPath = "/Authorization/AccessDenied";
                 })
-                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options => //oidc
+                //.AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options => //oidc
+                .AddOpenIdConnect("Auth0", options => //oidc
                 {
+                    // General client configuration.
                     options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.Authority = authorityURL;
-                    options.ClientId = Configuration["ClientConfiguration:ClientId"];
-                    options.ClientSecret = Configuration["ClientConfiguration:ClientSecret"];
-                    options.ResponseType = "code";
+                    options.SaveTokens = true;
                     foreach (var scope in scopes)
                     {
                         options.Scope.Add(scope.Value);
                     }
-                    options.ClaimActions.MapUniqueJsonKey("email", "email");
-                    options.ClaimActions.MapUniqueJsonKey("phone", "phone");
+
+                    // IdentityServer client configuration.
+                    //options.Authority = authorityURL;
+                    //options.ClientId = Configuration["ClientConfiguration:IdentityServer:ClientId"];
+                    //options.ClientSecret = Configuration["ClientConfiguration:IdentityServer:ClientSecret"];
+                    //options.ResponseType = "code";
+                    //options.ClaimActions.MapUniqueJsonKey("email", "email");
+                    //options.ClaimActions.MapUniqueJsonKey("phone", "phone");
+                    //options.ClaimActions.MapUniqueJsonKey("role", "role");
+                    //options.GetClaimsFromUserInfoEndpoint = true;
+                    //options.TokenValidationParameters = new TokenValidationParameters
+                    //{
+                    //    NameClaimType = JwtClaimTypes.GivenName,
+                    //    RoleClaimType = JwtClaimTypes.Role
+                    //};
+
+                    // Auth0 client configuration.
+                    options.Authority = Configuration["ClientConfiguration:Auth0:Authority"];
+                    options.CallbackPath = new PathString("/signin-auth0");
+                    options.ClaimsIssuer = "Auth0";
+                    options.RequireHttpsMetadata = false;
+                    options.ClientId = Configuration["ClientConfiguration:Auth0:ClientId"];
+                    options.ClientSecret = Configuration["ClientConfiguration:Auth0:ClientSecret"];
+                    options.ResponseType = "id_token code";
                     options.ClaimActions.MapUniqueJsonKey("role", "role");
-                    options.SaveTokens = true;
-                    options.GetClaimsFromUserInfoEndpoint = true;
-                    options.TokenValidationParameters = new TokenValidationParameters
+                    options.ClaimActions.MapUniqueJsonKey("email", "email");
+                    options.ClaimActions.MapUniqueJsonKey("name", "name");
+                    options.Events = new OpenIdConnectEvents
                     {
-                        NameClaimType = JwtClaimTypes.GivenName,
-                        RoleClaimType = JwtClaimTypes.Role
+                        OnRedirectToIdentityProvider = context =>
+                        {
+                            context.ProtocolMessage.SetParameter("audience",
+                                Configuration["ClientConfiguration:Auth0:Audience"]);
+
+                            return Task.CompletedTask;
+                        },
+                        // handle the logout redirection 
+                        OnRedirectToIdentityProviderForSignOut = (context) =>
+                        {
+                            var logoutUri = $"{Configuration["ClientConfiguration:Auth0:Authority"]}/v2/logout?client_id={Configuration["ClientConfiguration:Auth0:ClientId"]}";
+
+                            var postLogoutUri = context.Properties.RedirectUri;
+                            if (!string.IsNullOrEmpty(postLogoutUri))
+                            {
+                                if (postLogoutUri.StartsWith("/"))
+                                {
+                                    // transform to absolute
+                                    var request = context.Request;
+                                    postLogoutUri = request.Scheme + "://" + request.Host + request.PathBase + postLogoutUri;
+                                }
+                                logoutUri += $"&returnTo={ Uri.EscapeDataString(postLogoutUri)}";
+                            }
+
+                            context.Response.Redirect(logoutUri);
+                            context.HandleResponse();
+
+                            return Task.CompletedTask;
+                        }
                     };
                 });
         }
@@ -147,8 +206,10 @@ namespace ITQJ.WebClient
                         }
                     });
                 });
+                app.UseHsts();
             }
-            app.UseHsts();
+            app.UseStaticFiles();
+            app.UseCookiePolicy();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

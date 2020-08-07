@@ -1,6 +1,6 @@
-﻿@model ITQJ.WebClient.ViewModels.ProjectVM
+﻿@model ITQJ.WebClient.ViewModels.ProjectListVM
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Inicio";
     string Descr = "";
 
     int Nex = Model.PageIndex + 1, Back = Model.PageIndex - 1;
@@ -9,7 +9,7 @@
 
 @if (!User.Identity.IsAuthenticated)
 {
-    <h2>Bienvenido!</h2>
+    <h2>Bienvenido a ITQJ!</h2>
 }
 else
 {
@@ -182,8 +182,21 @@ else
             <br />
             <br />
         }
+    }
+    else
+    {
+        <h1>Parece que no hay proyectos disponibles de momento.</h1>
+        @if (ViewBag.UserRole == "Contratista")
+        {
+            <p>Sé el primero en publicar un proyecto para que otros profesionales puedan realizar tu trabajo.</p>
+        }
+        else
+        {
+            <p>Intenta entrar nuevamenta dentro de unos minutos.</p>
+        }
+    }
 
-    </div>
+</div>
 
-        <button onclick="ScrollUp()" class="ButtonUp" style="outline: none; float: left;"></button>
+<button onclick="ScrollUp()" class="ButtonUp" style="outline: none; float: left;"></button>
 

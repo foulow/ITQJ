@@ -1,19 +1,19 @@
 ﻿using AutoMapper;
-using IdentityModel.Client;
+using ITQJ.Domain.DTOs;
 using ITQJ.WebClient.Models;
 using ITQJ.WebClient.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using RestSharp;
+using Serilog;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -114,12 +114,14 @@ namespace ITQJ.WebClient.Controllers
             var response = await apiClient.SendAsync(
                 request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
 
+            T result = null;
             if (response.IsSuccessStatusCode)
             {
                 var responseString = await response.Content.ReadAsStringAsync();
                 var jsonObject = JObject.Parse(responseString);
-
-                return jsonObject["result"].ToObject<T>();
+                if (jsonObject.ContainsKey("result"))
+                    result = jsonObject["result"].ToObject<T>();
+                return result;
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized ||
                 response.StatusCode == HttpStatusCode.Forbidden)
@@ -162,12 +164,14 @@ namespace ITQJ.WebClient.Controllers
             var response = await apiClient.SendAsync(
                 request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
 
+            T result = null;
             if (response.IsSuccessStatusCode)
             {
                 var responseString = await response.Content.ReadAsStringAsync();
                 var jsonObject = JObject.Parse(responseString);
-
-                return jsonObject["result"].ToObject<T>();
+                if (jsonObject.ContainsKey("result"))
+                    result = jsonObject["result"].ToObject<T>();
+                return result;
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized ||
                 response.StatusCode == HttpStatusCode.Forbidden)
@@ -187,7 +191,7 @@ namespace ITQJ.WebClient.Controllers
             return content.StatusCode == HttpStatusCode.OK;
         }
 
-        protected async Task<T> CallSecuredApiDELETEAsync<T>(string uri) where T : class
+        protected async Task<bool> CallSecuredApiDELETEAsync<T>(string uri)
         {
             var apiClient = this._clientFactory.CreateClient("SecuredAPIClient");
 
@@ -196,24 +200,13 @@ namespace ITQJ.WebClient.Controllers
             var response = await apiClient.SendAsync(
                 request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
 
-            if (response.IsSuccessStatusCode)
-            {
-                var responseString = await response.Content.ReadAsStringAsync();
-                var jsonObject = JObject.Parse(responseString);
-
-                return jsonObject["result"].ToObject<T>();
-            }
-            else if (response.StatusCode == HttpStatusCode.Unauthorized ||
-                response.StatusCode == HttpStatusCode.Forbidden)
-            {
-                return null;
-            }
-
-            throw new Exception("Problem accessing the API");
+            return response.IsSuccessStatusCode;
         }
 
         public IActionResult PageNotFound()
         {
+            var userCredentials = GetUserCredentials();
+
             return View(nameof(PageNotFound));
         }
 
@@ -224,7 +217,8 @@ namespace ITQJ.WebClient.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public async Task LogOut()
+        [Authorize]
+        public async Task LogOut(string returnUrl = "/")
         {
             #region Logout config for Reference Tokens
             //var idpClient = this._clientFactory.CreateClient("IDPClient");
@@ -267,67 +261,118 @@ namespace ITQJ.WebClient.Controllers
             #endregion
 
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
+            //await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
+
+            await HttpContext.SignOutAsync("Auth0", new AuthenticationProperties
+            {
+                // Indicate here where Auth0 should redirect the user after a logout.
+                // Note that the resulting absolute Uri must be whitelisted in the 
+                // **Allowed Logout URLs** settings for the client.
+                //RedirectUri = Url.Action("Index", "Home")
+                RedirectUri = returnUrl
+            });
+
+            //return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
 
-        [Authorize]
-        public async Task<IActionResult> LogIn()
+        //[Authorize]
+        public async Task LogIn(string returnUrl = "/")
         {
+            await HttpContext.ChallengeAsync("Auth0", new AuthenticationProperties() { RedirectUri = returnUrl });
+
             // Get the currently authorized user claims information.
-            var userInfo = await GetUserInfo();
+            //var userInfo = await GetUserInfo();
+            //return RedirectToRoute(new { controller = "Home", action = "Index" });
 
-            return RedirectToRoute(new { controller = "Home", action = "Index" });
+
+
         }
 
-        public async Task<UserInfoM> GetUserInfo()
+        public UserResponseDTO GetUserCredentials()
         {
-            if (!User.Identity.IsAuthenticated)
-                return null;
+            var userCredentials = GetUserCredentialsAsync().Result;
+
+            ViewBag.UserId = userCredentials.Id;
+            ViewBag.UserName = userCredentials.Email.Split("@").First();
+            ViewBag.UserRole = userCredentials.Role;
+            ViewBag.UserEmail = userCredentials.Email;
+
+            return userCredentials;
+        }
+
+        public Task<UserResponseDTO> GetUserCredentialsAsync()
+        {
+            return CallSecuredApiGETAsync<UserResponseDTO>("/api/users");
+        }
+
+        protected async Task<UserResponseDTO> EnsureUserCreated()
+        {
+            var userCredentials = await GetUserCredentialsAsync();
+            if (userCredentials.Role == "Desconosido")
+            {
+                return userCredentials;
+            }
 
             var id = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var userName = User.Claims.FirstOrDefault(c => c.Type == "name")?.Value;
-            var role = User.Claims.FirstOrDefault(c => c.Type == "role")?.Value;
-            if (!string.IsNullOrWhiteSpace(id) && !string.IsNullOrWhiteSpace(userName) && !string.IsNullOrWhiteSpace(role))
-                return new UserInfoM
-                {
-                    Id = id,
-                    UserName = userName,
-                    Role = role
-                };
 
-            var idpClient = this._clientFactory.CreateClient("IDPClient");
+            var idp_access_token = await CallSecuredApiGETAsync<string>("/api/Auth0Access");
 
-            var discoveryDocumentResponse = await idpClient.GetDiscoveryDocumentAsync();
-            if (discoveryDocumentResponse.IsError)
+            var clientCredentials = _clientConfiguration.CurrentValue;
+            var client = new RestClient($"{clientCredentials.Authority}/api/v2/users/{id}/roles");
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("content-type", "application/json");
+            request.AddHeader("Authorization", $"Bearer {idp_access_token}");
+            IRestResponse response = client.Execute(request);
+
+            if (response.IsSuccessful && response.Content.Length > 7)
             {
-                throw new Exception(
-                    "Problem accessing the Discovery endpoint.",
-                    discoveryDocumentResponse.Exception);
+                var jsonValues = JArray.Parse(response.Content);
+
+                string role = "";
+                foreach (var jsonValue in jsonValues)
+                {
+                    if ((string)jsonValue["name"] == userCredentials.Role)
+                        role += (string)jsonValue["name"];
+                }
+
+                if (role != userCredentials.Role)
+                {
+                    // TODO: Update local roles.
+                    Log.Error($"Unexpected result on role maching {role} is not {userCredentials.Role}.");
+                }
+
+                return userCredentials;
+            }
+            else
+            {
+                var rolesClient = new RestClient($"{clientCredentials.Authority}/api/v2/roles");
+                request = new RestRequest(Method.GET);
+                request.AddHeader("content-type", "application/json");
+                request.AddHeader("Authorization", $"Bearer {idp_access_token}");
+                request.AddHeader("cache-control", "no-cache");
+                response = rolesClient.Execute(request);
+
+                if (response.IsSuccessful && response.Content.Length > 7)
+                {
+                    var jsonValues = JArray.Parse(response.Content);
+
+                    string role_id = "";
+                    foreach (var jsonValue in jsonValues)
+                    {
+                        if ((string)jsonValue["name"] == userCredentials.Role)
+                            role_id = (string)jsonValue["id"];
+                    }
+
+                    request = new RestRequest(Method.POST);
+                    request.AddHeader("content-type", "application/json");
+                    request.AddHeader("Authorization", $"Bearer {idp_access_token}");
+                    request.AddHeader("cache-control", "no-cache");
+                    request.AddParameter("application/json", $"{{\"roles\": [ \"{role_id}\" ] }}", ParameterType.RequestBody);
+                    response = client.Execute(request);
+                }
             }
 
-            var accessToken = await HttpContext
-                .GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
-
-            var userInfoResponse = await idpClient.GetUserInfoAsync(
-                new UserInfoRequest
-                {
-                    Address = discoveryDocumentResponse.UserInfoEndpoint,
-                    Token = accessToken
-                });
-
-            if (userInfoResponse.IsError)
-            {
-                throw new Exception(
-                    "Problem accessing the UserInfo endpoint.",
-                    userInfoResponse.Exception);
-            }
-
-            return new UserInfoM
-            {
-                Id = userInfoResponse.Claims.FirstOrDefault(c => c.Type == "sub")?.Value,
-                UserName = userInfoResponse.Claims.FirstOrDefault(c => c.Type == "name")?.Value,
-                Role = userInfoResponse.Claims.FirstOrDefault(c => c.Type == "role")?.Value
-            };
+            return userCredentials;
         }
     }
 }

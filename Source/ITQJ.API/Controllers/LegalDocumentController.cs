@@ -1,4 +1,4 @@
-﻿using ITQJ.Domain.Models;
+﻿using ITQJ.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;

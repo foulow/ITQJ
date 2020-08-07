@@ -1,5 +1,6 @@
 ﻿using ITQJ.Domain.DTOs;
 using ITQJ.WebClient.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,37 +10,38 @@ namespace ITQJ.WebClient.Controllers
 {
     public class UserController : BaseController
     {
-        public UserController(IServiceProvider serviceProvider) : base(serviceProvider)
-        {
+        public UserController(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
-        }
-
-        public async Task<IActionResult> Register()
+        [HttpGet]
+        [Authorize]
+        public IActionResult Register()
         {
-            var user = new UserVM();
-            user.Roles = await GetRoles();
+            var userCredentials = GetUserCredentials();
+
+            var user = new UserVM
+            {
+                Email = userCredentials.Email,
+                Role = userCredentials.Role
+            };
+            user.Roles = new List<string> { "Profesional", "Contratista" };
 
             return View(user);
         }
 
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Register(UserVM user)
         {
             if (!ModelState.IsValid)
             {
-                user.Roles = await GetRoles();
                 return View(user);
             }
 
-            var newuser = await CallApiPOSTAsync<UserCreateDTO>("/api/users/", user);
+            var newUser = await CallSecuredApiPOSTAsync<UserCreateDTO>("/api/users/", user);
 
-            return RedirectToAction("LogIn");
+            return RedirectToAction("Index", "Home");
         }
 
-        private async Task<List<RoleDTO>> GetRoles()
-        {
-            return await CallApiGETAsync<List<RoleDTO>>("/api/roles");
-        }
     }
 }

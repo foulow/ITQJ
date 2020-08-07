@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ITQJ.EFCore;
+using ITQJ.EFCore.DbContexts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
