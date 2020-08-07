@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+
 namespace ITQJ.API.Controllers
 {
     [ApiController]
@@ -16,6 +17,7 @@ namespace ITQJ.API.Controllers
     {
         public ProfesionalSkillsController(IServiceProvider serviceProvider)
             : base(serviceProvider) { }
+
 
         [HttpGet("{personalInfoId}")]
         public ActionResult GetProfesionalSkills([FromRoute] string personalInfoId)
@@ -36,6 +38,7 @@ namespace ITQJ.API.Controllers
                 Result = profesionalSkillModels
             });
         }
+
 
         [HttpPost]
         public ActionResult RegisterProfesionalSkills([FromBody] List<ProfesionalSkillCreateDTO> profesionalSkills)

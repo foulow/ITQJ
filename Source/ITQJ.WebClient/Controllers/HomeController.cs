@@ -12,10 +12,13 @@ namespace ITQJ.WebClient.Controllers
     {
         public HomeController(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
-        public async Task<IActionResult> Index(int pageIndex = 1, int maxResults = 20)
+        public async Task<IActionResult> Index(int pageIndex = 1 ,int  maxResults = 5)
         {
+
             string currentPage = (pageIndex < 1) ? "1" : pageIndex.ToString();
-            string maxProjectsCount = (maxResults < 20) ? "20" : (maxResults < 100) ? "100" : maxResults.ToString();
+
+            string maxProjectsCount = (maxResults <= 5) ? "5" : (maxResults > 100) ? "100" : maxResults.ToString();
+
             var queryResult = new Dictionary<string, string>
             {
                 { nameof(pageIndex), currentPage },
@@ -23,6 +26,7 @@ namespace ITQJ.WebClient.Controllers
             };
 
             var projects = await CallApiGETAsync<ProjectVM>("/api/projects/" + QueryString.Create(queryResult));
+            projects.PageIndex = pageIndex;
 
             if (User.Identity.IsAuthenticated)
             {

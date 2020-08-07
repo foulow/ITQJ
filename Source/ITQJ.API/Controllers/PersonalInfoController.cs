@@ -53,5 +53,37 @@ namespace ITQJ.API.Controllers
                 Result = personalInfoModel
             });
         }
+
+        [HttpPut("{Id}")]
+        public ActionResult EditPersonalInfo([FromRoute] string Id, [FromBody] PersonalInfoCreateDTO personalInfoData)
+        {
+
+            var newPersonalInfo = this._mapper.Map<PersonalInfo>(personalInfoData);
+            newPersonalInfo.UserId = Guid.Parse(Id);
+
+            var entity = this._appDBContext.PersonalInfos.FirstOrDefault(item => item.Id == Guid.Parse(Id));
+
+            if (entity != null)
+            {
+                var tempPersonalInfo = this._appDBContext.PersonalInfos.Update(newPersonalInfo);
+                this._appDBContext.SaveChanges();
+
+                var personalInfoModel = this._mapper.Map<PersonalInfoCreateDTO>(tempPersonalInfo.Entity);
+
+                return Ok(new
+                {
+                    Message = "Ok",
+                    Result = personalInfoModel
+                });
+            }
+            else
+                return Ok(new
+                {
+                    Message = "Ok"
+                });
+
+
+        }
+
     }
 }

@@ -3,9 +3,110 @@
     ViewData["Title"] = "Pagina de perfil del Contratista";
 }
 
-<h2>Perfil de usuario @Model.User.UserName</h2>
-<p>Nombre: @Model.Name</p>
-<p>Correo: @Model.User.Email</p>
-<p>Phone number: @Model.PhoneNumber</p>
-<p>Page: <a src="@Model.PagLink">@Model.PagLink</a></p>
-<p>Description: @Model.Description</p>
+<div class="border pt-1 pl-1 pr-1 pb-0 m-2 badge-primary" style=" border-radius:70% 70% 0% 0%">
+
+    <div class="border pt-1 pl-1 pr-1 pb-0 m-0 badge-dark" style=" border-radius:70% 70% 0% 0%">
+
+        <div class="border p-1 m-0 badge-light text-center text-dark" style="position:relative; left:50%; transform:translateX(-50%); border-radius:70% 70% 0% 0%">
+
+            <h1 class="display-2">@Model.User.UserName</h1>
+
+        </div>
+
+    </div>
+
+</div>
+
+<form asp-action="EditContratist" asp-controller="PersonalInfo" method="post">
+
+    <div hidden>
+
+        <label asp-for="User.UserName"></label>
+        <input asp-for="User.UserName" type="text" />
+
+        <label asp-for="User.Id"></label>
+        <input asp-for="User.Id" type="text" />
+
+        <label asp-for="User.Password"></label>
+        <input asp-for="User.Password" type="text" />
+
+        <label asp-for="User.Role"></label>
+        <input asp-for="User.Role" type="text" />
+
+        <label asp-for="User.RoleId"></label>
+        <input asp-for="User.RoleId" type="text" />
+
+    </div>
+
+    <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white;">
+
+        <h4 id="Lname" asp-for="Name">Nombre</h4>
+
+        <input id="Tname" style="margin-left:10px;"  type="text" asp-for="Name" />
+
+        <span asp-validation-for="Name" class="text-danger"></span>
+
+        <p id="Mname" class="h2"> Nombre: @Model.Name </p>
+
+    </div>
+
+    <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white;">
+
+        <h4 id="Lemail" asp-for="User.Email">Correo</h4>
+
+        <input id="Temail" style="margin-left:10px;" type="email" asp-for="User.Email" />
+
+        <span asp-validation-for="User.Email" class="text-danger"></span>
+
+        <p id="Memail" class="h2"> Correo: @Model.User.Email </p>
+
+    </div>
+
+    <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white;">
+
+        <h4 id="Lnumero" asp-for="PhoneNumber">Numero de telefono</h4>
+
+        <input id="Tnumero" style="margin-left:10px;" type="text" asp-for="PhoneNumber" />
+
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+
+        <p id="Mnumero" class="h2"> Numero de telefono: @Model.PhoneNumber </p>
+
+    </div>
+
+    <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white;">
+
+        <h4 id="Lling" asp-for="PagLink">Pagina</h4>
+
+        <input id="Tling" style="margin-left:10px;" type="text" asp-for="PagLink" />
+
+        <span asp-validation-for="PagLink" class="text-danger"></span>
+
+        <p id="Mling" class="h2"> Pagina Web: <a src="@Model.PagLink">@Model.PagLink </a></p>
+
+    </div>
+
+    <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white;">
+
+        <h4 id="Ldescripcion" asp-for="Description">Description</h4>
+
+        <input id="Tdescripcion" style="margin-left:10px;" type="text" asp-for="Description" />
+
+        <span asp-validation-for="Description" class="text-danger"></span>
+
+        <p id="Mdescripcion" class="h2"> Descripción: @Model.Description </p>
+
+    </div>
+
+    <div class="d-inline-block">
+
+        <input id="bntGuardar" class="btn btn-dark m-3" type="submit" value="Guardar" />
+
+        <input id="bntCancelar" class="btn btn-dark m-3" type="button" value="Cancelar" onclick="Cancelar()" />
+
+    </div>
+
+</form>
+
+<input id="bntEditar" class="btn btn-dark m-3" type="button" value="Editar" onclick="Edit()" />
+

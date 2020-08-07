@@ -2,135 +2,183 @@
 @{
     ViewData["Title"] = "Home Page";
     string Descr = "";
+
+    int Nex = Model.PageIndex + 1, Back = Model.PageIndex - 1;
+
 }
 
 @if (!User.Identity.IsAuthenticated)
 {
     <h2>Bienvenido!</h2>
 }
-else 
+else
 {
     <h2>Hola @ViewBag.UserName!</h2>
 }
 
-
-@*<nav aria-label="Page navigation exmple">
-
-    <ul class="pagination justify-content-center">
-
-        @foreach (var pagina in Model.ResultCount)
-        {
-
-            <li style="cursor: pointer;" class="page-item @(pagina.Habilitada ? null : "disabled") @(pagina.Activa ? "active" : null)">
-
-                <span class="page-link"> @pagina.Texto </span>
-
-            </li>
-
-        }
-
-    </ul>
-
-</nav>*@
-
     <br />
 
     <div>
-        
+
         <h4>Proyectos Recientes</h4>
         <hr />
 
+        <div class="d-block p-0 m-0">
+
+            <div class="d-inline-block bg-dark m-0 p-0" style="position:relative; left:50%; transform: translateX(-50%);">
+
+                <nav aria-label="Page navigation example h2">
+
+                    <ul class="pagination">
+
+                        @if (Model.PageIndex != 1)
+                        {
+                            <li class="page-item">
+
+                                <a class="page-link" aria-label="Previous" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Back">
+                                    <span aria-hidden="true" class="text-dark">&laquo;</span>
+                                </a>
+
+                            </li>
+                        }
+
+
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            if (i == Model.PageIndex)
+                            {
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link text-dark">
+                                        @i
+                                        <span class="sr-only">(current)</span>
+                                    </span>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item">
+
+                                    <a class="page-link text-dark" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@i">@i</a>
+
+                                </li>
+                            }
+
+                        }
+
+
+                        @if (Model.PageIndex != Model.TotalPages)
+                        {
+                            <li class="page-item">
+
+                                <a class="page-link" aria-label="Next" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Nex">
+
+                                    <span aria-hidden="true" class="text-dark">&raquo;</span>
+
+                                </a>
+
+                            </li>
+                        }
+
+                    </ul>
+
+                </nav>
+
+            </div>
+
+        </div>
+
+        <hr />
 
         @foreach (var dato in Model.Projects)
         {
-             <a asp-route-projectId="@dato.Id" asp-controller="Project" asp-action="Index" onmouseover="ProjectOver('@dato.Id')" onmouseout="ProjectDown('@dato.Id')">
+            <a asp-route-projectId="@dato.Id" asp-controller="Project" asp-action="Index" onmouseover="ProjectOver('@dato.Id')" onmouseout="ProjectDown('@dato.Id')">
 
-                 <div style="border: 2px solid lightgray; border-radius: 6px;" id="@dato.Id">
+                <div style="border: 2px solid lightgray; border-radius: 6px;" id="@dato.Id">
 
-                     <div class="col d-inline-block p-2 m-0  border badge-dark" style="border-radius: 6px;">
+                    <div class="col d-inline-block p-2 m-0  border badge-dark" style="border-radius: 6px;">
 
-                         <div class="col d-inline m-0 p-0">
+                        <div class="col d-inline m-0 p-0">
 
-                             <strong class="h4 m-0 p-0">
+                            <strong class="h4 m-0 p-0">
 
-                                 @dato.Name
+                                @dato.Name
 
-                             </strong>
+                            </strong>
 
-                         </div>
+                        </div>
 
-                     </div>
+                    </div>
 
-                     <div class="col d-inline-block m-0 mb-1 p-2">
+                    <div class="col d-inline-block m-0 mb-1 p-2">
 
-                         <div class="col d-inline m-0 p-0 ">
+                        <div class="col d-inline m-0 p-0 ">
 
-                             @if (!dato.Description.Equals(null))
-                             {
-                                 if (dato.Description.Length >= 100)
-                                 {
-                                     Descr = dato.Description.Substring(0, 150);
-                                     Descr += "...";
-                                 }
-                                 else if (dato.Description.Equals(string.Empty))
-                                 {
-                                     Descr = "Sin Descripción.";
-                                 }
-                                 else
-                                 {
-                                     Descr = dato.Description;
-                                 }
+                            @if (!dato.Description.Equals(null))
+                            {
+                                if (dato.Description.Length >= 100)
+                                {
+                                    Descr = dato.Description.Substring(0, 150);
+                                    Descr += "...";
+                                }
+                                else if (dato.Description.Equals(string.Empty))
+                                {
+                                    Descr = "Sin Descripción.";
+                                }
+                                else
+                                {
+                                    Descr = dato.Description;
+                                }
 
-                             }
+                            }
 
-                             <strong class="h6 m-0 p-0">
+                            <strong class="h6 m-0 p-0">
 
-                                 @Descr
+                                @Descr
 
-                             </strong>
+                            </strong>
 
-                         </div>
+                        </div>
 
-                     </div>
+                    </div>
 
-                     <div class="col d-inline-block m-0 mb-1 p-2">
+                    <div class="col d-inline-block m-0 mb-1 p-2">
 
-                         <div class="col d-inline m-0 p-0 ">
+                        <div class="col d-inline m-0 p-0 ">
 
-                             <strong class="h6 m-0 p-0">
+                            <strong class="h6 m-0 p-0">
 
-                                 Publicado: <text class="text-info">@dato.PublishDate</text>
+                                Publicado: <text class="text-info">@dato.PublishDate</text>
 
-                             </strong>
+                            </strong>
 
-                         </div>
+                        </div>
 
-                         <div class="col d-inline  ml-lg-3 p-0 ">
+                        <div class="col d-inline  ml-lg-3 p-0 ">
 
-                             <strong class="h6 m-0 p-0">
+                            <strong class="h6 m-0 p-0">
 
-                                 Cierra: <text class="text-danger">@dato.CloseDate</text>
+                                Cierra: <text class="text-danger">@dato.CloseDate</text>
 
-                             </strong>
+                            </strong>
 
-                         </div>
+                        </div>
 
-                         <div class="col d-inline  ml-lg-3 p-0 ">
+                        <div class="col d-inline  ml-lg-3 p-0 ">
 
-                             <strong class="h6 m-0 p-0">
+                            <strong class="h6 m-0 p-0">
 
-                                 Postaciones restante: <text class="text-danger">@dato.PostulantsLimit</text>
+                                Postaciones restante: <text class="text-danger">@dato.PostulantsLimit</text>
 
-                             </strong>
+                            </strong>
 
-                         </div>
+                        </div>
 
-                     </div>
+                    </div>
 
-                 </div>
+                </div>
 
-             </a>
- 
+            </a>
+
             <br />
             <br />
         }

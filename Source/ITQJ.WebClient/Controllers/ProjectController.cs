@@ -1,4 +1,5 @@
 ﻿using ITQJ.Domain.DTOs;
+using ITQJ.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -24,8 +25,16 @@ namespace ITQJ.WebClient.Controllers
             return View(projectInfo);
         }
 
+
         [Authorize(Roles = "Contratista")]
         public IActionResult Publish()
+        {
+            return View(new ProjectResponseDTO());
+        }
+
+
+        [HttpPost]
+        public IActionResult Publish(Project project)
         {
             return View();
         }
