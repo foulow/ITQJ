@@ -1,0 +1,117 @@
+﻿@model ITQJ.WebClient.ViewModels.PostutantListVM;
+@{
+    ViewData["Title"] = "Mis Postulaciones";
+    string Descr = "";
+}
+<div class="container">
+    @if (Model.Postulants != null && Model.Postulants.Count > 0)
+    {
+        foreach (var postulations in Model.Postulants)
+        {
+            <a asp-route-projectId="@postulations.ProjectId" asp-controller="Project" asp-action="Index" onmouseover="ProjectOver('@postulations.ProjectId')" onmouseout="ProjectDown('@postulations.ProjectId')">
+
+                <div style="border: 2px solid lightgray; border-radius: 6px;" id="@postulations.ProjectId">
+
+                    <div class="col d-inline-block p-2 m-0  border badge-dark" style="border-radius: 6px;">
+
+                        <div class="col d-inline m-0 p-0">
+
+                            <strong class="h4 m-0 p-0">
+
+                                @postulations.Project.Name
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col d-inline-block m-0 mb-1 p-2">
+
+                        <div class="col d-inline m-0 p-0 ">
+
+                            @if (!postulations.Project.Description.Equals(null))
+                            {
+                                if (postulations.Project.Description.Length >= 100)
+                                {
+                                    Descr = postulations.Project.Description.Substring(0, 150);
+                                    Descr += "...";
+                                }
+                                else if (postulations.Project.Description.Equals(string.Empty))
+                                {
+                                    Descr = "Sin Descripción.";
+                                }
+                                else
+                                {
+                                    Descr = postulations.Project.Description;
+                                }
+
+                            }
+
+                            <strong class="h6 m-0 p-0">
+
+                                @Descr
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col d-inline-block m-0 mb-1 p-2">
+
+                        <div class="col d-inline m-0 p-0 ">
+
+                            <strong class="h6 m-0 p-0">
+
+                                Publicado: <text class="text-info">@postulations.Project.PublishDate</text>
+
+                            </strong>
+
+                        </div>
+
+                        <div class="col d-inline  ml-lg-3 p-0 ">
+
+                            <strong class="h6 m-0 p-0">
+
+                                Cierra: <text class="text-danger">@postulations.Project.CloseDate</text>
+
+                            </strong>
+
+                        </div>
+
+                        <div class="col d-inline  ml-lg-3 p-0 ">
+
+                            <strong class="h6 m-0 p-0">
+
+                                Postaciones restante: <text class="text-danger">@postulations.Project.PostulantsLimit</text>
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+            <br />
+            <br />
+        }
+    }
+    else
+    {
+        <div class="row text-center">
+            <h1>Parece que no tienes postulaciones!</h1>
+            @if (ViewBag.UserRole == "Profesional")
+            {
+                <p>Comienza a realizar postulaciones, para comenzar a trabajar en tu primer proyecto.</p>
+            }
+            else
+            {
+                <p>No deverias estar aqui, completa el proseso de registro para poder acceder a esta pagina.</p>
+            }
+        </div>
+    }
+</div>

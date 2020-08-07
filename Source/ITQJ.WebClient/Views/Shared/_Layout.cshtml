@@ -115,14 +115,14 @@
                                     else if (ViewBag.UserRole == "Profesional")
                                     {
                                         <a class="dropdown-item"
-                                           asp-controller="Projects"
-                                           asp-action="Index">Mis postulaciones</a>
+                                           asp-controller="Postulant"
+                                           asp-action="MyPostulations">Mis postulaciones</a>
                                     }
                                     else if (ViewBag.UserRole == "Contratista")
                                     {
                                         <a class="dropdown-item"
-                                           asp-controller="Projects"
-                                           asp-action="Index">Mis proyectos</a>
+                                           asp-controller="Project"
+                                           asp-action="MyProjects">Mis proyectos</a>
                                     }
                                 </div>
 

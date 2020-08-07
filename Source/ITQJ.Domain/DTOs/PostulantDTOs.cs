@@ -11,5 +11,7 @@ namespace ITQJ.Domain.DTOs
     public class PostulantResponseDTO : PostulantCreateDTO
     {
         public Guid Id { get; set; }
+
+        public ProjectCreateDTO Project { get; set; }
     }
 }

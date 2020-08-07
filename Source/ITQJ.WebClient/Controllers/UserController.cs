@@ -1,5 +1,6 @@
 ﻿using ITQJ.Domain.DTOs;
 using ITQJ.WebClient.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,12 +13,15 @@ namespace ITQJ.WebClient.Controllers
         public UserController(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
         [HttpGet]
-        public IActionResult Register([FromQuery] string userName)
+        [Authorize]
+        public IActionResult Register()
         {
+            var userCredentials = GetUserCredentials();
+
             var user = new UserVM
             {
-                Email = userName,
-                Role = "Desconosido"
+                Email = userCredentials.Email,
+                Role = userCredentials.Role
             };
             user.Roles = new List<string> { "Profesional", "Contratista" };
 
@@ -26,6 +30,7 @@ namespace ITQJ.WebClient.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Register(UserVM user)
         {
             if (!ModelState.IsValid)

@@ -205,6 +205,8 @@ namespace ITQJ.WebClient.Controllers
 
         public IActionResult PageNotFound()
         {
+            var userCredentials = GetUserCredentials();
+
             return View(nameof(PageNotFound));
         }
 
@@ -286,9 +288,26 @@ namespace ITQJ.WebClient.Controllers
 
         }
 
+        public UserResponseDTO GetUserCredentials()
+        {
+            var userCredentials = GetUserCredentialsAsync().Result;
+
+            ViewBag.UserId = userCredentials.Id;
+            ViewBag.UserName = userCredentials.Email.Split("@").First();
+            ViewBag.UserRole = userCredentials.Role;
+            ViewBag.UserEmail = userCredentials.Email;
+
+            return userCredentials;
+        }
+
+        public Task<UserResponseDTO> GetUserCredentialsAsync()
+        {
+            return CallSecuredApiGETAsync<UserResponseDTO>("/api/users");
+        }
+
         protected async Task<UserResponseDTO> EnsureUserCreated()
         {
-            var userCredentials = await CallSecuredApiGETAsync<UserResponseDTO>("/api/users");
+            var userCredentials = await GetUserCredentialsAsync();
             if (userCredentials.Role == "Desconosido")
             {
                 return userCredentials;

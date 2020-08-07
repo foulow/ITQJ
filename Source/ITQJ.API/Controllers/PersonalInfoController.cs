@@ -17,16 +17,18 @@ namespace ITQJ.API.Controllers
             : base(serviceProvider) { }
 
         [HttpGet("{userId}")]
-        public ActionResult GetPersonalInfo([FromRoute] string userId)
+        public ActionResult GetPersonalInfo([FromRoute] Guid userId)
         {
-            var userIdGuid = Guid.Parse(userId);
+            if (userId == null)
+                return BadRequest(new { Message = $"Error: el parametro {nameof(userId)} no puede ser nulo." });
 
             var personalInfo = this._appDBContext.PersonalInfos
                 .Include(i => i.User)
                 .Include(i => i.LegalDocument)
                 .Include(i => i.ProfesionalSkills)
-                .FirstOrDefault(x => x.UserId == userIdGuid);
-            var personalInfoModel = this._mapper.Map<PersonalInfo>(personalInfo);
+                .FirstOrDefault(x => x.UserId == userId);
+
+            var personalInfoModel = this._mapper.Map<PersonalInfoResponseDTO>(personalInfo);
 
             return Ok(new
             {

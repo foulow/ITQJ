@@ -22,7 +22,6 @@ namespace ITQJ.API.Controllers
         {
             var subject = HttpContext.User.Claims.FirstOrDefault(c =>
                 c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
-            //subject = subject.Split('|').Last();
 
             var user = this._appDBContext.Users
                 .FirstOrDefault(x => x.Subject == subject);
@@ -73,7 +72,6 @@ namespace ITQJ.API.Controllers
         {
             var subject = HttpContext.User.Claims.FirstOrDefault(c =>
                 c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
-            //subject = subject.Split('|').Last();
 
             if (this._appDBContext.Users.Any(x => x.Subject == subject && x.DeletedFlag == false))
                 return Ok(new { Message = "Este usuario ya esta registrado.", Result = new UserResponseDTO() });
@@ -103,7 +101,8 @@ namespace ITQJ.API.Controllers
         [HttpPatch]
         public ActionResult DeactivateUser()
         {
-            var subject = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var subject = HttpContext.User.Claims.FirstOrDefault(c =>
+                c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
 
             var user = this._appDBContext.Users
                 .FirstOrDefault(x => x.Subject == subject && x.DeletedFlag == false);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ITQJ.WebClient.ViewModels
 {
-    public class ProjectVM
+    public class PostutantListVM
     {
         public int TotalCount { get; set; }
 
@@ -11,6 +11,6 @@ namespace ITQJ.WebClient.ViewModels
 
         public int ResultCount { get; set; }
 
-        public ICollection<ProjectResponseDTO> Projects { get; set; }
+        public ICollection<PostulantResponseDTO> Postulants { get; set; }
     }
 }

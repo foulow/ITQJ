@@ -13,15 +13,18 @@ namespace ITQJ.Domain
             CreateMap<UserCreateDTO, User>()
                 .ForMember(dest => dest.Id, act => act.Ignore());
             CreateMap<User, UserResponseDTO>();
+            CreateMap<User, UserCreateDTO>();
 
             // Mapeo de datos modelo Review.
             CreateMap<ReviewCreateDTO, Review>()
                 .ForMember(dest => dest.Id, act => act.Ignore());
+            CreateMap<Review, ReviewCreateDTO>();
             CreateMap<Review, ReviewResponseDTO>();
             #endregion
 
             #region PersonalInfo Data Mapping
             // Mapeo de datos modelo Skill.
+            CreateMap<SkillDTO, Skill>();
             CreateMap<Skill, SkillDTO>();
             // Mapeo de datos modelo ProfesionalSkills.
             CreateMap<ProfesionalSkillCreateDTO, ProfesionalSkill>()
@@ -29,15 +32,18 @@ namespace ITQJ.Domain
             CreateMap<ProfesionalSkillUpdateDTO, ProfesionalSkill>()
                 .ForMember(dest => dest.Id, act => act.Ignore())
                 .ForMember(dest => dest.PersonalInfoId, act => act.Ignore());
+            CreateMap<ProfesionalSkill, ProfesionalSkillCreateDTO>();
             CreateMap<ProfesionalSkill, ProfesionalSkillResponseDTO>();
 
             // Mapeo de datos modelo DocumentType.
+            CreateMap<DocumentTypeDTO, DocumentType>();
             CreateMap<DocumentType, DocumentTypeDTO>();
             // Mapeo de datos modelo LegalDocument.
             CreateMap<LegalDocumentCreateDTO, LegalDocument>()
                 .ForMember(dest => dest.Id, act => act.Ignore());
             CreateMap<LegalDocumentUpdateDTO, LegalDocument>()
                 .ForMember(dest => dest.Id, act => act.Ignore());
+            CreateMap<LegalDocument, LegalDocumentCreateDTO>();
             CreateMap<LegalDocument, LegalDocumentResponseDTO>();
 
             // Mapeo de datos modelo PersonalInfo.
@@ -47,6 +53,7 @@ namespace ITQJ.Domain
                 .ForMember(dest => dest.Id, act => act.Ignore())
                 .ForMember(dest => dest.UserId, act => act.Ignore())
                 .ForMember(dest => dest.LegalDocumentId, act => act.Ignore());
+            CreateMap<PersonalInfo, PersonalInfoCreateDTO>();
             CreateMap<PersonalInfo, PersonalInfoResponseDTO>();
             #endregion
 
@@ -57,16 +64,19 @@ namespace ITQJ.Domain
             CreateMap<ProjectUpdateDTO, Project>()
                 .ForMember(dest => dest.Id, act => act.Ignore())
                 .ForMember(dest => dest.UserId, act => act.Ignore());
+            CreateMap<Project, ProjectCreateDTO>();
             CreateMap<Project, ProjectResponseDTO>();
 
             // Mapeo de datos modelo Postulant.
             CreateMap<PostulantCreateDTO, Postulant>()
                 .ForMember(dest => dest.Id, act => act.Ignore());
+            CreateMap<Postulant, PostulantCreateDTO>();
             CreateMap<Postulant, PostulantResponseDTO>();
 
             // Mapeo de datos modelo Message.
             CreateMap<MessageCreateDTO, Message>()
                 .ForMember(dest => dest.Id, act => act.Ignore());
+            CreateMap<Message, MessageCreateDTO>();
             CreateMap<Message, MessageResponseDTO>();
             #endregion
         }

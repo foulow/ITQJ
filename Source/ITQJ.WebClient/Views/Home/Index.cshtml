@@ -1,14 +1,14 @@
-﻿@model ITQJ.WebClient.ViewModels.ProjectVM
+﻿@model ITQJ.WebClient.ViewModels.ProjectListVM
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Inicio";
     string Descr = "";
 }
 
 @if (!User.Identity.IsAuthenticated)
 {
-    <h2>Bienvenido!</h2>
+    <h2>Bienvenido a ITQJ!</h2>
 }
-else 
+else
 {
     <h2>Hola @ViewBag.UserName!</h2>
 }
@@ -16,126 +16,141 @@ else
 
 @*<nav aria-label="Page navigation exmple">
 
-    <ul class="pagination justify-content-center">
+        <ul class="pagination justify-content-center">
 
-        @foreach (var pagina in Model.ResultCount)
-        {
+            @foreach (var pagina in Model.ResultCount)
+            {
 
-            <li style="cursor: pointer;" class="page-item @(pagina.Habilitada ? null : "disabled") @(pagina.Activa ? "active" : null)">
+                <li style="cursor: pointer;" class="page-item @(pagina.Habilitada ? null : "disabled") @(pagina.Activa ? "active" : null)">
 
-                <span class="page-link"> @pagina.Texto </span>
+                    <span class="page-link"> @pagina.Texto </span>
 
-            </li>
+                </li>
 
-        }
+            }
 
-    </ul>
+        </ul>
 
-</nav>*@
+    </nav>*@
 
-    <br />
+<br />
 
-    <div>
-        
-        <h4>Proyectos Recientes</h4>
-        <hr />
+<div class="container">
 
+    <h4>Proyectos Recientes</h4>
+    <hr />
+
+    @if (Model.Projects != null && Model.Projects.Count > 0)
+    {
 
         @foreach (var dato in Model.Projects)
         {
-             <a asp-route-projectId="@dato.Id" asp-controller="Project" asp-action="Index" onmouseover="ProjectOver('@dato.Id')" onmouseout="ProjectDown('@dato.Id')">
+            <a asp-route-projectId="@dato.Id" asp-controller="Project" asp-action="Index" onmouseover="ProjectOver('@dato.Id')" onmouseout="ProjectDown('@dato.Id')">
 
-                 <div style="border: 2px solid lightgray; border-radius: 6px;" id="@dato.Id">
+                <div style="border: 2px solid lightgray; border-radius: 6px;" id="@dato.Id">
 
-                     <div class="col d-inline-block p-2 m-0  border badge-dark" style="border-radius: 6px;">
+                    <div class="col d-inline-block p-2 m-0  border badge-dark" style="border-radius: 6px;">
 
-                         <div class="col d-inline m-0 p-0">
+                        <div class="col d-inline m-0 p-0">
 
-                             <strong class="h4 m-0 p-0">
+                            <strong class="h4 m-0 p-0">
 
-                                 @dato.Name
+                                @dato.Name
 
-                             </strong>
+                            </strong>
 
-                         </div>
+                        </div>
 
-                     </div>
+                    </div>
 
-                     <div class="col d-inline-block m-0 mb-1 p-2">
+                    <div class="col d-inline-block m-0 mb-1 p-2">
 
-                         <div class="col d-inline m-0 p-0 ">
+                        <div class="col d-inline m-0 p-0 ">
 
-                             @if (!dato.Description.Equals(null))
-                             {
-                                 if (dato.Description.Length >= 100)
-                                 {
-                                     Descr = dato.Description.Substring(0, 150);
-                                     Descr += "...";
-                                 }
-                                 else if (dato.Description.Equals(string.Empty))
-                                 {
-                                     Descr = "Sin Descripción.";
-                                 }
-                                 else
-                                 {
-                                     Descr = dato.Description;
-                                 }
+                            @if (!dato.Description.Equals(null))
+                            {
+                                if (dato.Description.Length >= 100)
+                                {
+                                    Descr = dato.Description.Substring(0, 150);
+                                    Descr += "...";
+                                }
+                                else if (dato.Description.Equals(string.Empty))
+                                {
+                                    Descr = "Sin Descripción.";
+                                }
+                                else
+                                {
+                                    Descr = dato.Description;
+                                }
 
-                             }
+                            }
 
-                             <strong class="h6 m-0 p-0">
+                            <strong class="h6 m-0 p-0">
 
-                                 @Descr
+                                @Descr
 
-                             </strong>
+                            </strong>
 
-                         </div>
+                        </div>
 
-                     </div>
+                    </div>
 
-                     <div class="col d-inline-block m-0 mb-1 p-2">
+                    <div class="col d-inline-block m-0 mb-1 p-2">
 
-                         <div class="col d-inline m-0 p-0 ">
+                        <div class="col d-inline m-0 p-0 ">
 
-                             <strong class="h6 m-0 p-0">
+                            <strong class="h6 m-0 p-0">
 
-                                 Publicado: <text class="text-info">@dato.PublishDate</text>
+                                Publicado: <text class="text-info">@dato.PublishDate</text>
 
-                             </strong>
+                            </strong>
 
-                         </div>
+                        </div>
 
-                         <div class="col d-inline  ml-lg-3 p-0 ">
+                        <div class="col d-inline  ml-lg-3 p-0 ">
 
-                             <strong class="h6 m-0 p-0">
+                            <strong class="h6 m-0 p-0">
 
-                                 Cierra: <text class="text-danger">@dato.CloseDate</text>
+                                Cierra: <text class="text-danger">@dato.CloseDate</text>
 
-                             </strong>
+                            </strong>
 
-                         </div>
+                        </div>
 
-                         <div class="col d-inline  ml-lg-3 p-0 ">
+                        <div class="col d-inline  ml-lg-3 p-0 ">
 
-                             <strong class="h6 m-0 p-0">
+                            <strong class="h6 m-0 p-0">
 
-                                 Postaciones restante: <text class="text-danger">@dato.PostulantsLimit</text>
+                                Postaciones restante: <text class="text-danger">@dato.PostulantsLimit</text>
 
-                             </strong>
+                            </strong>
 
-                         </div>
+                        </div>
 
-                     </div>
+                    </div>
 
-                 </div>
+                </div>
 
-             </a>
- 
+            </a>
+
             <br />
             <br />
         }
+    }
+    else
+    {
+        <h1>Parece que no hay proyectos disponibles de momento.</h1>
+        @if (ViewBag.UserRole == "Contratista")
+        {
+            <p>Sé el primero en publicar un proyecto para que otros profesionales puedan realizar tu trabajo.</p>
+        }
+        else
+        {
+            <p>Intenta entrar nuevamenta dentro de unos minutos.</p>
+        }
+    }
 
-    </div>
+</div>
 
-        <button onclick="ScrollUp()" class="ButtonUp" style="outline: none; float: left;"></button>
+<button onclick="ScrollUp()" class="ButtonUp" style="outline: none; float: left;"></button>
 

@@ -1,5 +1,34 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model ITQJ.WebClient.ViewModels.ReviewListVM
 @{
+    ViewData["Title"] = "Reseñas";
 }
+<div class="container">
+    @if (Model.Reviews != null && Model.Reviews.Count > 0)
+    {
+        foreach (var review in Model.Reviews)
+        {
+            <div class="row text-center">
+                <h4>@review.Points Punto(s)</h4>
+                <p>@review.Description</p>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="row text-center">
+            <h1>Parece que no tienes reseñas!</h1>
+            @if (ViewBag.UserRole == "Profesional")
+            {
+                <p>Comienza a aplicar a proyectos para resivir una reseña por parte de un contratista.</p>
+            }
+            else if (ViewBag.UserRole == "Contratista")
+            {
+                <p>Comienza a publicar proyectos para resivir una reseña por parte de un profesional.</p>
+            }
+            else
+            {
+                <p>No deverias estar aqui, completa el proseso de registro para poder acceder a esta pagina.</p>
+            }
+        </div>
+    }
+</div>
