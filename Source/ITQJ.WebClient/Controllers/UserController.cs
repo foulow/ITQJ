@@ -40,7 +40,7 @@ namespace ITQJ.WebClient.Controllers
 
             var newUser = await CallSecuredApiPOSTAsync<UserCreateDTO>("/api/users/", user);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Register", "PersonalInfo");
         }
 
     }

@@ -109,6 +109,7 @@ namespace ITQJ.WebClient.Controllers
             var personalInfo = new PersonalInfoVM();
             personalInfo.Skills = new List<SkillM>();
             personalInfo.UserId = userCredentials.Id;
+            personalInfo.DocumentTypes = await CallApiGETAsync<List<DocumentTypeDTO>>("/api/documentTypes");
 
             if (userCredentials.Role == "Profesional")
             {
