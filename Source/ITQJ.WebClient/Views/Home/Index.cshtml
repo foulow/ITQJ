@@ -2,6 +2,9 @@
 @{
     ViewData["Title"] = "Inicio";
     string Descr = "";
+
+    int Nex = Model.PageIndex + 1, Back = Model.PageIndex - 1;
+
 }
 
 @if (!User.Identity.IsAuthenticated)
@@ -13,35 +16,78 @@ else
     <h2>Hola @ViewBag.UserName!</h2>
 }
 
+    <br />
 
-@*<nav aria-label="Page navigation exmple">
+    <div>
 
-        <ul class="pagination justify-content-center">
+        <h4>Proyectos Recientes</h4>
+        <hr />
 
-            @foreach (var pagina in Model.ResultCount)
-            {
+        <div class="d-block p-0 m-0">
 
-                <li style="cursor: pointer;" class="page-item @(pagina.Habilitada ? null : "disabled") @(pagina.Activa ? "active" : null)">
+            <div class="d-inline-block bg-dark m-0 p-0" style="position:relative; left:50%; transform: translateX(-50%);">
 
-                    <span class="page-link"> @pagina.Texto </span>
+                <nav aria-label="Page navigation example h2">
 
-                </li>
+                    <ul class="pagination">
 
-            }
+                        @if (Model.PageIndex != 1)
+                        {
+                            <li class="page-item">
 
-        </ul>
+                                <a class="page-link" aria-label="Previous" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Back">
+                                    <span aria-hidden="true" class="text-dark">&laquo;</span>
+                                </a>
 
-    </nav>*@
+                            </li>
+                        }
 
-<br />
 
-<div class="container">
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            if (i == Model.PageIndex)
+                            {
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link text-dark">
+                                        @i
+                                        <span class="sr-only">(current)</span>
+                                    </span>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item">
 
-    <h4>Proyectos Recientes</h4>
-    <hr />
+                                    <a class="page-link text-dark" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@i">@i</a>
 
-    @if (Model.Projects != null && Model.Projects.Count > 0)
-    {
+                                </li>
+                            }
+
+                        }
+
+
+                        @if (Model.PageIndex != Model.TotalPages)
+                        {
+                            <li class="page-item">
+
+                                <a class="page-link" aria-label="Next" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Nex">
+
+                                    <span aria-hidden="true" class="text-dark">&raquo;</span>
+
+                                </a>
+
+                            </li>
+                        }
+
+                    </ul>
+
+                </nav>
+
+            </div>
+
+        </div>
+
+        <hr />
 
         @foreach (var dato in Model.Projects)
         {

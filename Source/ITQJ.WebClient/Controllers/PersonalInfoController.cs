@@ -36,6 +36,7 @@ namespace ITQJ.WebClient.Controllers
             return View(personalInfoDTO);
         }
 
+
         [Authorize]
         public async Task<IActionResult> EditProfesional()
         {
@@ -49,8 +50,10 @@ namespace ITQJ.WebClient.Controllers
             if (personalInfo == null)
                 return RedirectToAction("Register");
 
+
             return View(personalInfo);
         }
+
 
         [Authorize]
         public async Task<IActionResult> Contratist(string userId)
@@ -86,9 +89,30 @@ namespace ITQJ.WebClient.Controllers
 
             if (personalInfo == null)
                 return RedirectToAction("Register");
-
+             
             return View(personalInfo);
         }
+
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> EditContratist(PersonalInfoResponseDTO personalInfoResponseDTO)
+        {
+            if(!ModelState.IsValid)
+            {
+                return Ok("Reintende nuevamente.");
+            }
+
+            var retuno = await CallApiPOSTAsync<PersonalInfoResponseDTO>("/api/PersonalInfo/EditPersonalInfo/" + personalInfoResponseDTO.UserId, personalInfoResponseDTO);
+
+            //if (retuno.Equals(null))
+            //{
+            //    return Ok("Reintende nuevamente.");
+            //}"/PersonalInfo/EditContratist?userName=" + 
+
+            return RedirectToAction("EditContratist", new { userName = personalInfoResponseDTO.User.UserName });
+        }
+
 
         [Authorize]
         public async Task<IActionResult> Register()

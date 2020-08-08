@@ -27,6 +27,5 @@ namespace ITQJ.Domain.DTOs
         public ICollection<PostulantResponseDTO> Postulants { get; set; }
         public ICollection<MessageResponseDTO> Messages { get; set; }
 
-
     }
 }
