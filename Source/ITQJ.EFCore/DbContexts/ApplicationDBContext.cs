@@ -48,6 +48,9 @@
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Subject)
                 .IsUnique();
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
 
             modelBuilder.Entity<LegalDocument>()
                 .HasOne(e => e.DocumentType)
