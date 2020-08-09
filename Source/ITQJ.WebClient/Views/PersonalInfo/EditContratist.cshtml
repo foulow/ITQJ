@@ -9,7 +9,7 @@
 
         <div class="border p-1 m-0 badge-light text-center text-dark" style="position:relative; left:50%; transform:translateX(-50%); border-radius:70% 70% 0% 0%">
 
-            <h1 class="display-2">@Model.User.UserName</h1>
+            <h1 class="display-2">@Model.User.</h1>
 
         </div>
 
@@ -21,20 +21,12 @@
 
     <div hidden>
 
-        <label asp-for="User.UserName"></label>
-        <input asp-for="User.UserName" type="text" />
-
         <label asp-for="User.Id"></label>
         <input asp-for="User.Id" type="text" />
 
-        <label asp-for="User.Password"></label>
-        <input asp-for="User.Password" type="text" />
 
         <label asp-for="User.Role"></label>
         <input asp-for="User.Role" type="text" />
-
-        <label asp-for="User.RoleId"></label>
-        <input asp-for="User.RoleId" type="text" />
 
     </div>
 

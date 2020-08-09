@@ -7,196 +7,290 @@
 
 }
 
-@if (!User.Identity.IsAuthenticated)
-{
-    <h2>Bienvenido a ITQJ!</h2>
-}
-else
-{
-    <h2>Hola @ViewBag.UserName!</h2>
-}
+    <section class="Main">
 
-    <br />
-
-    <div>
-
-        <h4>Proyectos Recientes</h4>
-        <hr />
-
-        <div class="d-block p-0 m-0">
-
-            <div class="d-inline-block bg-dark m-0 p-0" style="position:relative; left:50%; transform: translateX(-50%);">
-
-                <nav aria-label="Page navigation example h2">
-
-                    <ul class="pagination">
-
-                        @if (Model.PageIndex != 1)
-                        {
-                            <li class="page-item">
-
-                                <a class="page-link" aria-label="Previous" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Back">
-                                    <span aria-hidden="true" class="text-dark">&laquo;</span>
-                                </a>
-
-                            </li>
-                        }
+        <section class="articles">
 
 
-                        @for (int i = 1; i <= Model.TotalPages; i++)
-                        {
-                            if (i == Model.PageIndex)
-                            {
-                                <li class="page-item active" aria-current="page">
-                                    <span class="page-link text-dark">
-                                        @i
-                                        <span class="sr-only">(current)</span>
-                                    </span>
-                                </li>
-                            }
-                            else
-                            {
-                                <li class="page-item">
+            <article>
 
-                                    <a class="page-link text-dark" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@i">@i</a>
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <h2>Bienvenido a ITQJ!</h2>
+                }
+                else
+                {
+                    <h2>Hola @ViewBag.UserName!</h2>
+                }
 
-                                </li>
-                            }
+            </article>
 
-                        }
+            <div class="alert alert-primary" role="alert">
 
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
 
-                        @if (Model.PageIndex != Model.TotalPages)
-                        {
-                            <li class="page-item">
+                    <span aria-hidden="true">&times;</span>
 
-                                <a class="page-link" aria-label="Next" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Nex">
+                </button>
 
-                                    <span aria-hidden="true" class="text-dark">&raquo;</span>
+                <h4 class="alert-heading">Politica de Cookies!</h4>
 
-                                </a>
+                <p>
+                    Al navegar en esta pagina, por defecto estas aceptando los terminos y condiciones de
+                    nuestra politica de Cookies.
+                </p>
 
-                            </li>
-                        }
+                <hr>
+                <p class="mb-0">
 
-                    </ul>
+                    Simpre que lo necesites,  pues leer terminos y condiciones de Cookeies,
+                    ve al final de la pagina
 
-                </nav>
+                    <a href="#" class="alert-link">Politica de Cookeis</a> o haga click aqui.
+
+                </p>
 
             </div>
 
-        </div>
+            <article>
 
-        <hr />
+                <h4>Proyectos Recientes</h4>
+                <hr />
 
-        @foreach (var dato in Model.Projects)
-        {
-            <a asp-route-projectId="@dato.Id" asp-controller="Project" asp-action="Index" onmouseover="ProjectOver('@dato.Id')" onmouseout="ProjectDown('@dato.Id')">
+                <div class="d-block p-0 m-0">
 
-                <div style="border: 2px solid lightgray; border-radius: 6px;" id="@dato.Id">
+                    <div class="d-inline-block bg-dark m-0 p-0" style="position:relative; left:50%; transform: translateX(-50%);">
 
-                    <div class="col d-inline-block p-2 m-0  border badge-dark" style="border-radius: 6px;">
+                        <nav aria-label="Page navigation example h2">
 
-                        <div class="col d-inline m-0 p-0">
+                            <ul class="pagination">
 
-                            <strong class="h4 m-0 p-0">
-
-                                @dato.Name
-
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-                    <div class="col d-inline-block m-0 mb-1 p-2">
-
-                        <div class="col d-inline m-0 p-0 ">
-
-                            @if (!dato.Description.Equals(null))
-                            {
-                                if (dato.Description.Length >= 100)
+                                @if (Model.PageIndex != 1)
                                 {
-                                    Descr = dato.Description.Substring(0, 150);
-                                    Descr += "...";
-                                }
-                                else if (dato.Description.Equals(string.Empty))
-                                {
-                                    Descr = "Sin Descripción.";
-                                }
-                                else
-                                {
-                                    Descr = dato.Description;
+                                    <li class="page-item">
+
+                                        <a class="page-link" aria-label="Previous" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Back">
+                                            <span aria-hidden="true" class="text-dark">&laquo;</span>
+                                        </a>
+
+                                    </li>
                                 }
 
-                            }
 
-                            <strong class="h6 m-0 p-0">
+                                @for (int i = 1; i <= Model.TotalPages; i++)
+                                {
+                                    if (i == Model.PageIndex)
+                                    {
+                                        <li class="page-item active" aria-current="page">
+                                            <span class="page-link text-dark">
+                                                @i
+                                                <span class="sr-only">(current)</span>
+                                            </span>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item">
 
-                                @Descr
+                                            <a class="page-link text-dark" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@i">@i</a>
 
-                            </strong>
+                                        </li>
+                                    }
 
-                        </div>
+                                }
 
-                    </div>
 
-                    <div class="col d-inline-block m-0 mb-1 p-2">
+                                @if (Model.PageIndex != Model.TotalPages)
+                                {
+                                    <li class="page-item">
 
-                        <div class="col d-inline m-0 p-0 ">
+                                        <a class="page-link" aria-label="Next" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Nex">
 
-                            <strong class="h6 m-0 p-0">
+                                            <span aria-hidden="true" class="text-dark">&raquo;</span>
 
-                                Publicado: <text class="text-info">@dato.PublishDate</text>
+                                        </a>
 
-                            </strong>
+                                    </li>
+                                }
 
-                        </div>
+                            </ul>
 
-                        <div class="col d-inline  ml-lg-3 p-0 ">
-
-                            <strong class="h6 m-0 p-0">
-
-                                Cierra: <text class="text-danger">@dato.CloseDate</text>
-
-                            </strong>
-
-                        </div>
-
-                        <div class="col d-inline  ml-lg-3 p-0 ">
-
-                            <strong class="h6 m-0 p-0">
-
-                                Postaciones restante: <text class="text-danger">@dato.PostulantsLimit</text>
-
-                            </strong>
-
-                        </div>
+                        </nav>
 
                     </div>
 
                 </div>
 
-            </a>
+                <hr />
 
-            <br />
-            <br />
-        }
-    }
-    else
-    {
-        <h1>Parece que no hay proyectos disponibles de momento.</h1>
-        @if (ViewBag.UserRole == "Contratista")
-        {
-            <p>Sé el primero en publicar un proyecto para que otros profesionales puedan realizar tu trabajo.</p>
-        }
-        else
-        {
-            <p>Intenta entrar nuevamenta dentro de unos minutos.</p>
-        }
-    }
+                @if (Model.Projects != null && Model.Projects.Count > 0)
+                {
+                    @foreach (var dato in Model.Projects)
+                    {
+                        <a asp-route-projectId="@dato.Id" asp-controller="Project" asp-action="Index" onmouseover="ProjectOver('@dato.Id')" onmouseout="ProjectDown('@dato.Id')">
 
-</div>
+                            <div style="border: 2px solid lightgray; border-radius: 6px;" id="@dato.Id">
 
-<button onclick="ScrollUp()" class="ButtonUp" style="outline: none; float: left;"></button>
+                                <div class="col d-inline-block p-2 m-0  border badge-dark" style="border-radius: 6px;">
+
+                                    <div class="col d-inline m-0 p-0">
+
+                                        <strong class="h4 m-0 p-0">
+
+                                            @dato.Name
+
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col d-inline-block m-0 mb-1 p-2">
+
+                                    <div class="col d-inline m-0 p-0 ">
+
+                                        @if (!dato.Description.Equals(null))
+                                        {
+                                            if (dato.Description.Length >= 100)
+                                            {
+                                                Descr = dato.Description.Substring(0, 150);
+                                                Descr += "...";
+                                            }
+                                            else if (dato.Description.Equals(string.Empty))
+                                            {
+                                                Descr = "Sin Descripción.";
+                                            }
+                                            else
+                                            {
+                                                Descr = dato.Description;
+                                            }
+
+                                        }
+
+                                        <strong class="h6 m-0 p-0">
+
+                                            @Descr
+
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col d-inline-block m-0 mb-1 p-2">
+
+                                    <div class="col d-inline m-0 p-0 ">
+
+                                        <strong class="h6 m-0 p-0">
+
+                                            Publicado: <text class="text-info">@dato.PublishDate</text>
+
+                                        </strong>
+
+                                    </div>
+
+                                    <div class="col d-inline  ml-lg-3 p-0 ">
+
+                                        <strong class="h6 m-0 p-0">
+
+                                            Cierra: <text class="text-danger">@dato.CloseDate</text>
+
+                                        </strong>
+
+                                    </div>
+
+                                    <div class="col d-inline  ml-lg-3 p-0 ">
+
+                                        <strong class="h6 m-0 p-0">
+
+                                            Postaciones restante: <text class="text-danger">@dato.PostulantsLimit</text>
+
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </a>
+
+                        <br />
+                        <br />
+                    }
+                }
+                else
+                {
+                    <h1>Parece que no hay proyectos disponibles de momento.</h1>
+                    @if (ViewBag.UserRole == "Contratista")
+                    {
+                        <p>Sé el primero en publicar un proyecto para que otros profesionales puedan realizar tu trabajo.</p>
+                    }
+                    else
+                    {
+                        <p>Intenta entrar nuevamenta dentro de unos minutos.</p>
+                    }
+                }
+
+                <button onclick="ScrollUp()" class="ButtonUp" style="outline: none; float: left;"></button>
+
+            </article>
+
+        </section>
+
+        <aside>
+
+            <div>
+
+                <div class="donacion">
+
+                    <h4 style="margin: 0.2em; ">Donativos</h4>
+
+                    <p>
+                        Si este sitio te parece interesante puedes contribuir con
+                        una pequeña aportación.
+                    </p>
+
+                    <br>
+
+                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+
+                        <input type="hidden" name="cmd" value="_s-xclick">
+
+                        <input type="hidden" name="hosted_button_id" value="F5ZMZH7ALVRCU">
+
+                        <input type="image" src="https://www.paypalobjects.com/es_ES/ES/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal. La forma rápida y segura de pagar en Internet.">
+
+                        <img alt="" border="0" src="https://www.paypalobjects.com/es_ES/i/scr/pixel.gif" width="1" height="1">
+
+                    </form>
+
+                </div>
+
+                <div class="licencia">
+
+                    <a rel="license" href="https://www.copyright.gov/">
+
+                        <img alt="Licencia de Creative Commons" src="~/Image/copyright.svg">
+
+                    </a>
+
+                    <br>
+
+                    Este obra está bajo una
+                    Esta obra está bajo una
+
+                    <a rel="license" href="https://www.copyright.gov/">
+
+                        licencia de Copy Right
+
+                    </a>.
+
+                </div>
+
+            </div>
+
+        </aside>
+
+    </section>
 

@@ -1,184 +1,354 @@
 ﻿@using Microsoft.AspNetCore.Authentication
 <!DOCTYPE html>
-<html lang="en">
 
-<head>
+<html lang="es">
 
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ITQJ.WebClient</title>
+    <head>
 
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] - ITQJ.WebClient</title>
 
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link href="/css/ProfisionalSkill.css" rel="stylesheet" />
-    <link href="/css/BarraConocimiento.css" rel="stylesheet" />
-    <script src="https://kit.fontawesome.com/0358124a37.js" crossorigin="anonymous"></script>
-</head>
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
-<body>
+        <link rel="stylesheet" href="~/css/site.css" />
+        <link href="/css/ProfisionalSkill.css" rel="stylesheet" />
+        <link href="/css/BarraConocimiento.css" rel="stylesheet" />
+        <link href="~/css//Layout.css" rel="stylesheet" />
 
-    <header style="margin:0px; padding:0px; height:160px; margin-bottom:20px;">
+        <script src="https://kit.fontawesome.com/0358124a37.js" crossorigin="anonymous"></script>
 
-        <div class="top-row bg-dark d-block col" style="width:100%; padding:0px; margin:0px; height:65px;">
+    </head>
 
-            <div class="position-relative  bg-primary" style="width:100%; top:30px; z-index:2; height:30px; bottom:0px;">
+    <body onResize="Resize()" class="boddy">
 
-            </div>
-            <div style="left:50%; z-index:3; transform:translate(-50%,-20%); position:absolute;  display:inline-block; ">
+        <header>
 
-                <div>
+            <nav class="top-row d-block col navegador">
 
-                    <a asp-action="Index" asp-controller="Home" asp-route-projectId="1">
-                        <img src="/Image/Logo.png" style="
-                             width: 125px;
-                             height: 125px;
-                             " />
-                    </a>
-
+                <div class="position-relative  bg-primary navegador-linea ">
+                    
                 </div>
 
-            </div>
+                <div class="logo">
 
-            <div class="d-inline-block" style="position:absolute; z-index:3; right:5%; ">
+                    <div>
 
-                <nav class="navbar navbar-expand-md">
+                        <a asp-action="Index" asp-controller="Home" asp-route-projectId="1">
+                            
+                            <img src="/Image/Logo.png" style=" width: 125px; height: 125px;" />
 
-
-                    <div class="navbar-collapse">
-
-                        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-
-                            <div class="btn-group" role="group">
-
-                                <button id="btnGroupDrop1"
-                                        type="button" class="btn btn-dark dropdown-toggle"
-                                        data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
-                                    Perfil
-                                </button>
-
-                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    @if (!User.Identity.IsAuthenticated)
-                                    {
-                                        <a class="dropdown-item"
-                                           asp-controller="Home"
-                                           asp-action="LogIn">Informacion Personal</a>
-                                    }
-                                    else if (ViewBag.UserRole == "Profesional")
-                                    {
-                                        <a class="dropdown-item"
-                                           asp-controller="PersonalInfo"
-                                           asp-action="EditProfesional">Informacion Personal</a>
-                                    }
-                                    else if (ViewBag.UserRole == "Contratista")
-                                    {
-                                        <a class="dropdown-item"
-                                           asp-controller="PersonalInfo"
-                                           asp-action="EditContratist">Informacion Personal</a>
-                                    }
-
-                                </div>
-
-                            </div>
-
-                            <div class="btn-group" role="group">
-
-                                <button id="btnGroupDrop1" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Reseñas
-                                </button>
-
-                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    @if (!User.Identity.IsAuthenticated)
-                                    {
-                                        <a class="dropdown-item" asp-controller="Home" asp-action="LogIn">Hacer Reseña</a>
-                                    }
-                                    else
-                                    {
-                                        <a class="dropdown-item" asp-controller="Review" asp-action="Index">Hacer Reseña</a>
-                                    }
-                                </div>
-
-                            </div>
-
-                            <div class="btn-group" role="group">
-
-                                <button id="btnGroupDrop1" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Proyectos
-                                </button>
-
-                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    @if (!User.Identity.IsAuthenticated)
-                                    {
-                                        <a class="dropdown-item" asp-controller="Home" asp-action="LogIn">Mis proyectos</a>
-                                    }
-                                    else if (ViewBag.UserRole == "Profesional")
-                                    {
-                                        <a class="dropdown-item"
-                                           asp-controller="Postulant"
-                                           asp-action="MyPostulations">Mis postulaciones</a>
-                                    }
-                                    else if (ViewBag.UserRole == "Contratista")
-                                    {
-                                        <a class="dropdown-item"
-                                           asp-controller="Project"
-                                           asp-action="MyProjects">Mis proyectos</a>
-                                    }
-                                </div>
-
-                            </div>
-
-                            <div class="btn-group" role="group">
-
-                                <button id="btnGroupDrop1" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Acceso
-                                </button>
-
-                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    @if (!User.Identity.IsAuthenticated)
-                                    {
-                                        <a class="dropdown-item" asp-action="LogIn">Acceder con Auth0</a>
-
-                                    }
-                                    else
-                                    {
-                                        <a class="dropdown-item" asp-action="LogOut">Finalizar sección</a>
-
-                                    }
-
-                                </div>
-
-                            </div>
-
-                            <div class="btn-group" role="group">
-
-                                <button id="btnGroupDrop1" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Ayuda
-                                </button>
-
-                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-
-                                    <a class="dropdown-item" asp-controller="Home" asp-action="About">Contacto</a>
-
-                                </div>
-
-                            </div>
-
-                        </div>
+                        </a>
 
                     </div>
 
-                </nav>
+                </div>
 
-            </div>
+                <div class="d-inline-block menu-sandwich">
+
+                    <nav class="navbar navbar-light light-blue lighten-4">
+
+                        <div style="cursor:pointer;" onclick="Sandwich()">
+
+                            <button class="navbar-toggler toggler-example sandwich-botton" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1"
+                                    aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation">
+
+                                <span class="dark-blue-text">
+
+                                    <i class="fas fa-bars fa-1x"></i>
+
+                                </span>
+
+                            </button>
+
+                        </div>
+
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+
+                            <ul class="navbar-nav mr-auto">
+
+                                <li class="nav-item active">
+
+                                    <div class="btn-group" role="group">
+
+                                        <button id="btnGroupDrop1"
+                                                type="button" class="btn btn-dark dropdown-toggle"
+                                                data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
+                                            Perfil
+                                        </button>
+
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            @if (!User.Identity.IsAuthenticated)
+                                            {
+                                                <a class="dropdown-item"
+                                                   asp-controller="Home"
+                                                   asp-action="LogIn">Informacion Personal</a>
+                                            }
+                                            else if (ViewBag.UserRole == "Profesional")
+                                            {
+                                                <a class="dropdown-item"
+                                                   asp-controller="PersonalInfo"
+                                                   asp-action="EditProfesional">Informacion Personal</a>
+                                            }
+                                            else if (ViewBag.UserRole == "Contratista")
+                                            {
+                                                <a class="dropdown-item"
+                                                   asp-controller="PersonalInfo"
+                                                   asp-action="EditContratist">Informacion Personal</a>
+                                            }
+
+                                        </div>
+
+                                    </div>
+
+                                </li>
+
+                                <li class="nav-item">
 
 
-        </div>
+                                    <div class="btn-group" role="group">
 
+                                        <button id="btnGroupDrop1" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Reseñas
+                                        </button>
 
-    </header>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            @if (!User.Identity.IsAuthenticated)
+                                            {
+                                                <a class="dropdown-item" asp-controller="Home" asp-action="LogIn">Hacer Reseña</a>
+                                            }
+                                            else
+                                            {
+                                                <a class="dropdown-item" asp-controller="Review" asp-action="Index">Hacer Reseña</a>
+                                            }
+                                        </div>
 
-    <div class="container">
+                                    </div>
+
+                                </li>
+
+                                <li class="nav-item">
+
+                                    <div class="btn-group" role="group">
+
+                                        <button id="btnGroupDrop1" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Proyectos
+                                        </button>
+
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            @if (!User.Identity.IsAuthenticated)
+                                            {
+                                                <a class="dropdown-item" asp-controller="Home" asp-action="LogIn">Mis proyectos</a>
+                                            }
+                                            else if (ViewBag.UserRole == "Profesional")
+                                            {
+                                                <a class="dropdown-item"
+                                                   asp-controller="Postulant"
+                                                   asp-action="MyPostulations">Mis postulaciones</a>
+                                            }
+                                            else if (ViewBag.UserRole == "Contratista")
+                                            {
+                                                <a class="dropdown-item"
+                                                   asp-controller="Project"
+                                                   asp-action="MyProjects">Mis proyectos</a>
+                                            }
+                                        </div>
+
+                                    </div>
+
+                                </li>
+
+                                <li class="nav-item">
+
+                                    <div class="btn-group" role="group">
+
+                                        <button id="btnGroupDrop1" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Acceso
+                                        </button>
+
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            @if (!User.Identity.IsAuthenticated)
+                                            {
+                                                <a class="dropdown-item" asp-action="LogIn">Acceder con Auth0</a>
+
+                                            }
+                                            else
+                                            {
+                                                <a class="dropdown-item" asp-action="LogOut">Finalizar sección</a>
+
+                                            }
+
+                                        </div>
+
+                                    </div>
+
+                                </li>
+
+                                <li class="nav-item">
+
+                                    <div class="btn-group" role="group">
+
+                                        <button id="btnGroupDrop1" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Ayuda
+                                        </button>
+
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+
+                                            <a class="dropdown-item" asp-controller="Home" asp-action="Donations">Donaciones</a>
+
+                                            <a class="dropdown-item" asp-controller="Home" asp-action="About">Contactanos</a>
+
+                                        </div>
+
+                                    </div>
+
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+                    </nav>
+
+                </div>
+
+                <div class="d-inline-block menu-deplegable">
+                
+                    <nav class="navbar navbar-expand-md">
+                
+                        <div class="navbar-collapse">
+                
+                            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                
+                                <div class="btn-group" role="group">
+                
+                                    <button id="btnGroupDrop1"
+                                            type="button" class="btn btn-dark dropdown-toggle"
+                                            data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                        Perfil
+                                    </button>
+                
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        @if (!User.Identity.IsAuthenticated)
+                                        {
+                                            <a class="dropdown-item"
+                                               asp-controller="Home"
+                                               asp-action="LogIn">Informacion Personal</a>
+                                        }
+                                        else if (ViewBag.UserRole == "Profesional")
+                                        {
+                                            <a class="dropdown-item"
+                                               asp-controller="PersonalInfo"
+                                               asp-action="EditProfesional">Informacion Personal</a>
+                                        }
+                                        else if (ViewBag.UserRole == "Contratista")
+                                        {
+                                            <a class="dropdown-item"
+                                               asp-controller="PersonalInfo"
+                                               asp-action="EditContratist">Informacion Personal</a>
+                                        }
+                
+                                    </div>
+                
+                                </div>
+                
+                                <div class="btn-group" role="group">
+                
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Reseñas
+                                    </button>
+                
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        @if (!User.Identity.IsAuthenticated)
+                                        {
+                                            <a class="dropdown-item" asp-controller="Home" asp-action="LogIn">Hacer Reseña</a>
+                                        }
+                                        else
+                                        {
+                                            <a class="dropdown-item" asp-controller="Review" asp-action="Index">Hacer Reseña</a>
+                                        }
+                                    </div>
+                
+                                </div>
+                
+                                <div class="btn-group" role="group">
+                
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Proyectos
+                                    </button>
+                
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        @if (!User.Identity.IsAuthenticated)
+                                        {
+                                            <a class="dropdown-item" asp-controller="Home" asp-action="LogIn">Mis proyectos</a>
+                                        }
+                                        else if (ViewBag.UserRole == "Profesional")
+                                        {
+                                            <a class="dropdown-item"
+                                               asp-controller="Postulant"
+                                               asp-action="MyPostulations">Mis postulaciones</a>
+                                        }
+                                        else if (ViewBag.UserRole == "Contratista")
+                                        {
+                                            <a class="dropdown-item"
+                                               asp-controller="Project"
+                                               asp-action="MyProjects">Mis proyectos</a>
+                                        }
+                                    </div>
+                
+                                </div>
+                
+                                <div class="btn-group" role="group">
+                
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Acceso
+                                    </button>
+                
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        @if (!User.Identity.IsAuthenticated)
+                                        {
+                                            <a class="dropdown-item" asp-action="LogIn">Acceder con Auth0</a>
+                
+                                        }
+                                        else
+                                        {
+                                            <a class="dropdown-item" asp-action="LogOut">Finalizar sección</a>
+                
+                                        }
+                
+                                    </div>
+                
+                                </div>
+                
+                                <div class="btn-group" role="group">
+                
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Ayuda
+                                    </button>
+                
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                
+                                        <a class="dropdown-item" asp-controller="Home" asp-action="Donations">Donaciones</a>
+                
+                                        <a class="dropdown-item" asp-controller="Home" asp-action="About">Contactanos</a>
+                
+                                    </div>
+                
+                                </div>
+                
+                            </div>
+                
+                        </div>
+                
+                    </nav>
+                
+                </div>
+
+            </nav>
+
+        </header>
 
         <main role="main" class="pb-3">
 
@@ -186,41 +356,47 @@
 
         </main>
 
-    </div>
+        <footer>
 
-    <footer class="border-top footer text-muted" style="height:50px;">
+            <div class="container">
 
-        <div class="container">
+                &copy; 2020 - ITQJ.  WebPWA
 
-            &copy; 2020 - ITQJ.  WebPWA -<a class="dropdown-item text-center col-1 d-inline-block m-0 p-2" asp-action="Privacy" asp-controller="Home">Privacidad</a>
+                -<a class="dropdown-item text-center col-1 d-inline-block m-0 pl-2 text-light" asp-action="Privacy" asp-controller="Home"> Privacidad</a>
+                -<a class="dropdown-item text-center col-2 d-inline-block m-0 pl-2 text-light" asp-action="CookiesPolicy" asp-controller="Home"> Politica de Cookeis</a>
+                -<a class="dropdown-item text-center col-1 d-inline-block m-0 pl-2 text-light" asp-action="About" asp-controller="Home"> Nosotros</a>
 
+            </div>
+
+        </footer>
+
+        <partial name="_Chat" />
+
+        <div style="width: 300px; position: fixed; bottom: 12px; right: 12px;">
+            <div id="alert-container" style="width: 100%;"></div>
         </div>
 
-    </footer>
-
-    <partial name="_Chat" />
-
-    <div style="width: 300px; position: fixed; bottom: 12px; right: 12px;">
-        <div id="alert-container" style="width: 100%;"></div>
-    </div>
-
-    <div id="loader" class="loading-indicator">
-        <div class="d-flex justify-content-center align-items-center">
-            <img alt="loading"
-                 src="https://media.giphy.com/media/feN0YJbVs0fwA/giphy.gif"
-                 width="500"
-                 height="500" />
+        <div id="loader" class="loading-indicator">
+            <div class="d-flex justify-content-center align-items-center">
+                <img alt="loading"
+                     src="https://media.giphy.com/media/feN0YJbVs0fwA/giphy.gif"
+                     width="500"
+                     height="500" />
+            </div>
         </div>
-    </div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/jquery/jquery-dateformat.js"></script>
-    <script src="~/js/signalr/dist/browser/signalr.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/chat.js"></script>
-    <script src="~/js/Funciones.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/lib/jquery/jquery-dateformat.js"></script>
+        <script src="~/js/signalr/dist/browser/signalr.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/js/chat.js"></script>
+        <script src="~/js/Funciones.js" asp-append-version="true"></script>
 
-    @RenderSection("Scripts", required: false)
-</body>
+        @RenderSection("Scripts", required: false)
+
+
+    </body>
+
 </html>
+

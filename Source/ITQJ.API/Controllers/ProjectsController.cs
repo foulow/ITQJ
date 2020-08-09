@@ -43,6 +43,7 @@ namespace ITQJ.API.Controllers
                 Message = "Ok",
                 Result = new
                 {
+                    pageIndex = pageIndex,
                     TotalCount = projectsCount,
                     TotalPages = pagesCount,
                     ResultCount = projectsModel.Count(),
