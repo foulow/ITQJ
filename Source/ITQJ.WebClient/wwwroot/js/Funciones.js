@@ -129,26 +129,27 @@ function ChecClose(CheckPostulant, InputClose)
     else
     {
         date.defaultValue = defaultDate;
-        $("#InputCloseDate").css({ pointerEvents: "painted" });
+        $("#InputCloseDate").css({ pointerEvents: "painted" }); 
         document.getElementById("InputCloseDate").disabled = false;
     }
 
 }
 
 
-$(document).ready(() => {
-    document.getElementById('Lname').style.display = 'none';
-    document.getElementById('Tname').style.display = 'none';
-    document.getElementById('Lemail').style.display = 'none';
-    document.getElementById('Temail').style.display = 'none';
-    document.getElementById('Lnumero').style.display = 'none';
-    document.getElementById('Tnumero').style.display = 'none';
-    document.getElementById('Lling').style.display = 'none';
-    document.getElementById('Tling').style.display = 'none';
-    document.getElementById('Ldescripcion').style.display = 'none';
-    document.getElementById('Tdescripcion').style.display = 'none';
-    document.getElementById('bntGuardar').style.display = 'none';
-    document.getElementById('bntCancelar').style.display = 'none';
+$(document).ready(() =>
+{
+    //document.getElementById('Lname').style.display = 'none';
+    //document.getElementById('Tname').style.display = 'none';
+    //document.getElementById('Lemail').style.display = 'none';
+    //document.getElementById('Temail').style.display = 'none';
+    //document.getElementById('Lnumero').style.display = 'none';
+    //document.getElementById('Tnumero').style.display = 'none';
+    //document.getElementById('Lling').style.display = 'none';
+    //document.getElementById('Tling').style.display = 'none';
+    //document.getElementById('Ldescripcion').style.display = 'none';
+    //document.getElementById('Tdescripcion').style.display = 'none';
+    //document.getElementById('bntGuardar').style.display = 'none';
+    //document.getElementById('bntCancelar').style.display = 'none';
 
 });
 
@@ -182,6 +183,8 @@ function Cancelar()
 function Edit()
     {
 
+    debugger;
+
     document.getElementById('Lname').style.display = 'inline';
     document.getElementById('Tname').style.display = 'inline';
     document.getElementById('Lemail').style.display = 'inline';
@@ -201,4 +204,74 @@ function Edit()
     document.getElementById('Mling').style.display = 'none';
     document.getElementById('Mdescripcion').style.display = 'none';
     document.getElementById('bntEditar').style.display = 'none';
+}
+
+var active = false;
+function Sandwich() {
+
+    if (active == false)
+    {
+
+        $(".navegador").css({ height: "300px" });
+
+        $("#navbarSupportedContent1").css({
+            display: "block"
+        });
+
+        $(".menu").css({
+            position: "absolute",
+            left: "10px",
+            top: "60px"
+        });
+
+        active = true;
+
+    }
+    else
+    {
+
+        $(".navegador").css({ height: "65px" });
+
+        $(".menu").css({
+            position: "relatove",
+            right: "20px",
+            top: "20px"
+        });
+
+        $("#navbarSupportedContent1").css({
+            display: "none"
+        });
+
+        active = false;
+    }
+      
+}
+
+var _with = 0;
+function Resize()
+{
+    if (active == true) {
+
+        _with = $(".boddy").width();
+
+        if (_with => 1300)
+        {
+            $(".navegador").css({ height: "65px" });
+
+            $(".menu").css({
+                position: "relatove",
+                right: "20px",
+                top: "20px"
+            });
+
+            active = false;
+
+            $("#navbarSupportedContent1").css({
+                display: "none"
+            });
+
+        }
+
+    }
+
 }

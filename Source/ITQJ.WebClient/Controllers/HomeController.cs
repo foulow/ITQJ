@@ -55,5 +55,21 @@ namespace ITQJ.WebClient.Controllers
 
             return View();
         }
+
+        public IActionResult CookiesPolicy()
+        {
+            if (User.Identity.IsAuthenticated)
+                GetUserCredentials();
+
+            return View();
+        }
+
+        public IActionResult Donations()
+        {
+            if (User.Identity.IsAuthenticated)
+                GetUserCredentials();
+
+            return View();
+        }
     }
 }

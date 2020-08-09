@@ -1,4 +1,5 @@
 ﻿using ITQJ.Domain.DTOs;
+using ITQJ.Domain.Entities;
 using ITQJ.WebClient.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

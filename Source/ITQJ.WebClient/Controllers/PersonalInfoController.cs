@@ -105,10 +105,6 @@ namespace ITQJ.WebClient.Controllers
 
             var retuno = await CallApiPOSTAsync<PersonalInfoResponseDTO>("/api/PersonalInfo/EditPersonalInfo/" + personalInfoResponseDTO.UserId, personalInfoResponseDTO);
 
-            //if (retuno.Equals(null))
-            //{
-            //    return Ok("Reintende nuevamente.");
-            //}"/PersonalInfo/EditContratist?userName=" + 
 
             return View(personalInfoResponseDTO);
         }
