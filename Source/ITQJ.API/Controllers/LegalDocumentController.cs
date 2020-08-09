@@ -1,4 +1,5 @@
-﻿using ITQJ.Domain.Entities;
+﻿using ITQJ.Domain.DTOs;
+using ITQJ.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -19,6 +20,36 @@ namespace ITQJ.API.Controllers
         {
             var legalDocument = this._appDBContext.LegalDocuments.FirstOrDefault(x => x.Id == legalDocumentId);
             var legalDocumentModel = this._mapper.Map<LegalDocument>(legalDocument);
+
+            return Ok(new
+            {
+                Message = "Ok",
+                Result = legalDocumentModel
+            });
+        }
+
+        [HttpPost]
+        public ActionResult RegisterProfesionalSkill([FromBody] LegalDocumentCreateDTO legalDocument)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new
+                {
+                    Message = "La informacion de registro de skills de usuario invalidos.",
+                    ErrorsCount = ModelState.ErrorCount,
+                    Errors = ModelState.Select(x => x.Value.Errors)
+                });
+            }
+
+            var newLegalDocument = this._mapper.Map<LegalDocument>(legalDocument);
+
+            if (newLegalDocument == null)
+                return BadRequest(new { Error = "No se enviaron los datos esperados." });
+
+            var temporalProfesionalSkill = this._appDBContext.LegalDocuments.Add(newLegalDocument);
+            this._appDBContext.SaveChanges();
+
+            var legalDocumentModel = this._mapper.Map<LegalDocumentResponseDTO>(temporalProfesionalSkill.Entity);
 
             return Ok(new
             {

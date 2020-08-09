@@ -1,6 +1,5 @@
 ﻿namespace ITQJ.Domain.Entities
 {
-    using ITQJ.Domain.Entities;
     using System;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Text.Json.Serialization;
@@ -17,6 +16,12 @@
         [ForeignKey("ProjectId")]
         public virtual Project Project { get; set; }
         public Guid ProjectId { get; set; }
+
+        public bool IsSellected { get; set; }
+
+        public bool HasWorkReview { get; set; }
+
+        public bool HasProyectReview { get; set; }
 
     }
 }

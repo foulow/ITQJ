@@ -76,10 +76,11 @@ namespace ITQJ.WebClient.Controllers
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden)
             {
-                return null;
+                throw new Exception("Problem accessing the API");
             }
 
-            throw new Exception("Problem accessing the API");
+            ViewBag.Errors = await response.Content.ReadAsStringAsync();
+            return null;
         }
 
         protected async Task<T> CallApiPOSTAsync<T>(string uri, T body) where T : class
@@ -126,10 +127,11 @@ namespace ITQJ.WebClient.Controllers
             else if (response.StatusCode == HttpStatusCode.Unauthorized ||
                 response.StatusCode == HttpStatusCode.Forbidden)
             {
-                return null;
+                throw new Exception("Problem accessing the API");
             }
 
-            throw new Exception("Problem accessing the API");
+            ViewBag.Errors = await response.Content.ReadAsStringAsync();
+            return null;
         }
 
         protected async Task<T> CallApiPUTAsync<T>(string uri, T body) where T : class
@@ -176,10 +178,11 @@ namespace ITQJ.WebClient.Controllers
             else if (response.StatusCode == HttpStatusCode.Unauthorized ||
                 response.StatusCode == HttpStatusCode.Forbidden)
             {
-                return null;
+                throw new Exception("Problem accessing the API");
             }
 
-            throw new Exception("Problem accessing the API");
+            ViewBag.Errors = await response.Content.ReadAsStringAsync();
+            return null;
         }
 
         protected async Task<bool> CallApiDELETEAsync(string uri)
@@ -200,7 +203,19 @@ namespace ITQJ.WebClient.Controllers
             var response = await apiClient.SendAsync(
                 request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
 
-            return response.IsSuccessStatusCode;
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized ||
+                response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                throw new Exception("Problem accessing the API");
+            }
+
+            ViewBag.Errors = await response.Content.ReadAsStringAsync();
+            return false;
         }
 
         public IActionResult PageNotFound()

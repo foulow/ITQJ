@@ -7,6 +7,10 @@
     <div style="padding:3px; padding:10px;">
         <form asp-action="Register" method="post">
 
+            <div hidden>
+                <input asp-for="UserId" type="text" />
+            </div>
+
             <h3>Introduca sus datos personales</h3>
             <div class="form-group">
 
@@ -30,11 +34,22 @@
 
             <div class="form-group">
 
+                <i class="fas fa-pencil-alt prefix"></i>
                 <label asp-for="Description" class="control-label">Pequeña descripción</label><br />
 
-                <input type="text" asp-for="Description" /><br />
+                <textarea class="md-textarea form-control" asp-for="Description"></textarea><br />
 
                 <span asp-validation-for="Description" class="text-danger"></span>
+
+            </div>
+
+            <div class="form-group">
+
+                <label asp-for="PagLink" class="control-label">Enlace a su sitio web</label><br />
+
+                <input type="text" asp-for="PagLink" /><br />
+
+                <span asp-validation-for="PagLink" class="text-danger"></span>
 
             </div>
 

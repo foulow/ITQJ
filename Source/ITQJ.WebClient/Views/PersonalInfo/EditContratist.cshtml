@@ -9,7 +9,7 @@
 
         <div class="border p-1 m-0 badge-light text-center text-dark" style="position:relative; left:50%; transform:translateX(-50%); border-radius:70% 70% 0% 0%">
 
-            <h1 class="display-2">@Model.User.</h1>
+            <h1 class="display-2">@ViewBag.UserName</h1>
 
         </div>
 
@@ -24,6 +24,8 @@
         <label asp-for="User.Id"></label>
         <input asp-for="User.Id" type="text" />
 
+        <label asp-for="User.Email"></label>
+        <input asp-for="User.Email" type="text" />
 
         <label asp-for="User.Role"></label>
         <input asp-for="User.Role" type="text" />
@@ -34,7 +36,7 @@
 
         <h4 id="Lname" asp-for="Name">Nombre</h4>
 
-        <input id="Tname" style="margin-left:10px;"  type="text" asp-for="Name" />
+        <input id="Tname" style="margin-left:10px;" type="text" asp-for="Name" />
 
         <span asp-validation-for="Name" class="text-danger"></span>
 

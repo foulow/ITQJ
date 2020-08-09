@@ -89,7 +89,7 @@ namespace ITQJ.WebClient.Controllers
 
             if (personalInfo == null)
                 return RedirectToAction("Register");
-             
+
             return View(personalInfo);
         }
 
@@ -98,9 +98,9 @@ namespace ITQJ.WebClient.Controllers
         [HttpPost]
         public async Task<IActionResult> EditContratist(PersonalInfoResponseDTO personalInfoResponseDTO)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                return Ok("Reintende nuevamente.");
+                return View(personalInfoResponseDTO);
             }
 
             var retuno = await CallApiPOSTAsync<PersonalInfoResponseDTO>("/api/PersonalInfo/EditPersonalInfo/" + personalInfoResponseDTO.UserId, personalInfoResponseDTO);
@@ -152,10 +152,10 @@ namespace ITQJ.WebClient.Controllers
         [Authorize]
         public async Task<IActionResult> Register(PersonalInfoVM personalInfo)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(personalInfo);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return View(personalInfo);
+            //}
 
             // Registra el documento de identidad.
             var newLegalDocument = await CallSecuredApiPOSTAsync<LegalDocumentResponseDTO>("/api/legalDocument", personalInfo.LegalDocument);
@@ -163,7 +163,7 @@ namespace ITQJ.WebClient.Controllers
 
             // Registra la informacion personal.
             var tempPersonalInfo = (PersonalInfoResponseDTO)personalInfo;
-            var newPersonalInfo = await CallSecuredApiPOSTAsync<PersonalInfoResponseDTO>("/api/personailInfo", tempPersonalInfo);
+            var newPersonalInfo = await CallSecuredApiPOSTAsync<PersonalInfoResponseDTO>("/api/personalInfo", tempPersonalInfo);
 
 
             if (newPersonalInfo.User.Role == "Profesional")

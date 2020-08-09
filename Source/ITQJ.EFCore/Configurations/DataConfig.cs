@@ -181,17 +181,20 @@ namespace ITQJ.EFCore.Configurations
                     Email = "jeffreyissaul@hotmail.com",
                     Subject = "auth0|5f0c49e03e0de80013aa852c",
                     Role = "Profesional"
-                    //Password = "password".ToSha256(),
-                    //RoleId = Guid.Parse("31BE72FD-BE58-492A-8976-57FF74DAEB7A")
                 },
                 new User
                 {
                     Id = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84"),
-                    Email = "luiseduardofrias27@hotmail.com",
-                    Subject = "LuisEduardo",
+                    Email = "luiseduardofrias27@gmail.com",
+                    Subject = "auth0|5f2eb494022f3a003d353973",
                     Role = "Contratista"
-                    //Password = "Eduardo".ToSha256(),
-                    //RoleId = Guid.Parse("3D3B586A-EC26-42A3-A63A-026492FFC298")
+                },
+                new User
+                {
+                    Id = Guid.Parse("d2b17c1e-205c-4167-8219-08d839ce621a"),
+                    Email = "jessejose@outlook.es",
+                    Subject = "auth0|5f2b8e5d58e286003737cd4a",
+                    Role = "Contratista"
                 }
             };
 

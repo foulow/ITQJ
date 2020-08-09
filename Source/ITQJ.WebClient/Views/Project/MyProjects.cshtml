@@ -1,13 +1,15 @@
-﻿@model ITQJ.WebClient.ViewModels.PostutantListVM;
+﻿@model ITQJ.WebClient.ViewModels.ProjectListVM
 @{
-    ViewData["Title"] = "Mis Postulaciones";
+    ViewData["Title"] = "Inicio";
     string Descr = "";
 
     int Nex = Model.PageIndex + 1, Back = Model.PageIndex - 1;
+
 }
+
 <div class="container">
 
-    <h4>Mis postulaciones</h4>
+    <h4>Mis proyectos</h4>
     <hr />
 
     <div class="d-block p-0 m-0">
@@ -22,7 +24,7 @@
                     {
                         <li class="page-item">
 
-                            <a class="page-link" aria-label="Previous" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Back">
+                            <a class="page-link" aria-label="Previous" asp-controller="Project" asp-action="MyProjects" asp-route-pageIndex="@Back">
                                 <span aria-hidden="true" class="text-dark">&laquo;</span>
                             </a>
 
@@ -45,7 +47,7 @@
                         {
                             <li class="page-item">
 
-                                <a class="page-link text-dark" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@i">@i</a>
+                                <a class="page-link text-dark" asp-controller="Project" asp-action="MyProjects" asp-route-pageIndex="@i">@i</a>
 
                             </li>
                         }
@@ -57,7 +59,7 @@
                     {
                         <li class="page-item">
 
-                            <a class="page-link" aria-label="Next" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Nex">
+                            <a class="page-link" aria-label="Next" asp-controller="Project" asp-action="MyProjects" asp-route-pageIndex="@Nex">
 
                                 <span aria-hidden="true" class="text-dark">&raquo;</span>
 
@@ -75,14 +77,13 @@
     </div>
 
     <hr />
-
-    @if (Model.Postulants != null && Model.Postulants.Count > 0)
+    @if (Model.Projects != null && Model.Projects.Count > 0)
     {
-        foreach (var postulations in Model.Postulants)
+        @foreach (var dato in Model.Projects)
         {
-            <a asp-route-projectId="@postulations.ProjectId" asp-controller="Project" asp-action="Index" onmouseover="ProjectOver('@postulations.ProjectId')" onmouseout="ProjectDown('@postulations.ProjectId')">
+            <a asp-route-projectId="@dato.Id" asp-controller="Project" asp-action="Edit" onmouseover="ProjectOver('@dato.Id')" onmouseout="ProjectDown('@dato.Id')">
 
-                <div style="border: 2px solid lightgray; border-radius: 6px;" id="@postulations.ProjectId">
+                <div style="border: 2px solid lightgray; border-radius: 6px;" id="@dato.Id">
 
                     <div class="col d-inline-block p-2 m-0  border badge-dark" style="border-radius: 6px;">
 
@@ -90,7 +91,7 @@
 
                             <strong class="h4 m-0 p-0">
 
-                                @postulations.Project.Name
+                                @dato.Name
 
                             </strong>
 
@@ -102,20 +103,20 @@
 
                         <div class="col d-inline m-0 p-0 ">
 
-                            @if (!postulations.Project.Description.Equals(null))
+                            @if (!dato.Description.Equals(null))
                             {
-                                if (postulations.Project.Description.Length >= 100)
+                                if (dato.Description.Length >= 100)
                                 {
-                                    Descr = postulations.Project.Description.Substring(0, 150);
+                                    Descr = dato.Description.Substring(0, 150);
                                     Descr += "...";
                                 }
-                                else if (postulations.Project.Description.Equals(string.Empty))
+                                else if (dato.Description.Equals(string.Empty))
                                 {
                                     Descr = "Sin Descripción.";
                                 }
                                 else
                                 {
-                                    Descr = postulations.Project.Description;
+                                    Descr = dato.Description;
                                 }
 
                             }
@@ -136,7 +137,7 @@
 
                             <strong class="h6 m-0 p-0">
 
-                                Publicado: <text class="text-info">@postulations.Project.PublishDate</text>
+                                Publicado: <text class="text-info">@dato.PublishDate</text>
 
                             </strong>
 
@@ -146,7 +147,7 @@
 
                             <strong class="h6 m-0 p-0">
 
-                                Cierra: <text class="text-danger">@postulations.Project.CloseDate</text>
+                                Cierra: <text class="text-danger">@dato.CloseDate</text>
 
                             </strong>
 
@@ -156,7 +157,7 @@
 
                             <strong class="h6 m-0 p-0">
 
-                                Postaciones restante: <text class="text-danger">@postulations.Project.PostulantsLimit</text>
+                                Postaciones restante: <text class="text-danger">@dato.PostulantsLimit</text>
 
                             </strong>
 
@@ -174,16 +175,18 @@
     }
     else
     {
-        <div class="row text-center">
-            <h1>Parece que no tienes postulaciones!</h1>
-            @if (ViewBag.UserRole == "Profesional")
-            {
-                <p>Comienza a realizar postulaciones, para comenzar a trabajar en tu primer proyecto.</p>
-            }
-            else
-            {
-                <p>No deverias estar aqui, completa el proseso de registro para poder acceder a esta pagina.</p>
-            }
-        </div>
+        <h1>Parece que no hay proyectos disponibles de momento.</h1>
+        @if (ViewBag.UserRole == "Contratista")
+        {
+            <p>Sé el primero en publicar un proyecto para que otros profesionales puedan realizar tu trabajo.</p>
+        }
+        else
+        {
+            <p>Intenta entrar nuevamenta dentro de unos minutos.</p>
+        }
     }
+
 </div>
+
+<button onclick="ScrollUp()" class="ButtonUp" style="outline: none; float: left;"></button>
+
