@@ -44,7 +44,6 @@ namespace ITQJ.API.Controllers
                 Message = "Ok",
                 Result = new
                 {
-                    pageIndex = pageIndex,
                     TotalCount = projectsCount,
                     ResultCount = projectsModel.Count(),
                     TotalPages = pagesCount,
@@ -92,8 +91,9 @@ namespace ITQJ.API.Controllers
                 Result = new
                 {
                     TotalCount = projectsCount,
-                    TotalPages = pagesCount,
                     ResultCount = projectsModel.Count(),
+                    TotalPages = pagesCount,
+                    PageIndex = pageIndex,
                     Projects = projectsModel
                 }
             });

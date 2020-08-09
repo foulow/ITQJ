@@ -350,6 +350,17 @@
 
         </header>
 
+    <div class="container">
+        @if (ViewBag?.Errors != null)
+        {
+            <div class="alert-danger text-center">
+                <h4>Un error inesperado ha ocurrido</h4>
+                <p>
+                    Errores en:<br />
+                    @ViewBag?.Errors
+                </p>
+            </div>
+        }
         <main role="main" class="pb-3">
 
             @RenderBody()
