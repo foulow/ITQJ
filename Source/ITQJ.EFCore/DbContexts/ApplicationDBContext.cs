@@ -70,6 +70,9 @@
             modelBuilder.Entity<Project>()
                 .HasOne(e => e.User)
                 .WithMany(e => e.Projects);
+            modelBuilder.Entity<Project>()
+                .Property(p => p.IsOpen)
+                .HasDefaultValue(true);
 
             modelBuilder.Entity<Postulant>()
                 .HasOne(e => e.Project)

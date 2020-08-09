@@ -1,6 +1,8 @@
 ﻿using ITQJ.Domain.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,10 +49,64 @@ namespace ITQJ.API.Controllers
                 Result = new
                 {
                     TotalCount = reviewsCount,
-                    TotalPages = pagesCount,
                     ResultCount = reviewsModel.Count(),
+                    TotalPages = pagesCount,
+                    PageIndex = pageIndex,
                     Reviews = reviewsModel
                 }
+            });
+        }
+
+        [HttpGet("pending/{userId}")]
+        public ActionResult GetPendingReviews([FromRoute] Guid userId, [FromQuery] string role)
+        {
+            if (userId == null)
+                return BadRequest(new { Message = $"Error: el valor de {nameof(userId)} no puede ser nulo." });
+
+            if (string.IsNullOrWhiteSpace(role))
+                return BadRequest(new { Message = $"Error: el valor de {nameof(role)} no puede ser nulo." });
+
+            var projectsToReview = new List<ProjectResponseDTO>();
+            if (role == "Profesional")
+            {
+                var tempProjectsToReview = _appDBContext.Projects
+                    .Include(i => i.User)
+                    .Where(x =>
+                           x.Postulants.Any(y =>
+                                            y.ProjectId == x.Id &&
+                                            y.IsSellected == true &&
+                                            y.UserId == userId &&
+                                            y.HasProyectReview == false) &&
+                           x.IsOpen == false);
+
+                projectsToReview = _mapper.Map<List<ProjectResponseDTO>>(tempProjectsToReview);
+            }
+            else if (role == "Contratista")
+            {
+                var tempProjectsToReview = _appDBContext.Projects
+                    .Include(i => i.User)
+                    .Where(x =>
+                           x.Postulants.Any(y =>
+                                            y.ProjectId == x.Id &&
+                                            y.IsSellected == true &&
+                                            y.HasWorkReview == false) &&
+                           x.UserId == userId);
+
+                projectsToReview = _mapper.Map<List<ProjectResponseDTO>>(tempProjectsToReview);
+            }
+            else
+            {
+                return Unauthorized(new
+                {
+                    Message = "Error: Intento de acceso fallido."
+                });
+            }
+
+            return Ok(new
+            {
+                Message = "Ok",
+                ResultCount = projectsToReview.Count(),
+                ProjectsToReview = projectsToReview
             });
         }
     }

@@ -11,6 +11,8 @@ namespace ITQJ.WebClient.ViewModels
 
         public int ResultCount { get; set; }
 
+        public int PageIndex { get; set; }
+
         public ICollection<ReviewResponseDTO> Reviews { get; set; }
     }
 }

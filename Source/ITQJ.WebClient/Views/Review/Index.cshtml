@@ -1,34 +1,66 @@
-﻿@model ITQJ.WebClient.ViewModels.ReviewListVM
+﻿@model ITQJ.WebClient.ViewModels.ReviewsToMakeVM
 @{
-    ViewData["Title"] = "Reseñas";
+    ViewData["Title"] = "Hacer Reseña";
 }
+
 <div class="container">
-    @if (Model.Reviews != null && Model.Reviews.Count > 0)
+    <h4>Aquí podras ver las reseñas que esten pendiente</h4>
+
+    @if (ViewBag.UserRole == "Profesional")
     {
-        foreach (var review in Model.Reviews)
-        {
-            <div class="row text-center">
-                <h4>@review.Points Punto(s)</h4>
-                <p>@review.Description</p>
-            </div>
-        }
+        <p>Selecciona una de las reseñas pendiente del/los contratista(s) que desea puntuar</p>
     }
-    else
+    else if (ViewBag.UserRole == "Contratista")
     {
-        <div class="row text-center">
-            <h1>Parece que no tienes reseñas!</h1>
-            @if (ViewBag.UserRole == "Profesional")
-            {
-                <p>Comienza a aplicar a proyectos para resivir una reseña por parte de un contratista.</p>
-            }
-            else if (ViewBag.UserRole == "Contratista")
-            {
-                <p>Comienza a publicar proyectos para resivir una reseña por parte de un profesional.</p>
-            }
-            else
-            {
-                <p>No deverias estar aqui, completa el proseso de registro para poder acceder a esta pagina.</p>
-            }
+        <p>Selecciona una de las reseñas pendiente del/los profesional(es) que desea puntuar</p>
+    }
+
+    @foreach (var postulation in Model.ProjectsToReview)
+    {
+        <div style="border: 2px solid lightgray; border-radius: 6px;" id="@postulation.Id">
+
+            <div class="col d-inline-block p-2 m-0  border badge-dark" style="border-radius: 6px;">
+
+                <div class="col d-inline m-0 p-0">
+
+                    <strong class="h4 m-0 p-0">
+
+                        @postulation.Name
+
+                    </strong>
+
+                </div>
+
+            </div>
+            <form>
+                <div hidden>
+                    <input asp-for="Review.UserId" type="text" value="@postulation.UserId" />
+                </div>
+                <div class="form-group">
+
+                    <label asp-for="Review.Points" class="control-label">Puntiación</label><br />
+
+                    <input type="range" asp-for="Review.Points" min="1" max="5" value="1" /><br />
+
+                    <span asp-validation-for="Review.Points" class="text-danger"></span>
+
+                </div>
+
+                <div class="form-group">
+
+                    <i class="fas fa-pencil-alt prefix"></i>
+                    <label asp-for="Review.Description" class="control-label">Describenos porque desides dar esa puntiación</label><br />
+
+                    <textarea class="md-textarea form-control" asp-for="Review.Description"></textarea><br />
+
+                    <span asp-validation-for="Review.Description" class="text-danger"></span>
+
+                </div>
+                <input type="submit" class="btn badge-dark" style="float:none;" value="Finalizar registro" />
+
+            </form>
+
         </div>
     }
+
 </div>

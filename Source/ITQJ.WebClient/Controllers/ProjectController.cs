@@ -1,9 +1,10 @@
 ﻿using ITQJ.Domain.DTOs;
-using ITQJ.Domain.Models;
+using ITQJ.WebClient.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ITQJ.WebClient.Controllers
@@ -21,7 +22,6 @@ namespace ITQJ.WebClient.Controllers
                 GetUserCredentials();
 
             var projectInfo = await CallApiGETAsync<ProjectResponseDTO>("/api/projects/" + projectId);
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
 
             if (projectInfo == null)
                 return PageNotFound();
@@ -29,28 +29,73 @@ namespace ITQJ.WebClient.Controllers
             return View(projectInfo);
         }
 
-
-
+        [Authorize]
+        [HttpGet]
         public IActionResult Publish()
         {
-            return View(new ProjectResponseDTO());
+            var userCredentials = GetUserCredentials();
+
+            if (userCredentials is null || userCredentials.Role != "Contratista")
+                return PageNotFound();
+
+            var newProject = new ProjectResponseDTO();
+            newProject.UserId = userCredentials.Id;
+
+            return View(newProject);
         }
 
 
         [Authorize]
         [HttpPost]
-        public IActionResult Publish(Project project)
+        public async Task<IActionResult> Publish(ProjectResponseDTO project)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(project);
+            }
+
+            var newProject = await CallSecuredApiPOSTAsync<ProjectResponseDTO>("/api/projects", project);
+
+            return RedirectToRoute(new { action = "Index", controller = "Project", projectId = newProject.Id });
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Edit(string projectId)
+        {
+            if (string.IsNullOrWhiteSpace(projectId))
+                return PageNotFound();
 
             var userCredentials = GetUserCredentials();
 
-            if (userCredentials is null || userCredentials.Role == "Contratista")
+            if (userCredentials is null || userCredentials.Role != "Contratista")
                 return PageNotFound();
 
-            return View();
+            var myProyect = await CallSecuredApiGETAsync<ProjectResponseDTO>("api/projects/myprojects/" + projectId);
+
+            if (userCredentials.Id != myProyect.UserId)
+                return PageNotFound();
+
+            return View(myProyect);
         }
 
 
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Edit(ProjectResponseDTO project)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(project);
+            }
+
+            var newProject = await CallSecuredApiPUTAsync<ProjectResponseDTO>("/api/projects/myprojects/" + project.Id.ToString(), project);
+
+            if (newProject == null)
+                return View(project);
+
+            return RedirectToAction("Edit", new { projectId = newProject.Id.ToString() });
+        }
 
         [Authorize]
         [HttpPost]
@@ -76,5 +121,26 @@ namespace ITQJ.WebClient.Controllers
             return RedirectToAction("Index", new { projectId = projectId });
         }
 
+
+        [Authorize]
+        public async Task<IActionResult> MyProjects(int pageIndex = 1, int maxResults = 5)
+        {
+            var userCredentials = GetUserCredentials();
+
+            if (userCredentials is null || userCredentials.Role != "Contratista")
+                return PageNotFound();
+
+            string currentPage = (pageIndex < 1) ? "1" : pageIndex.ToString();
+            string maxProjectsCount = (maxResults < 5) ? "5" : (maxResults > 100) ? "100" : maxResults.ToString();
+            var queryResult = new Dictionary<string, string>
+            {
+                { nameof(pageIndex), currentPage },
+                { nameof(maxResults), maxProjectsCount }
+            };
+
+            var projects = await CallApiGETAsync<ProjectListVM>("/api/projects/current/" + userCredentials.Id.ToString() + QueryString.Create(queryResult));
+
+            return View(projects);
+        }
     }
 }

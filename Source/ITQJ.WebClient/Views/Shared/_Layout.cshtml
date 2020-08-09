@@ -91,11 +91,23 @@
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                     @if (!User.Identity.IsAuthenticated)
                                     {
-                                        <a class="dropdown-item" asp-controller="Home" asp-action="LogIn">Hacer Reseña</a>
+                                        <a class="dropdown-item"
+                                           asp-controller="Home"
+                                           asp-action="LogIn">Hacer Reseña</a>
+                                        <a class="dropdown-item"
+                                           asp-controller="Home"
+                                           asp-action="LogIn">Mis Reseñas</a>
+
                                     }
                                     else
                                     {
-                                        <a class="dropdown-item" asp-controller="Review" asp-action="Index">Hacer Reseña</a>
+                                        <a class="dropdown-item"
+                                           asp-controller="Review"
+                                           asp-action="Index">Hacer Reseña</a>
+                                        <a class="dropdown-item"
+                                           asp-controller="Review"
+                                           asp-action="MyReviews">Mis Reseñas</a>
+
                                     }
                                 </div>
 
@@ -110,7 +122,12 @@
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                     @if (!User.Identity.IsAuthenticated)
                                     {
-                                        <a class="dropdown-item" asp-controller="Home" asp-action="LogIn">Mis proyectos</a>
+                                        <a class="dropdown-item"
+                                           asp-controller="Home"
+                                           asp-action="LogIn">Publicar proyecto</a>
+                                        <a class="dropdown-item"
+                                           asp-controller="Home"
+                                           asp-action="LogIn">Mis proyectos</a>
                                     }
                                     else if (ViewBag.UserRole == "Profesional")
                                     {
@@ -120,6 +137,9 @@
                                     }
                                     else if (ViewBag.UserRole == "Contratista")
                                     {
+                                        <a class="dropdown-item"
+                                           asp-controller="Project"
+                                           asp-action="Publish">Publicar proyecto</a>
                                         <a class="dropdown-item"
                                            asp-controller="Project"
                                            asp-action="MyProjects">Mis proyectos</a>

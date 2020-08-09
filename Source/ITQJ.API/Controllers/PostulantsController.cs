@@ -40,11 +40,11 @@ namespace ITQJ.API.Controllers
                 .Take(maxResults)
                 .ToList();
 
-            var reviewsCount = this._appDBContext.Postulants
+            var postulantsCount = this._appDBContext.Postulants
                 .Where(x => x.UserId == userId && x.DeletedFlag == false)
                 .Count();
 
-            var pagesCount = Math.Ceiling((float)reviewsCount / (float)maxResults);
+            var pagesCount = Math.Ceiling((float)postulantsCount / (float)maxResults);
 
             var reviewsModel = this._mapper.Map<IEnumerable<PostulantResponseDTO>>(reviews);
 
@@ -53,9 +53,10 @@ namespace ITQJ.API.Controllers
                 Message = "Ok",
                 Result = new
                 {
-                    TotalCount = reviewsCount,
-                    TotalPages = pagesCount,
+                    TotalCount = postulantsCount,
                     ResultCount = reviewsModel.Count(),
+                    TotalPages = pagesCount,
+                    PageIndex = pageIndex,
                     Reviews = reviewsModel
                 }
             });

@@ -1,4 +1,5 @@
 ﻿using ITQJ.Domain.DTOs;
+using ITQJ.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -44,8 +45,9 @@ namespace ITQJ.API.Controllers
                 Result = new
                 {
                     TotalCount = projectsCount,
-                    TotalPages = pagesCount,
                     ResultCount = projectsModel.Count(),
+                    TotalPages = pagesCount,
+                    PageIndex = pageIndex,
                     Projects = projectsModel
                 }
             });
@@ -118,7 +120,7 @@ namespace ITQJ.API.Controllers
         }
 
         [Authorize]
-        [HttpGet("/myprojects/{projectId}")]
+        [HttpGet("myprojects/{projectId}")]
         public ActionResult GetUserProjectInfo([FromRoute] Guid projectId)
         {
             if (projectId == null)
@@ -135,9 +137,6 @@ namespace ITQJ.API.Controllers
                 .Include(i => i.Messages)
                 .FirstOrDefault(x => x.Id == projectId && x.UserId == user.Id);
 
-            if (project is null)
-                return NotFound(new { Message = "Error: El recurso no ha sido encontrado." });
-
             var projectModel = this._mapper.Map<ProjectResponseDTO>(project);
 
             return Ok(new
@@ -145,6 +144,65 @@ namespace ITQJ.API.Controllers
                 Message = "Ok",
                 Result = projectModel
             });
+        }
+
+        [HttpPost]
+        public ActionResult RegisterProject([FromBody] ProjectCreateDTO projectData)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new
+                {
+                    Message = "La informacion de registro del proyecto son invalidos.",
+                    ErrorsCount = ModelState.ErrorCount,
+                    Errors = ModelState.Select(x => x.Value.Errors)
+                });
+            }
+
+            var newProject = this._mapper.Map<Project>(projectData);
+
+            if (newProject == null)
+                return BadRequest(new { Error = "No se enviaron los datos esperados." });
+
+            var tempProject = this._appDBContext.Projects.Add(newProject);
+            this._appDBContext.SaveChanges();
+
+            var projectModel = this._mapper.Map<ProjectResponseDTO>(tempProject.Entity);
+
+            return Ok(new
+            {
+                Message = "Ok",
+                Result = projectModel
+            });
+        }
+
+        [HttpPut("myprojects/{projectId}")]
+        public ActionResult UpdateProject([FromRoute] Guid projectId, [FromBody] ProjectUpdateDTO projectData)
+        {
+            if (projectId == null || projectId == new Guid())
+                return BadRequest(new { Message = $"Error: el parametro {nameof(projectId)} no puede ser nulo." });
+
+            var entity = this._appDBContext.Projects.FirstOrDefault(item => item.Id == projectId);
+
+            if (entity != null)
+            {
+                var tempProjectToCheck = this._mapper.Map<Project>(projectData);
+
+                var tempProjectToUpdate = this._appDBContext.Projects.Update(tempProjectToCheck);
+                this._appDBContext.SaveChanges();
+
+                var projectModel = this._mapper.Map<ProjectResponseDTO>(tempProjectToUpdate.Entity);
+
+                return Ok(new
+                {
+                    Message = "Ok",
+                    Result = projectModel
+                });
+            }
+            else
+            {
+                return NotFound(new { Message = "El recurso a actualizar no ha sido encontrado." });
+            }
         }
     }
 }

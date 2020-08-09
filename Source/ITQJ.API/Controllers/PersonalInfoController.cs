@@ -28,6 +28,9 @@ namespace ITQJ.API.Controllers
                 .Include(i => i.ProfesionalSkills)
                 .FirstOrDefault(x => x.UserId == userId);
 
+            if (personalInfo is null)
+                return NotFound(new { Error = "El recurso no ha sido encontrado." });
+
             var personalInfoModel = this._mapper.Map<PersonalInfoResponseDTO>(personalInfo);
 
             return Ok(new
@@ -40,22 +43,22 @@ namespace ITQJ.API.Controllers
         [HttpPost]
         public ActionResult RegisterPersonalInfo([FromBody] PersonalInfoCreateDTO personalInfoData)
         {
-            var newPersonalInfo = this._mapper.Map<PersonalInfo>(personalInfoData);
-            if (personalInfoData.UserId != null)
+            if (!ModelState.IsValid)
             {
-                var subject = HttpContext.User.Claims.FirstOrDefault(c =>
-                    c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
-
-                var user = this._appDBContext.Users
-                    .FirstOrDefault(x => x.Subject == subject);
-
-                newPersonalInfo.UserId = user.Id;
+                return BadRequest(new
+                {
+                    Message = "La informacion de registro de los datos personales son invalidos.",
+                    ErrorsCount = ModelState.ErrorCount,
+                    Errors = ModelState.Select(x => x.Value.Errors)
+                });
             }
+
+            var newPersonalInfo = this._mapper.Map<PersonalInfo>(personalInfoData);
 
             var tempPersonalInfo = this._appDBContext.PersonalInfos.Add(newPersonalInfo);
             this._appDBContext.SaveChanges();
 
-            var personalInfoModel = this._mapper.Map<UserResponseDTO>(tempPersonalInfo.Entity);
+            var personalInfoModel = this._mapper.Map<PersonalInfoResponseDTO>(tempPersonalInfo.Entity);
 
             return Ok(new
             {
@@ -64,14 +67,13 @@ namespace ITQJ.API.Controllers
             });
         }
 
-        [HttpPut("{Id}")]
-        public ActionResult EditPersonalInfo([FromRoute] string Id, [FromBody] PersonalInfoCreateDTO personalInfoData)
+        [HttpPut("{personalInfoId}")]
+        public ActionResult EditPersonalInfo([FromRoute] string personalInfoId, [FromBody] PersonalInfoUpdateDTO personalInfoData)
         {
-
             var newPersonalInfo = this._mapper.Map<PersonalInfo>(personalInfoData);
-            newPersonalInfo.UserId = Guid.Parse(Id);
+            newPersonalInfo.UserId = Guid.Parse(personalInfoId);
 
-            var entity = this._appDBContext.PersonalInfos.FirstOrDefault(item => item.Id == Guid.Parse(Id));
+            var entity = this._appDBContext.PersonalInfos.FirstOrDefault(item => item.Id == Guid.Parse(personalInfoId));
 
             if (entity != null)
             {
@@ -87,13 +89,9 @@ namespace ITQJ.API.Controllers
                 });
             }
             else
-                return Ok(new
-                {
-                    Message = "Ok"
-                });
-
-
+            {
+                return NotFound(new { Message = "El recurso a actualizar no ha sido encontrado." });
+            }
         }
-
     }
 }
