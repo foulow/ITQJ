@@ -26,6 +26,26 @@
 
     <div class="d-flex justify-content-between bg-info mr-2" onclick="toggleChat()">
 
+@*
+    <div class="d-flex align-items-center"
+         style="position: fixed; right: 0; top: 0; height: 100%;">
+        <div id="fixed-right-chat-button">
+            <button id="button-chat"
+                    onclick="toggleChat()"
+                    type="button"
+                    class="btn bg-info text-light">
+                <i class="fas fa-comment-dots fa-2x m-2"></i>
+            </button>
+        </div>
+    </div>
+*@
+
+<div class="bg-white col-md-6 pl-0" id="fixed-bottom-chat"
+     style="position: fixed; bottom: 0; right: 0;">
+
+    <div class="d-flex text-white bg-info mr-2"
+         onclick="toggleChat()">
+        <i class="fas fa-comment-dots fa-2x m-2 ml-2"></i>
         <span class="h4 card-title mx-3 my-2 text-white">Chat</span>
 
     </div>
