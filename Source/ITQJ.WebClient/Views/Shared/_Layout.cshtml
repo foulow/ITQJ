@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="~/css/site.css" />
         <link href="/css/ProfisionalSkill.css" rel="stylesheet" />
         <link href="/css/BarraConocimiento.css" rel="stylesheet" />
-        <link href="~/css//Layout.css" rel="stylesheet" />
+        <link href="~/css/Layoutdd.css" rel="stylesheet" />
 
         <script src="https://kit.fontawesome.com/0358124a37.js" crossorigin="anonymous"></script>
 
@@ -79,23 +79,27 @@
                                         </button>
 
                                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                            @if (!User.Identity.IsAuthenticated)
+                                            @if(!User.Identity.IsAuthenticated)
                                             {
                                                 <a class="dropdown-item"
                                                    asp-controller="Home"
                                                    asp-action="LogIn">Informacion Personal</a>
                                             }
-                                            else if (ViewBag.UserRole == "Profesional")
+                                            else if(ViewBag.UserRole == "Profesional")
                                             {
                                                 <a class="dropdown-item"
                                                    asp-controller="PersonalInfo"
                                                    asp-action="EditProfesional">Informacion Personal</a>
                                             }
-                                            else if (ViewBag.UserRole == "Contratista")
+                                            else if(ViewBag.UserRole == "Contratista")
                                             {
                                                 <a class="dropdown-item"
                                                    asp-controller="PersonalInfo"
                                                    asp-action="EditContratist">Informacion Personal</a>
+
+                                                <a class="dropdown-item"
+                                                   asp-controller="Projects"
+                                                   asp-action="Publich">Publicar</a>
                                             }
 
                                         </div>
@@ -350,18 +354,18 @@
 
         </header>
 
-    <div class="container">
-        @if (ViewBag?.Errors != null)
-        {
-            <div class="alert-danger text-center">
-                <h4>Un error inesperado ha ocurrido</h4>
-                <p>
-                    Errores en:<br />
-                    @ViewBag?.Errors
-                </p>
-            </div>
-        }
         <main role="main" class="pb-3">
+
+            @if (ViewBag?.Errors != null)
+            {
+                <div class="alert-danger text-center">
+                    <h4>Un error inesperado ha ocurrido</h4>
+                    <p>
+                        Errores en:<br />
+                        @ViewBag?.Errors
+                    </p>
+                </div>
+            }
 
             @RenderBody()
 
@@ -369,13 +373,13 @@
 
         <footer>
 
-            <div class="container">
+            <div class="footerContainer">
 
-                &copy; 2020 - ITQJ.  WebPWA
+                <label>&copy; 2020 - ITQJ.  WebPWA</label>
 
-                -<a class="dropdown-item text-center col-1 m-0 pl-2 text-light" asp-action="Privacy" asp-controller="Home"> Privacidad</a>
-                -<a class="dropdown-item text-center col-2 m-0 pl-2 text-light" asp-action="CookiesPolicy" asp-controller="Home"> Politica de Cookeis</a>
-                -<a class="dropdown-item text-center col-1 m-0 pl-2 text-light" asp-action="About" asp-controller="Home"> Nosotros</a>
+                <a class="dropdown-item" asp-action="Privacy" asp-controller="Home">Privacidad</a>
+                <a class="dropdown-item" asp-action="CookiesPolicy" asp-controller="Home">Politica de Cookeis</a>
+                <a class="dropdown-item" asp-action="About" asp-controller="Home">Nosotros</a>
 
             </div>
 

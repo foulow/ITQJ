@@ -89,6 +89,16 @@ footer {
     height:1%;
 }
 
+.footerContainer label{
+    margin:0px 0px 0px 15px;
+}
+
+.footerContainer a {
+    color: #fff;
+    display: inline;
+    padding: 0px 5px 0px 5px;
+}
+
 .sandwich-botton {
     visibility: hidden;
 }
@@ -137,6 +147,7 @@ footer {
 {
     aside {
         visibility: hidden;
+        position: absolute;
     }
 
     .Main .articles {
@@ -147,6 +158,9 @@ footer {
 
 @media (min-width: 1012) {
 
+    .footerContainer a {
+        display: block;
+    }
 
 }
 

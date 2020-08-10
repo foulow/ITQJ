@@ -1,4 +1,20 @@
-﻿function ScrollUp() {
+﻿$(document).ready(() => {
+    document.getElementById('Lname').style.display = 'none';
+    document.getElementById('Tname').style.display = 'none';
+    document.getElementById('Lemail').style.display = 'none';
+    document.getElementById('Temail').style.display = 'none';
+    document.getElementById('Lnumero').style.display = 'none';
+    document.getElementById('Tnumero').style.display = 'none';
+    document.getElementById('Lling').style.display = 'none';
+    document.getElementById('Tling').style.display = 'none';
+    document.getElementById('Ldescripcion').style.display = 'none';
+    document.getElementById('Tdescripcion').style.display = 'none';
+    document.getElementById('bntGuardar').style.display = 'none';
+    document.getElementById('bntCancelar').style.display = 'none';
+
+});
+
+function ScrollUp() {
 
     window.scroll({
         top: 0,
@@ -136,22 +152,7 @@ function ChecClose(CheckPostulant, InputClose)
 }
 
 
-$(document).ready(() =>
-{
-    //document.getElementById('Lname').style.display = 'none';
-    //document.getElementById('Tname').style.display = 'none';
-    //document.getElementById('Lemail').style.display = 'none';
-    //document.getElementById('Temail').style.display = 'none';
-    //document.getElementById('Lnumero').style.display = 'none';
-    //document.getElementById('Tnumero').style.display = 'none';
-    //document.getElementById('Lling').style.display = 'none';
-    //document.getElementById('Tling').style.display = 'none';
-    //document.getElementById('Ldescripcion').style.display = 'none';
-    //document.getElementById('Tdescripcion').style.display = 'none';
-    //document.getElementById('bntGuardar').style.display = 'none';
-    //document.getElementById('bntCancelar').style.display = 'none';
 
-});
 
 
 function Cancelar()
