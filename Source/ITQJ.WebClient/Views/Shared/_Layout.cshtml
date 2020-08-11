@@ -295,6 +295,9 @@
                                         <a class="dropdown-item"
                                            asp-controller="Project"
                                            asp-action="MyProjects">Mis proyectos</a>
+                                        <a class="dropdown-item"
+                                           asp-controller="Project"
+                                           asp-action="Publish">Publicar</a>
                                     }
                                 </div>
 
@@ -353,7 +356,7 @@
     <main role="main" class="pb-3">
         @if (ViewBag?.Errors != null)
         {
-            <div class="alert-danger text-center">
+            <div class="@ViewBag?.ErrorLevel text-center">
                 <h4>Un error inesperado ha ocurrido</h4>
                 <p>
                     Errores en:<br />

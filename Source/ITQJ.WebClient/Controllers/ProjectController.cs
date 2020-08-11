@@ -21,7 +21,7 @@ namespace ITQJ.WebClient.Controllers
             if (User.Identity.IsAuthenticated)
                 GetUserCredentials();
 
-            var projectInfo = await CallApiGETAsync<ProjectResponseDTO>("/api/projects/" + projectId);
+            var projectInfo = await CallApiGETAsync<ProjectResponseDTO>(uri: "/api/projects/" + projectId, isSecured: true);
 
             if (projectInfo == null)
                 return PageNotFound();
@@ -54,7 +54,7 @@ namespace ITQJ.WebClient.Controllers
                 return View(project);
             }
 
-            var newProject = await CallSecuredApiPOSTAsync<ProjectResponseDTO>("/api/projects", project);
+            var newProject = await CallApiPOSTAsync<ProjectResponseDTO>(uri: "/api/projects", body: project, isSecured: true);
 
             return RedirectToRoute(new { action = "Index", controller = "Project", projectId = newProject.Id });
         }
@@ -71,7 +71,7 @@ namespace ITQJ.WebClient.Controllers
             if (userCredentials is null || userCredentials.Role != "Contratista")
                 return PageNotFound();
 
-            var myProyect = await CallSecuredApiGETAsync<ProjectResponseDTO>("api/projects/myprojects/" + projectId);
+            var myProyect = await CallApiGETAsync<ProjectResponseDTO>(uri: "api/projects/myprojects/" + projectId, isSecured: true);
 
             if (userCredentials.Id != myProyect.UserId)
                 return PageNotFound();
@@ -89,7 +89,7 @@ namespace ITQJ.WebClient.Controllers
                 return View(project);
             }
 
-            var newProject = await CallSecuredApiPUTAsync<ProjectResponseDTO>("/api/projects/myprojects/" + project.Id.ToString(), project);
+            var newProject = await CallApiPUTAsync<ProjectResponseDTO>(uri: "/api/projects/myprojects/" + project.Id.ToString(), body: project, isSecured: true);
 
             if (newProject == null)
                 return View(project);
@@ -109,7 +109,7 @@ namespace ITQJ.WebClient.Controllers
                 UserId = userCredentials.Id
             };
 
-            var repuesta = await CallSecuredApiPOSTAsync<PostulantCreateDTO>("/api/postulants/", newPostulant);
+            var repuesta = await CallApiPOSTAsync<PostulantCreateDTO>(uri: "/api/postulants/", body: newPostulant, isSecured: true);
 
             if (repuesta.Equals(null))
             {
@@ -138,7 +138,13 @@ namespace ITQJ.WebClient.Controllers
                 { nameof(maxResults), maxProjectsCount }
             };
 
-            var projects = await CallApiGETAsync<ProjectListVM>("/api/projects/current/" + userCredentials.Id.ToString() + QueryString.Create(queryResult));
+            var projects = await CallApiGETAsync<ProjectListVM>(uri: "/api/projects/current/" + userCredentials.Id.ToString() + QueryString.Create(queryResult), isSecured: true);
+
+            if (projects == null)
+            {
+                projects = new ProjectListVM();
+                projects.PageIndex = pageIndex;
+            }
 
             return View(projects);
         }

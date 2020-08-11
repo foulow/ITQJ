@@ -15,7 +15,7 @@ namespace ITQJ.WebClient.Controllers
         [HttpGet]
         public async Task<IActionResult> EdictSkills(string userName)
         {
-            var profesionalSkills = await CallApiGETAsync<ProfesionalSkillResponseDTO>("/api/ProfesionalSkills/" + userName);
+            var profesionalSkills = await CallApiGETAsync<ProfesionalSkillResponseDTO>(uri: "/api/ProfesionalSkills/" + userName, isSecured: true);
 
             if (profesionalSkills == null)
                 return PageNotFound();

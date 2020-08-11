@@ -54,6 +54,20 @@ namespace ITQJ.WebClient.Controllers
             return View(personalInfo);
         }
 
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> EditProfesional(PersonalInfoResponseDTO personalInfo)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(personalInfo);
+            }
+
+            var response = await CallApiPUTAsync<PersonalInfoResponseDTO>(uri: "/api/PersonalInfo/EditPersonalInfo/" + personalInfo.UserId, body: personalInfo, isSecured: true);
+
+
+            return View(response);
+        }
 
         [Authorize]
         public async Task<IActionResult> Contratist(string userId)
@@ -96,17 +110,17 @@ namespace ITQJ.WebClient.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> EditContratist(PersonalInfoResponseDTO personalInfoResponseDTO)
+        public async Task<IActionResult> EditContratist(PersonalInfoResponseDTO personalInfo)
         {
             if (!ModelState.IsValid)
             {
-                return View(personalInfoResponseDTO);
+                return View(personalInfo);
             }
 
-            var retuno = await CallApiPOSTAsync<PersonalInfoResponseDTO>("/api/PersonalInfo/EditPersonalInfo/" + personalInfoResponseDTO.UserId, personalInfoResponseDTO);
+            var response = await CallApiPUTAsync<PersonalInfoResponseDTO>(uri: "/api/PersonalInfo/EditPersonalInfo/" + personalInfo.UserId, body: personalInfo, isSecured: true);
 
 
-            return View(personalInfoResponseDTO);
+            return View(response);
         }
 
 
@@ -129,11 +143,11 @@ namespace ITQJ.WebClient.Controllers
             var personalInfo = new PersonalInfoVM();
             personalInfo.Skills = new List<SkillM>();
             personalInfo.UserId = userCredentials.Id;
-            personalInfo.DocumentTypes = await CallApiGETAsync<List<DocumentTypeDTO>>("/api/documentTypes");
+            personalInfo.DocumentTypes = await CallApiGETAsync<List<DocumentTypeDTO>>(uri: "/api/documentTypes", isSecured: false);
 
             if (userCredentials.Role == "Profesional")
             {
-                var tempSkills = await CallApiGETAsync<List<SkillDTO>>("/api/skills");
+                var tempSkills = await CallApiGETAsync<List<SkillDTO>>(uri: "/api/skills", isSecured: false);
                 foreach (var skill in tempSkills)
                 {
                     personalInfo.Skills.Add(new SkillM
@@ -158,12 +172,12 @@ namespace ITQJ.WebClient.Controllers
             //}
 
             // Registra el documento de identidad.
-            var newLegalDocument = await CallSecuredApiPOSTAsync<LegalDocumentResponseDTO>("/api/legalDocument", personalInfo.LegalDocument);
+            var newLegalDocument = await CallApiPOSTAsync<LegalDocumentResponseDTO>(uri: "/api/legalDocument", body: personalInfo.LegalDocument, isSecured: true);
             personalInfo.LegalDocumentId = newLegalDocument.Id;
 
             // Registra la informacion personal.
             var tempPersonalInfo = (PersonalInfoResponseDTO)personalInfo;
-            var newPersonalInfo = await CallSecuredApiPOSTAsync<PersonalInfoResponseDTO>("/api/personalInfo", tempPersonalInfo);
+            var newPersonalInfo = await CallApiPOSTAsync<PersonalInfoResponseDTO>(uri: "/api/personalInfo", body: tempPersonalInfo, isSecured: true);
 
 
             if (newPersonalInfo.User.Role == "Profesional")
@@ -180,7 +194,7 @@ namespace ITQJ.WebClient.Controllers
                     };
                     temProfesionalSkills.Add(profesionalSkill);
                 }
-                _ = await CallSecuredApiPOSTAsync("/api/profesionalSkills/", temProfesionalSkills);
+                _ = await CallApiPOSTAsync(uri: "/api/profesionalSkills/", body: temProfesionalSkills, isSecured: true);
 
                 return RedirectToAction("EditProfesional");
 
@@ -196,7 +210,7 @@ namespace ITQJ.WebClient.Controllers
 
         private Task<PersonalInfoResponseDTO> GetPersonalInfo(string userId)
         {
-            return CallSecuredApiGETAsync<PersonalInfoResponseDTO>("/api/personalInfo/" + userId);
+            return CallApiGETAsync<PersonalInfoResponseDTO>(uri: "/api/personalInfo/" + userId, isSecured: true);
         }
     }
 }

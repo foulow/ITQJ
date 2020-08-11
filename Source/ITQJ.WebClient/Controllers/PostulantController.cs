@@ -22,6 +22,12 @@ namespace ITQJ.WebClient.Controllers
 
             var myPostulations = await GetPostulations(userCredentials.Id.ToString(), pageIndex, maxResults);
 
+            if (myPostulations == null)
+            {
+                myPostulations = new PostutantListVM();
+                myPostulations.PageIndex = pageIndex;
+            }
+
             return View(myPostulations);
         }
 
@@ -35,7 +41,7 @@ namespace ITQJ.WebClient.Controllers
                 { nameof(maxResults), maxProjectsCount }
             };
 
-            return CallSecuredApiGETAsync<PostutantListVM>("api/postulants/mypostulations/" + userId + QueryString.Create(queryResult));
+            return CallApiGETAsync<PostutantListVM>(uri: "api/postulants/mypostulations/" + userId + QueryString.Create(queryResult), isSecured: true);
         }
     }
 }

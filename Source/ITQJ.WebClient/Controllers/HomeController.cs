@@ -35,7 +35,13 @@ namespace ITQJ.WebClient.Controllers
                 { nameof(maxResults), maxProjectsCount }
             };
 
-            var projects = await CallApiGETAsync<ProjectListVM>("/api/projects/" + QueryString.Create(queryResult));
+            var projects = await CallApiGETAsync<ProjectListVM>(uri: "/api/projects/" + QueryString.Create(queryResult), isSecured: false);
+
+            if (projects == null)
+            {
+                projects = new ProjectListVM();
+                projects.PageIndex = pageIndex;
+            }
 
             return View(projects);
         }
