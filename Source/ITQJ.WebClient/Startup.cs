@@ -47,6 +47,7 @@ namespace ITQJ.WebClient
                 });
 
             var apiURL = Configuration["APIURL"];
+
             services.AddHttpClient("SecuredAPIClient", client =>
                 {
                     client.BaseAddress = new Uri(apiURL);
@@ -75,18 +76,25 @@ namespace ITQJ.WebClient
             });
 
             // IdentityServer client configuration.
+            //var idpURL = Configuration["autorityURL"];
             //services.AddTransient<IdentityServerBearerTokenHandler>();
-            //var authorityURL = Configuration["AuthorityURL"];
             //services.AddHttpClient("IDPClient", client =>
             //    {
-            //        client.BaseAddress = new Uri(authorityURL);
+            //        client.BaseAddress = new Uri(idpURL);
             //        client.DefaultRequestHeaders.Clear();
             //        client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
             //    });
             //services.Configure<ClientCredentialsM>(Configuration.GetSection("ClientConfiguration:IdentityServer"));
-            //var scopes = Configuration.GetSection("ClientConfiguration:Auth0:AllowedScopes").GetChildren();
+            //var scopes = Configuration.GetSection("ClientConfiguration:IdentityServer:AllowedScopes").GetChildren();
 
             // Auth0 client configuration.
+            var idpURL = Configuration["ClientConfiguration:Auth0:Authority"];
+            services.AddHttpClient("IDPClient", client =>
+                {
+                    client.BaseAddress = new Uri(idpURL);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Add(Microsoft.Net.Http.Headers.HeaderNames.Accept, "application/json");
+                });
             services.AddTransient<Auth0BearerTokenHandler>();
             services.Configure<ClientCredentialsM>(Configuration.GetSection("ClientConfiguration:Auth0"));
             var scopes = Configuration.GetSection("ClientConfiguration:Auth0:AllowedScopes").GetChildren();
@@ -95,7 +103,8 @@ namespace ITQJ.WebClient
                 {
                     // IdentityServer client configuration.
                     //options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    //options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme; //oidc
+                    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                    //options.DefaultChallengeScheme = "oidc";
 
                     // Auth0 client configuration.
                     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -106,8 +115,9 @@ namespace ITQJ.WebClient
                 {
                     options.AccessDeniedPath = "/Authorization/AccessDenied";
                 })
-                //.AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options => //oidc
-                .AddOpenIdConnect("Auth0", options => //oidc
+                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
+                //.AddOpenIdConnect("oidc", options =>
+                //.AddOpenIdConnect("Auth0", options =>
                 {
                     // General client configuration.
                     options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -139,7 +149,7 @@ namespace ITQJ.WebClient
                     options.RequireHttpsMetadata = false;
                     options.ClientId = Configuration["ClientConfiguration:Auth0:ClientId"];
                     options.ClientSecret = Configuration["ClientConfiguration:Auth0:ClientSecret"];
-                    options.ResponseType = "id_token code";
+                    options.ResponseType = "code";
                     options.ClaimActions.MapUniqueJsonKey("role", "role");
                     options.ClaimActions.MapUniqueJsonKey("email", "email");
                     options.ClaimActions.MapUniqueJsonKey("name", "name");

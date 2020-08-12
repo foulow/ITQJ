@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Newtonsoft.Json.Linq;
+using RestSharp;
 using System;
 using System.Globalization;
 using System.Net.Http;
@@ -37,7 +39,11 @@ namespace ITQJ.WebClient.HttpHandlers
         {
             var accessToken = await GetAccessTokenAsync();
 
-            if (!string.IsNullOrWhiteSpace(accessToken))
+            if (string.IsNullOrWhiteSpace(accessToken))
+            {
+                await _httpContextAccessor.HttpContext.ChallengeAsync("Auth0", new AuthenticationProperties() { RedirectUri = "/" });
+            }
+            else
             {
                 request.SetBearerToken(accessToken);
             }
@@ -49,10 +55,16 @@ namespace ITQJ.WebClient.HttpHandlers
         {
             var expiresAt = await _httpContextAccessor
                 .HttpContext.GetTokenAsync("expires_at");
+            if (string.IsNullOrWhiteSpace(expiresAt))
+                expiresAt = await _httpContextAccessor.HttpContext.GetTokenAsync("expires_in");
+
+            if (string.IsNullOrWhiteSpace(expiresAt))
+            {
+                return "";
+            }
 
             var expiresAtDataTimeOffset =
                 DateTimeOffset.Parse(expiresAt, CultureInfo.InvariantCulture);
-
 
             if ((expiresAtDataTimeOffset.AddSeconds(-60)).ToUniversalTime() > DateTime.UtcNow)
             {
@@ -60,66 +72,56 @@ namespace ITQJ.WebClient.HttpHandlers
                     .HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
             }
 
-            var idpClient = _httpClientFactory.CreateClient("IDPClient");
-
-            var discoveryResponse = await idpClient.GetDiscoveryDocumentAsync();
-            if (discoveryResponse.IsError)
-            {
-                throw new Exception(
-                    "Problem accessing the Discovery endpoint.",
-                    discoveryResponse.Exception);
-            }
-
             var refreshToken = await _httpContextAccessor
                 .HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken);
 
-            var clientCredentials = _clientConfiguration.CurrentValue;
-            var refreshResponse = await idpClient.RequestRefreshTokenAsync(
-                new RefreshTokenRequest
-                {
-                    Address = discoveryResponse.TokenEndpoint,
-
-                    ClientId = clientCredentials.ClientId,
-                    ClientSecret = clientCredentials.ClientSecret,
-                    Scope = clientCredentials.APIName,
-
-                    RefreshToken = refreshToken
-                });
-
-            if (refreshResponse.IsError)
+            if (string.IsNullOrWhiteSpace(refreshToken))
             {
-                throw new Exception(
-                    "Problem accessing the Token endpoint.",
-                    refreshResponse.Exception);
+                return "";
             }
+
+
+            var clientCredentials = _clientConfiguration.CurrentValue;
+            var clientAccess = new RestClient($"{clientCredentials.Authority}/oauth/token");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("content-type", "application/x-www-form-urlencoded");
+            request.AddParameter("application/x-www-form-urlencoded", $"grant_type=refresh_token&client_id={clientCredentials.ClientId}&client_secret={clientCredentials.ClientSecret}&refresh_token={refreshToken}", ParameterType.RequestBody);
+            IRestResponse response = clientAccess.Execute(request);
+            var jsonResponse = JObject.Parse(response.Content);
+
+            var timeLeft =
+                DateTimeOffset.Parse(jsonResponse["expires_in"].Value<string>(), CultureInfo.InvariantCulture);
+            var currentDate = DateTime.UtcNow;
+            var expiresIn = new DateTime(timeLeft.Ticks + currentDate.Ticks);
+
+            var updatedTokens = new AuthenticationToken[]
+                {
+                        new AuthenticationToken
+                        {
+                            Name = OpenIdConnectParameterNames.IdToken,
+                            Value = jsonResponse["id_token"].Value<string>()
+                        },
+                        new AuthenticationToken
+                        {
+                            Name = OpenIdConnectParameterNames.AccessToken,
+                            Value = jsonResponse["access_token"].Value<string>()
+                        },
+                        new AuthenticationToken
+                        {
+                            Name = OpenIdConnectParameterNames.RefreshToken,
+                            Value = refreshToken
+                        },
+                        new AuthenticationToken
+                        {
+                            Name = "expires_at",
+                            Value = expiresIn.Second
+                            .ToString("o", CultureInfo.InvariantCulture)
+                        }
+                };
+
 
             var currentAuthenticationResult = await _httpContextAccessor
                 .HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-            var updatedTokens = new AuthenticationToken[]
-            {
-                new AuthenticationToken
-                {
-                    Name = OpenIdConnectParameterNames.IdToken,
-                    Value = refreshResponse.IdentityToken
-                },
-                new AuthenticationToken
-                {
-                    Name = OpenIdConnectParameterNames.AccessToken,
-                    Value = refreshResponse.AccessToken
-                },
-                new AuthenticationToken
-                {
-                    Name = OpenIdConnectParameterNames.RefreshToken,
-                    Value = refreshResponse.RefreshToken
-                },
-                new AuthenticationToken
-                {
-                    Name = "expires_at",
-                    Value = (DateTime.UtcNow + TimeSpan.FromSeconds(refreshResponse.ExpiresIn))
-                        .ToString("o", CultureInfo.InvariantCulture)
-                }
-            };
 
             currentAuthenticationResult.Properties.StoreTokens(updatedTokens);
 
@@ -128,7 +130,8 @@ namespace ITQJ.WebClient.HttpHandlers
                 currentAuthenticationResult.Principal,
                 currentAuthenticationResult.Properties);
 
-            return refreshResponse.AccessToken;
+
+            return jsonResponse["access_token"].Value<string>();
         }
     }
 }

@@ -20,6 +20,7 @@ namespace ITQJ.WebClient.Controllers
         [HttpPost]
         public async Task<IActionResult> GetEdictSkills()
         {
+            var profesionalSkills = await CallApiGETAsync<ProfesionalSkillResponseDTO>(uri: "/api/ProfesionalSkills/" + userName, isSecured: true);
 
             var userCredentials = GetUserCredentials();
 

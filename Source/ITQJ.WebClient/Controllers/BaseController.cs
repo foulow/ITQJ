@@ -1,13 +1,13 @@
-﻿using AutoMapper;
-using ITQJ.Domain.DTOs;
+﻿using ITQJ.Domain.DTOs;
 using ITQJ.WebClient.Models;
 using ITQJ.WebClient.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -26,41 +26,28 @@ namespace ITQJ.WebClient.Controllers
 {
     public class BaseController : Controller
     {
-        protected readonly IServiceProvider _serviceProvider;
+        //protected readonly IServiceProvider _serviceProvider;
         //protected readonly IHttpContextAccessor _httpContextAccessor;
+        //protected readonly IMapper _mapper;
+        //protected readonly IConfiguration _configuration;
         protected readonly IHttpClientFactory _clientFactory;
-        protected readonly IMapper _mapper;
-        protected readonly IConfiguration _configuration;
         protected readonly IOptionsMonitor<ClientCredentialsM> _clientConfiguration;
+        protected readonly IWebHostEnvironment _environment;
 
         public BaseController(IServiceProvider serviceProvider)
         {
+            //this._serviceProvider = serviceProvider;
             //this._httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+            //this._mapper = serviceProvider.GetRequiredService<IMapper>();
+            //this._configuration = serviceProvider.GetRequiredService<IConfiguration>();
             this._clientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
-            this._mapper = serviceProvider.GetRequiredService<IMapper>();
-            this._configuration = serviceProvider.GetRequiredService<IConfiguration>();
             this._clientConfiguration = serviceProvider.GetRequiredService<IOptionsMonitor<ClientCredentialsM>>();
+            this._environment = serviceProvider.GetRequiredService<IWebHostEnvironment>();
         }
 
-        protected async Task<T> CallApiGETAsync<T>(string uri) where T : class
+        protected async Task<T> CallApiGETAsync<T>(string uri, bool isSecured) where T : class
         {
-            var apiClient = this._clientFactory.CreateClient("APIClient");
-
-            T result = null;
-            var content = await apiClient.GetStringAsync(uri);
-
-            if (content != null && content.Contains("result"))
-            {
-                var jsonObject = JObject.Parse(content);
-                result = jsonObject["result"].ToObject<T>();
-            }
-
-            return result;
-        }
-
-        protected async Task<T> CallSecuredApiGETAsync<T>(string uri) where T : class
-        {
-            var apiClient = this._clientFactory.CreateClient("SecuredAPIClient");
+            var apiClient = this._clientFactory.CreateClient((isSecured) ? "SecuredAPIClient" : "APIClient");
 
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
 
@@ -79,35 +66,13 @@ namespace ITQJ.WebClient.Controllers
                 throw new Exception("Problem accessing the API");
             }
 
-            ViewBag.Errors = await response.Content.ReadAsStringAsync();
+            await GetErrors(response);
             return null;
         }
 
-        protected async Task<T> CallApiPOSTAsync<T>(string uri, T body) where T : class
+        protected async Task<T> CallApiPOSTAsync<T>(string uri, T body, bool isSecured) where T : class
         {
-            var apiClient = this._clientFactory.CreateClient("APIClient");
-
-            T result = null;
-
-            var content = await apiClient
-                .PostAsync(uri,
-                new StringContent(JsonConvert.SerializeObject(body),
-                    Encoding.UTF8, "application/json"));
-
-            var response = await content.Content.ReadAsStringAsync();
-
-            if (content != null && response.Contains("result"))
-            {
-                var jsonObject = JObject.Parse(response);
-                result = jsonObject["result"].ToObject<T>();
-            }
-
-            return result;
-        }
-
-        protected async Task<T> CallSecuredApiPOSTAsync<T>(string uri, T body) where T : class
-        {
-            var apiClient = this._clientFactory.CreateClient("SecuredAPIClient");
+            var apiClient = this._clientFactory.CreateClient((isSecured) ? "SecuredAPIClient" : "APIClient");
 
             var request = new HttpRequestMessage(HttpMethod.Post, uri);
             request.Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
@@ -130,35 +95,13 @@ namespace ITQJ.WebClient.Controllers
                 throw new Exception("Problem accessing the API");
             }
 
-            ViewBag.Errors = await response.Content.ReadAsStringAsync();
+            await GetErrors(response);
             return null;
         }
 
-        protected async Task<T> CallApiPUTAsync<T>(string uri, T body) where T : class
+        protected async Task<T> CallApiPUTAsync<T>(string uri, T body, bool isSecured) where T : class
         {
-            var apiClient = this._clientFactory.CreateClient("APIClient");
-
-            T result = null;
-
-            var content = await apiClient
-                .PutAsync(uri,
-                new StringContent(JsonConvert.SerializeObject(body),
-                    Encoding.UTF8, "application/json"));
-
-            var response = await content.Content.ReadAsStringAsync();
-
-            if (content != null || response.Contains("result"))
-            {
-                var jsonObject = JObject.Parse(response);
-                result = jsonObject["result"].ToObject<T>();
-            }
-
-            return result;
-        }
-
-        protected async Task<T> CallSecuredApiPUTAsync<T>(string uri, T body) where T : class
-        {
-            var apiClient = this._clientFactory.CreateClient("SecuredAPIClient");
+            var apiClient = this._clientFactory.CreateClient((isSecured) ? "SecuredAPIClient" : "APIClient");
 
             var request = new HttpRequestMessage(HttpMethod.Put, uri);
             request.Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
@@ -181,22 +124,13 @@ namespace ITQJ.WebClient.Controllers
                 throw new Exception("Problem accessing the API");
             }
 
-            ViewBag.Errors = await response.Content.ReadAsStringAsync();
+            await GetErrors(response);
             return null;
         }
 
-        protected async Task<bool> CallApiDELETEAsync(string uri)
+        protected async Task<bool> CallApiDELETEAsync(string uri, bool isSecured)
         {
-            var apiClient = this._clientFactory.CreateClient("APIClient");
-
-            var content = await apiClient.DeleteAsync(uri);
-
-            return content.StatusCode == HttpStatusCode.OK;
-        }
-
-        protected async Task<bool> CallSecuredApiDELETEAsync<T>(string uri)
-        {
-            var apiClient = this._clientFactory.CreateClient("SecuredAPIClient");
+            var apiClient = this._clientFactory.CreateClient((isSecured) ? "SecuredAPIClient" : "APIClient");
 
             var request = new HttpRequestMessage(HttpMethod.Delete, uri);
 
@@ -214,11 +148,11 @@ namespace ITQJ.WebClient.Controllers
                 throw new Exception("Problem accessing the API");
             }
 
-            ViewBag.Errors = await response.Content.ReadAsStringAsync();
+            await GetErrors(response);
             return false;
         }
 
-        public IActionResult PageNotFound()
+        protected IActionResult PageNotFound()
         {
             var userCredentials = GetUserCredentials();
 
@@ -227,7 +161,7 @@ namespace ITQJ.WebClient.Controllers
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        protected IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
@@ -275,17 +209,10 @@ namespace ITQJ.WebClient.Controllers
             //}
             #endregion
 
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            //await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
+            //await HttpContext.SignOutAsync("Auth0", new AuthenticationProperties { RedirectUri = returnUrl });
 
-            await HttpContext.SignOutAsync("Auth0", new AuthenticationProperties
-            {
-                // Indicate here where Auth0 should redirect the user after a logout.
-                // Note that the resulting absolute Uri must be whitelisted in the 
-                // **Allowed Logout URLs** settings for the client.
-                //RedirectUri = Url.Action("Index", "Home")
-                RedirectUri = returnUrl
-            });
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = returnUrl });
 
             //return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
@@ -293,17 +220,16 @@ namespace ITQJ.WebClient.Controllers
         //[Authorize]
         public async Task LogIn(string returnUrl = "/")
         {
-            await HttpContext.ChallengeAsync("Auth0", new AuthenticationProperties() { RedirectUri = returnUrl });
+            //await HttpContext.ChallengeAsync("Auth0", new AuthenticationProperties() { RedirectUri = returnUrl });
+
+            await HttpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties() { RedirectUri = returnUrl });
 
             // Get the currently authorized user claims information.
             //var userInfo = await GetUserInfo();
             //return RedirectToRoute(new { controller = "Home", action = "Index" });
-
-
-
         }
 
-        public UserResponseDTO GetUserCredentials()
+        protected UserResponseDTO GetUserCredentials()
         {
             var userCredentials = GetUserCredentialsAsync().Result;
 
@@ -315,9 +241,9 @@ namespace ITQJ.WebClient.Controllers
             return userCredentials;
         }
 
-        public Task<UserResponseDTO> GetUserCredentialsAsync()
+        protected Task<UserResponseDTO> GetUserCredentialsAsync()
         {
-            return CallSecuredApiGETAsync<UserResponseDTO>("/api/users");
+            return CallApiGETAsync<UserResponseDTO>(uri: "/api/users", isSecured: true);
         }
 
         protected async Task<UserResponseDTO> EnsureUserCreated()
@@ -330,7 +256,7 @@ namespace ITQJ.WebClient.Controllers
 
             var id = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
 
-            var idp_access_token = await CallSecuredApiGETAsync<string>("/api/Auth0Access");
+            var idp_access_token = await CallApiGETAsync<string>(uri: "/api/Auth0Access", isSecured: true);
 
             var clientCredentials = _clientConfiguration.CurrentValue;
             var client = new RestClient($"{clientCredentials.Authority}/api/v2/users/{id}/roles");
@@ -388,6 +314,19 @@ namespace ITQJ.WebClient.Controllers
             }
 
             return userCredentials;
+        }
+
+        private Task GetErrors(HttpResponseMessage httpResponse)
+        {
+            if (httpResponse.StatusCode == HttpStatusCode.NotFound)
+                ViewBag.ErrorLevel = "alert-warning";
+
+            if (httpResponse.StatusCode == HttpStatusCode.BadRequest || httpResponse.StatusCode == HttpStatusCode.InternalServerError)
+                ViewBag.ErrorLevel = "alert-danger";
+
+            ViewBag.Errors = httpResponse.Content.ReadAsStringAsync().Result;
+
+            return Task.CompletedTask;
         }
     }
 }

@@ -1,0 +1,106 @@
+﻿@model ITQJ.WebClient.ViewModels.ReviewListVM
+@{
+    ViewData["Title"] = "Mis Reseñas";
+
+    int Nex = Model.PageIndex + 1, Back = Model.PageIndex - 1;
+}
+<div class="container">
+
+    <h4>Mis Reseñas</h4>
+    <hr />
+
+    <div class="d-block p-0 m-0">
+
+        <div class="d-inline-block bg-dark m-0 p-0" style="position:relative; left:50%; transform: translateX(-50%);">
+
+            <nav aria-label="Page navigation example h2">
+
+                <ul class="pagination">
+
+                    @if (Model.PageIndex != 1)
+                    {
+                        <li class="page-item">
+
+                            <a class="page-link" aria-label="Previous" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Back">
+                                <span aria-hidden="true" class="text-dark">&laquo;</span>
+                            </a>
+
+                        </li>
+                    }
+
+
+                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    {
+                        if (i == Model.PageIndex)
+                        {
+                            <li class="page-item active" aria-current="page">
+                                <span class="page-link text-dark">
+                                    @i
+                                    <span class="sr-only">(current)</span>
+                                </span>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item">
+
+                                <a class="page-link text-dark" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@i">@i</a>
+
+                            </li>
+                        }
+
+                    }
+
+
+                    @if (Model.PageIndex != Model.TotalPages)
+                    {
+                        <li class="page-item">
+
+                            <a class="page-link" aria-label="Next" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Nex">
+
+                                <span aria-hidden="true" class="text-dark">&raquo;</span>
+
+                            </a>
+
+                        </li>
+                    }
+
+                </ul>
+
+            </nav>
+
+        </div>
+
+    </div>
+
+    <hr />
+
+    @if (Model.Reviews != null && Model.Reviews.Count > 0)
+    {
+        foreach (var review in Model.Reviews)
+        {
+            <div class="row text-center">
+                <h4>@review.Points Punto(s)</h4>
+                <p>@review.Description</p>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="row text-center">
+            <h1>Parece que no tienes reseñas!</h1>
+            @if (ViewBag.UserRole == "Profesional")
+            {
+                <p>Comienza a aplicar a proyectos para resivir una reseña por parte de un contratista.</p>
+            }
+            else if (ViewBag.UserRole == "Contratista")
+            {
+                <p>Comienza a publicar proyectos para resivir una reseña por parte de un profesional.</p>
+            }
+            else
+            {
+                <p>No deverias estar aqui, completa el proseso de registro para poder acceder a esta pagina.</p>
+            }
+        </div>
+    }
+</div>
