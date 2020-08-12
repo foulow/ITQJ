@@ -1,0 +1,143 @@
+﻿
+@model ITQJ.WebClient.ViewModels.PersonalInfoVM;
+
+@{
+    ViewData["Title"] = "Editando Skills";
+
+}
+
+<div class="container">
+
+    <div style="padding:3px; padding:10px;">
+
+        <div hidden class="form-group">
+
+            <label asp-for="Name" class="control-label">Nombre completo</label><br />
+            <input type="text" asp-for="Name" value="@Model.Name" />
+
+            <label asp-for="PhoneNumber" class="control-label">Nombre completo</label><br />
+            <input type="text" asp-for="PhoneNumber" value="@Model.PhoneNumber" />
+
+            <label asp-for="PagLink" class="control-label">Nombre completo</label><br />
+            <input type="text" asp-for="PagLink" value="@Model.PagLink" />
+
+            <label asp-for="Description" class="control-label">Nombre completo</label><br />
+            <input type="text" asp-for="Description" value="@Model.Description" />
+
+            <label asp-for="User.Email" class="control-label">Nombre completo</label><br />
+            <input type="text" asp-for="User.Email" value="@Model.User.Email" />
+
+            <label asp-for="ProfesionalSkills" class="control-label">Nombre completo</label><br />
+            <input asp-for="ProfesionalSkills" value="@Model.ProfesionalSkills" />
+
+            <label asp-for="LegalDocument" class="control-label">Nombre completo</label><br />
+            <input type="text" asp-for="LegalDocument" value="@Model.LegalDocument" />
+
+            <label asp-for="UserId" class="control-label">Nombre completo</label><br />
+            <input type="text" asp-for="UserId" value="@Model.UserId" />
+
+            <label asp-for="User" class="control-label">Nombre completo</label><br />
+            <input type="text" asp-for="User" value="@Model.User" />
+
+        </div>
+
+        <form asp-action="PostEdictSkills" method="post">
+
+            <hr />
+            <h3 class="m-5">Habilidades tecnicas</h3>
+
+            @foreach(var skill in Model.Skills)
+            {
+                var InId = "inputID" + skill.Id;
+                var ImId = "imgID" + skill.Id;
+                var ChId = "CheckID" + skill.Id;
+
+                <div class="icon-skill-edict d-inline-block">
+
+                    <div class="ContSkill1">
+
+                        <div class="conte-Edict">
+
+                            <div class="ContSkill2">
+
+                                <div class="titulo" style="">
+
+                                    <label>@skill.Name</label>
+
+                                    <input class="Check" hidden onchange="Checked('@skill.Id',
+                                                                           '@InId',
+                                                                           '@ChId',
+                                                                           '@ImId')"
+                                           id="@ChId" type="checkbox" />
+
+                                </div>
+
+                                <div class="DivIMG" style="">
+
+                                    <a onclick="Check('@skill.Id','@InId','@ChId','@ImId')" id="@ImId">
+
+                                        <i aria-hidden="true">
+
+                                            <img src="@skill.Path" asp-append-version="true" />
+
+                                        </i>
+
+                                    </a>
+
+                                </div>
+
+                                <div class="ContPorcen">
+
+                                    <div class="form-group">
+
+                                        <label asp-for="@skill.Percentage" id="@skill.Id">   @skill.Percentage % </label>
+
+                                        <input onchange="ChangePorcentage('@skill.Id','@InId','@ChId','@ImId')" id="@InId" asp-for="@skill.Percentage" type="range" max="100" min="0" class="form-control-range">
+
+                                    </div>
+
+                                </div>
+
+                                @if(skill.Active)
+                                {
+                                    <script>
+
+                                        debugger;
+
+                                        var input, A, check;
+
+                                        input = document.getElementById('@InId');
+                                        check = document.getElementById('@ChId');
+                                        A =     document.getElementById('@ImId');
+
+                                        if (check.checked == false)
+                                        {
+                                            check.checked = true;
+
+                                            A.style.backgroundColor = "gray";
+
+                                        }
+
+                                    </script>
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+            <div class="mt-3 position-relative pb-1">
+
+                <input type="submit" class="btn badge-dark" style="" value="Finalizar registro" />
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

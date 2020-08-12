@@ -1,16 +1,10 @@
 ﻿$(document).ready(() => {
-    document.getElementById('Lname').style.display = 'none';
-    document.getElementById('Tname').style.display = 'none';
-    document.getElementById('Lemail').style.display = 'none';
-    document.getElementById('Temail').style.display = 'none';
-    document.getElementById('Lnumero').style.display = 'none';
-    document.getElementById('Tnumero').style.display = 'none';
-    document.getElementById('Lling').style.display = 'none';
-    document.getElementById('Tling').style.display = 'none';
-    document.getElementById('Ldescripcion').style.display = 'none';
-    document.getElementById('Tdescripcion').style.display = 'none';
-    document.getElementById('bntGuardar').style.display = 'none';
-    document.getElementById('bntCancelar').style.display = 'none';
+
+    $("#Editar").css({
+        visibility: "hidden",
+        position: "absolute",
+        top: "0px"
+    }); 
 
 });
 
@@ -57,19 +51,20 @@ function ChangePorcentage(id, inID, chId, AID)
 
 function Check(id, inID, chId, AID)
 {
+    debugger;
+
     var input, A, check;
 
     A = $("#" + AID);
     input = document.getElementById(inID)
     check = document.getElementById(chId)
 
-
     if (check.checked == false)
     {
         input.value = 50;
         ChangePorcentage(id, inID, chId);
         check.checked = true;
-
+      
         A.css({
             backgroundColor: "gray"
         });
@@ -87,6 +82,25 @@ function Check(id, inID, chId, AID)
     
    
 }
+
+function Checked(id, inID, chId, AID) {
+
+    debugger;
+
+    var input, A, check;
+
+    A = $("#" + AID);
+    input = document.getElementById(inID)
+    check = document.getElementById(chId)
+    
+    ChangePorcentage(id, inID, chId);
+    check.checked = true;
+    
+    A.css({
+        backgroundColor: "gray"
+    });
+
+ }
 
 function ProjectOver(proId)
 {
@@ -158,53 +172,33 @@ function ChecClose(CheckPostulant, InputClose)
 function Cancelar()
 {
 
-    document.getElementById('Lname').style.display = 'none';
-    document.getElementById('Tname').style.display = 'none';
-    document.getElementById('Lemail').style.display = 'none';
-    document.getElementById('Temail').style.display = 'none';
-    document.getElementById('Lnumero').style.display = 'none';
-    document.getElementById('Tnumero').style.display = 'none';
-    document.getElementById('Lling').style.display = 'none';
-    document.getElementById('Tling').style.display = 'none';
-    document.getElementById('Ldescripcion').style.display = 'none';
-    document.getElementById('Tdescripcion').style.display = 'none';
-    document.getElementById('bntGuardar').style.display = 'none';
-    document.getElementById('bntCancelar').style.display = 'none';
+    $("#Editar").css({
+        visibility: "hidden",
+        position: "absolute",
+        top: "0px"
+    }); 
 
-    document.getElementById('Mname').style.display = 'block';
-    document.getElementById('Memail').style.display = 'block';
-    document.getElementById('Mnumero').style.display = 'block';
-    document.getElementById('Mling').style.display = 'block';
-    document.getElementById('Mdescripcion').style.display = 'block';
-    document.getElementById('bntEditar').style.display = 'block';
-    
 
+    $("#presentar").css({
+        visibility: "visible",
+        position: "initial"
+    }); 
 }
 
 function Edit()
-    {
+{
 
-    debugger;
+    $("#Editar").css({
+        visibility: "visible",
+        position: "initial"
+    }); 
 
-    document.getElementById('Lname').style.display = 'inline';
-    document.getElementById('Tname').style.display = 'inline';
-    document.getElementById('Lemail').style.display = 'inline';
-    document.getElementById('Temail').style.display = 'inline';
-    document.getElementById('Lnumero').style.display = 'inline';
-    document.getElementById('Tnumero').style.display = 'inline';
-    document.getElementById('Lling').style.display = 'inline';
-    document.getElementById('Tling').style.display = 'inline';
-    document.getElementById('Ldescripcion').style.display = 'inline';
-    document.getElementById('Tdescripcion').style.display = 'inline';
-    document.getElementById('bntGuardar').style.display = 'inline';
-    document.getElementById('bntCancelar').style.display = 'inline';
+    $("#presentar").css({
+        visibility: "hidden",
+        position: "absolute",
+        top:"0px"
+    }); 
 
-    document.getElementById('Mname').style.display = 'none';
-    document.getElementById('Memail').style.display = 'none';
-    document.getElementById('Mnumero').style.display = 'none';
-    document.getElementById('Mling').style.display = 'none';
-    document.getElementById('Mdescripcion').style.display = 'none';
-    document.getElementById('bntEditar').style.display = 'none';
 }
 
 var active = false;
