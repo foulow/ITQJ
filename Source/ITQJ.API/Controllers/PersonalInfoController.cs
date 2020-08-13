@@ -59,6 +59,9 @@ namespace ITQJ.API.Controllers
             this._appDBContext.SaveChanges();
 
             var personalInfoModel = this._mapper.Map<PersonalInfoResponseDTO>(tempPersonalInfo.Entity);
+            
+            var tempUser = this._appDBContext.Users.FirstOrDefault(x => x.Id == personalInfoModel.UserId);
+            personalInfoModel.User = this._mapper.Map<UserResponseDTO>(tempUser);
 
             return Ok(new
             {

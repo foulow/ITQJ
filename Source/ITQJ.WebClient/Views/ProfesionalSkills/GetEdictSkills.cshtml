@@ -10,131 +10,163 @@
 
     <div style="padding:3px; padding:10px;">
 
-        <div hidden class="form-group">
-
-            <label asp-for="Name" class="control-label">Nombre completo</label><br />
-            <input type="text" asp-for="Name" value="@Model.Name" />
-
-            <label asp-for="PhoneNumber" class="control-label">Nombre completo</label><br />
-            <input type="text" asp-for="PhoneNumber" value="@Model.PhoneNumber" />
-
-            <label asp-for="PagLink" class="control-label">Nombre completo</label><br />
-            <input type="text" asp-for="PagLink" value="@Model.PagLink" />
-
-            <label asp-for="Description" class="control-label">Nombre completo</label><br />
-            <input type="text" asp-for="Description" value="@Model.Description" />
-
-            <label asp-for="User.Email" class="control-label">Nombre completo</label><br />
-            <input type="text" asp-for="User.Email" value="@Model.User.Email" />
-
-            <label asp-for="ProfesionalSkills" class="control-label">Nombre completo</label><br />
-            <input asp-for="ProfesionalSkills" value="@Model.ProfesionalSkills" />
-
-            <label asp-for="LegalDocument" class="control-label">Nombre completo</label><br />
-            <input type="text" asp-for="LegalDocument" value="@Model.LegalDocument" />
-
-            <label asp-for="UserId" class="control-label">Nombre completo</label><br />
-            <input type="text" asp-for="UserId" value="@Model.UserId" />
-
-            <label asp-for="User" class="control-label">Nombre completo</label><br />
-            <input type="text" asp-for="User" value="@Model.User" />
-
-        </div>
-
         <form asp-action="PostEdictSkills" method="post">
 
-            <hr />
-            <h3 class="m-5">Habilidades tecnicas</h3>
+            <div hidden>
+                <input asp-for="UserId" type="text" />
+            </div>
 
-            @foreach(var skill in Model.Skills)
+            <div hidden class="form-group">
+
+                <label asp-for="Name" class="control-label">Nombre completo</label><br />
+
+                <input type="text" asp-for="Name" /><br />
+
+                <span asp-validation-for="Name" class="text-danger"></span>
+
+            </div>
+
+            <div  hidden  class="form-group">
+
+                <label asp-for="PhoneNumber" class="control-label">Número de telefono</label><br />
+
+                <input type="tel" asp-for="PhoneNumber" /><br />
+
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+
+            </div>
+
+            <div hidden  class="form-group">
+
+                <i class="fas fa-pencil-alt prefix"></i>
+                <label asp-for="Description" class="control-label">Pequeña descripción</label><br />
+
+                <textarea class="md-textarea form-control" asp-for="Description"></textarea><br />
+
+                <span asp-validation-for="Description" class="text-danger"></span>
+
+            </div>
+
+            <div hidden  class="form-group">
+
+                <label asp-for="PagLink" class="control-label">Enlace a su sitio web</label><br />
+
+                <input type="text" asp-for="PagLink" /><br />
+
+                <span asp-validation-for="PagLink" class="text-danger"></span>
+
+            </div>
+
+            <div hidden class="form-group">
+
+                <label asp-for="LegalDocument.Number" class="control-label">Numero de identidad</label><br />
+
+                <input type="text" asp-for="LegalDocument.Number" /><br />
+
+                <span asp-validation-for="LegalDocument.Number" class="text-danger"></span>
+
+            </div>
+
+            <div hidden class="form-group">
+
+                <label asp-for="LegalDocument.Image" class="control-label">Foto del documetno legal</label><br />
+
+                <input type="file" asp-for="LegalDocument.Image" /><br />
+
+                <span asp-validation-for="LegalDocument.Image" class="text-danger"></span>
+
+            </div>
+
+            <div hidden class="form-group">
+
+                <label asp-for="LegalDocument.DocumentTypeId">Rol</label>
+
+                <select asp-for="LegalDocument.DocumentTypeId" class="dropdown" asp-items="@(new SelectList(Model.DocumentTypes, "Id", "Name"))" required>
+                </select>
+
+            </div>
+
+
+
+            @if(Model.Skills != null && Model.Skills.Count > 0)
             {
-                var InId = "inputID" + skill.Id;
-                var ImId = "imgID" + skill.Id;
-                var ChId = "CheckID" + skill.Id;
+                <hr />
+                <h3 class="m-5">Habilidades tecnicas. Editando...</h3>
 
-                <div class="icon-skill-edict d-inline-block">
+                @foreach(var skill in Model.Skills)
+                {
+                    var InId = "inputID" + skill.Id;
+                    var ImId = "imgID" + skill.Id;
+                    var ChId = "CheckID" + skill.Id;
 
-                    <div class="ContSkill1">
+                    <div class="icon-skill-edict d-inline-block">
 
-                        <div class="conte-Edict">
+                        <div class="ContSkill1">
 
-                            <div class="ContSkill2">
+                            <div class="conte-Edict">
 
-                                <div class="titulo" style="">
+                                <div class="ContSkill2">
 
-                                    <label>@skill.Name</label>
+                                    <div class="titulo" style="">
 
-                                    <input class="Check" hidden onchange="Checked('@skill.Id',
-                                                                           '@InId',
-                                                                           '@ChId',
-                                                                           '@ImId')"
-                                           id="@ChId" type="checkbox" />
-
-                                </div>
-
-                                <div class="DivIMG" style="">
-
-                                    <a onclick="Check('@skill.Id','@InId','@ChId','@ImId')" id="@ImId">
-
-                                        <i aria-hidden="true">
-
-                                            <img src="@skill.Path" asp-append-version="true" />
-
-                                        </i>
-
-                                    </a>
-
-                                </div>
-
-                                <div class="ContPorcen">
-
-                                    <div class="form-group">
-
-                                        <label asp-for="@skill.Percentage" id="@skill.Id">   @skill.Percentage % </label>
-
-                                        <input onchange="ChangePorcentage('@skill.Id','@InId','@ChId','@ImId')" id="@InId" asp-for="@skill.Percentage" type="range" max="100" min="0" class="form-control-range">
+                                        <label>@skill.Name</label> <input hidden class="Check" id="@ChId" type="checkbox" />
 
                                     </div>
 
+                                    <div class="DivIMG" style="">
+                                        <a onclick="Check('@skill.Id','@InId','@ChId','@ImId')" id="@ImId">
+                                            <i aria-hidden="true">
+                                                <img src="@skill.Path" asp-append-version="true" />
+                                            </i>
+                                        </a>
+                                    </div>
+
+                                    <div class="ContPorcen">
+
+                                        <div class="form-group">
+
+                                            <label asp-for="@skill.Percentage" id="@skill.Id">   @skill.Percentage % </label>
+
+                                            <input onchange="ChangePorcentage('@skill.Id','@InId','@ChId','@ImId')" id="@InId" asp-for="@skill.Percentage" type="range" max="100" min="0" class="form-control-range">
+
+                                        </div>
+
+                                    </div>
+
+                                    @*@if(skill.Active)
+                                    {
+                                        <script>
+
+                                            debugger;
+
+                                            var input, A, check;
+
+                                            input = document.getElementById('@InId');
+                                            check = document.getElementById('@ChId');
+                                            A =     document.getElementById('@ImId');
+
+                                            if (check.checked == false)
+                                            {
+                                                check.checked = true;
+
+                                                A.style.backgroundColor = "gray";
+
+                                            }
+
+                                        </script>
+                                    }*@
+
                                 </div>
-
-                                @if(skill.Active)
-                                {
-                                    <script>
-
-                                        debugger;
-
-                                        var input, A, check;
-
-                                        input = document.getElementById('@InId');
-                                        check = document.getElementById('@ChId');
-                                        A =     document.getElementById('@ImId');
-
-                                        if (check.checked == false)
-                                        {
-                                            check.checked = true;
-
-                                            A.style.backgroundColor = "gray";
-
-                                        }
-
-                                    </script>
-                                }
 
                             </div>
 
                         </div>
 
                     </div>
-
-                </div>
+                }
             }
 
-            <div class="mt-3 position-relative pb-1">
-
-                <input type="submit" class="btn badge-dark" style="" value="Finalizar registro" />
-
-            </div>
+            <input type="submit" class="btn badge-dark" style="float:none;" value="Actializar" />
 
         </form>
 
