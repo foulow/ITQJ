@@ -116,6 +116,37 @@ function ProjectDown(proId)
     });
 }
 
+
+function MaxPostulantOff(CheckClose, MaxPas, CheckPostulant, InputClose) {
+
+    debugger;
+
+    var checkn, number;
+    var checkd, date;
+
+    checkn = CheckPostulant;
+    date = InputClose;
+    checkd = CheckClose;
+    number = MaxPas;
+
+
+    if (checkd.checked == true) {
+        number.value = 50;
+        $("#MaxPastilants").css({ pointerEvents: "none" });
+        document.getElementById("MaxPastilants").disabled = false;
+    }
+
+
+    if (checkn.checked == true) {
+        defaultDate = date.defaultValue;
+        date.defaultValue = "3000-01-01";
+        $("#InputCloseDate").css({ pointerEvents: "none" });
+        document.getElementById("InputCloseDate").disabled = false;
+    }
+
+}
+
+
 function MaxPostulant(CheckClose, MaxPas)
 {
     debugger;
