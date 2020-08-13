@@ -190,9 +190,9 @@
 
     </div>
 
-    <form hidden asp-controller="ProfesionalSkills" asp-action="GetEdictSkills" method="post">
+    <form asp-controller="ProfesionalSkills" asp-action="GetEdictSkills" method="post">
 
-        <div class="form-group">
+        <div  hidden  class="form-group">
 
             <label asp-for="Name" class="control-label">Nombre completo</label><br />
             <input type="text" asp-for="Name" value="@Model.Name" />

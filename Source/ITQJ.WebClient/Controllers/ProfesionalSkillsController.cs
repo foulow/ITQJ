@@ -10,16 +10,16 @@ using System.Threading.Tasks;
 
 namespace ITQJ.WebClient.Controllers
 {
-    public class ProfesionalSkillsController : BaseController
+    public class ProfesionalSkillsController:BaseController
     {
         public ProfesionalSkillsController(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> GetEdictSkills()
+        public async Task<IActionResult> GetEdictSkills(PersonalInfoVM _personalInfo)
         {
-            var profesionalSkills = await CallApiGETAsync<ProfesionalSkillResponseDTO>(uri: "/api/ProfesionalSkills/" , isSecured: true);
+            //var profesionalSkills = await CallApiGETAsync<ProfesionalSkillResponseDTO>(uri: "/api/ProfesionalSkills/" , isSecured: true);
 
             var userCredentials = GetUserCredentials();
 
@@ -33,6 +33,7 @@ namespace ITQJ.WebClient.Controllers
 
 
             var personalInfo = new PersonalInfoVM();
+            personalInfo = _personalInfo;
             personalInfo.Skills = new List<SkillM>();
             personalInfo.UserId = userCredentials.Id;
             personalInfo.DocumentTypes = await CallApiGETAsync<List<DocumentTypeDTO>>("/api/documentTypes",isSecured: true);
@@ -53,7 +54,7 @@ namespace ITQJ.WebClient.Controllers
 
                 foreach(var skill in tempSkills)
                 {
-                    personalInfo.Skills.Add(new SkillM  
+                    personalInfo.Skills.Add(new SkillM
                     {
                         Id = skill.Id,
                         Name = skill.Name,
@@ -70,7 +71,7 @@ namespace ITQJ.WebClient.Controllers
 
         private async Task<PersonalInfoResponseDTO> GetPersonalInfo(string userId)
         {
-            return await CallApiGETAsync<PersonalInfoResponseDTO>("/api/personalInfo/" + userId, isSecured: true);
+            return await CallApiGETAsync<PersonalInfoResponseDTO>("/api/personalInfo/" + userId,isSecured: true);
         }
 
 
@@ -84,13 +85,18 @@ namespace ITQJ.WebClient.Controllers
             //}
 
             // Registra el documento de identidad.
-            var newLegalDocument = await CallApiPOSTAsync<LegalDocumentResponseDTO>("/api/legalDocument",personalInfo.LegalDocument,isSecured: true);
+            var newLegalDocument = await CallApiPUTAsync<LegalDocumentResponseDTO>(uri: "/api/legalDocument",body: personalInfo.LegalDocument,isSecured: true);
             personalInfo.LegalDocumentId = newLegalDocument.Id;
 
             // Registra la informacion personal.
             var tempPersonalInfo = (PersonalInfoResponseDTO)personalInfo;
-            var newPersonalInfo = await CallApiPOSTAsync<PersonalInfoResponseDTO>("/api/personalInfo",tempPersonalInfo,isSecured: true);
+            var newPersonalInfo = await CallApiPUTAsync<PersonalInfoResponseDTO>(uri: "/api/personalInfo",body: tempPersonalInfo,isSecured: true);
 
+            var get = GetUserCredentials();
+
+            newPersonalInfo.User = new UserResponseDTO();
+
+            newPersonalInfo.User.Role = get.Role;
 
             if(newPersonalInfo.User.Role == "Profesional")
             {
@@ -106,7 +112,7 @@ namespace ITQJ.WebClient.Controllers
                     };
                     temProfesionalSkills.Add(profesionalSkill);
                 }
-                _ = await CallApiPOSTAsync("/api/profesionalSkills/",temProfesionalSkills,isSecured: true);
+                _ = await CallApiPUTAsync(uri: "/api/profesionalSkills/",body: temProfesionalSkills,isSecured: true);
 
                 return RedirectToAction("EditProfesional");
 
@@ -119,6 +125,5 @@ namespace ITQJ.WebClient.Controllers
 
             return Error();
         }
-
     }
 }

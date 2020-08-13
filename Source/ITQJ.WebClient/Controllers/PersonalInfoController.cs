@@ -179,6 +179,11 @@ namespace ITQJ.WebClient.Controllers
             var tempPersonalInfo = (PersonalInfoResponseDTO)personalInfo;
             var newPersonalInfo = await CallApiPOSTAsync<PersonalInfoResponseDTO>(uri: "/api/personalInfo", body: tempPersonalInfo, isSecured: true);
 
+            //var get = GetUserCredentials();
+
+            //newPersonalInfo.User = new UserResponseDTO();
+
+            //newPersonalInfo.User.Role = get.Role;
 
             if (newPersonalInfo.User.Role == "Profesional")
             {

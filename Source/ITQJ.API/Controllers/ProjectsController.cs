@@ -16,6 +16,7 @@ namespace ITQJ.API.Controllers
         public ProjectsController(IServiceProvider serviceProvider)
             : base(serviceProvider) { }
 
+
         [HttpGet]
         public ActionResult GetProjects([FromQuery] int pageIndex = 1, [FromQuery] int maxResults = 5)
         {
@@ -52,6 +53,7 @@ namespace ITQJ.API.Controllers
                 }
             });
         }
+
 
         [HttpGet("current/{userId}")]
         public ActionResult GetContratistProjects([FromRoute] Guid userId, [FromQuery] int pageIndex = 1, [FromQuery] int maxResults = 5)
@@ -119,6 +121,7 @@ namespace ITQJ.API.Controllers
                 Result = projectModel
             });
         }
+
 
         [Authorize]
         [HttpGet("myprojects/{projectId}")]

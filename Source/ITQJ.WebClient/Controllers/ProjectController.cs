@@ -59,6 +59,7 @@ namespace ITQJ.WebClient.Controllers
             return RedirectToRoute(new { action = "Index", controller = "Project", projectId = newProject.Id });
         }
 
+
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> Edit(string projectId)
