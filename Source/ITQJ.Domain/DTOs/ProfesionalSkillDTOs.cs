@@ -5,6 +5,8 @@ namespace ITQJ.Domain.DTOs
     public class ProfesionalSkillCreateDTO : ProfesionalSkillUpdateDTO
     {
         public Guid PersonalInfoId { get; set; }
+
+        public Guid SkillId { get; set; }
     }
 
 
@@ -12,7 +14,6 @@ namespace ITQJ.Domain.DTOs
     {
         public int Percentage { get; set; }
 
-        public Guid SkillId { get; set; }
     }
 
 
@@ -21,6 +22,6 @@ namespace ITQJ.Domain.DTOs
         public Guid Id { get; set; }
 
         public SkillDTO Skill { get; set; }
-        
+
     }
 }

@@ -59,6 +59,8 @@ namespace ITQJ.API.Controllers
             this._appDBContext.SaveChanges();
 
             var personalInfoModel = this._mapper.Map<PersonalInfoResponseDTO>(tempPersonalInfo.Entity);
+            var tempUser = this._appDBContext.Users.FirstOrDefault(x => x.Id == personalInfoModel.UserId);
+            personalInfoModel.User = this._mapper.Map<UserResponseDTO>(tempUser);
 
             return Ok(new
             {
@@ -68,16 +70,16 @@ namespace ITQJ.API.Controllers
         }
 
         [HttpPut("{personalInfoId}")]
-        public ActionResult EditPersonalInfo([FromRoute] string personalInfoId, [FromBody] PersonalInfoUpdateDTO personalInfoData)
+        public ActionResult EditPersonalInfo([FromRoute] Guid personalInfoId, [FromBody] PersonalInfoUpdateDTO personalInfoData)
         {
-            var newPersonalInfo = this._mapper.Map<PersonalInfo>(personalInfoData);
-            newPersonalInfo.UserId = Guid.Parse(personalInfoId);
+            var personalInfoToUpdate = this._appDBContext.PersonalInfos
+                .FirstOrDefault(item => item.Id == personalInfoId);
 
-            var entity = this._appDBContext.PersonalInfos.FirstOrDefault(item => item.Id == Guid.Parse(personalInfoId));
-
-            if (entity != null)
+            if (personalInfoToUpdate != null)
             {
-                var tempPersonalInfo = this._appDBContext.PersonalInfos.Update(newPersonalInfo);
+                this._mapper.Map<PersonalInfoUpdateDTO, PersonalInfo>(personalInfoData, personalInfoToUpdate);
+
+                var tempPersonalInfo = this._appDBContext.PersonalInfos.Update(personalInfoToUpdate);
                 this._appDBContext.SaveChanges();
 
                 var personalInfoModel = this._mapper.Map<PersonalInfoCreateDTO>(tempPersonalInfo.Entity);

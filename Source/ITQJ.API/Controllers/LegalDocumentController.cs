@@ -29,7 +29,7 @@ namespace ITQJ.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult RegisterProfesionalSkill([FromBody] LegalDocumentCreateDTO legalDocument)
+        public ActionResult RegisterLegalDocument([FromBody] LegalDocumentCreateDTO legalDocument)
         {
             if (!ModelState.IsValid)
             {
@@ -56,6 +56,33 @@ namespace ITQJ.API.Controllers
                 Message = "Ok",
                 Result = legalDocumentModel
             });
+        }
+
+        [HttpPut("{legalDocumentId}")]
+        public ActionResult EditLegalDocument([FromRoute] Guid legalDocumentId, [FromBody] LegalDocumentUpdateDTO lecalDocumentData)
+        {
+            var legalDocumentToUpdate = this._appDBContext.LegalDocuments
+                .FirstOrDefault(item => item.Id == legalDocumentId);
+
+            if (legalDocumentToUpdate != null)
+            {
+                this._mapper.Map<LegalDocumentUpdateDTO, LegalDocument>(lecalDocumentData, legalDocumentToUpdate);
+
+                var tempLegalDocument = this._appDBContext.LegalDocuments.Update(legalDocumentToUpdate);
+                this._appDBContext.SaveChanges();
+
+                var personalInfoModel = this._mapper.Map<LegalDocumentResponseDTO>(tempLegalDocument.Entity);
+
+                return Ok(new
+                {
+                    Message = "Ok",
+                    Result = personalInfoModel
+                });
+            }
+            else
+            {
+                return NotFound(new { Message = "El recurso a actualizar no ha sido encontrado." });
+            }
         }
     }
 }

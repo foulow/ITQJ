@@ -147,6 +147,7 @@ namespace ITQJ.API.Controllers
             });
         }
 
+        [Authorize]
         [HttpPost]
         public ActionResult RegisterProject([FromBody] ProjectCreateDTO projectData)
         {
@@ -177,19 +178,30 @@ namespace ITQJ.API.Controllers
             });
         }
 
+        [Authorize]
         [HttpPut("myprojects/{projectId}")]
         public ActionResult UpdateProject([FromRoute] Guid projectId, [FromBody] ProjectUpdateDTO projectData)
         {
             if (projectId == null || projectId == new Guid())
                 return BadRequest(new { Message = $"Error: el parametro {nameof(projectId)} no puede ser nulo." });
 
-            var entity = this._appDBContext.Projects.FirstOrDefault(item => item.Id == projectId);
-
-            if (entity != null)
+            if (!ModelState.IsValid)
             {
-                var tempProjectToCheck = this._mapper.Map<Project>(projectData);
+                return BadRequest(new
+                {
+                    Message = "La informacion de registro de skills de usuario invalidos.",
+                    ErrorsCount = ModelState.ErrorCount,
+                    Errors = ModelState.Select(x => x.Value.Errors)
+                });
+            }
 
-                var tempProjectToUpdate = this._appDBContext.Projects.Update(tempProjectToCheck);
+            var projectToUpdate = this._appDBContext.Projects.FirstOrDefault(item => item.Id == projectId);
+
+            if (projectToUpdate != null)
+            {
+                this._mapper.Map<ProjectUpdateDTO, Project>(projectData, projectToUpdate);
+
+                var tempProjectToUpdate = this._appDBContext.Projects.Update(projectToUpdate);
                 this._appDBContext.SaveChanges();
 
                 var projectModel = this._mapper.Map<ProjectResponseDTO>(tempProjectToUpdate.Entity);
@@ -204,6 +216,27 @@ namespace ITQJ.API.Controllers
             {
                 return NotFound(new { Message = "El recurso a actualizar no ha sido encontrado." });
             }
+        }
+
+        [HttpDelete("{projectId}")]
+        public ActionResult CloseProyect([FromRoute] Guid projectId, [FromQuery] bool deleteAlso = false)
+        {
+            var projectToUpdate = this._appDBContext.Projects
+                .FirstOrDefault(x => x.Id == projectId && x.IsOpen == true);
+
+            if (projectToUpdate is null)
+                return NotFound(new { Error = "El recurso no ha sido encontrado." });
+
+            projectToUpdate.IsOpen = true;
+            projectToUpdate.DeletedFlag = deleteAlso;
+
+            this._appDBContext.Projects.Update(projectToUpdate);
+            this._appDBContext.SaveChanges();
+
+            return Ok(new
+            {
+                Message = "Ok"
+            });
         }
     }
 }

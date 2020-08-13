@@ -98,21 +98,44 @@ namespace ITQJ.API.Controllers
             });
         }
 
-        [HttpPatch]
+        [HttpPut]
+        public ActionResult ReactivateUser()
+        {
+            var subject = HttpContext.User.Claims.FirstOrDefault(c =>
+                c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
+
+            var userToUpdate = this._appDBContext.Users
+                .FirstOrDefault(x => x.Subject == subject && x.DeletedFlag != false);
+
+            if (userToUpdate is null)
+                return NotFound(new { Error = "El recurso no ha sido encontrado." });
+
+            userToUpdate.DeletedFlag = false;
+
+            this._appDBContext.Users.Update(userToUpdate);
+            this._appDBContext.SaveChanges();
+
+            return Ok(new
+            {
+                Message = "Ok"
+            });
+        }
+
+        [HttpDelete]
         public ActionResult DeactivateUser()
         {
             var subject = HttpContext.User.Claims.FirstOrDefault(c =>
                 c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
 
-            var user = this._appDBContext.Users
+            var userToUpdate = this._appDBContext.Users
                 .FirstOrDefault(x => x.Subject == subject && x.DeletedFlag == false);
 
-            if (user is null)
+            if (userToUpdate is null)
                 return NotFound(new { Error = "El recurso no ha sido encontrado." });
 
-            user.DeletedFlag = true;
+            userToUpdate.DeletedFlag = true;
 
-            this._appDBContext.Users.Update(user);
+            this._appDBContext.Users.Update(userToUpdate);
             this._appDBContext.SaveChanges();
 
             return Ok(new

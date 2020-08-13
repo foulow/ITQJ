@@ -20,16 +20,14 @@ namespace ITQJ.API.Controllers
 
 
         [HttpGet("{personalInfoId}")]
-        public ActionResult GetProfesionalSkills([FromRoute] string personalInfoId)
+        public ActionResult GetProfesionalSkills([FromRoute] Guid personalInfoId)
         {
-            var personalInfoIdGuid = Guid.Parse(personalInfoId);
-
             var profesionalSkills = this._appDBContext.ProfesionalSkills
                 .Include(i => i.Skill)
-                .Where(x => x.PersonalInfoId == personalInfoIdGuid)
+                .Where(x => x.PersonalInfoId == personalInfoId && x.Percentage > 0)
                 .ToList();
             var profesionalSkillModels = this._mapper
-                .Map<IEnumerable<ProfesionalSkill>>(profesionalSkills);
+                .Map<List<ProfesionalSkill>>(profesionalSkills);
 
             return Ok(new
             {
@@ -41,7 +39,7 @@ namespace ITQJ.API.Controllers
 
 
         [HttpPost]
-        public ActionResult RegisterProfesionalSkill([FromBody] ProfesionalSkillCreateDTO profesionalSkill)
+        public ActionResult RegisterProfesionalSkill([FromBody] ProfesionalSkillCreateDTO profesionalSkillData)
         {
             if (!ModelState.IsValid)
             {
@@ -53,7 +51,7 @@ namespace ITQJ.API.Controllers
                 });
             }
 
-            var newProfesionalSkill = this._mapper.Map<ProfesionalSkill>(profesionalSkill);
+            var newProfesionalSkill = this._mapper.Map<ProfesionalSkill>(profesionalSkillData);
 
             if (newProfesionalSkill == null)
                 return BadRequest(new { Error = "No se enviaron los datos esperados." });
@@ -71,20 +69,99 @@ namespace ITQJ.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult RegisterProfesionalSkills([FromBody] List<ProfesionalSkillCreateDTO> profesionalSkills)
+        public ActionResult RegisterProfesionalSkills([FromBody] List<ProfesionalSkillCreateDTO> profesionalSkillsData)
         {
-            var newProfesionalSkills = this._mapper.Map<List<ProfesionalSkill>>(profesionalSkills);
+            var temp = profesionalSkillsData.FirstOrDefault(x => x.PersonalInfoId != null);
 
-            if (newProfesionalSkills == null)
-                return BadRequest(new { Error = "No se enviaros los datos esperados." });
+            if (temp == null)
+                return BadRequest(new { Error = "No se enviaron los datos esperados." });
 
-            _appDBContext.ProfesionalSkills.AddRange(newProfesionalSkills);
+            var skills = this._appDBContext.Skills.Where(x => x.DeletedFlag != true).ToList();
+            foreach (var skill in skills)
+            {
+                if (null != profesionalSkillsData.FirstOrDefault(x => x.SkillId == skill.Id))
+                    continue;
+
+                profesionalSkillsData.Add(new ProfesionalSkillCreateDTO
+                {
+                    SkillId = skill.Id,
+                    PersonalInfoId = temp.PersonalInfoId,
+                    Percentage = 0
+                });
+            }
+
+            var newProfesionalSkills = this._mapper.Map<List<ProfesionalSkill>>(profesionalSkillsData);
+
+            this._appDBContext.ProfesionalSkills.AddRange(newProfesionalSkills);
             this._appDBContext.SaveChanges();
 
             return Ok(new
             {
                 Message = "Ok"
             });
+        }
+
+        [HttpPut("{profesionalSkillId}")]
+        public ActionResult EditProfesionalSkill([FromRoute] Guid profesionalSkillId, [FromBody] ProfesionalSkillUpdateDTO profesionalSkillData)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new
+                {
+                    Message = "La informacion de registro de skills de usuario invalidos.",
+                    ErrorsCount = ModelState.ErrorCount,
+                    Errors = ModelState.Select(x => x.Value.Errors)
+                });
+            }
+
+            var profesionalSkillToUpdate = this._appDBContext.ProfesionalSkills
+                .FirstOrDefault(item => item.Id == profesionalSkillId);
+
+            if (profesionalSkillToUpdate != null)
+            {
+                this._mapper.Map<ProfesionalSkillUpdateDTO, ProfesionalSkill>(profesionalSkillData, profesionalSkillToUpdate);
+
+                var tempProfesionalSkill = this._appDBContext.ProfesionalSkills.Update(profesionalSkillToUpdate);
+                this._appDBContext.SaveChanges();
+
+                var profesionalSkillModel = this._mapper
+                    .Map<ProfesionalSkillResponseDTO>(tempProfesionalSkill.Entity);
+
+                return Ok(new
+                {
+                    Message = "Ok",
+                    Result = profesionalSkillModel
+                });
+            }
+            else
+            {
+                return NotFound(new { Message = "El recurso a actualizar no ha sido encontrado." });
+            }
+        }
+
+        [HttpPut("{profesionalSkillId}")]
+        public ActionResult EditProfesionalSkills([FromRoute] Guid personalInfoId, [FromBody] List<ProfesionalSkillUpdateDTO> profesionalSkillsData)
+        {
+            var profesionalSkillsToUpdate = this._appDBContext.ProfesionalSkills
+                .Where(item => item.PersonalInfoId == personalInfoId)
+                .ToList();
+
+            if (profesionalSkillsToUpdate != null)
+            {
+                this._mapper.Map<List<ProfesionalSkillUpdateDTO>, List<ProfesionalSkill>>(profesionalSkillsData, profesionalSkillsToUpdate);
+
+                this._appDBContext.UpdateRange(profesionalSkillsToUpdate);
+                this._appDBContext.SaveChanges();
+
+                return Ok(new
+                {
+                    Message = "Ok",
+                });
+            }
+            else
+            {
+                return NotFound(new { Message = "Los recurso a actualizar no han sido encontrado." });
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ITQJ.Domain.DTOs;
+using ITQJ.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -107,6 +108,36 @@ namespace ITQJ.API.Controllers
                 Message = "Ok",
                 ResultCount = projectsToReview.Count(),
                 ProjectsToReview = projectsToReview
+            });
+        }
+
+        [HttpPost]
+        public ActionResult CreateReview([FromBody] ReviewCreateDTO reviewData)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new
+                {
+                    Message = "La informacion de registro del proyecto son invalidos.",
+                    ErrorsCount = ModelState.ErrorCount,
+                    Errors = ModelState.Select(x => x.Value.Errors)
+                });
+            }
+
+            var newReview = this._mapper.Map<Review>(reviewData);
+
+            if (newReview == null)
+                return BadRequest(new { Error = "No se enviaron los datos esperados." });
+
+            var tempReview = this._appDBContext.Reviews.Add(newReview);
+            this._appDBContext.SaveChanges();
+
+            var reviewModel = this._mapper.Map<ReviewResponseDTO>(tempReview.Entity);
+
+            return Ok(new
+            {
+                Message = "Ok",
+                Result = reviewModel
             });
         }
     }
