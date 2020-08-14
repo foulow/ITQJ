@@ -21,7 +21,7 @@ namespace ITQJ.API.Controllers
         [HttpGet("{userId}")]
         public ActionResult GetReviews([FromRoute] Guid userId, [FromQuery] int pageIndex = 1, [FromQuery] int maxResults = 10)
         {
-            if (userId == null)
+            if (userId == null || userId == new Guid())
                 return BadRequest(new { Message = $"Error: el {nameof(userId)} no puede ser nulo." });
 
             if (pageIndex < 1)
@@ -61,7 +61,7 @@ namespace ITQJ.API.Controllers
         [HttpGet("pending/{userId}")]
         public ActionResult GetPendingReviews([FromRoute] Guid userId, [FromQuery] string role)
         {
-            if (userId == null)
+            if (userId == null || userId == new Guid())
                 return BadRequest(new { Message = $"Error: el valor de {nameof(userId)} no puede ser nulo." });
 
             if (string.IsNullOrWhiteSpace(role))

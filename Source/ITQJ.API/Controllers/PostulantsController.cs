@@ -22,15 +22,15 @@ namespace ITQJ.API.Controllers
         }
 
         [HttpGet("mypostulations/{userId}")]
-        public ActionResult GetPostulantations([FromRoute] Guid userId, [FromQuery] int pageIndex = 1, [FromQuery] int maxResults = 10)
+        public ActionResult GetPostulantations([FromRoute] Guid userId, [FromQuery] int pageIndex = 1, [FromQuery] int maxResults = 5)
         {
-            if (userId == null)
+            if (userId == null || userId == new Guid())
                 return BadRequest(new { Message = $"Error: el parametro {nameof(userId)} no puede ser nulo." });
 
             if (pageIndex < 1)
                 return BadRequest(new { Error = $"Error: value for pageIndex={pageIndex} is lower than the minimund expected." });
 
-            if (maxResults < 10)
+            if (maxResults < 5)
                 return BadRequest(new { Error = $"Error: value for maxResults={maxResults} is lower than the minimund expected." });
 
             var reviews = this._appDBContext.Postulants
@@ -46,7 +46,7 @@ namespace ITQJ.API.Controllers
 
             var pagesCount = Math.Ceiling((float)postulantsCount / (float)maxResults);
 
-            var reviewsModel = this._mapper.Map<IEnumerable<PostulantResponseDTO>>(reviews);
+            var postulantsModel = this._mapper.Map<IEnumerable<PostulantResponseDTO>>(reviews);
 
             return Ok(new
             {
@@ -54,10 +54,10 @@ namespace ITQJ.API.Controllers
                 Result = new
                 {
                     TotalCount = postulantsCount,
-                    ResultCount = reviewsModel.Count(),
+                    ResultCount = postulantsModel.Count(),
                     TotalPages = pagesCount,
                     PageIndex = pageIndex,
-                    Reviews = reviewsModel
+                    Postulants = postulantsModel
                 }
             });
         }
@@ -65,6 +65,16 @@ namespace ITQJ.API.Controllers
         [HttpPost]
         public ActionResult RegisterPostulant([FromBody] PostulantCreateDTO postulantCreateDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new
+                {
+                    Message = "La informacion de registro del proyecto son invalidos.",
+                    ErrorsCount = ModelState.ErrorCount,
+                    Errors = ModelState.Select(x => x.Value.Errors)
+                });
+            }
+
             var newPostulant = _mapper.Map<Postulant>(postulantCreateDTO);
 
             if (newPostulant == null)

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ITQJ.WebClient.Controllers
 {
-    public class ProfesionalSkillsController:BaseController
+    public class ProfesionalSkillsController : BaseController
     {
         public ProfesionalSkillsController(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
@@ -23,12 +23,12 @@ namespace ITQJ.WebClient.Controllers
 
             var userCredentials = GetUserCredentials();
 
-            if(userCredentials is null || userCredentials.Role == "Contratista")
+            if (userCredentials is null || userCredentials.Role == "Contratista")
                 return PageNotFound();
 
             var personalInfoskills = await GetPersonalInfo(userCredentials.Id.ToString());
 
-            if(personalInfoskills == null)
+            if (personalInfoskills == null)
                 return RedirectToAction("Register");
 
 
@@ -36,14 +36,14 @@ namespace ITQJ.WebClient.Controllers
             personalInfo = _personalInfo;
             personalInfo.Skills = new List<SkillM>();
             personalInfo.UserId = userCredentials.Id;
-            personalInfo.DocumentTypes = await CallApiGETAsync<List<DocumentTypeDTO>>("/api/documentTypes",isSecured: true);
+            personalInfo.DocumentTypes = await CallApiGETAsync<List<DocumentTypeDTO>>("/api/documentTypes", isSecured: true);
 
-            if(userCredentials.Role == "Profesional")
+            if (userCredentials.Role == "Profesional")
             {
-                var tempSkills = await CallApiGETAsync<List<SkillDTO>>("/api/skills",isSecured: true);
+                var tempSkills = await CallApiGETAsync<List<SkillDTO>>("/api/skills", isSecured: true);
 
                 List<ProfesionalSkillResponseDTO> skillDTOs = new List<ProfesionalSkillResponseDTO>();
-                foreach(var skill in personalInfoskills.ProfesionalSkills)
+                foreach (var skill in personalInfoskills.ProfesionalSkills)
                 {
                     skillDTOs.Add(skill);
                 }
@@ -52,7 +52,7 @@ namespace ITQJ.WebClient.Controllers
                 //799a9cdc - 73b1 - 4256 - 3652 - 08d83cab2c0
                 //38508f31 - c4bb - 4046 - 3653 - 08d83cab2c08
 
-                foreach(var skill in tempSkills)
+                foreach (var skill in tempSkills)
                 {
                     personalInfo.Skills.Add(new SkillM
                     {
@@ -71,7 +71,7 @@ namespace ITQJ.WebClient.Controllers
 
         private async Task<PersonalInfoResponseDTO> GetPersonalInfo(string userId)
         {
-            return await CallApiGETAsync<PersonalInfoResponseDTO>("/api/personalInfo/" + userId,isSecured: true);
+            return await CallApiGETAsync<PersonalInfoResponseDTO>("/api/personalInfo/" + userId, isSecured: true);
         }
 
 
@@ -84,46 +84,21 @@ namespace ITQJ.WebClient.Controllers
             //    return View(personalInfo);
             //}
 
-            // Registra el documento de identidad.
-            var newLegalDocument = await CallApiPUTAsync<LegalDocumentResponseDTO>(uri: "/api/legalDocument",body: personalInfo.LegalDocument,isSecured: true);
-            personalInfo.LegalDocumentId = newLegalDocument.Id;
-
-            // Registra la informacion personal.
-            var tempPersonalInfo = (PersonalInfoResponseDTO)personalInfo;
-            var newPersonalInfo = await CallApiPUTAsync<PersonalInfoResponseDTO>(uri: "/api/personalInfo",body: tempPersonalInfo,isSecured: true);
-
-            var get = GetUserCredentials();
-
-            newPersonalInfo.User = new UserResponseDTO();
-
-            newPersonalInfo.User.Role = get.Role;
-
-            if(newPersonalInfo.User.Role == "Profesional")
+            // Registra los skills de dicho profesional.
+            var temProfesionalSkills = new List<ProfesionalSkillCreateDTO>();
+            foreach (var selectedSkill in personalInfo.Skills)
             {
-                // Registra los skills de dicho profesional.
-                var temProfesionalSkills = new List<ProfesionalSkillCreateDTO>();
-                foreach(var selectedSkill in personalInfo.Skills)
+                var profesionalSkill = new ProfesionalSkillCreateDTO
                 {
-                    var profesionalSkill = new ProfesionalSkillCreateDTO
-                    {
-                        Percentage = selectedSkill.Percentage,
-                        PersonalInfoId = newPersonalInfo.Id,
-                        SkillId = selectedSkill.SkillId
-                    };
-                    temProfesionalSkills.Add(profesionalSkill);
-                }
-                _ = await CallApiPUTAsync(uri: "/api/profesionalSkills/",body: temProfesionalSkills,isSecured: true);
-
-                return RedirectToAction("EditProfesional");
-
-
+                    Percentage = selectedSkill.Percentage,
+                    PersonalInfoId = personalInfo.Id,
+                    SkillId = selectedSkill.SkillId
+                };
+                temProfesionalSkills.Add(profesionalSkill);
             }
-            else if(newPersonalInfo.User.Role == "Contratista")
-            {
-                return RedirectToAction("EditContratist");
-            }
+            _ = await CallApiPUTAsync(uri: "/api/profesionalSkills/", body: temProfesionalSkills, isSecured: true);
 
-            return Error();
+            return RedirectToAction("EditProfesional");
         }
     }
 }

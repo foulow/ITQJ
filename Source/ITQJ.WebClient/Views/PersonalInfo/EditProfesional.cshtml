@@ -129,48 +129,50 @@
 
         <h1 class="mb-5">Profesional Skill</h1>
 
-        @if(!Model.ProfesionalSkills.Equals(null))
+        @if (!Model.ProfesionalSkills.Equals(null))
         {
             <h2> Sin avilidades para mostrar.</h2>
         }
         else
-        @foreach(ITQJ.Domain.DTOs.ProfesionalSkillResponseDTO skill in Model.ProfesionalSkills)
-        {
+            @foreach (ITQJ.Domain.DTOs.ProfesionalSkillResponseDTO skill in Model.ProfesionalSkills)
+            {
 
-            <div class="icon-skill-edict d-inline-block">
+                <div class="icon-skill-edict d-inline-block">
 
-                <div class="ContSkill1">
+                    <div class="ContSkill1">
 
-                    <div class="conte-Edict">
+                        <div class="conte-Edict">
 
-                        <div class="ContSkill2">
+                            <div class="ContSkill2">
 
-                            <div class="titulo" style="">
+                                <div class="titulo" style="">
 
-                                <label>@skill.Skill.Name</label>
+                                    <label>@skill.Skill.Name</label>
 
-                            </div>
+                                </div>
 
-                            <div class="DivIMG">
+                                <div class="DivIMG">
 
-                                <a>
+                                    <a>
 
-                                    <i aria-hidden="true" style="cursor:default;">
+                                        <i aria-hidden="true" style="cursor:default;">
 
-                                        <img src="@skill.Skill.Path" />
+                                            <img src="@skill.Skill.Path" />
 
-                                    </i>
+                                        </i>
 
-                                </a>
+                                    </a>
 
-                            </div>
+                                </div>
 
-                            <div class="ContPorcen">
+                                <div class="ContPorcen">
 
-                                <div class="form-group">
+                                    <div class="form-group">
 
-                                    <div class="progress-bar blue stripes shine ">
-                                        <span style=" width: @(Convert.ToString(skill.Percentage) + "%")"></span>
+                                        <div class="progress-bar blue stripes shine ">
+                                            <span style=" width: @(Convert.ToString(skill.Percentage) + "%")"></span>
+                                        </div>
+
                                     </div>
 
                                 </div>
@@ -183,38 +185,36 @@
 
                 </div>
 
-            </div>
 
-
-        }
+            }
 
     </div>
 
     <form asp-controller="ProfesionalSkills" asp-action="GetEdictSkills" method="post">
 
-        <div  hidden  class="form-group">
+        <div hidden class="form-group">
 
             <label asp-for="Name" class="control-label">Nombre completo</label><br />
             <input type="text" asp-for="Name" value="@Model.Name" />
-        
+
             <label asp-for="PhoneNumber" class="control-label">Nombre completo</label><br />
             <input type="text" asp-for="PhoneNumber" value="@Model.PhoneNumber" />
-       
+
             <label asp-for="PagLink" class="control-label">Nombre completo</label><br />
             <input type="text" asp-for="PagLink" value="@Model.PagLink" />
-        
+
             <label asp-for="Description" class="control-label">Nombre completo</label><br />
             <input type="text" asp-for="Description" value="@Model.Description" />
-        
+
             <label asp-for="User.Email" class="control-label">Nombre completo</label><br />
             <input type="text" asp-for="User.Email" value="@Model.User.Email" />
-        
+
             <label asp-for="LegalDocument" class="control-label">Nombre completo</label><br />
             <input type="text" asp-for="LegalDocument" value="@Model.LegalDocument" />
-        
+
             <label asp-for="UserId" class="control-label">Nombre completo</label><br />
             <input type="text" asp-for="UserId" value="@Model.UserId" />
-        
+
             <label asp-for="User" class="control-label">Nombre completo</label><br />
             <input type="text" asp-for="User" value="@Model.User" />
 
@@ -230,3 +230,8 @@
 
 </div>
 
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

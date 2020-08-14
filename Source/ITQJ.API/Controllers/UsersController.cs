@@ -70,6 +70,16 @@ namespace ITQJ.API.Controllers
         [HttpPost]
         public ActionResult RegisterUser([FromBody] UserCreateDTO user)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new
+                {
+                    Message = "La informacion de registro del proyecto son invalidos.",
+                    ErrorsCount = ModelState.ErrorCount,
+                    Errors = ModelState.Select(x => x.Value.Errors)
+                });
+            }
+
             var subject = HttpContext.User.Claims.FirstOrDefault(c =>
                 c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
 

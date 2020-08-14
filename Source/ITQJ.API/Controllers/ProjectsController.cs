@@ -58,7 +58,7 @@ namespace ITQJ.API.Controllers
         [HttpGet("current/{userId}")]
         public ActionResult GetContratistProjects([FromRoute] Guid userId, [FromQuery] int pageIndex = 1, [FromQuery] int maxResults = 5)
         {
-            if (userId == null)
+            if (userId == null || userId == new Guid())
                 return BadRequest(new { Message = $"Error: el parametro {nameof(userId)} no puede ser nulo." });
 
             if (pageIndex < 1)
@@ -104,7 +104,7 @@ namespace ITQJ.API.Controllers
         [HttpGet("{projectId}")]
         public ActionResult GetProjectById([FromRoute] Guid projectId)
         {
-            if (projectId == null)
+            if (projectId == null || projectId == new Guid())
                 return BadRequest(new { Message = $"Error: el parametro {nameof(projectId)} no puede ser nulo." });
 
             var project = this._appDBContext.Projects
@@ -127,7 +127,7 @@ namespace ITQJ.API.Controllers
         [HttpGet("myprojects/{projectId}")]
         public ActionResult GetUserProjectInfo([FromRoute] Guid projectId)
         {
-            if (projectId == null)
+            if (projectId == null || projectId == new Guid())
                 return BadRequest(new { Message = $"Error: el parametro {nameof(projectId)} no puede ser nulo." });
 
             var subject = HttpContext.User.Claims
@@ -224,6 +224,9 @@ namespace ITQJ.API.Controllers
         [HttpDelete("{projectId}")]
         public ActionResult CloseProyect([FromRoute] Guid projectId, [FromQuery] bool deleteAlso = false)
         {
+            if (projectId == null || projectId == new Guid())
+                return BadRequest(new { Message = $"Error: el parametro {nameof(projectId)} no puede ser nulo." });
+
             var projectToUpdate = this._appDBContext.Projects
                 .FirstOrDefault(x => x.Id == projectId && x.IsOpen == true);
 

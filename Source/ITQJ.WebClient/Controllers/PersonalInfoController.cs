@@ -22,10 +22,10 @@ namespace ITQJ.WebClient.Controllers
 
             var userCredentials = GetUserCredentials();
 
-            if (userCredentials is null || userCredentials.Role == "Contratista")
-                return PageNotFound();
+            if (userCredentials is null || userCredentials.Role == "Profesional")
+                return RedirectToAction("AccessDenied", "Authorization");
 
-            var personalInfoDTO = await GetPersonalInfo(userCredentials.Id.ToString());
+            var personalInfoDTO = await GetPersonalInfo(userId);
             if ((personalInfoDTO is null) && (userId == userCredentials.Id.ToString()))
                 return RedirectToAction("Register");
             else if (userId == userCredentials.Id.ToString())
@@ -78,9 +78,9 @@ namespace ITQJ.WebClient.Controllers
             var userCredentials = GetUserCredentials();
 
             if (userCredentials is null || userCredentials.Role == "Profesional")
-                return PageNotFound();
+                return RedirectToAction("AccessDenied", "Authorization");
 
-            var personalInfoDTO = await GetPersonalInfo(userCredentials.Id.ToString());
+            var personalInfoDTO = await GetPersonalInfo(userId);
             if ((personalInfoDTO is null) && (userId == userCredentials.Id.ToString()))
                 return RedirectToAction("Register");
             else if (userId == userCredentials.Id.ToString())
@@ -178,12 +178,6 @@ namespace ITQJ.WebClient.Controllers
             // Registra la informacion personal.
             var tempPersonalInfo = (PersonalInfoResponseDTO)personalInfo;
             var newPersonalInfo = await CallApiPOSTAsync<PersonalInfoResponseDTO>(uri: "/api/personalInfo", body: tempPersonalInfo, isSecured: true);
-
-            //var get = GetUserCredentials();
-
-            //newPersonalInfo.User = new UserResponseDTO();
-
-            //newPersonalInfo.User.Role = get.Role;
 
             if (newPersonalInfo.User.Role == "Profesional")
             {

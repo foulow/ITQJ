@@ -1,4 +1,5 @@
-﻿using ITQJ.WebClient.ViewModels;
+﻿using ITQJ.Domain.DTOs;
+using ITQJ.WebClient.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +35,7 @@ namespace ITQJ.WebClient.Controllers
             if (pendingReviews == null)
             {
                 pendingReviews = new ReviewsToMakeVM();
+                pendingReviews.ProjectsToReview = new List<ProjectResponseDTO>();
                 pendingReviews.PageIndex = pageIndex;
             }
 

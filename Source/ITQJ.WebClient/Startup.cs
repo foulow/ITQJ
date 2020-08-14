@@ -1,4 +1,6 @@
 using AutoMapper;
+using FluentValidation.AspNetCore;
+using ITQJ.Domain.Validations;
 using ITQJ.WebClient.HttpHandlers;
 using ITQJ.WebClient.Hubs;
 using ITQJ.WebClient.Models;
@@ -33,7 +35,10 @@ namespace ITQJ.WebClient
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddFluentValidation(fv =>
+                    fv.RegisterValidatorsFromAssemblyContaining
+                        <UserCreateDTOValidation>());
 
             services.AddCors(options =>
                 {

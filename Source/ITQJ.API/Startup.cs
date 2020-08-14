@@ -2,8 +2,7 @@ using AutoMapper;
 using FluentValidation.AspNetCore;
 using ITQJ.API.Authorization;
 //using Microsoft.AspNetCore.Authentication.JwtBearer;
-
-using ITQJ.Domain.DTOs;
+using ITQJ.Domain.Validations;
 using ITQJ.EFCore.DbContexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -63,7 +62,9 @@ namespace ITQJ.Domain
             });
 
             services.AddControllers()
-                    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<UserCreateDTO>());
+                    .AddFluentValidation(fv =>
+                        fv.RegisterValidatorsFromAssemblyContaining
+                            <UserCreateDTOValidation>());
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

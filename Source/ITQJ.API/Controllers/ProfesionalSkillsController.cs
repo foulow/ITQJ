@@ -71,6 +71,16 @@ namespace ITQJ.API.Controllers
         [HttpPost]
         public ActionResult RegisterProfesionalSkills([FromBody] List<ProfesionalSkillCreateDTO> profesionalSkillsData)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new
+                {
+                    Message = "La informacion de registro del proyecto son invalidos.",
+                    ErrorsCount = ModelState.ErrorCount,
+                    Errors = ModelState.Select(x => x.Value.Errors)
+                });
+            }
+
             var temp = profesionalSkillsData.FirstOrDefault(x => x.PersonalInfoId != null);
 
             if (temp == null)
@@ -142,6 +152,16 @@ namespace ITQJ.API.Controllers
         [HttpPut("{profesionalSkillId}")]
         public ActionResult EditProfesionalSkills([FromRoute] Guid personalInfoId, [FromBody] List<ProfesionalSkillUpdateDTO> profesionalSkillsData)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new
+                {
+                    Message = "La informacion de registro del proyecto son invalidos.",
+                    ErrorsCount = ModelState.ErrorCount,
+                    Errors = ModelState.Select(x => x.Value.Errors)
+                });
+            }
+
             var profesionalSkillsToUpdate = this._appDBContext.ProfesionalSkills
                 .Where(item => item.PersonalInfoId == personalInfoId)
                 .ToList();
