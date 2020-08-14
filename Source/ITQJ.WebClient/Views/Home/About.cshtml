@@ -1,23 +1,96 @@
 ﻿@using Microsoft.AspNetCore.Authentication
 
-<h2>Datos de identidad</h2>
-<div>
-    <strong>id_token</strong>
-    <span>@await ViewContext.HttpContext.GetTokenAsync("id_token")</span>
-</div>
-<div>
-    <strong>access_token</strong>
-    <span>@await ViewContext.HttpContext.GetTokenAsync("access_token")</span>
-</div>
-<div>
-    <strong>refresh_token</strong>
-    <span>@await ViewContext.HttpContext.GetTokenAsync("refresh_token")</span>
-</div>
+    <div hidden >
 
-@foreach (var claim in User.Claims)
-{
-    <div>
-        <strong>@claim.Type</strong>
-        <span>@claim.Value</span>
+        <h2>Datos de identidad</h2>
+
+        <div>
+            <strong>id_token</strong>
+            <span>@await ViewContext.HttpContext.GetTokenAsync("id_token")</span>
+        </div>
+        <div>
+            <strong>access_token</strong>
+            <span>@await ViewContext.HttpContext.GetTokenAsync("access_token")</span>
+        </div>
+        <div>
+            <strong>refresh_token</strong>
+            <span>@await ViewContext.HttpContext.GetTokenAsync("refresh_token")</span>
+        </div>
+
+        @foreach(var claim in User.Claims)
+        {
+            <div>
+                <strong>@claim.Type</strong>
+                <span>@claim.Value</span>
+            </div>
+        }
+
     </div>
-}
+
+<article id="post-20989" class="post-20989 page type-page status-publish hentry overviewPage" style="margin: 8% 0% 0% 0%; background: #ffffff; border-top: 2px solid #007DFF; border-bottom: 2px solid #007DFF; ">
+
+    <section class="masterBanner-section overviewPage-banner-primary" style="padding:5px;">
+
+        <div class="masterBanner-inner">
+
+            <div class="masterBanner-content">
+
+                <h1 class="masterBanner-title">
+
+                    Un mercado de trabajo independiente.
+
+                </h1>
+
+                <p class="masterBanner-byline">
+
+                    Conectamos a cientos de empleadores y freelancers en forma global
+                    provenientes de más 247 países, regiones y territorios.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+    
+</article>
+
+    <article id="post-20989" class="post-20989 page type-page status-publish hentry overviewPage" style="margin: 2% 0% 4% 0%; 
+          background: #ffffff; border-top: 2px solid #007DFF; border-bottom: 2px solid #007DFF; ">
+
+        <section class="site-section-inner" style="padding:5px;">
+
+            <div class="overviewPage-intro" style="padding:2px">
+
+                <div style="width:49%; display:inline-block;">
+
+                    <img style="width:95%; height:95%; border-radius:0%;" src="https://cdn3.f-cdn.com/build/css/images/about-us/overview-company-overview.jpg"
+                         alt="una imagen de cómo funciona la economía del ITQJ">
+
+                </div>
+
+                <div style="width:49%; display:inline-block;">
+
+                    <h2>
+
+                        Información general
+                    </h2>
+
+                    <p>
+
+                        ITQJ.com es un mercado de freelancing, tanto para personas como
+                        compañias. Conectando a empleadores y freelancers
+                        de manera global provenientes de más de 247 países, regiones y territorios. A través de nuestro mercado, los empleadores
+                        pueden contratar freelancers para trabajar en áreas tales como desarrollo de software, redacción, ingreso de datos y diseño
+                        hasta ingeniería, Seo y demas arias de IT.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </article>

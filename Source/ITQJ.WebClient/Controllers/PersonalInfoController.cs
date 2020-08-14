@@ -22,10 +22,10 @@ namespace ITQJ.WebClient.Controllers
 
             var userCredentials = GetUserCredentials();
 
-            if (userCredentials is null || userCredentials.Role == "Contratista")
-                return PageNotFound();
+            if (userCredentials is null || userCredentials.Role == "Profesional")
+                return RedirectToAction("AccessDenied", "Authorization");
 
-            var personalInfoDTO = await GetPersonalInfo(userCredentials.Id.ToString());
+            var personalInfoDTO = await GetPersonalInfo(userId);
             if ((personalInfoDTO is null) && (userId == userCredentials.Id.ToString()))
                 return RedirectToAction("Register");
             else if (userId == userCredentials.Id.ToString())
@@ -38,7 +38,7 @@ namespace ITQJ.WebClient.Controllers
 
 
         [Authorize]
-        public async Task<IActionResult> EditProfesional()
+        public async Task<IActionResult> viewProfesionalInfo()
         {
             var userCredentials = GetUserCredentials();
 
@@ -55,8 +55,25 @@ namespace ITQJ.WebClient.Controllers
         }
 
         [Authorize]
+        public async Task<IActionResult> EdictProfesionalInfo()
+        {
+            var userCredentials = GetUserCredentials();
+
+            if(userCredentials is null || userCredentials.Role == "Contratista")
+                return PageNotFound();
+
+            var personalInfo = await GetPersonalInfo(userCredentials.Id.ToString());
+
+            if(personalInfo == null)
+                return RedirectToAction("Register");
+
+
+            return View(personalInfo);
+        }
+
+        [Authorize]
         [HttpPost]
-        public async Task<IActionResult> EditProfesional(PersonalInfoResponseDTO personalInfo)
+        public async Task<IActionResult> PutProfesionalInfo(PersonalInfoResponseDTO personalInfo)
         {
             if (!ModelState.IsValid)
             {
@@ -69,6 +86,7 @@ namespace ITQJ.WebClient.Controllers
             return View(response);
         }
 
+        
         [Authorize]
         public async Task<IActionResult> Contratist(string userId)
         {
@@ -78,9 +96,9 @@ namespace ITQJ.WebClient.Controllers
             var userCredentials = GetUserCredentials();
 
             if (userCredentials is null || userCredentials.Role == "Profesional")
-                return PageNotFound();
+                return RedirectToAction("AccessDenied", "Authorization");
 
-            var personalInfoDTO = await GetPersonalInfo(userCredentials.Id.ToString());
+            var personalInfoDTO = await GetPersonalInfo(userId);
             if ((personalInfoDTO is null) && (userId == userCredentials.Id.ToString()))
                 return RedirectToAction("Register");
             else if (userId == userCredentials.Id.ToString())
@@ -91,26 +109,56 @@ namespace ITQJ.WebClient.Controllers
             return View(personalInfoDTO);
         }
 
-        [Authorize]
-        public async Task<IActionResult> EditContratist()
-        {
-            var userCredentials = GetUserCredentials();
 
-            if (userCredentials is null || userCredentials.Role == "Profesional")
+        [Authorize]
+        public async Task<IActionResult> viewContratistInfo(string userId)
+        {
+            if(string.IsNullOrWhiteSpace(userId))
                 return PageNotFound();
 
-            var personalInfo = await GetPersonalInfo(userCredentials.Id.ToString());
+            var userCredentials = GetUserCredentials();
 
-            if (personalInfo == null)
+            if(userCredentials is null || userCredentials.Role == "Profesional")
+                return PageNotFound();
+
+            var personalInfoDTO = await GetPersonalInfo(userCredentials.Id.ToString());
+            if((personalInfoDTO is null) && (userId == userCredentials.Id.ToString()))
                 return RedirectToAction("Register");
+            else if(userId == userCredentials.Id.ToString())
+                return RedirectToAction("EditContratist");
+            else if(personalInfoDTO == null)
+                return PageNotFound();
 
-            return View(personalInfo);
+            return View(personalInfoDTO);
+        }
+
+
+        [Authorize]
+        public async Task<IActionResult> EdictContratistInfo(string userId)
+        {
+            if(string.IsNullOrWhiteSpace(userId))
+                return PageNotFound();
+
+            var userCredentials = GetUserCredentials();
+
+            if(userCredentials is null || userCredentials.Role == "Profesional")
+                return PageNotFound();
+
+            var personalInfoDTO = await GetPersonalInfo(userCredentials.Id.ToString());
+            if((personalInfoDTO is null) && (userId == userCredentials.Id.ToString()))
+                return RedirectToAction("Register");
+            else if(userId == userCredentials.Id.ToString())
+                return RedirectToAction("EditContratist");
+            else if(personalInfoDTO == null)
+                return PageNotFound();
+
+            return View(personalInfoDTO);
         }
 
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> EditContratist(PersonalInfoResponseDTO personalInfo)
+        public async Task<IActionResult> PutContratistInfo(PersonalInfoResponseDTO personalInfo)
         {
             if (!ModelState.IsValid)
             {
@@ -179,12 +227,6 @@ namespace ITQJ.WebClient.Controllers
             var tempPersonalInfo = (PersonalInfoResponseDTO)personalInfo;
             var newPersonalInfo = await CallApiPOSTAsync<PersonalInfoResponseDTO>(uri: "/api/personalInfo", body: tempPersonalInfo, isSecured: true);
 
-            //var get = GetUserCredentials();
-
-            //newPersonalInfo.User = new UserResponseDTO();
-
-            //newPersonalInfo.User.Role = get.Role;
-
             if (newPersonalInfo.User.Role == "Profesional")
             {
                 // Registra los skills de dicho profesional.
@@ -212,6 +254,7 @@ namespace ITQJ.WebClient.Controllers
 
             return Error();
         }
+
 
         private Task<PersonalInfoResponseDTO> GetPersonalInfo(string userId)
         {

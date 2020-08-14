@@ -8,6 +8,15 @@ namespace ITQJ.Domain.DTOs
         public Guid ProjectId { get; set; }
     }
 
+    public class PostulantUpdateDTO
+    {
+        public bool IsSellected { get; set; }
+
+        public bool HasWorkReview { get; set; }
+
+        public bool HasProyectReview { get; set; }
+    }
+
     public class PostulantResponseDTO : PostulantCreateDTO
     {
         public Guid Id { get; set; }

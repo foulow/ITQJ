@@ -1,11 +1,11 @@
 ﻿@model ITQJ.Domain.DTOs.PersonalInfoResponseDTO;
 @{
-    ViewData["Title"] = "Pagina de perfil del Contratista";
+    ViewData["Title"] = "Pagina de editar perfil del Contratista";
 }
 
 <div style="width:90%; transform:translateX(5%);">
 
-    <div id="presentar" style="margin:100px 0px 0px 0px;">
+    <form id="Editar" asp-action="PutContratistInfo" asp-controller="PersonalInfo" style="margin:100px 0px 0px 0px; border:3px solid black; background:#007DFF;" class="p-5" method="post">
 
         <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000;">
 
@@ -42,31 +42,31 @@
     </div>
 
 
-    <form id="Editar" asp-action="EditContratist" asp-controller="PersonalInfo" style="margin:100px 0px 0px 0px; border:3px solid black; background:#007DFF;"  class="p-5" method="post">
-    
+    <form id="Editar" asp-action="EditContratist" asp-controller="PersonalInfo" style="margin:100px 0px 0px 0px; border:3px solid black; background:#007DFF;" class="p-5" method="post">
+
         <div hidden>
-    
+
             <label asp-for="User.Id"></label>
             <input asp-for="User.Id" type="text" />
-    
+
             <label asp-for="User.Email"></label>
             <input asp-for="User.Email" type="text" />
-    
+
             <label asp-for="User.Role"></label>
             <input asp-for="User.Role" type="text" />
-    
+
         </div>
-    
+
         <div class="mt-3">
-    
+
             <h4 id="Lname" asp-for="Name" class="d-block">Nombre</h4>
-    
+
             <input id="Tname" style="display: block; margin: 3px 0px 3px 10px; width:97%;" type="text" asp-for="Name" />
-    
+
             <span asp-validation-for="Name" class="text-danger"></span>
-    
+
         </div>
-    
+
         <div class="mt-3">
 
             <h4 id="Lemail" asp-for="User.Email" class="d-block">Correo</h4>
@@ -76,7 +76,7 @@
             <span asp-validation-for="User.Email" class="text-danger"></span>
 
         </div>
-    
+
         <div class="mt-3">
 
             <h4 id="Lnumero" asp-for="PhoneNumber" class="d-block">Numero de telefono</h4>
@@ -86,7 +86,7 @@
             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
 
         </div>
-    
+
         <div class="mt-3">
 
             <h4 id="Lling" asp-for="PagLink" class="d-block">Pagina</h4>
@@ -96,25 +96,31 @@
             <span asp-validation-for="PagLink" class="text-danger"></span>
 
         </div>
-    
+
         <div class="mt-3">
 
-            <h4 id="Ldescripcion" asp-for="Description" class="d-block" >Description</h4>
+            <h4 id="Ldescripcion" asp-for="Description" class="d-block">Description</h4>
 
             <textarea id="Tdescripcion" style="display: block; margin: 3px 0px 3px 10px; height: 130px; width: 97%;" type="text" asp-for="Description"> </textarea>
 
             <span asp-validation-for="Description" class="text-danger"></span>
 
         </div>
-    
+
         <div class="d-inline-block">
-    
+
             <input id="bntGuardar" class="btn btn-dark m-3" type="submit" value="Guardar" />
-    
+
             <input id="bntCancelar" class="btn btn-dark m-3" type="button" value="Cancelar" onclick="Cancelar()" />
-    
+
         </div>
-    
+
     </form>
 
 </div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

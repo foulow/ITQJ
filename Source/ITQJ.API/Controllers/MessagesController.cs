@@ -18,6 +18,9 @@ namespace ITQJ.API.Controllers
         [HttpGet("{projectId}")]
         public ActionResult GetMessagesByProjectId([FromRoute] Guid projectId)
         {
+            if (projectId == null || projectId == new Guid())
+                return BadRequest(new { Message = $"Error: el parametro {nameof(projectId)} no puede ser nulo." });
+
             var messages = this._appDBContext.Messages.Where(x => x.ProjectId == projectId).ToList();
 
             var messagesModel = this._mapper
@@ -34,6 +37,9 @@ namespace ITQJ.API.Controllers
         [HttpGet("{userId}")]
         public ActionResult GetMessagesByUserId([FromRoute] Guid userId)
         {
+            if (userId == null || userId == new Guid())
+                return BadRequest(new { Message = $"Error: el parametro {nameof(userId)} no puede ser nulo." });
+
             var messages = this._appDBContext.Messages.Where(x => x.UserId == userId).ToList();
 
             var messagesModel = this._mapper

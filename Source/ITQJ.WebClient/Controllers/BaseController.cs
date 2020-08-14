@@ -59,7 +59,7 @@ namespace ITQJ.WebClient.Controllers
                 var responseString = await response.Content.ReadAsStringAsync();
                 var jsonObject = JObject.Parse(responseString);
 
-                return jsonObject["result"].ToObject<T>();
+                return jsonObject["result"]?.ToObject<T>();
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden)
             {
@@ -80,14 +80,12 @@ namespace ITQJ.WebClient.Controllers
             var response = await apiClient.SendAsync(
                 request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
 
-            T result = null;
             if (response.IsSuccessStatusCode)
             {
                 var responseString = await response.Content.ReadAsStringAsync();
                 var jsonObject = JObject.Parse(responseString);
-                if (jsonObject.ContainsKey("result"))
-                    result = jsonObject["result"].ToObject<T>();
-                return result;
+
+                return jsonObject["result"]?.ToObject<T>();
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized ||
                 response.StatusCode == HttpStatusCode.Forbidden)
@@ -109,14 +107,12 @@ namespace ITQJ.WebClient.Controllers
             var response = await apiClient.SendAsync(
                 request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
 
-            T result = null;
             if (response.IsSuccessStatusCode)
             {
                 var responseString = await response.Content.ReadAsStringAsync();
                 var jsonObject = JObject.Parse(responseString);
-                if (jsonObject.ContainsKey("result"))
-                    result = jsonObject["result"].ToObject<T>();
-                return result;
+
+                return jsonObject["result"]?.ToObject<T>();
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized ||
                 response.StatusCode == HttpStatusCode.Forbidden)
@@ -140,7 +136,6 @@ namespace ITQJ.WebClient.Controllers
             if (response.IsSuccessStatusCode)
             {
                 return true;
-
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized ||
                 response.StatusCode == HttpStatusCode.Forbidden)
@@ -318,13 +313,17 @@ namespace ITQJ.WebClient.Controllers
 
         private Task GetErrors(HttpResponseMessage httpResponse)
         {
-            if (httpResponse.StatusCode == HttpStatusCode.NotFound)
-                ViewBag.ErrorLevel = "alert-warning";
+            if (this._environment.EnvironmentName == "Development")
+            {
+                if (httpResponse.StatusCode == HttpStatusCode.NotFound)
+                    ViewBag.ErrorLevel = "alert-warning";
 
-            if (httpResponse.StatusCode == HttpStatusCode.BadRequest || httpResponse.StatusCode == HttpStatusCode.InternalServerError)
-                ViewBag.ErrorLevel = "alert-danger";
+                if (httpResponse.StatusCode == HttpStatusCode.BadRequest || httpResponse.StatusCode == HttpStatusCode.InternalServerError)
+                    ViewBag.ErrorLevel = "alert-danger";
 
-            ViewBag.Errors = httpResponse.Content.ReadAsStringAsync().Result;
+                ViewBag.Errors = httpResponse.Content.ReadAsStringAsync().Result;
+
+            }
 
             return Task.CompletedTask;
         }

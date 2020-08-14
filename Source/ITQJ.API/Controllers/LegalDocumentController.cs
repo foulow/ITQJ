@@ -18,6 +18,9 @@ namespace ITQJ.API.Controllers
         [HttpGet("{legalDocumentId}")]
         public ActionResult GetPersonalInfo([FromRoute] Guid legalDocumentId)
         {
+            if (legalDocumentId == null || legalDocumentId == new Guid())
+                return BadRequest(new { Message = $"Error: el parametro {nameof(legalDocumentId)} no puede ser nulo." });
+
             var legalDocument = this._appDBContext.LegalDocuments.FirstOrDefault(x => x.Id == legalDocumentId);
             var legalDocumentModel = this._mapper.Map<LegalDocument>(legalDocument);
 
@@ -61,6 +64,19 @@ namespace ITQJ.API.Controllers
         [HttpPut("{legalDocumentId}")]
         public ActionResult EditLegalDocument([FromRoute] Guid legalDocumentId, [FromBody] LegalDocumentUpdateDTO lecalDocumentData)
         {
+            if (legalDocumentId == null || legalDocumentId == new Guid())
+                return BadRequest(new { Message = $"Error: el parametro {nameof(legalDocumentId)} no puede ser nulo." });
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new
+                {
+                    Message = "La informacion de registro de skills de usuario invalidos.",
+                    ErrorsCount = ModelState.ErrorCount,
+                    Errors = ModelState.Select(x => x.Value.Errors)
+                });
+            }
+
             var legalDocumentToUpdate = this._appDBContext.LegalDocuments
                 .FirstOrDefault(item => item.Id == legalDocumentId);
 

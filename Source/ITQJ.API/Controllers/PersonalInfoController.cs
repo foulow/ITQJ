@@ -19,7 +19,7 @@ namespace ITQJ.API.Controllers
         [HttpGet("{userId}")]
         public ActionResult GetPersonalInfo([FromRoute] Guid userId)
         {
-            if (userId == null)
+            if (userId == null || userId == new Guid())
                 return BadRequest(new { Message = $"Error: el parametro {nameof(userId)} no puede ser nulo." });
 
             var personalInfo = this._appDBContext.PersonalInfos
@@ -59,7 +59,7 @@ namespace ITQJ.API.Controllers
             this._appDBContext.SaveChanges();
 
             var personalInfoModel = this._mapper.Map<PersonalInfoResponseDTO>(tempPersonalInfo.Entity);
-            
+
             var tempUser = this._appDBContext.Users.FirstOrDefault(x => x.Id == personalInfoModel.UserId);
             personalInfoModel.User = this._mapper.Map<UserResponseDTO>(tempUser);
 
@@ -73,6 +73,19 @@ namespace ITQJ.API.Controllers
         [HttpPut("{personalInfoId}")]
         public ActionResult EditPersonalInfo([FromRoute] Guid personalInfoId, [FromBody] PersonalInfoUpdateDTO personalInfoData)
         {
+            if (personalInfoId == null || personalInfoId == new Guid())
+                return BadRequest(new { Message = $"Error: el parametro {nameof(personalInfoId)} no puede ser nulo." });
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new
+                {
+                    Message = "La informacion de registro del proyecto son invalidos.",
+                    ErrorsCount = ModelState.ErrorCount,
+                    Errors = ModelState.Select(x => x.Value.Errors)
+                });
+            }
+
             var personalInfoToUpdate = this._appDBContext.PersonalInfos
                 .FirstOrDefault(item => item.Id == personalInfoId);
 

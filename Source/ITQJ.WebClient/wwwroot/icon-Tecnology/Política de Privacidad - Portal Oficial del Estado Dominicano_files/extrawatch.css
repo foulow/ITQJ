@@ -1,0 +1,58 @@
+/****************************************************************
+ExtraWatch Styling
+
+Instructions: remove /* and * / in between {} to apply the custom css styling
+
+Thanks to Winchester (VXDriven) for this patch
+****************************************************************/
+
+table.extrawatch {
+  /*width:200px; margin:0 10px 0px 10px; padding-bottom:10px;*/
+}
+
+/* Both ExtraWatch tables */
+.jwCountry {
+  /*border-bottom:1px solid #ccc;*/
+}
+
+/* Table for Countries only */
+.jwVisits {
+}
+
+/* Table for Visits only */
+.jwCountryPercent {
+  /*width:30px;*/
+}
+
+/* Percentage td */
+.jwCountryFlag {
+  /*width:48px;*/
+}
+
+/* Flag td */
+.jwCountryFlag img {
+  /*margin-left:15px; margin-top:5px;*/
+}
+
+/* Flag image */
+.jwCountryName {
+}
+
+/* Country names td */
+.jwVisitsLabels {
+  /*width:100px;*/
+}
+
+/* Visits label td */
+.jwVisitsResults {
+}
+
+/* Visits Result td */
+
+.extrawatch td {
+    padding: 2px;
+}
+
+table.extrawatch {
+    width: 80%
+}
