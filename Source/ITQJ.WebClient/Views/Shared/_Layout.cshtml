@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="/css/ProfisionalSkill.css" rel="stylesheet" />
     <link href="/css/BarraConocimientoaa.css" rel="stylesheet" />
-    <link href="~/css/Layoutdd.css" rel="stylesheet" />
+    <link href="/css/Layout_.css" rel="stylesheet" />
 
     <script src="https://kit.fontawesome.com/0358124a37.js" crossorigin="anonymous"></script>
 
@@ -34,7 +34,7 @@
 
                 <div>
 
-                    <a asp-action="Index" asp-controller="Home" asp-route-projectId="1">
+                    <a asp-action="Index" asp-controller="Home">
 
                         <img src="/Image/Logo.png" style=" width: 125px; height: 125px;" />
 
@@ -89,13 +89,13 @@
                                         {
                                             <a class="dropdown-item"
                                                asp-controller="PersonalInfo"
-                                               asp-action="EditProfesional">Informacion Personal</a>
+                                               asp-action="viewProfesionalInfo">Informacion Personal</a>
                                         }
                                         else if (ViewBag.UserRole == "Contratista")
                                         {
                                             <a class="dropdown-item"
                                                asp-controller="PersonalInfo"
-                                               asp-action="EditContratist">Informacion Personal</a>
+                                               asp-action="viewContratistInfo">Informacion Personal</a>
                                         }
 
                                     </div>
@@ -116,6 +116,7 @@
                                     <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                         @if (!User.Identity.IsAuthenticated)
                                         {
+                                            <a class="dropdown-item" asp-controller="Home" asp-action="LogIn">Mis reseñas</a>
                                             <a class="dropdown-item" asp-controller="Home" asp-action="LogIn">Hacer Reseña</a>
                                         }
                                         else
@@ -245,13 +246,13 @@
                                     {
                                         <a class="dropdown-item"
                                            asp-controller="PersonalInfo"
-                                           asp-action="EditProfesional">Informacion Personal</a>
+                                           asp-action="viewProfesionalInfo">Informacion Personal</a>
                                     }
                                     else if (ViewBag.UserRole == "Contratista")
                                     {
                                         <a class="dropdown-item"
                                            asp-controller="PersonalInfo"
-                                           asp-action="EditContratist">Informacion Personal</a>
+                                           asp-action="viewContratistInfo">Informacion Personal</a>
                                     }
 
                                 </div>
@@ -267,6 +268,7 @@
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                     @if (!User.Identity.IsAuthenticated)
                                     {
+                                        <a class="dropdown-item" asp-controller="Home" asp-action="LogIn">Mis reseñas</a>
                                         <a class="dropdown-item" asp-controller="Home" asp-action="LogIn">Hacer Reseña</a>
                                     }
                                     else

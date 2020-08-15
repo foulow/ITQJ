@@ -22,7 +22,7 @@
     {
         Guid userId = ViewBag.UserId;
 
-        if(Model.UserId == userId )
+        if (Model.UserId == userId)
         {
             return true;
         }
@@ -36,7 +36,7 @@
 
         var fecha = Model.CloseDate.ToString();
 
-        if(fecha.Substring(0,8) == "1/1/0001")
+        if (fecha.Substring(0, 8) == "1/1/0001")
         {
             return "Nullo";
         }
@@ -52,7 +52,7 @@
 
         <strong class="h2 m-0 p-0">
 
-             @Model.Name 
+            @Model.Name
 
         </strong>
 
@@ -88,9 +88,9 @@
 
                 Cierra: <text class="text-danger">
 
-                            @func();
+                    @func();
 
-                        </text>
+                </text>
 
             </strong>
 
@@ -108,9 +108,7 @@
 
     </div>
 
-    <form method="post" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
-
-    @if(!funcVerifiContratis())
+    @if (!funcVerifiContratis())
     {
         <form method="post" class="d-inline-block" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
 

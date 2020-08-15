@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ITQJ.API.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20200808133651_ultimaMigracion")]
-    partial class ultimaMigracion
+    [Migration("20200815095317_UpdateMigration")]
+    partial class UpdateMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -122,8 +122,8 @@ namespace ITQJ.API.Migrations
 
                     b.Property<string>("PagLink")
                         .IsRequired()
-                        .HasColumnType("nvarchar(25)")
-                        .HasMaxLength(25);
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -151,6 +151,15 @@ namespace ITQJ.API.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("DeletedFlag")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasProyectReview")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasWorkReview")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSellected")
                         .HasColumnType("bit");
 
                     b.Property<Guid>("ProjectId")
@@ -190,8 +199,7 @@ namespace ITQJ.API.Migrations
 
                     b.HasIndex("PersonalInfoId");
 
-                    b.HasIndex("SkillId")
-                        .IsUnique();
+                    b.HasIndex("SkillId");
 
                     b.ToTable("ProfesionalSkills");
                 });
@@ -214,7 +222,9 @@ namespace ITQJ.API.Migrations
                         .HasMaxLength(2500);
 
                     b.Property<bool>("IsOpen")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -312,6 +322,9 @@ namespace ITQJ.API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.HasIndex("Subject")
                         .IsUnique();
 
@@ -381,8 +394,8 @@ namespace ITQJ.API.Migrations
                         .IsRequired();
 
                     b.HasOne("ITQJ.Domain.Entities.Skill", "Skill")
-                        .WithOne("ProfesionalSkill")
-                        .HasForeignKey("ITQJ.Domain.Entities.ProfesionalSkill", "SkillId")
+                        .WithMany("ProfesionalSkills")
+                        .HasForeignKey("SkillId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
