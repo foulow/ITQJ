@@ -7,13 +7,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-
 namespace ITQJ.API.Controllers
 {
     [ApiController]
     [Authorize]
     [Route("api/[controller]")]
-    public class ProfesionalSkillsController:BaseController
+    public class ProfesionalSkillsController : BaseController
     {
         public ProfesionalSkillsController(IServiceProvider serviceProvider)
             : base(serviceProvider) { }
@@ -22,26 +21,40 @@ namespace ITQJ.API.Controllers
         [HttpGet("{personalInfoId}")]
         public ActionResult GetProfesionalSkills([FromRoute] Guid personalInfoId)
         {
+            if (personalInfoId == null || personalInfoId == new Guid())
+                return BadRequest(new { Message = $"Error: el parametro {nameof(personalInfoId)} no puede ser nulo." });
+
             var profesionalSkills = this._appDBContext.ProfesionalSkills
                 .Include(i => i.Skill)
                 .Where(x => x.PersonalInfoId == personalInfoId && x.Percentage > 0)
                 .ToList();
-            var profesionalSkillModels = this._mapper
-                .Map<List<ProfesionalSkill>>(profesionalSkills);
 
-            return Ok(new
+            if (profesionalSkills != null && profesionalSkills.Count > 0)
             {
-                Message = "Ok",
-                ResultCount = profesionalSkillModels.Count(),
-                Result = profesionalSkillModels
-            });
+                var profesionalSkillModels = this._mapper
+                    .Map<List<ProfesionalSkill>>(profesionalSkills);
+
+                return Ok(new
+                {
+                    Message = "Ok",
+                    ResultCount = profesionalSkillModels.Count(),
+                    Result = profesionalSkillModels
+                });
+            }
+            else
+            {
+                return NotFound(new
+                {
+                    Message = "Error: no se encontro ningun skill registrado para este usuario ."
+                });
+            }
         }
 
 
         [HttpPost]
         public ActionResult RegisterProfesionalSkill([FromBody] ProfesionalSkillCreateDTO profesionalSkillData)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(new
                 {
@@ -53,7 +66,7 @@ namespace ITQJ.API.Controllers
 
             var newProfesionalSkill = this._mapper.Map<ProfesionalSkill>(profesionalSkillData);
 
-            if(newProfesionalSkill == null)
+            if (newProfesionalSkill == null)
                 return BadRequest(new { Error = "No se enviaron los datos esperados." });
 
             var temporalProfesionalSkill = this._appDBContext.ProfesionalSkills.Add(newProfesionalSkill);
@@ -115,6 +128,9 @@ namespace ITQJ.API.Controllers
         [HttpPut("{profesionalSkillId}")]
         public ActionResult EditProfesionalSkill([FromRoute] Guid profesionalSkillId, [FromBody] ProfesionalSkillUpdateDTO profesionalSkillData)
         {
+            if (profesionalSkillId == null || profesionalSkillId == new Guid())
+                return BadRequest(new { Message = $"Error: el parametro {nameof(profesionalSkillId)} no puede ser nulo." });
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(new
@@ -150,9 +166,12 @@ namespace ITQJ.API.Controllers
             }
         }
 
-        [HttpPut("{profesionalSkillId}")]
-        public ActionResult EditProfesionalSkills([FromRoute] Guid personalInfoId, [FromBody] List<ProfesionalSkillUpdateDTO> profesionalSkillsData)
+        [HttpPut("group/{personalInfoId}")]
+        public ActionResult EditProfesionalSkills([FromRoute] Guid personalInfoId, [FromBody] List<ProfesionalSkillResponseDTO> profesionalSkillsData)
         {
+            if (personalInfoId == null || personalInfoId == new Guid())
+                return BadRequest(new { Message = $"Error: el parametro {nameof(personalInfoId)} no puede ser nulo." });
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(new
@@ -167,9 +186,16 @@ namespace ITQJ.API.Controllers
                 .Where(item => item.PersonalInfoId == personalInfoId)
                 .ToList();
 
-            if (profesionalSkillsToUpdate != null)
+            if (profesionalSkillsToUpdate != null && profesionalSkillsToUpdate.Count > 0)
             {
-                this._mapper.Map<List<ProfesionalSkillUpdateDTO>, List<ProfesionalSkill>>(profesionalSkillsData, profesionalSkillsToUpdate);
+                foreach (var profesionalSkill in profesionalSkillsData)
+                {
+                    var profesionalSkillToUpdate = profesionalSkillsToUpdate.FirstOrDefault(x => x.Id == profesionalSkill.Id);
+
+                    this._mapper.Map<ProfesionalSkillResponseDTO, ProfesionalSkill>(profesionalSkill, profesionalSkillToUpdate);
+                }
+
+                //this._mapper.Map<List<ProfesionalSkillUpdateDTO>, List<ProfesionalSkill>>(profesionalSkillsData, profesionalSkillsToUpdate);
 
                 this._appDBContext.UpdateRange(profesionalSkillsToUpdate);
                 this._appDBContext.SaveChanges();

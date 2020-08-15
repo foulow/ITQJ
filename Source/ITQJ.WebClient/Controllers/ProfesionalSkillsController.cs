@@ -22,31 +22,33 @@ namespace ITQJ.WebClient.Controllers
 
             var userCredentials = GetUserCredentials();
 
-            if(userCredentials is null || userCredentials.Role == "Contratista")
+            if (userCredentials is null || userCredentials.Role == "Contratista")
                 return PageNotFound();
 
-            var MySkills = await GetPersonalInfo(userCredentials.Id.ToString());
+            var personalInfo = await GetPersonalInfo(userCredentials.Id.ToString());
 
-            if(MySkills == null)
+            if (personalInfo == null)
                 return RedirectToAction("Register");
 
             List<SkillM>  skills = new List<SkillM>();
             List<SkillDTO> tempSkills = new List<SkillDTO>();
 
-            tempSkills = await CallApiGETAsync<List<SkillDTO>>(uri: "/api/skills",isSecured: false);
+            tempSkills = await CallApiGETAsync<List<SkillDTO>>(uri: "/api/skills", isSecured: false);
 
-            foreach(var skill in MySkills.ProfesionalSkills)
+            foreach (var skill in tempSkills)
             {
-                var sk = tempSkills.FirstOrDefault(x => x.Id == skill.SkillId);
+                var sk = personalInfo.ProfesionalSkills.FirstOrDefault(x => x.SkillId == skill.Id);
 
                 skills.Add(new SkillM
                 {
                     Id = skill.Id,
-                    Name = sk.Name,
-                    PersonalInfoId = MySkills.Id,
-                    Path = sk.Path,
-                    Percentage = skill.Percentage,
-                    Active = skill.Percentage >= 1 ? true : false
+                    Name = skill.Name,
+                    Path = skill.Path,
+                    PersonalInfoId = personalInfo.Id,
+                    ProfesionalSkillId = sk.Id,
+                    SkillId = sk.SkillId,
+                    Percentage = sk.Percentage,
+                    Active = sk.Percentage >= 1 ? true : false
                 });
             }
 
@@ -70,27 +72,28 @@ namespace ITQJ.WebClient.Controllers
         [Authorize]
         public async Task<IActionResult> PostEdictSkills(List<SkillM> skills)
         {
-            var temProfesionalSkills = new List<ProfesionalSkillCreateDTO>();
+            var temProfesionalSkills = new List<ProfesionalSkillResponseDTO>();
 
-            foreach(var skill in skills)
+            foreach (var skill in skills)
             {
-                if(skill.Percentage >= 1)
-                {
-                    var profesionalSkill = new ProfesionalSkillCreateDTO
-                    {
-                        Percentage = skill.Percentage,
-                        PersonalInfoId = skill.PersonalInfoId,
-                        SkillId = skill.Id
-                    };
 
-                    temProfesionalSkills.Add(profesionalSkill);
-                }
+                var profesionalSkill = new ProfesionalSkillResponseDTO
+                {
+                    Id = skill.ProfesionalSkillId,
+                    Percentage = skill.Percentage,
+                    PersonalInfoId = skill.PersonalInfoId,
+                    SkillId = skill.SkillId
+                };
+
+                temProfesionalSkills.Add(profesionalSkill);
 
             }
 
-            _ = await CallApiPUTAsync(uri: "/api/profesionalSkills/group",body: temProfesionalSkills,isSecured: true);
+            var temp = temProfesionalSkills.FirstOrDefault(x => x.Percentage >= 0).PersonalInfoId;
 
-            return RedirectToAction("Index","Home");
+            _ = await CallApiPUTAsync(uri: "/api/profesionalSkills/group/" + temp.ToString(), body: temProfesionalSkills, isSecured: true);
+
+            return RedirectToAction("viewProfesionalInfo", "PersonalInfo");
         }
     }
 }
