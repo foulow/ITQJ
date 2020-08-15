@@ -7,92 +7,94 @@
 
 }
 
-    <section class="Main">
+<section class="Main">
 
-        <section class="articles">
+    <section class="articles">
 
 
-            <article>
+        <article>
 
-                @if (!User.Identity.IsAuthenticated)
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <h2>Bienvenido a ITQJ!</h2>
+            }
+            else
+            {
+                <h2>Hola @ViewBag.UserName!</h2>
+            }
+
+        </article>
+
+        <article>
+
+            <h4>Proyectos Recientes</h4>
+            <hr />
+
+            <div class="d-block p-0 m-0">
+
+                @if (Model.TotalPages > 1)
                 {
-                    <h2>Bienvenido a ITQJ!</h2>
-                }
-                else
-                {
-                    <h2>Hola @ViewBag.UserName!</h2>
-                }
+                    <div class="d-block p-0 m-0">
 
-            </article>
+                        <div class="d-inline-block bg-dark m-0 p-0" style="position:relative; left:50%; transform: translateX(-50%);">
 
-            <article>
+                            <nav aria-label="Page navigation example h2">
 
-                <h4>Proyectos Recientes</h4>
-                <hr />
-
-                <div class="d-block p-0 m-0">
-
-                    <div class="d-inline-block bg-dark m-0 p-0" style="position:relative; left:50%; transform: translateX(-50%);">
-
-                        <nav aria-label="Page navigation example h2">
-
-                            <ul class="pagination">
-
-                                @if (Model.PageIndex != 1)
-                                {
-                                    <li class="page-item">
-
-                                        <a class="page-link" aria-label="Previous" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Back">
-                                            <span aria-hidden="true" class="text-dark">&laquo;</span>
-                                        </a>
-
-                                    </li>
-                                }
-
-
-                                @for (int i = 1; i <= Model.TotalPages; i++)
-                                {
-                                    if (i == Model.PageIndex)
-                                    {
-                                        <li class="page-item active" aria-current="page">
-                                            <span class="page-link text-dark">
-                                                @i
-                                                <span class="sr-only">(current)</span>
-                                            </span>
-                                        </li>
-                                    }
-                                    else
+                                <ul class="pagination">
+                                    @if (Model.PageIndex != 1)
                                     {
                                         <li class="page-item">
 
-                                            <a class="page-link text-dark" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@i">@i</a>
+                                            <a class="page-link" aria-label="Previous" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Back">
+                                                <span aria-hidden="true" class="text-dark">&laquo;</span>
+                                            </a>
 
                                         </li>
                                     }
 
-                                }
+
+                                    @for (int i = 1; i <= Model.TotalPages; i++)
+                                    {
+                                        if (i == Model.PageIndex)
+                                        {
+                                            <li class="page-item active" aria-current="page">
+                                                <span class="page-link text-dark">
+                                                    @i
+                                                    <span class="sr-only">(current)</span>
+                                                </span>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li class="page-item">
+
+                                                <a class="page-link text-dark" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@i">@i</a>
+
+                                            </li>
+                                        }
+
+                                    }
 
 
-                                @if (Model.PageIndex != Model.TotalPages)
-                                {
-                                    <li class="page-item">
+                                    @if (Model.PageIndex != Model.TotalPages)
+                                    {
+                                        <li class="page-item">
 
-                                        <a class="page-link" aria-label="Next" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Nex">
+                                            <a class="page-link" aria-label="Next" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Nex">
 
-                                            <span aria-hidden="true" class="text-dark">&raquo;</span>
+                                                <span aria-hidden="true" class="text-dark">&raquo;</span>
 
-                                        </a>
+                                            </a>
 
-                                    </li>
-                                }
+                                        </li>
+                                    }
+                                </ul>
+                            </nav>
 
-                            </ul>
-
-                        </nav>
+                        </div>
 
                     </div>
-
-                </div>
+                }
 
                 <hr />
 
@@ -194,103 +196,104 @@
                 }
                 else
                 {
-                    <h1>Parece que no hay proyectos disponibles de momento.</h1>
-                    @if (ViewBag.UserRole == "Contratista")
-                    {
-                        <p>Sé el primero en publicar un proyecto para que otros profesionales puedan realizar tu trabajo.</p>
-                    }
-                    else
-                    {
-                        <p>Intenta entrar nuevamenta dentro de unos minutos.</p>
-                    }
+                    <div class="text-center">
+                        <h1>Parece que no hay proyectos disponibles de momento.</h1> <br />
+                        @if (ViewBag.UserRole == "Contratista")
+                        {
+                            <p>Sé el primero en publicar un proyecto para que otros profesionales puedan realizar tu trabajo.</p>
+                        }
+                        else
+                        {
+                            <p>Intenta entrar nuevamenta dentro de unos minutos.</p>
+                        }
+                    </div>
                 }
-
                 <button onclick="ScrollUp()" class="ButtonUp" style="outline: none; float: left;"></button>
 
-            </article>
+        </article>
 
-        </section>
+    </section>
 
-        <aside>
+    <aside>
 
-            <div>
+        <div>
 
-                <div class="alert alert-primary" role="alert">
+            <div class="alert alert-primary" role="alert">
 
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
 
-                        <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true">&times;</span>
 
-                    </button>
+                </button>
 
-                    <h4 class="alert-heading">Politica de Cookies!</h4>
+                <h4 class="alert-heading">Politica de Cookies!</h4>
 
-                    <p>
-                        Al navegar en esta pagina, por defecto estas aceptando los terminos y condiciones de
-                        nuestra politica de Cookies.
-                    </p>
+                <p>
+                    Al navegar en esta pagina, por defecto estas aceptando los terminos y condiciones de
+                    nuestra politica de Cookies.
+                </p>
 
-                    <hr>
-                    <p class="mb-0">
+                <hr>
+                <p class="mb-0">
 
-                        Simpre que lo necesites,  pues leer terminos y condiciones de Cookeies,
-                        ve al final de la pagina
+                    Simpre que lo necesites,  pues leer terminos y condiciones de Cookeies,
+                    ve al final de la pagina
 
-                        <a href="#" class="alert-link">Politica de Cookeis</a> o haga click aqui.
+                    <a href="#" class="alert-link">Politica de Cookeis</a> o haga click aqui.
 
-                    </p>
-
-                </div>
-
-                <div class="donacion">
-
-                    <h4 style="margin: 0.2em; ">Donativos</h4>
-
-                    <p>
-                        Si este sitio te parece interesante puedes contribuir con
-                        una pequeña aportación.
-                    </p>
-
-                    <br>
-
-                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-
-                        <input type="hidden" name="cmd" value="_s-xclick">
-
-                        <input type="hidden" name="hosted_button_id" value="F5ZMZH7ALVRCU">
-
-                        <input type="image" src="https://www.paypalobjects.com/es_ES/ES/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal. La forma rápida y segura de pagar en Internet.">
-
-                        <img alt="" border="0" src="https://www.paypalobjects.com/es_ES/i/scr/pixel.gif" width="1" height="1">
-
-                    </form>
-
-                </div>
-
-                <div class="licencia">
-
-                    <a rel="license" href="https://www.copyright.gov/">
-
-                        <img alt="Licencia de Creative Commons" src="~/Image/copyright.svg">
-
-                    </a>
-
-                    <br>
-
-                    Este obra está bajo una
-                    Esta obra está bajo una
-
-                    <a rel="license" href="https://www.copyright.gov/">
-
-                        licencia de Copy Right
-
-                    </a>.
-
-                </div>
+                </p>
 
             </div>
 
-        </aside>
+            <div class="donacion">
 
-    </section>
+                <h4 style="margin: 0.2em; ">Donativos</h4>
+
+                <p>
+                    Si este sitio te parece interesante puedes contribuir con
+                    una pequeña aportación.
+                </p>
+
+                <br>
+
+                <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+
+                    <input type="hidden" name="cmd" value="_s-xclick">
+
+                    <input type="hidden" name="hosted_button_id" value="F5ZMZH7ALVRCU">
+
+                    <input type="image" src="https://www.paypalobjects.com/es_ES/ES/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal. La forma rápida y segura de pagar en Internet.">
+
+                    <img alt="" border="0" src="https://www.paypalobjects.com/es_ES/i/scr/pixel.gif" width="1" height="1">
+
+                </form>
+
+            </div>
+
+            <div class="licencia">
+
+                <a rel="license" href="https://www.copyright.gov/">
+
+                    <img alt="Licencia de Creative Commons" src="~/Image/copyright.svg">
+
+                </a>
+
+                <br>
+
+                Este obra está bajo una
+                Esta obra está bajo una
+
+                <a rel="license" href="https://www.copyright.gov/">
+
+                    licencia de Copy Right
+
+                </a>.
+
+            </div>
+
+        </div>
+
+    </aside>
+
+</section>
 

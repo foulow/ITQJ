@@ -69,7 +69,6 @@ namespace ITQJ.API.Controllers
         }
 
         [HttpPost("group")]
-
         public ActionResult RegisterProfesionalSkills([FromBody] List<ProfesionalSkillCreateDTO> profesionalSkillsData)
         {
             if (!ModelState.IsValid)

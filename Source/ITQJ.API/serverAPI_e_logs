@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 2020-08-15 00:02:50.868 -04:00 [ERR] An unhandled exception has occurred while executing the request.
 Microsoft.AspNetCore.Routing.Matching.AmbiguousMatchException: The request matched multiple endpoints. Matches: 
 
@@ -981,3 +982,67 @@ System.InvalidOperationException: IDX20803: Unable to obtain configuration from:
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
 2020-08-15 04:26:03.442 -04:00 [FTL] Server-side Error: IDX20803: Unable to obtain configuration from: '[PII is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+2020-08-15 07:17:34.530 -04:00 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.AspNetCore.Routing.Matching.AmbiguousMatchException: The request matched multiple endpoints. Matches: 
+
+ITQJ.API.Controllers.ProfesionalSkillsController.EditProfesionalSkills (ITQJ.API)
+ITQJ.API.Controllers.ProfesionalSkillsController.EditProfesionalSkill (ITQJ.API)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ReportAmbiguity(CandidateState[] candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ProcessFinalCandidates(HttpContext httpContext, CandidateState[] candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcher.MatchAsync(HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.Invoke(HttpContext context)
+2020-08-15 07:17:37.303 -04:00 [FTL] Server-side Error: The request matched multiple endpoints. Matches: 
+
+ITQJ.API.Controllers.ProfesionalSkillsController.EditProfesionalSkills (ITQJ.API)
+ITQJ.API.Controllers.ProfesionalSkillsController.EditProfesionalSkill (ITQJ.API)
+2020-08-15 07:30:09.240 -04:00 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.AspNetCore.Routing.Matching.AmbiguousMatchException: The request matched multiple endpoints. Matches: 
+
+ITQJ.API.Controllers.ProfesionalSkillsController.EditProfesionalSkills (ITQJ.API)
+ITQJ.API.Controllers.ProfesionalSkillsController.EditProfesionalSkill (ITQJ.API)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ReportAmbiguity(CandidateState[] candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ProcessFinalCandidates(HttpContext httpContext, CandidateState[] candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.Select(HttpContext httpContext, CandidateState[] candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcher.MatchAsync(HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.MatchAsync(HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.Invoke(HttpContext context)
+2020-08-15 07:30:09.408 -04:00 [FTL] Server-side Error: The request matched multiple endpoints. Matches: 
+
+ITQJ.API.Controllers.ProfesionalSkillsController.EditProfesionalSkills (ITQJ.API)
+ITQJ.API.Controllers.ProfesionalSkillsController.EditProfesionalSkill (ITQJ.API)
+2020-08-15 07:36:22.427 -04:00 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.AspNetCore.Routing.Matching.AmbiguousMatchException: The request matched multiple endpoints. Matches: 
+
+ITQJ.API.Controllers.ProfesionalSkillsController.EditProfesionalSkills (ITQJ.API)
+ITQJ.API.Controllers.ProfesionalSkillsController.EditProfesionalSkill (ITQJ.API)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ReportAmbiguity(CandidateState[] candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ProcessFinalCandidates(HttpContext httpContext, CandidateState[] candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcher.MatchAsync(HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.Invoke(HttpContext context)
+2020-08-15 07:36:22.448 -04:00 [FTL] Server-side Error: The request matched multiple endpoints. Matches: 
+
+ITQJ.API.Controllers.ProfesionalSkillsController.EditProfesionalSkills (ITQJ.API)
+ITQJ.API.Controllers.ProfesionalSkillsController.EditProfesionalSkill (ITQJ.API)
+2020-08-15 07:37:55.108 -04:00 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.AspNetCore.Routing.Matching.AmbiguousMatchException: The request matched multiple endpoints. Matches: 
+
+ITQJ.API.Controllers.ProfesionalSkillsController.EditProfesionalSkills (ITQJ.API)
+ITQJ.API.Controllers.ProfesionalSkillsController.EditProfesionalSkill (ITQJ.API)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ReportAmbiguity(CandidateState[] candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ProcessFinalCandidates(HttpContext httpContext, CandidateState[] candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcher.MatchAsync(HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.Invoke(HttpContext context)
+2020-08-15 07:37:55.128 -04:00 [FTL] Server-side Error: The request matched multiple endpoints. Matches: 
+
+ITQJ.API.Controllers.ProfesionalSkillsController.EditProfesionalSkills (ITQJ.API)
+ITQJ.API.Controllers.ProfesionalSkillsController.EditProfesionalSkill (ITQJ.API)
+=======
+>>>>>>> 3577cd3d0db0d58935e1524314ecc21120ff5067

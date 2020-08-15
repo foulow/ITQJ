@@ -19,7 +19,7 @@ namespace ITQJ.API.Controllers
             : base(serviceProvider) { }
 
         [HttpGet("{userId}")]
-        public ActionResult GetReviews([FromRoute] Guid userId, [FromQuery] int pageIndex = 1, [FromQuery] int maxResults = 10)
+        public ActionResult GetReviews([FromRoute] Guid userId, [FromQuery] int pageIndex = 1, [FromQuery] int maxResults = 5)
         {
             if (userId == null || userId == new Guid())
                 return BadRequest(new { Message = $"Error: el {nameof(userId)} no puede ser nulo." });
@@ -27,7 +27,7 @@ namespace ITQJ.API.Controllers
             if (pageIndex < 1)
                 return BadRequest(new { Message = $"Error: value for pageIndex={pageIndex} is lower than the minimund expected." });
 
-            if (maxResults < 10)
+            if (maxResults < 5)
                 return BadRequest(new { Message = $"Error: value for maxResults={maxResults} is lower than the minimund expected." });
 
             var reviews = this._appDBContext.Reviews
@@ -59,18 +59,25 @@ namespace ITQJ.API.Controllers
         }
 
         [HttpGet("pending/{userId}")]
-        public ActionResult GetPendingReviews([FromRoute] Guid userId, [FromQuery] string role)
+        public ActionResult GetPendingReviews([FromRoute] Guid userId, [FromQuery] int pageIndex, [FromQuery] int maxResults, [FromQuery] string role)
         {
             if (userId == null || userId == new Guid())
                 return BadRequest(new { Message = $"Error: el valor de {nameof(userId)} no puede ser nulo." });
 
+            if (pageIndex < 1)
+                return BadRequest(new { Error = $"Error: value for pageIndex={pageIndex} is lower than the minimund expected." });
+
+            if (maxResults < 5)
+                return BadRequest(new { Error = $"Error: value for maxResults={maxResults} is lower than the minimund expected." });
+
             if (string.IsNullOrWhiteSpace(role))
                 return BadRequest(new { Message = $"Error: el valor de {nameof(role)} no puede ser nulo." });
 
+            int projectsToReviewCount = 0;
             var projectsToReview = new List<ProjectResponseDTO>();
             if (role == "Profesional")
             {
-                var tempProjectsToReview = _appDBContext.Projects
+                var tempProjectsToReview = this._appDBContext.Projects
                     .Include(i => i.User)
                     .Where(x =>
                            x.Postulants.Any(y =>
@@ -78,22 +85,49 @@ namespace ITQJ.API.Controllers
                                             y.IsSellected == true &&
                                             y.UserId == userId &&
                                             y.HasProyectReview == false) &&
-                           x.IsOpen == false);
+                           x.IsOpen == false)
+                    .Skip((pageIndex - 1) * maxResults)
+                    .Take(maxResults)
+                    .ToList();
 
                 projectsToReview = _mapper.Map<List<ProjectResponseDTO>>(tempProjectsToReview);
-            }
-            else if (role == "Contratista")
-            {
-                var tempProjectsToReview = _appDBContext.Projects
+
+                if (projectsToReview.Count > 0)
+                    projectsToReviewCount = this._appDBContext.Projects
                     .Include(i => i.User)
                     .Where(x =>
                            x.Postulants.Any(y =>
                                             y.ProjectId == x.Id &&
                                             y.IsSellected == true &&
+                                            y.UserId == userId &&
+                                            y.HasProyectReview == false) &&
+                           x.IsOpen == false)
+                    .Count();
+            }
+            else if (role == "Contratista")
+            {
+                var tempProjectsToReview = this._appDBContext.Projects
+                    .Where(x =>
+                           x.Postulants.Any(y =>
+                                            y.ProjectId == x.Id &&
+                                            y.IsSellected == true &&
                                             y.HasWorkReview == false) &&
-                           x.UserId == userId);
+                           x.UserId == userId)
+                    .Skip((pageIndex - 1) * maxResults)
+                    .Take(maxResults)
+                    .ToList();
 
                 projectsToReview = _mapper.Map<List<ProjectResponseDTO>>(tempProjectsToReview);
+
+                if (projectsToReview.Count > 0)
+                    projectsToReviewCount = this._appDBContext.Projects
+                    .Where(x =>
+                           x.Postulants.Any(y =>
+                                            y.ProjectId == x.Id &&
+                                            y.IsSellected == true &&
+                                            y.HasWorkReview == false) &&
+                           x.UserId == userId)
+                    .Count();
             }
             else
             {
@@ -103,11 +137,20 @@ namespace ITQJ.API.Controllers
                 });
             }
 
+            var pagesCount = Math.Ceiling((float)projectsToReviewCount / (float)maxResults);
+
             return Ok(new
             {
                 Message = "Ok",
-                ResultCount = projectsToReview.Count(),
-                ProjectsToReview = projectsToReview
+                ResultCount = projectsToReviewCount,
+                Result = new
+                {
+                    TotalCount = projectsToReviewCount,
+                    ResultCount = projectsToReview.Count(),
+                    TotalPages = pagesCount,
+                    PageIndex = pageIndex,
+                    ProjectsToReview = projectsToReview
+                }
             });
         }
 

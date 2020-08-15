@@ -1,4 +1,5 @@
-﻿using ITQJ.Domain.DTOs;
+﻿
+using ITQJ.Domain.DTOs;
 using ITQJ.WebClient.Models;
 using ITQJ.WebClient.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -18,44 +19,44 @@ namespace ITQJ.WebClient.Controllers
         [Authorize]
         public async Task<IActionResult> GetEdictSkills()
         {
-            PersonalInfoVM personalInfo = new PersonalInfoVM();
 
             var userCredentials = GetUserCredentials();
 
-            if (userCredentials is null || userCredentials.Role == "Contratista")
+            if(userCredentials is null || userCredentials.Role == "Contratista")
                 return PageNotFound();
 
+            var MySkills = await GetPersonalInfo(userCredentials.Id.ToString());
 
-            personalInfo.Id = (await GetPersonalInfo(userCredentials.Id.ToString())).Id;
-            personalInfo.Skills = new List<SkillM>();
+            if(MySkills == null)
+                return RedirectToAction("Register");
 
 
-            if(userCredentials.Role == "Profesional")
+
+            var skills = new PersonalInfoVM();
+            skills.Skills = new List<SkillM>();
+            skills.Id = (await GetPersonalInfo(userCredentials.Id.ToString())).Id;
+
+            List<SkillDTO> tempSkills = new List<SkillDTO>();
+
+            tempSkills = await CallApiGETAsync<List<SkillDTO>>(uri: "/api/skills",isSecured: false);
+
+            foreach(var skill in MySkills.ProfesionalSkills)
             {
-                var tempSkills = await CallApiGETAsync<List<SkillDTO>>(uri: "/api/skills",isSecured: false);
+                var sk = tempSkills.FirstOrDefault(x => x.Id == skill.SkillId);
 
-                List<ProfesionalSkillResponseDTO> skillDTOs = new List<ProfesionalSkillResponseDTO>();
-                foreach(var skill in tempSkills)
+                skills.Skills.Add(new SkillM
                 {
-                    skillDTOs.Add( new ProfesionalSkillResponseDTO { Id = skill.Id });
-                }
-
-                foreach(var skill in tempSkills)
-                {
-                    personalInfo.Skills.Add(new SkillM
-                    {
-                        Id = skill.Id,
-                        Name = skill.Name,
-                        Path = skill.Path,
-                        PersonalInfoId = personalInfo.Id,
-                        Percentage = skillDTOs.FirstOrDefault(x => x.Skill.Id == skill.Id) == null ? 0 : skillDTOs.FirstOrDefault(x => x.Skill.Id == skill.Id).Percentage,
-                        Active = skillDTOs.FirstOrDefault(x => x.Skill.Id == skill.Id) == null ? false : true
-                    });
-                }
+                    Id = skill.Id,
+                    Name = sk.Name,
+                    PersonalInfoId = MySkills.Id,
+                    Path = sk.Path,
+                    Percentage = skill.Percentage,
+                    Active = skill.Percentage >= 1 ? true : false
+                });
             }
 
 
-            return View(personalInfo.Skills);
+            return View(skills.Skills);
 
         }
 

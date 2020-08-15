@@ -109,6 +109,7 @@ namespace ITQJ.API.Controllers
 
             var project = this._appDBContext.Projects
                 .Include(i => i.User)
+                .Include(i => i.Postulants)
                 .FirstOrDefault(x => x.Id == projectId);
 
             if (project is null)

@@ -98,8 +98,8 @@ namespace ITQJ.WebClient.Controllers
 
             var userCredentials = GetUserCredentials();
 
-            if(userCredentials is null)
-                return RedirectToAction("AccessDenied","Authorization");
+            if (userCredentials is null)
+                return RedirectToAction("AccessDenied", "Authorization");
 
             var personalInfoDTO = await GetPersonalInfo(userId);
             if((personalInfoDTO is null) && (userId == userCredentials.Id.ToString()))

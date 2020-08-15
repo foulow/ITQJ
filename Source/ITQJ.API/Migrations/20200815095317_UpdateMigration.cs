@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ITQJ.API.Migrations
 {
-    public partial class ApiDbMigration : Migration
+    public partial class UpdateMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,19 +21,6 @@ namespace ITQJ.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Roles",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    DeletedFlag = table.Column<bool>(nullable: false),
-                    Name = table.Column<string>(maxLength: 25, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Roles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Skills",
                 columns: table => new
                 {
@@ -45,6 +32,21 @@ namespace ITQJ.API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Skills", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    DeletedFlag = table.Column<bool>(nullable: false),
+                    Subject = table.Column<string>(maxLength: 200, nullable: false),
+                    Email = table.Column<string>(maxLength: 200, nullable: false),
+                    Role = table.Column<string>(maxLength: 200, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -69,58 +71,6 @@ namespace ITQJ.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    DeletedFlag = table.Column<bool>(nullable: false),
-                    UserName = table.Column<string>(maxLength: 25, nullable: false),
-                    Password = table.Column<string>(maxLength: 500, nullable: false),
-                    Email = table.Column<string>(maxLength: 50, nullable: false),
-                    RoleId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Users_Roles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "Roles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PersonalInfos",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    DeletedFlag = table.Column<bool>(nullable: false),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    PhoneNumber = table.Column<string>(maxLength: 25, nullable: false),
-                    Description = table.Column<string>(maxLength: 500, nullable: false),
-                    PagLink = table.Column<string>(maxLength: 25, nullable: false),
-                    LegalDocumentId = table.Column<Guid>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PersonalInfos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PersonalInfos_LegalDocuments_LegalDocumentId",
-                        column: x => x.LegalDocumentId,
-                        principalTable: "LegalDocuments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PersonalInfos_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Projects",
                 columns: table => new
                 {
@@ -131,7 +81,7 @@ namespace ITQJ.API.Migrations
                     PublishDate = table.Column<DateTime>(nullable: false),
                     CloseDate = table.Column<DateTime>(nullable: false),
                     PostulantsLimit = table.Column<int>(nullable: false),
-                    IsOpen = table.Column<bool>(nullable: false),
+                    IsOpen = table.Column<bool>(nullable: false, defaultValue: true),
                     UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -167,28 +117,31 @@ namespace ITQJ.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProfesionalSkills",
+                name: "PersonalInfos",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     DeletedFlag = table.Column<bool>(nullable: false),
-                    Percentage = table.Column<int>(nullable: false),
-                    PersonalInfoId = table.Column<Guid>(nullable: false),
-                    SkillId = table.Column<Guid>(nullable: false)
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    PhoneNumber = table.Column<string>(maxLength: 25, nullable: false),
+                    Description = table.Column<string>(maxLength: 500, nullable: false),
+                    PagLink = table.Column<string>(maxLength: 200, nullable: false),
+                    LegalDocumentId = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProfesionalSkills", x => x.Id);
+                    table.PrimaryKey("PK_PersonalInfos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProfesionalSkills_PersonalInfos_PersonalInfoId",
-                        column: x => x.PersonalInfoId,
-                        principalTable: "PersonalInfos",
+                        name: "FK_PersonalInfos_LegalDocuments_LegalDocumentId",
+                        column: x => x.LegalDocumentId,
+                        principalTable: "LegalDocuments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProfesionalSkills_Skills_SkillId",
-                        column: x => x.SkillId,
-                        principalTable: "Skills",
+                        name: "FK_PersonalInfos_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -226,7 +179,10 @@ namespace ITQJ.API.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     DeletedFlag = table.Column<bool>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false),
-                    ProjectId = table.Column<Guid>(nullable: false)
+                    ProjectId = table.Column<Guid>(nullable: false),
+                    IsSellected = table.Column<bool>(nullable: false),
+                    HasWorkReview = table.Column<bool>(nullable: false),
+                    HasProyectReview = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -240,6 +196,33 @@ namespace ITQJ.API.Migrations
                         name: "FK_Postulants_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProfesionalSkills",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    DeletedFlag = table.Column<bool>(nullable: false),
+                    Percentage = table.Column<int>(nullable: false),
+                    PersonalInfoId = table.Column<Guid>(nullable: false),
+                    SkillId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProfesionalSkills", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProfesionalSkills_PersonalInfos_PersonalInfoId",
+                        column: x => x.PersonalInfoId,
+                        principalTable: "PersonalInfos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProfesionalSkills_Skills_SkillId",
+                        column: x => x.SkillId,
+                        principalTable: "Skills",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -289,8 +272,7 @@ namespace ITQJ.API.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_ProfesionalSkills_SkillId",
                 table: "ProfesionalSkills",
-                column: "SkillId",
-                unique: true);
+                column: "SkillId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Projects_UserId",
@@ -303,14 +285,15 @@ namespace ITQJ.API.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_RoleId",
+                name: "IX_Users_Email",
                 table: "Users",
-                column: "RoleId");
+                column: "Email",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_UserName",
+                name: "IX_Users_Subject",
                 table: "Users",
-                column: "UserName",
+                column: "Subject",
                 unique: true);
         }
 
@@ -345,9 +328,6 @@ namespace ITQJ.API.Migrations
 
             migrationBuilder.DropTable(
                 name: "DocumentTypes");
-
-            migrationBuilder.DropTable(
-                name: "Roles");
         }
     }
 }
