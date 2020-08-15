@@ -33,6 +33,10 @@ namespace ITQJ.Domain
                 .ForMember(dest => dest.Id, act => act.Ignore())
                 .ForMember(dest => dest.SkillId, act => act.Ignore())
                 .ForMember(dest => dest.PersonalInfoId, act => act.Ignore());
+            CreateMap<ProfesionalSkillResponseDTO, ProfesionalSkill>()
+                .ForMember(dest => dest.Id, act => act.Ignore())
+                .ForMember(dest => dest.SkillId, act => act.Ignore())
+                .ForMember(dest => dest.PersonalInfoId, act => act.Ignore());
             CreateMap<ProfesionalSkill, ProfesionalSkillCreateDTO>();
             CreateMap<ProfesionalSkill, ProfesionalSkillResponseDTO>();
 

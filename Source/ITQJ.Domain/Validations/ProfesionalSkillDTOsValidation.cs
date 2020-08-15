@@ -14,7 +14,7 @@ namespace ITQJ.Domain.Validations
             RuleFor(profesionalSkill => profesionalSkill.SkillId).NotEqual(Guid.Empty)
                 .WithMessage($"El {nameof(PersonalInfoCreateDTO.Name)} no puede estar vacio.");
 
-            RuleFor(profesionalSkill => profesionalSkill.Percentage).NotEqual(0)
+            RuleFor(profesionalSkill => profesionalSkill.Percentage).NotNull().GreaterThanOrEqualTo(0)
                 .WithMessage($"El {nameof(PersonalInfoCreateDTO.PhoneNumber)} no puede estar vacio.");
         }
     }
