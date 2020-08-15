@@ -30,12 +30,7 @@ namespace ITQJ.WebClient.Controllers
             if(MySkills == null)
                 return RedirectToAction("Register");
 
-
-
-            var skills = new PersonalInfoVM();
-            skills.Skills = new List<SkillM>();
-            skills.Id = (await GetPersonalInfo(userCredentials.Id.ToString())).Id;
-
+            List<SkillM>  skills = new List<SkillM>();
             List<SkillDTO> tempSkills = new List<SkillDTO>();
 
             tempSkills = await CallApiGETAsync<List<SkillDTO>>(uri: "/api/skills",isSecured: false);
@@ -44,7 +39,7 @@ namespace ITQJ.WebClient.Controllers
             {
                 var sk = tempSkills.FirstOrDefault(x => x.Id == skill.SkillId);
 
-                skills.Skills.Add(new SkillM
+                skills.Add(new SkillM
                 {
                     Id = skill.Id,
                     Name = sk.Name,
@@ -56,7 +51,7 @@ namespace ITQJ.WebClient.Controllers
             }
 
 
-            return View(skills.Skills);
+            return View(skills);
 
         }
 

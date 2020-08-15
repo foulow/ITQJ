@@ -1,10 +1,10 @@
 ﻿.progress-bar {
-    background-color: #1a1a1a;
+    background-color: #BCBCBC;
     height: 25px;
     padding: 5px;
     width: 98%;
-    margin:0% 1% 0% 1%;
-    border-radius: 5px;
+    margin: 0% 1% 0% 1%;
+    border-radius: 5px 5px 15px 15px;
     box-shadow: 0 1px 5px #000 inset, 0 1px 0 #444;
 }
 
@@ -19,7 +19,7 @@
 
 /**** GRADIENTS ****/
 .blue span {
-    background-color: #34c2e3;
+    background-color: #007DFF;
 }
 
 /**** STRIPES ****/

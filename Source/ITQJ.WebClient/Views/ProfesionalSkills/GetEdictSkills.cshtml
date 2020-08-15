@@ -4,12 +4,12 @@
     ViewData["Title"] = "Registro de abilidadess";
 }
 
-<form asp-action="PostEdictSkills" method="post">
+<form asp-action="PostEdictSkills" method="post" style="margin:100px 0px 50px 0px; padding:20px">
 
     @if(Model != null && Model.Count > 0)
     {
         <hr />
-        <h3>Seleccione las habilidades tecnicas que conoce</h3>
+        <h3 style="margin:0px 0px 30px 0px; padding:0px 0px 0px 20spx;">Seleccione las habilidades tecnicas que conoce</h3>
 
 
         for(int i = 0; i < Model.Count; i++)
@@ -88,6 +88,6 @@
         }
     }
 
-    <input type="submit" value="Guardar" class="btn btn-dark " />
+    <input type="submit" value="Guardar" style="display:block; margin:20px;" class="btn btn-dark " />
 
 </form>

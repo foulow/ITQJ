@@ -26,31 +26,46 @@
 
     <div class="d-flex justify-content-between bg-info mr-2" onclick="toggleChat()">
 
-@*
-    <div class="d-flex align-items-center"
-         style="position: fixed; right: 0; top: 0; height: 100%;">
-        <div id="fixed-right-chat-button">
-            <button id="button-chat"
-                    onclick="toggleChat()"
-                    type="button"
-                    class="btn bg-info text-light">
-                <i class="fas fa-comment-dots fa-2x m-2"></i>
-            </button>
-        </div>
+        @*
+        <div class="d-flex align-items-center"
+             style="position: fixed; right: 0; top: 0; height: 100%;">
+            <div id="fixed-right-chat-button">
+                <button id="button-chat"
+                        onclick="toggleChat()"
+                        type="button"
+                        class="btn bg-info text-light">
+                    <i class="fas fa-comment-dots fa-2x m-2"></i>
+                </button>*@
     </div>
-*@
 
-<div class="bg-white col-md-6 pl-0" id="fixed-bottom-chat"
-     style="position: fixed; bottom: 0; right: 0;">
+</div>
 
-    <div class="d-flex text-white bg-info mr-2"
+
+<div class="bg-white col-md-6" id="fixed-bottom-chat"
+     style="
+     position: fixed; 
+     bottom: 0; 
+     right: 0; 
+     padding:0px; 
+     margin:0px; 
+     border-radius: 5px 5px 0px 0px;
+     width:25%">
+
+    <div class="d-flex text-white" 
+         style="
+         background-color: #007BFF; 
+         padding:0px;
+         margin: 0px;
+         border-radius: 5px 5px 0px 0px;"
          onclick="toggleChat()">
-        <i class="fas fa-comment-dots fa-2x m-2 ml-2"></i>
-        <span class="h4 card-title mx-3 my-2 text-white">Chat</span>
+
+        <label class="fas fa-comment-dots fa-1x m-2"> </label>
+
+        <span class="h6 card-title text-white d-inline-block m-2" >Chat</span>
 
     </div>
 
-    <div id="chat-container">
+    <div id="chat-container" style="box-sizing:border-box; padding:0px; margin:0px; border:1px solid #BCBCBC;">
 
         <div id="user-name-form" class="form-group bg-light-gray p-2 mr-2 rounded">
 
@@ -95,7 +110,7 @@
 
         </div>
 
-        <div id="chat-form" class="row pr-2 pb-2 mx-0" style="background-color: #fff;">
+        <div id="chat-form" class="row m-0 p-0"  style="background-color: #fff;">
 
             <div class="col border border-primary rounded p-0" style="height: 400px;">
 
@@ -109,23 +124,23 @@
 
                         <div class="d-flex align-content-start">
 
-                            <div class="col-10 p-0">
+                            <div class="col-10 p-0 " style="margin: .0rem .5rem .0rem .0rem;">
 
-                                <input id="message" type="text" placeholder="Message" class="form-control" required maxlength="500" />
+                                <textarea id="message" placeholder="Message" class="form-control"
+                                          required maxlength="500" style="width:98.5%; height:40px;"></textarea>
 
-                                <p class="m-0" style="position: absolute; top: 6px; right: 6px;">
+                                @*<p class="m-0" style="position: absolute; top: 6px; right: 6px;">
 
-                                    <span id="message-count">0</span>/500
+                <span id="message-count">0</span>/500
 
-                                </p>
+            </p>*@
 
                             </div>
 
-                            <button id="send" name="send" class="btn btn-outline-info col align-self-start ml-1">
+                            <img src="/Image/send.svg" id="send" name="send" class="btn-outline-primary" style="height:40px; width:40px; margin:0px; padding:0px; outline: none;" />
 
-                                Send
-
-                            </button>
+                            @*<button  style="outline: none">
+                            </button>*@
 
                         </div>
 
