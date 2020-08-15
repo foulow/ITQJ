@@ -1,5 +1,5 @@
 ﻿
-@model ITQJ.WebClient.ViewModels.PersonalInfoVM;
+@*@model ITQJ.WebClient.ViewModels.PersonalInfoVM;
 
 @{
     ViewData["Title"] = "Editando Skills";
@@ -26,7 +26,7 @@
 
             </div>
 
-            <div  hidden  class="form-group">
+            <div hidden class="form-group">
 
                 <label asp-for="PhoneNumber" class="control-label">Número de telefono</label><br />
 
@@ -36,7 +36,7 @@
 
             </div>
 
-            <div hidden  class="form-group">
+            <div hidden class="form-group">
 
                 <i class="fas fa-pencil-alt prefix"></i>
                 <label asp-for="Description" class="control-label">Pequeña descripción</label><br />
@@ -47,7 +47,7 @@
 
             </div>
 
-            <div hidden  class="form-group">
+            <div hidden class="form-group">
 
                 <label asp-for="PagLink" class="control-label">Enlace a su sitio web</label><br />
 
@@ -133,28 +133,28 @@
 
                                     </div>
 
-                                    @*@if(skill.Active)
-                                    {
-                                        <script>
+                                    @if(skill.Active)
+                                        {
+                                            <script>
 
-                                            debugger;
+                                                debugger;
 
-                                            var input, A, check;
+                                                var input, A, check;
 
-                                            input = document.getElementById('@InId');
-                                            check = document.getElementById('@ChId');
-                                            A =     document.getElementById('@ImId');
+                                                input = document.getElementById('@InId');
+                                                check = document.getElementById('@ChId');
+                                                A =     document.getElementById('@ImId');
 
-                                            if (check.checked == false)
-                                            {
-                                                check.checked = true;
+                                                if (check.checked == false)
+                                                {
+                                                    check.checked = true;
 
-                                                A.style.backgroundColor = "gray";
+                                                    A.style.backgroundColor = "gray";
 
-                                            }
+                                                }
 
-                                        </script>
-                                    }*@
+                                            </script>
+                                        }
 
                                 </div>
 
@@ -172,4 +172,83 @@
 
     </div>
 
-</div>
+</div>*@
+
+
+
+
+@model List<ITQJ.WebClient.Models.SkillM>;
+@{
+    ViewData["Title"] = "Registro de abilidadess";
+}
+
+<form asp-action="AddSkills" method="post">
+
+    @if(Model != null && Model.Count > 0)
+    {
+        <hr />
+        <h3>Seleccione las habilidades tecnicas que conoce</h3>
+
+
+        for(int i = 0; i < Model.Count; i++)
+        {
+            var InId = "inputID" + Model[i].Id;
+            var ImId = "imgID" + Model[i].Id;
+            var ChId = "CheckID" + Model[i].Id;
+
+            <div class="icon-skill-edict d-inline-block">
+
+                <div class="ContSkill1">
+
+                    <div class="conte-Edict">
+
+                        <div class="ContSkill2">
+
+                            <div class="titulo" style="">
+
+                                <input hidden asp-for="@Model[i].PersonalInfoId" />
+                                <input hidden asp-for="@Model[i].Id" />
+
+                                <label asp-for="@Model[i].Name">@Model[i].Name</label> <input hidden asp-for="@Model[i].Active" class="Check" id="@ChId" type="checkbox" />
+
+                            </div>
+
+                            <div class="DivIMG" style="">
+
+                                <a onclick="Check('@Model[i].Id','@InId','@ChId','@ImId')" id="@ImId">
+
+                                    <i aria-hidden="true">
+
+                                        <img src="@Model[i].Path" asp-for="" asp-append-version="true" />
+
+                                    </i>
+
+                                </a>
+
+                            </div>
+
+                            <div class="ContPorcen">
+
+                                <div class="form-group">
+
+                                    <label asp-for="@Model[i].Percentage" id="@Model[i].Id">   @Model[i].Percentage % </label>
+
+                                    <input onchange="ChangePorcentage('@Model[i].Id','@InId','@ChId','@ImId')" id="@InId" asp-for="@Model[i].Percentage" type="range" max="100" min="0" class="form-control-range">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+    }
+
+    <input type="submit" value="Guardar" class="btn btn-dark " />
+
+</form>

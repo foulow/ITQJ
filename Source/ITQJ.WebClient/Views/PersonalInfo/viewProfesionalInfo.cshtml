@@ -117,43 +117,13 @@
 
     </div>
 
-    <form asp-controller="ProfesionalSkills" asp-action="GetEdictSkills" method="post">
+ 
+    <div class="mt-3 position-relative pb-1">
+    
+        <a  asp-controller="ProfesionalSkills" asp-action="GetEdictSkills" class="btn badge-dark" >Editar skills</a>
+    
+    </div>
 
-        <div hidden class="form-group">
-
-            <label asp-for="Name" class="control-label">Nombre completo</label><br />
-            <input type="text" asp-for="Name" value="@Model.Name" />
-
-            <label asp-for="PhoneNumber" class="control-label">Nombre completo</label><br />
-            <input type="text" asp-for="PhoneNumber" value="@Model.PhoneNumber" />
-
-            <label asp-for="PagLink" class="control-label">Nombre completo</label><br />
-            <input type="text" asp-for="PagLink" value="@Model.PagLink" />
-
-            <label asp-for="Description" class="control-label">Nombre completo</label><br />
-            <input type="text" asp-for="Description" value="@Model.Description" />
-
-            <label asp-for="User.Email" class="control-label">Nombre completo</label><br />
-            <input type="text" asp-for="User.Email" value="@Model.User.Email" />
-
-            <label asp-for="LegalDocument" class="control-label">Nombre completo</label><br />
-            <input type="text" asp-for="LegalDocument" value="@Model.LegalDocument" />
-
-            <label asp-for="UserId" class="control-label">Nombre completo</label><br />
-            <input type="text" asp-for="UserId" value="@Model.UserId" />
-
-            <label asp-for="User" class="control-label">Nombre completo</label><br />
-            <input type="text" asp-for="User" value="@Model.User" />
-
-        </div>
-
-        <div class="mt-3 position-relative pb-1">
-
-            <input type="submit" class="btn badge-dark" value="Editar skills" />
-
-        </div>
-
-    </form>
 
 </div>
 

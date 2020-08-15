@@ -14,6 +14,8 @@ namespace ITQJ.WebClient.Controllers
     {
         public PersonalInfoController(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
+
+
         [Authorize]
         public async Task<IActionResult> Profesional(string userId)
         {
@@ -79,13 +81,15 @@ namespace ITQJ.WebClient.Controllers
                 return View(personalInfo);
             }
 
-            var response = await CallApiPUTAsync<PersonalInfoResponseDTO>(uri: "/api/PersonalInfo/EditPersonalInfo/" + personalInfo.UserId, body: personalInfo, isSecured: true);
+            var response = await CallApiPUTAsync<PersonalInfoResponseDTO>(uri: "/api/PersonalInfo/" + personalInfo.Id, body: personalInfo, isSecured: true);
 
 
-            return RedirectToAction("/viewProfesionalInfo");
+            return RedirectToRoute(new { action = "viewProfesionalInfo", contructor = "PersonalInfo" });
         }
 
         
+
+
         [Authorize]
         public async Task<IActionResult> Contratist(string userId)
         {
@@ -152,10 +156,10 @@ namespace ITQJ.WebClient.Controllers
                 return View(personalInfo);
             }
 
-            var response = await CallApiPUTAsync<PersonalInfoResponseDTO>(uri: "/api/PersonalInfo/EditPersonalInfo/" + personalInfo.UserId,body: personalInfo,isSecured: true);
+            var response = await CallApiPUTAsync<PersonalInfoResponseDTO>(uri: "/api/PersonalInfo/" + personalInfo.Id,body: personalInfo,isSecured: true);
 
 
-            return RedirectToAction("viewContratistInfo");
+            return RedirectToRoute(new { action = "viewContratistInfo",contructor = "PersonalInfo" });
         }
 
 
@@ -221,6 +225,9 @@ namespace ITQJ.WebClient.Controllers
         }
 
 
+
+
+
         [Authorize]
         public async Task<IActionResult> Register()
         {
@@ -281,6 +288,9 @@ namespace ITQJ.WebClient.Controllers
 
             return RedirectToRoute( new { action = "AddSkills", controller = "PersonalInfo", id = newPersonalInfo.Id });
         }
+
+
+
 
 
         private Task<PersonalInfoResponseDTO> GetPersonalInfo(string userId)

@@ -10,16 +10,43 @@
     var Div = "div" + @Model.Id;
     var Fcta = "fcta" + @Model.Id;
 
-    if (User.Identity.IsAuthenticated)
-        ViewBag.userId = User.Claims.FirstOrDefault(c => c.Type == "sub").Value;
+    //if(User.Identity.IsAuthenticated)
+    //    ViewBag.userId = User.Claims.FirstOrDefault(c => c.Type == "sub").Value;
 
-    if (ViewBag.ErrorMesseger != null)
+    if(ViewBag.ErrorMesseger != null)
     {
         <script>
             alert(ViewBag.ErrorMesseger);
         </script>
     }
 
+
+    Func<bool> funcVerifiContratis = () =>
+    {
+        Guid userId = ViewBag.UserId;
+
+        if(Model.UserId == userId )
+        {
+            return true;
+        }
+
+        return false;
+
+    };
+
+    Func<string> func = () =>
+    {
+
+        var fecha = Model.CloseDate.ToString();
+
+        if(fecha.Substring(0,8) == "1/1/0001")
+        {
+            return "Nullo";
+        }
+
+        return Model.CloseDate.ToString();
+
+    };
 }
 
 <div class="col d-inline-block p-2 border badge-dark" style="margin:4% 0% 2% 0%">
@@ -62,7 +89,11 @@
 
             <strong class="h6 m-0 p-0">
 
-                Cierra: <text class="text-danger">@Model.CloseDate</text>
+                Cierra: <text class="text-danger">
+
+                            @func();
+
+                        </text>
 
             </strong>
 
@@ -80,18 +111,21 @@
 
     </div>
 
-    <form method="post" class="d-inline-block" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
 
-        <input id="Submit" type="submit" value="Postularse" class="btn btn-dark m-3" />
+    @if(!funcVerifiContratis())
+    {
+        <form method="post" class="d-inline-block" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
 
-    </form>
+            <input id="Submit" type="submit" value="Postularse" class="btn btn-dark m-3" />
 
-    <div class="d-inline-block">
-        
-        <a asp-controller="PersonalInfo" asp-action="Contratist" asp-route-userId="@Model.UserId" class="btn btn-dark m-3"> Perfil del Contratista </a>
-   
-    </div>
-    
+        </form>
+
+        <div class="d-inline-block">
+
+            <a asp-controller="PersonalInfo" asp-action="Contratist" asp-route-userId="@Model.UserId" class="btn btn-dark m-3"> Perfil del Contratista </a>
+
+        </div>
+    }
 
 </div>
 

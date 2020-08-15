@@ -24,7 +24,7 @@
 
         [Required]
         [DataType(DataType.Url)]
-        [StringLength(25)]
+        [StringLength(200)]
         public string PagLink { get; set; }
 
         [ForeignKey("LegalDocumentId")]
