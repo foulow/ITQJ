@@ -1,0 +1,129 @@
+﻿
+@model ITQJ.Domain.DTOs.PersonalInfoResponseDTO;
+
+@{
+    ViewData["Title"] = "Pagina de perfil del Profesional";
+
+}
+
+<div style="width:90%; transform:translateX(5%);">
+
+    <div id="presentar" style="margin:100px 0px 0px 0px;">
+
+
+
+        <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000;">
+
+            <p id="Mname" class="h2"> Nombre: @Model.Name </p>
+
+        </div>
+
+        <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000;">
+
+            <p id="Memail" class="h2"> Correo: @Model.User.Email </p>
+
+        </div>
+
+        <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000">
+
+            <p id="Mnumero" class="h2"> Numero de telefono: @Model.PhoneNumber </p>
+
+        </div>
+
+        <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000">
+
+            <p id="Mling" class="h2"> Pagina Web: <a src="@Model.PagLink">@Model.PagLink </a></p>
+
+        </div>
+
+        <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000">
+
+            <p id="Mdescripcion" class="h2"> Descripción: @Model.Description </p>
+
+        </div>
+
+        <a class="btn badge-dark mt-3 mb-3" asp-action="EdictProfesionalInfo" asp-controller="PersonalInfo"> Editar skills </a>
+
+    </div>
+
+</div>
+
+
+<div class="container" style="width:90%; transform:translateX(5%); margin:0px 0px 100px 0px; ">
+
+    <div style="padding:3px;">
+
+        <h1 class="mb-5">Profesional Skill</h1>
+
+        @if(Model.ProfesionalSkills.FirstOrDefault(x => x.Percentage >= 1).Equals(null))
+        {
+            <h2> Sin avilidades para mostrar.</h2>
+        }
+        else
+            @foreach(ITQJ.Domain.DTOs.ProfesionalSkillResponseDTO skill in Model.ProfesionalSkills)
+            {
+                if(skill.Percentage >= 1)
+                {
+                    <div class="icon-skill-edict d-inline-block">
+
+                        <div class="ContSkill1">
+
+                            <div class="conte-Edict">
+
+                                <div class="ContSkill2">
+
+                                    <div class="titulo" style="">
+
+                                        <label>@skill.Skill.Name</label>
+
+                                    </div>
+
+                                    <div class="DivIMG">
+
+                                        <a>
+
+                                            <i aria-hidden="true" style="cursor:default;">
+
+                                                <img src="@skill.Skill.Path" />
+
+                                            </i>
+
+                                        </a>
+
+                                    </div>
+
+                                    <div class="ContPorcen">
+
+                                        <div class="form-group">
+
+                                            <div class="progress-bar blue stripes shine ">
+                                                <span style=" width: @(Convert.ToString(skill.Percentage) + "%")"></span>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+             }
+
+    </div>
+
+ 
+    <div class="mt-3 position-relative pb-1">
+    
+        <a  asp-controller="ProfesionalSkills" asp-action="GetEdictSkills" class="btn badge-dark" >Editar skills</a>
+    
+    </div>
+
+
+</div>
+

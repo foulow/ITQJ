@@ -13,7 +13,7 @@ namespace ITQJ.API.Controllers
     [ApiController]
     [Authorize]
     [Route("api/[controller]")]
-    public class ProfesionalSkillsController : BaseController
+    public class ProfesionalSkillsController:BaseController
     {
         public ProfesionalSkillsController(IServiceProvider serviceProvider)
             : base(serviceProvider) { }
@@ -41,7 +41,7 @@ namespace ITQJ.API.Controllers
         [HttpPost]
         public ActionResult RegisterProfesionalSkill([FromBody] ProfesionalSkillCreateDTO profesionalSkillData)
         {
-            if (!ModelState.IsValid)
+            if(!ModelState.IsValid)
             {
                 return BadRequest(new
                 {
@@ -53,7 +53,7 @@ namespace ITQJ.API.Controllers
 
             var newProfesionalSkill = this._mapper.Map<ProfesionalSkill>(profesionalSkillData);
 
-            if (newProfesionalSkill == null)
+            if(newProfesionalSkill == null)
                 return BadRequest(new { Error = "No se enviaron los datos esperados." });
 
             var temporalProfesionalSkill = this._appDBContext.ProfesionalSkills.Add(newProfesionalSkill);
@@ -87,6 +87,7 @@ namespace ITQJ.API.Controllers
                 return BadRequest(new { Error = "No se enviaron los datos esperados." });
 
             var skills = this._appDBContext.Skills.Where(x => x.DeletedFlag != true).ToList();
+
             foreach (var skill in skills)
             {
                 if (null != profesionalSkillsData.FirstOrDefault(x => x.SkillId == skill.Id))

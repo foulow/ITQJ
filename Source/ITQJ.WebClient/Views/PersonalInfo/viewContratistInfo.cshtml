@@ -1,0 +1,45 @@
+﻿@model ITQJ.Domain.DTOs.PersonalInfoResponseDTO;
+
+@{
+    ViewData["Title"] = "Pagina de perfil del Contratista";
+}
+
+<div style="width:90%; transform:translateX(5%);">
+
+    <div id="presentar" style="margin:100px 0px 0px 0px;">
+
+        <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000;">
+
+            <p id="Mname" class="h2"> Nombre: @Model.Name </p>
+
+        </div>
+
+        <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000;">
+
+            <p id="Memail" class="h2"> Correo: @Model.User.Email </p>
+
+        </div>
+
+        <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000">
+
+            <p id="Mnumero" class="h2"> Numero de telefono: @Model.PhoneNumber </p>
+
+        </div>
+
+        <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000">
+
+            <p id="Mling" class="h2"> Pagina Web: <a src="@Model.PagLink">@Model.PagLink </a></p>
+
+        </div>
+
+        <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000">
+
+            <p id="Mdescripcion" class="h2"> Descripción: @Model.Description </p>
+
+        </div>
+
+        <a asp-controller="PersonalInfo" asp-action="EdictContratistInfo" class="btn btn-dark m-3"> Editar </a>
+
+    </div>
+
+</div>

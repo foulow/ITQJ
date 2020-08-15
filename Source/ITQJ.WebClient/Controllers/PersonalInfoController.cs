@@ -14,6 +14,8 @@ namespace ITQJ.WebClient.Controllers
     {
         public PersonalInfoController(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
+
+
         [Authorize]
         public async Task<IActionResult> Profesional(string userId)
         {
@@ -29,16 +31,15 @@ namespace ITQJ.WebClient.Controllers
             if ((personalInfoDTO is null) && (userId == userCredentials.Id.ToString()))
                 return RedirectToAction("Register");
             else if (userId == userCredentials.Id.ToString())
-                return RedirectToAction("EditProfesional");
+                return RedirectToAction("Profesional");
             else if (personalInfoDTO == null)
                 return PageNotFound();
 
             return View(personalInfoDTO);
         }
 
-
         [Authorize]
-        public async Task<IActionResult> EditProfesional()
+        public async Task<IActionResult> viewProfesionalInfo()
         {
             var userCredentials = GetUserCredentials();
 
@@ -55,24 +56,44 @@ namespace ITQJ.WebClient.Controllers
         }
 
         [Authorize]
+        public async Task<IActionResult> EdictProfesionalInfo()
+        {
+            var userCredentials = GetUserCredentials();
+
+            if(userCredentials is null || userCredentials.Role == "Contratista")
+                return PageNotFound();
+
+            var personalInfo = await GetPersonalInfo(userCredentials.Id.ToString());
+
+            if(personalInfo == null)
+                return RedirectToAction("Register");
+
+
+            return View(personalInfo);
+        }
+
+        [Authorize]
         [HttpPost]
-        public async Task<IActionResult> EditProfesional(PersonalInfoResponseDTO personalInfo)
+        public async Task<IActionResult> PutProfesionalInfo(PersonalInfoResponseDTO personalInfo)
         {
             if (!ModelState.IsValid)
             {
                 return View(personalInfo);
             }
 
-            var response = await CallApiPUTAsync<PersonalInfoResponseDTO>(uri: "/api/PersonalInfo/" + personalInfo.UserId, body: personalInfo, isSecured: true);
+            var response = await CallApiPUTAsync<PersonalInfoResponseDTO>(uri: "/api/PersonalInfo/" + personalInfo.Id, body: personalInfo, isSecured: true);
 
 
-            return View(response);
+            return RedirectToRoute(new { action = "viewProfesionalInfo", contructor = "PersonalInfo" });
         }
+
+        
+
 
         [Authorize]
         public async Task<IActionResult> Contratist(string userId)
         {
-            if (string.IsNullOrWhiteSpace(userId))
+            if(string.IsNullOrWhiteSpace(userId))
                 return PageNotFound();
 
             var userCredentials = GetUserCredentials();
@@ -81,27 +102,45 @@ namespace ITQJ.WebClient.Controllers
                 return RedirectToAction("AccessDenied", "Authorization");
 
             var personalInfoDTO = await GetPersonalInfo(userId);
-            if ((personalInfoDTO is null) && (userId == userCredentials.Id.ToString()))
+            if((personalInfoDTO is null) && (userId == userCredentials.Id.ToString()))
                 return RedirectToAction("Register");
-            else if (userId == userCredentials.Id.ToString())
-                return RedirectToAction("EditContratist");
-            else if (personalInfoDTO == null)
+            else if(userId == userCredentials.Id.ToString())
+                return RedirectToAction("Contratist");
+            else if(personalInfoDTO == null)
                 return PageNotFound();
 
             return View(personalInfoDTO);
         }
 
+
         [Authorize]
-        public async Task<IActionResult> EditContratist()
+        public async Task<IActionResult> viewContratistInfo()
         {
             var userCredentials = GetUserCredentials();
 
-            if (userCredentials is null || userCredentials.Role == "Profesional")
+            if(userCredentials is null || userCredentials.Role == "Profesional")
                 return PageNotFound();
 
             var personalInfo = await GetPersonalInfo(userCredentials.Id.ToString());
 
-            if (personalInfo == null)
+            if(personalInfo == null)
+                return RedirectToAction("Register");
+
+            return View(personalInfo);
+        }
+
+
+        [Authorize]
+        public async Task<IActionResult> EdictContratistInfo()
+        {
+            var userCredentials = GetUserCredentials();
+
+            if(userCredentials is null || userCredentials.Role == "Profesional")
+                return PageNotFound();
+
+            var personalInfo = await GetPersonalInfo(userCredentials.Id.ToString());
+
+            if(personalInfo == null)
                 return RedirectToAction("Register");
 
             return View(personalInfo);
@@ -110,18 +149,83 @@ namespace ITQJ.WebClient.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> EditContratist(PersonalInfoResponseDTO personalInfo)
+        public async Task<IActionResult> PutContratistInfo(PersonalInfoResponseDTO personalInfo)
         {
-            if (!ModelState.IsValid)
+            if(!ModelState.IsValid)
             {
                 return View(personalInfo);
             }
 
-            var response = await CallApiPUTAsync<PersonalInfoResponseDTO>(uri: "/api/PersonalInfo/" + personalInfo.UserId, body: personalInfo, isSecured: true);
+            var response = await CallApiPUTAsync<PersonalInfoResponseDTO>(uri: "/api/PersonalInfo/" + personalInfo.Id,body: personalInfo,isSecured: true);
 
 
-            return View(response);
+            return RedirectToRoute(new { action = "viewContratistInfo",contructor = "PersonalInfo" });
         }
+
+
+
+
+
+
+        [Authorize]
+        public async Task<IActionResult> AddSkills(string id)
+        {
+            var userCredentials = GetUserCredentials();
+
+
+            var personalInfo = new PersonalInfoVM();
+            personalInfo.Skills = new List<SkillM>();
+            personalInfo.Id = Guid.Parse(id);
+
+            if(userCredentials.Role == "Profesional")
+            {
+                var tempSkills = await CallApiGETAsync<List<SkillDTO>>(uri: "/api/skills",isSecured: false);
+
+                foreach(var skill in tempSkills)
+                {
+                    personalInfo.Skills.Add(new SkillM
+                    {
+                        Id = skill.Id,
+                        Name = skill.Name,
+                        Path = skill.Path,
+                        PersonalInfoId = personalInfo.Id
+                    });
+                }
+            }
+
+            return View(personalInfo.Skills);
+        }
+
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> AddSkills(List<SkillM> skills)
+        {
+                var temProfesionalSkills = new List<ProfesionalSkillCreateDTO>();
+
+                foreach(var skill in skills)
+                {
+                    if(skill.Percentage >= 1)
+                    {
+                        var profesionalSkill = new ProfesionalSkillCreateDTO
+                        {
+                            Percentage = skill.Percentage,
+                            PersonalInfoId = skill.PersonalInfoId,
+                            SkillId = skill.Id
+                        };
+
+                        temProfesionalSkills.Add(profesionalSkill);
+                    }
+
+                }
+
+                _ = await CallApiPOSTAsync(uri: "/api/profesionalSkills/group",body: temProfesionalSkills,isSecured: true);
+
+            return RedirectToAction("Index","Home");
+        }
+
+
+
 
 
         [Authorize]
@@ -162,17 +266,14 @@ namespace ITQJ.WebClient.Controllers
             return View(personalInfo);
         }
 
+
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Register(PersonalInfoVM personalInfo)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return View(personalInfo);
-            //}
+            personalInfo.LegalDocument.Image = new byte[] { 0,0,0,0,1,0 };
 
             // Registra el documento de identidad.
-            personalInfo.LegalDocument.Image = new byte[] { 0, 0, 0, 0, 1, 0 };
             var newLegalDocument = await CallApiPOSTAsync<LegalDocumentResponseDTO>(uri: "/api/legalDocument", body: personalInfo.LegalDocument, isSecured: true);
             personalInfo.LegalDocumentId = newLegalDocument.Id;
 
@@ -185,8 +286,12 @@ namespace ITQJ.WebClient.Controllers
                 return RedirectToAction("EditContratist");
             }
 
-            return Error();
+            return RedirectToRoute( new { action = "AddSkills", controller = "PersonalInfo", id = newPersonalInfo.Id });
         }
+
+
+
+
 
         private Task<PersonalInfoResponseDTO> GetPersonalInfo(string userId)
         {

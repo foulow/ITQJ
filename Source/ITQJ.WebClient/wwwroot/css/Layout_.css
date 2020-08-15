@@ -4,7 +4,6 @@
 }
 
 body {
-    background: #000;
     background: #e6e6e6;
     box-sizing:border-box;
 }
@@ -58,6 +57,10 @@ header{
         right: 5%;
     }
 
+main {
+    min-height: calc(100vh - 165px - 60px);
+}
+
 .Main {
     padding: 0% 1% 0% 1%;
 }
@@ -87,7 +90,7 @@ footer {
     clear: both;
     padding: 2px 0px;
     margin-bottom:1.5%;
-    height:1%;
+    height:30px;
 }
 
 .footerContainer label{

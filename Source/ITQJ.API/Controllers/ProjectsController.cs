@@ -152,6 +152,7 @@ namespace ITQJ.API.Controllers
             });
         }
 
+
         [Authorize]
         [HttpPost]
         public ActionResult RegisterProject([FromBody] ProjectCreateDTO projectData)
@@ -182,6 +183,7 @@ namespace ITQJ.API.Controllers
                 Result = projectModel
             });
         }
+
 
         [Authorize]
         [HttpPut("myprojects/{projectId}")]
@@ -222,6 +224,7 @@ namespace ITQJ.API.Controllers
                 return NotFound(new { Message = "El recurso a actualizar no ha sido encontrado." });
             }
         }
+
 
         [HttpDelete("{projectId}")]
         public ActionResult CloseProyect([FromRoute] Guid projectId, [FromQuery] bool deleteAlso = false)
