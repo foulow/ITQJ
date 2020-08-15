@@ -22,13 +22,13 @@
 
 }
 
-<div class="col d-inline-block p-2 m-0  border badge-dark">
+<div class="col d-inline-block p-2 border badge-dark" style="margin:4% 0% 2% 0%">
 
     <div class="col d-inline m-0 p-0">
 
-        <strong class="h4 m-0 p-0">
+        <strong class="h2 m-0 p-0">
 
-            <h1 class="h2"> @Model.Name </h1>
+             @Model.Name 
 
         </strong>
 
@@ -36,7 +36,7 @@
 
 </div>
 
-<div class="border badge-light mt-lg-3 p-2" id="Div">
+<div class="border badge-light mt-lg-3 p-2 mt-3 " style="margin:0% 0% 13% 0%">
 
     <div class="border-bottom border-dark mb-3">
 
@@ -80,11 +80,18 @@
 
     </div>
 
-    <form method="post" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
+    <form method="post" class="d-inline-block" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
 
         <input id="Submit" type="submit" value="Postularse" class="btn btn-dark m-3" />
 
     </form>
+
+    <div class="d-inline-block">
+        
+        <a asp-controller="PersonalInfo" asp-action="Contratist" asp-route-userId="@Model.UserId" class="btn btn-dark m-3"> Perfil del Contratista </a>
+   
+    </div>
+    
 
 </div>
 

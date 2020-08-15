@@ -10,6 +10,8 @@
 
     <div id="presentar" style="margin:100px 0px 0px 0px;">
 
+
+
         <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000;">
 
             <p id="Mname" class="h2"> Nombre: @Model.Name </p>
@@ -40,7 +42,7 @@
 
         </div>
 
-        <input id="bntEditar" asp-action="EdictProfesionalInfo" asp-controller="PersonalInfo" class="btn btn-dark m-3" type="button" value="Editar" onclick="Edit()" />
+        <a class="btn badge-dark mt-3 mb-3" asp-action="EdictProfesionalInfo" asp-controller="PersonalInfo"> Editar skills </a>
 
     </div>
 

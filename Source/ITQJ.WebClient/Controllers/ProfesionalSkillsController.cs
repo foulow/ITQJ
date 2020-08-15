@@ -85,8 +85,11 @@ namespace ITQJ.WebClient.Controllers
             //}
 
             // Registra los skills de dicho profesional.
+
+
+
             var temProfesionalSkills = new List<ProfesionalSkillCreateDTO>();
-            foreach (var selectedSkill in personalInfo.Skills)
+            foreach(var selectedSkill in personalInfo.Skills)
             {
                 var profesionalSkill = new ProfesionalSkillCreateDTO
                 {
@@ -96,9 +99,9 @@ namespace ITQJ.WebClient.Controllers
                 };
                 temProfesionalSkills.Add(profesionalSkill);
             }
-            _ = await CallApiPUTAsync(uri: "/api/profesionalSkills/", body: temProfesionalSkills, isSecured: true);
+            _ = await CallApiPUTAsync(uri: "/api/profesionalSkills/",body: temProfesionalSkills,isSecured: true);
 
-            return RedirectToAction("EditProfesional");
+            return RedirectToAction("viewProfesionalInfo","PersonalInfo");
         }
     }
 }

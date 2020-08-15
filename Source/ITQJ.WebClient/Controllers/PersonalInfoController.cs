@@ -29,13 +29,12 @@ namespace ITQJ.WebClient.Controllers
             if ((personalInfoDTO is null) && (userId == userCredentials.Id.ToString()))
                 return RedirectToAction("Register");
             else if (userId == userCredentials.Id.ToString())
-                return RedirectToAction("EditProfesional");
+                return RedirectToAction("Profesional");
             else if (personalInfoDTO == null)
                 return PageNotFound();
 
             return View(personalInfoDTO);
         }
-
 
         [Authorize]
         public async Task<IActionResult> viewProfesionalInfo()
@@ -83,49 +82,26 @@ namespace ITQJ.WebClient.Controllers
             var response = await CallApiPUTAsync<PersonalInfoResponseDTO>(uri: "/api/PersonalInfo/EditPersonalInfo/" + personalInfo.UserId, body: personalInfo, isSecured: true);
 
 
-            return View(response);
+            return RedirectToAction("/viewProfesionalInfo");
         }
 
         
         [Authorize]
         public async Task<IActionResult> Contratist(string userId)
         {
-            if (string.IsNullOrWhiteSpace(userId))
+            if(string.IsNullOrWhiteSpace(userId))
                 return PageNotFound();
 
             var userCredentials = GetUserCredentials();
 
-            if (userCredentials is null || userCredentials.Role == "Profesional")
-                return RedirectToAction("AccessDenied", "Authorization");
+            if(userCredentials is null)
+                return RedirectToAction("AccessDenied","Authorization");
 
             var personalInfoDTO = await GetPersonalInfo(userId);
-            if ((personalInfoDTO is null) && (userId == userCredentials.Id.ToString()))
-                return RedirectToAction("Register");
-            else if (userId == userCredentials.Id.ToString())
-                return RedirectToAction("EditContratist");
-            else if (personalInfoDTO == null)
-                return PageNotFound();
-
-            return View(personalInfoDTO);
-        }
-
-
-        [Authorize]
-        public async Task<IActionResult> viewContratistInfo(string userId)
-        {
-            if(string.IsNullOrWhiteSpace(userId))
-                return PageNotFound();
-
-            var userCredentials = GetUserCredentials();
-
-            if(userCredentials is null || userCredentials.Role == "Profesional")
-                return PageNotFound();
-
-            var personalInfoDTO = await GetPersonalInfo(userCredentials.Id.ToString());
             if((personalInfoDTO is null) && (userId == userCredentials.Id.ToString()))
                 return RedirectToAction("Register");
             else if(userId == userCredentials.Id.ToString())
-                return RedirectToAction("EditContratist");
+                return RedirectToAction("Contratist");
             else if(personalInfoDTO == null)
                 return PageNotFound();
 
@@ -134,25 +110,36 @@ namespace ITQJ.WebClient.Controllers
 
 
         [Authorize]
-        public async Task<IActionResult> EdictContratistInfo(string userId)
+        public async Task<IActionResult> viewContratistInfo()
         {
-            if(string.IsNullOrWhiteSpace(userId))
-                return PageNotFound();
-
             var userCredentials = GetUserCredentials();
 
             if(userCredentials is null || userCredentials.Role == "Profesional")
                 return PageNotFound();
 
-            var personalInfoDTO = await GetPersonalInfo(userCredentials.Id.ToString());
-            if((personalInfoDTO is null) && (userId == userCredentials.Id.ToString()))
+            var personalInfo = await GetPersonalInfo(userCredentials.Id.ToString());
+
+            if(personalInfo == null)
                 return RedirectToAction("Register");
-            else if(userId == userCredentials.Id.ToString())
-                return RedirectToAction("EditContratist");
-            else if(personalInfoDTO == null)
+
+            return View(personalInfo);
+        }
+
+
+        [Authorize]
+        public async Task<IActionResult> EdictContratistInfo()
+        {
+            var userCredentials = GetUserCredentials();
+
+            if(userCredentials is null || userCredentials.Role == "Profesional")
                 return PageNotFound();
 
-            return View(personalInfoDTO);
+            var personalInfo = await GetPersonalInfo(userCredentials.Id.ToString());
+
+            if(personalInfo == null)
+                return RedirectToAction("Register");
+
+            return View(personalInfo);
         }
 
 
@@ -160,15 +147,15 @@ namespace ITQJ.WebClient.Controllers
         [HttpPost]
         public async Task<IActionResult> PutContratistInfo(PersonalInfoResponseDTO personalInfo)
         {
-            if (!ModelState.IsValid)
+            if(!ModelState.IsValid)
             {
                 return View(personalInfo);
             }
 
-            var response = await CallApiPUTAsync<PersonalInfoResponseDTO>(uri: "/api/PersonalInfo/EditPersonalInfo/" + personalInfo.UserId, body: personalInfo, isSecured: true);
+            var response = await CallApiPUTAsync<PersonalInfoResponseDTO>(uri: "/api/PersonalInfo/EditPersonalInfo/" + personalInfo.UserId,body: personalInfo,isSecured: true);
 
 
-            return View(response);
+            return RedirectToAction("viewContratistInfo");
         }
 
 

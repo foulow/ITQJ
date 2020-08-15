@@ -108,6 +108,7 @@ namespace ITQJ.API.Controllers
                 return BadRequest(new { Message = $"Error: el parametro {nameof(projectId)} no puede ser nulo." });
 
             var project = this._appDBContext.Projects
+                .Include(i => i.User)
                 .FirstOrDefault(x => x.Id == projectId);
 
             if (project is null)
