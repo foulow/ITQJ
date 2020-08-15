@@ -129,7 +129,7 @@
 
         <h1 class="mb-5">Profesional Skill</h1>
 
-        @if (!Model.ProfesionalSkills.Equals(null))
+        @if (Model.ProfesionalSkills != null && Model.ProfesionalSkills.Count <= 0)
         {
             <h2> Sin avilidades para mostrar.</h2>
         }

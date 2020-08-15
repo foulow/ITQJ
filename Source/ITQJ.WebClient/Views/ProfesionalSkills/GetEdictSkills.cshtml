@@ -26,7 +26,7 @@
 
             </div>
 
-            <div  hidden  class="form-group">
+            <div hidden class="form-group">
 
                 <label asp-for="PhoneNumber" class="control-label">Número de telefono</label><br />
 
@@ -36,7 +36,7 @@
 
             </div>
 
-            <div hidden  class="form-group">
+            <div hidden class="form-group">
 
                 <i class="fas fa-pencil-alt prefix"></i>
                 <label asp-for="Description" class="control-label">Pequeña descripción</label><br />
@@ -47,7 +47,7 @@
 
             </div>
 
-            <div hidden  class="form-group">
+            <div hidden class="form-group">
 
                 <label asp-for="PagLink" class="control-label">Enlace a su sitio web</label><br />
 
@@ -88,16 +88,20 @@
 
 
 
-            @if(Model.Skills != null && Model.Skills.Count > 0)
+            @if (Model.Skills != null && Model.Skills.Count > 0)
             {
                 <hr />
                 <h3 class="m-5">Habilidades tecnicas. Editando...</h3>
 
-                @foreach(var skill in Model.Skills)
+                @for (int i = 0; i < Model.Skills.Count; i++)
                 {
-                    var InId = "inputID" + skill.Id;
-                    var ImId = "imgID" + skill.Id;
-                    var ChId = "CheckID" + skill.Id;
+                    var InId = "inputID" + Model.Skills[i].Id;
+                    var ImId = "imgID" + Model.Skills[i].Id;
+                    var ChId = "CheckID" + Model.Skills[i].Id;
+
+                    <input hidden type="text" asp-for="@Model.Skills[i].PersonalInfoId" />
+                    <input hidden type="text" asp-for="@Model.Skills[i].SkillId" />
+                    <input hidden type="text" asp-for="@Model.Skills[i].Active" />
 
                     <div class="icon-skill-edict d-inline-block">
 
@@ -109,14 +113,14 @@
 
                                     <div class="titulo" style="">
 
-                                        <label>@skill.Name</label> <input hidden class="Check" id="@ChId" type="checkbox" />
+                                        <label>@Model.Skills[i].Name</label> <input hidden class="Check" id="@ChId" asp-for="@Model.Skills[i].Active" type="checkbox" />
 
                                     </div>
 
                                     <div class="DivIMG" style="">
-                                        <a onclick="Check('@skill.Id','@InId','@ChId','@ImId')" id="@ImId">
+                                        <a onclick="Check('@Model.Skills[i].Id','@InId','@ChId','@ImId')" id="@ImId">
                                             <i aria-hidden="true">
-                                                <img src="@skill.Path" asp-append-version="true" />
+                                                <img src="@Model.Skills[i].Path" asp-append-version="true" />
                                             </i>
                                         </a>
                                     </div>
@@ -125,36 +129,36 @@
 
                                         <div class="form-group">
 
-                                            <label asp-for="@skill.Percentage" id="@skill.Id">   @skill.Percentage % </label>
+                                            <label asp-for="@Model.Skills[i].Percentage" id="@Model.Skills[i].Id">   @Model.Skills[i].Percentage % </label>
 
-                                            <input onchange="ChangePorcentage('@skill.Id','@InId','@ChId','@ImId')" id="@InId" asp-for="@skill.Percentage" type="range" max="100" min="0" class="form-control-range">
+                                            <input onchange="ChangePorcentage('@Model.Skills[i].Id','@InId','@ChId','@ImId')" id="@InId" asp-for="@Model.Skills[i].Percentage" type="range" max="100" min="0" class="form-control-range">
 
                                         </div>
 
                                     </div>
 
                                     @*@if(skill.Active)
-                                    {
-                                        <script>
+                                        {
+                                            <script>
 
-                                            debugger;
+                                                debugger;
 
-                                            var input, A, check;
+                                                var input, A, check;
 
-                                            input = document.getElementById('@InId');
-                                            check = document.getElementById('@ChId');
-                                            A =     document.getElementById('@ImId');
+                                                input = document.getElementById('@InId');
+                                                check = document.getElementById('@ChId');
+                                                A =     document.getElementById('@ImId');
 
-                                            if (check.checked == false)
-                                            {
-                                                check.checked = true;
+                                                if (check.checked == false)
+                                                {
+                                                    check.checked = true;
 
-                                                A.style.backgroundColor = "gray";
+                                                    A.style.backgroundColor = "gray";
 
-                                            }
+                                                }
 
-                                        </script>
-                                    }*@
+                                            </script>
+                                        }*@
 
                                 </div>
 

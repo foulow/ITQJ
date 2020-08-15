@@ -89,8 +89,9 @@ namespace ITQJ.WebClient.HttpHandlers
             IRestResponse response = clientAccess.Execute(request);
             var jsonResponse = JObject.Parse(response.Content);
 
-            var timeLeft =
-                DateTimeOffset.Parse(jsonResponse["expires_in"].Value<string>(), CultureInfo.InvariantCulture);
+
+            var timeLeft = new DateTimeOffset();
+            timeLeft.AddSeconds((double)int.Parse(jsonResponse["expires_in"].Value<string>()));
             var currentDate = DateTime.UtcNow;
             var expiresIn = new DateTime(timeLeft.Ticks + currentDate.Ticks);
 

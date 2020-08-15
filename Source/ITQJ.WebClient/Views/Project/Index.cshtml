@@ -10,9 +10,6 @@
     var Div = "div" + @Model.Id;
     var Fcta = "fcta" + @Model.Id;
 
-    if (User.Identity.IsAuthenticated)
-        ViewBag.userId = User.Claims.FirstOrDefault(c => c.Type == "sub").Value;
-
     if (ViewBag.ErrorMesseger != null)
     {
         <script>
@@ -80,11 +77,17 @@
 
     </div>
 
-    <form method="post" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
+    <form method="post" class="d-inline-block" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
 
         <input id="Submit" type="submit" value="Postularse" class="btn btn-dark m-3" />
 
     </form>
+
+    <div class="d-inline-block">
+
+        <a asp-controller="PersonalInfo" asp-action="Contratist" asp-route-userId="@Model.UserId" class="btn btn-dark m-3"> Perfil del Contratista </a>
+
+    </div>
 
 </div>
 

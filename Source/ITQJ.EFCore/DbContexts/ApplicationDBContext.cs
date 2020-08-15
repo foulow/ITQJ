@@ -68,7 +68,7 @@
                 .WithMany(e => e.ProfesionalSkills);
             modelBuilder.Entity<ProfesionalSkill>()
                 .HasOne(e => e.Skill)
-                .WithOne(e => e.ProfesionalSkill);
+                .WithMany(e => e.ProfesionalSkills);
 
             modelBuilder.Entity<Project>()
                 .HasOne(e => e.User)

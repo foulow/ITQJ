@@ -1,9 +1,77 @@
 ﻿@model ITQJ.WebClient.ViewModels.ReviewsToMakeVM
 @{
     ViewData["Title"] = "Hacer Reseña";
+
+    int Nex = Model.PageIndex + 1, Back = Model.PageIndex - 1;
 }
 
 <div class="container">
+    @if (Model.TotalPages > 1)
+    {
+        <div class="d-block p-0 m-0">
+
+            <div class="d-inline-block bg-dark m-0 p-0" style="position:relative; left:50%; transform: translateX(-50%);">
+
+                <nav aria-label="Page navigation example h2">
+
+                    <ul class="pagination">
+                        @if (Model.PageIndex != 1)
+                        {
+                            <li class="page-item">
+
+                                <a class="page-link" aria-label="Previous" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Back">
+                                    <span aria-hidden="true" class="text-dark">&laquo;</span>
+                                </a>
+
+                            </li>
+                        }
+
+
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            if (i == Model.PageIndex)
+                            {
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link text-dark">
+                                        @i
+                                        <span class="sr-only">(current)</span>
+                                    </span>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item">
+
+                                    <a class="page-link text-dark" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@i">@i</a>
+
+                                </li>
+                            }
+
+                        }
+
+
+                        @if (Model.PageIndex != Model.TotalPages)
+                        {
+                            <li class="page-item">
+
+                                <a class="page-link" aria-label="Next" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Nex">
+
+                                    <span aria-hidden="true" class="text-dark">&raquo;</span>
+
+                                </a>
+
+                            </li>
+                        }
+                    </ul>
+                </nav>
+
+            </div>
+
+        </div>
+    }
+
+    <hr />
+
     <h4>Aquí podras ver las reseñas que esten pendiente</h4>
 
     @if (ViewBag.UserRole == "Profesional")
@@ -15,54 +83,74 @@
         <p>Selecciona una de las reseñas pendiente del/los profesional(es) que desea puntuar</p>
     }
 
-    @foreach (var postulation in Model.ProjectsToReview)
+    @if (Model.ProjectsToReview != null && Model.ProjectsToReview.Count > 0)
     {
-        <div style="border: 2px solid lightgray; border-radius: 6px;" id="@postulation.Id">
+        @foreach (var postulation in Model.ProjectsToReview)
+        {
+            <div style="border: 2px solid lightgray; border-radius: 6px;" id="@postulation.Id">
 
-            <div class="col d-inline-block p-2 m-0  border badge-dark" style="border-radius: 6px;">
+                <div class="col d-inline-block p-2 m-0  border badge-dark" style="border-radius: 6px;">
 
-                <div class="col d-inline m-0 p-0">
+                    <div class="col d-inline m-0 p-0">
 
-                    <strong class="h4 m-0 p-0">
+                        <strong class="h4 m-0 p-0">
 
-                        @postulation.Name
+                            @postulation.Name
 
-                    </strong>
+                        </strong>
+
+                    </div>
 
                 </div>
+                <form>
+                    <div hidden>
+                        <input asp-for="Review.UserId" type="text" value="@postulation.UserId" />
+                    </div>
+                    <div class="form-group">
+
+                        <label asp-for="Review.Points" class="control-label">Puntiación</label><br />
+
+                        <input type="range" asp-for="Review.Points" min="1" max="5" value="1" /><br />
+
+                        <span asp-validation-for="Review.Points" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <i class="fas fa-pencil-alt prefix"></i>
+                        <label asp-for="Review.Description" class="control-label">Describenos porque desides dar esa puntiación</label><br />
+
+                        <textarea class="md-textarea form-control" asp-for="Review.Description"></textarea><br />
+
+                        <span asp-validation-for="Review.Description" class="text-danger"></span>
+
+                    </div>
+                    <input type="submit" class="btn badge-dark" style="float:none;" value="Realizar reseña" />
+
+                </form>
 
             </div>
-            <form>
-                <div hidden>
-                    <input asp-for="Review.UserId" type="text" value="@postulation.UserId" />
-                </div>
-                <div class="form-group">
-
-                    <label asp-for="Review.Points" class="control-label">Puntiación</label><br />
-
-                    <input type="range" asp-for="Review.Points" min="1" max="5" value="1" /><br />
-
-                    <span asp-validation-for="Review.Points" class="text-danger"></span>
-
-                </div>
-
-                <div class="form-group">
-
-                    <i class="fas fa-pencil-alt prefix"></i>
-                    <label asp-for="Review.Description" class="control-label">Describenos porque desides dar esa puntiación</label><br />
-
-                    <textarea class="md-textarea form-control" asp-for="Review.Description"></textarea><br />
-
-                    <span asp-validation-for="Review.Description" class="text-danger"></span>
-
-                </div>
-                <input type="submit" class="btn badge-dark" style="float:none;" value="Finalizar registro" />
-
-            </form>
-
+        }
+    }
+    else
+    {
+        <div class="text-center">
+            <h1>Parece que no tienes proyectos completados!</h1> <br />
+            @if (ViewBag.UserRole == "Profesional")
+            {
+                <p>Comienza a aplicar a proyectos para finalizarlos y así dar una reseña al contratista de dicho proyecto.</p>
+            }
+            else if (ViewBag.UserRole == "Contratista")
+            {
+                <p>Comienza a publicar proyectos para resivir profesionales dispuestos a finalizarlos y así dar una reseña al profesional que complete esos proyectos.</p>
+            }
+            else
+            {
+                <p>No deverias estar aqui, completa el proseso de registro para poder acceder a esta pagina.</p>
+            }
         </div>
     }
-
 </div>
 
 @section Scripts {

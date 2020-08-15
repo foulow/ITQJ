@@ -63,7 +63,7 @@ namespace ITQJ.WebClient.Controllers
                 return View(personalInfo);
             }
 
-            var response = await CallApiPUTAsync<PersonalInfoResponseDTO>(uri: "/api/PersonalInfo/EditPersonalInfo/" + personalInfo.UserId, body: personalInfo, isSecured: true);
+            var response = await CallApiPUTAsync<PersonalInfoResponseDTO>(uri: "/api/PersonalInfo/" + personalInfo.UserId, body: personalInfo, isSecured: true);
 
 
             return View(response);
@@ -77,7 +77,7 @@ namespace ITQJ.WebClient.Controllers
 
             var userCredentials = GetUserCredentials();
 
-            if (userCredentials is null || userCredentials.Role == "Profesional")
+            if (userCredentials is null)
                 return RedirectToAction("AccessDenied", "Authorization");
 
             var personalInfoDTO = await GetPersonalInfo(userId);
@@ -117,7 +117,7 @@ namespace ITQJ.WebClient.Controllers
                 return View(personalInfo);
             }
 
-            var response = await CallApiPUTAsync<PersonalInfoResponseDTO>(uri: "/api/PersonalInfo/EditPersonalInfo/" + personalInfo.UserId, body: personalInfo, isSecured: true);
+            var response = await CallApiPUTAsync<PersonalInfoResponseDTO>(uri: "/api/PersonalInfo/" + personalInfo.UserId, body: personalInfo, isSecured: true);
 
 
             return View(response);
@@ -172,6 +172,7 @@ namespace ITQJ.WebClient.Controllers
             //}
 
             // Registra el documento de identidad.
+            personalInfo.LegalDocument.Image = new byte[] { 0, 0, 0, 0, 1, 0 };
             var newLegalDocument = await CallApiPOSTAsync<LegalDocumentResponseDTO>(uri: "/api/legalDocument", body: personalInfo.LegalDocument, isSecured: true);
             personalInfo.LegalDocumentId = newLegalDocument.Id;
 
@@ -179,27 +180,7 @@ namespace ITQJ.WebClient.Controllers
             var tempPersonalInfo = (PersonalInfoResponseDTO)personalInfo;
             var newPersonalInfo = await CallApiPOSTAsync<PersonalInfoResponseDTO>(uri: "/api/personalInfo", body: tempPersonalInfo, isSecured: true);
 
-            if (newPersonalInfo.User.Role == "Profesional")
-            {
-                // Registra los skills de dicho profesional.
-                var temProfesionalSkills = new List<ProfesionalSkillCreateDTO>();
-                foreach (var selectedSkill in personalInfo.Skills)
-                {
-                    var profesionalSkill = new ProfesionalSkillCreateDTO
-                    {
-                        Percentage = selectedSkill.Percentage,
-                        PersonalInfoId = newPersonalInfo.Id,
-                        SkillId = selectedSkill.SkillId
-                    };
-                    temProfesionalSkills.Add(profesionalSkill);
-                }
-                _ = await CallApiPOSTAsync(uri: "/api/profesionalSkills/", body: temProfesionalSkills, isSecured: true);
-
-                return RedirectToAction("EditProfesional");
-
-
-            }
-            else if (newPersonalInfo.User.Role == "Contratista")
+            if (newPersonalInfo.User.Role == "Contratista")
             {
                 return RedirectToAction("EditContratist");
             }
