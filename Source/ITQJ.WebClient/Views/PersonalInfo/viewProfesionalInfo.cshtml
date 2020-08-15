@@ -55,48 +55,51 @@
 
         <h1 class="mb-5">Profesional Skill</h1>
 
-        @if(!Model.ProfesionalSkills.Equals(null))
+        @if(Model.ProfesionalSkills.FirstOrDefault(x => x.Percentage >= 1).Equals(null))
         {
             <h2> Sin avilidades para mostrar.</h2>
         }
         else
             @foreach(ITQJ.Domain.DTOs.ProfesionalSkillResponseDTO skill in Model.ProfesionalSkills)
             {
+                if(skill.Percentage >= 1)
+                {
+                    <div class="icon-skill-edict d-inline-block">
 
-                <div class="icon-skill-edict d-inline-block">
+                        <div class="ContSkill1">
 
-                    <div class="ContSkill1">
+                            <div class="conte-Edict">
 
-                        <div class="conte-Edict">
+                                <div class="ContSkill2">
 
-                            <div class="ContSkill2">
+                                    <div class="titulo" style="">
 
-                                <div class="titulo" style="">
+                                        <label>@skill.Skill.Name</label>
 
-                                    <label>@skill.Skill.Name</label>
+                                    </div>
 
-                                </div>
+                                    <div class="DivIMG">
 
-                                <div class="DivIMG">
+                                        <a>
 
-                                    <a>
+                                            <i aria-hidden="true" style="cursor:default;">
 
-                                        <i aria-hidden="true" style="cursor:default;">
+                                                <img src="@skill.Skill.Path" />
 
-                                            <img src="@skill.Skill.Path" />
+                                            </i>
 
-                                        </i>
+                                        </a>
 
-                                    </a>
+                                    </div>
 
-                                </div>
+                                    <div class="ContPorcen">
 
-                                <div class="ContPorcen">
+                                        <div class="form-group">
 
-                                    <div class="form-group">
+                                            <div class="progress-bar blue stripes shine ">
+                                                <span style=" width: @(Convert.ToString(skill.Percentage) + "%")"></span>
+                                            </div>
 
-                                        <div class="progress-bar blue stripes shine ">
-                                            <span style=" width: @(Convert.ToString(skill.Percentage) + "%")"></span>
                                         </div>
 
                                     </div>
@@ -108,11 +111,9 @@
                         </div>
 
                     </div>
+                }
 
-                </div>
-
-
-            }
+             }
 
     </div>
 

@@ -159,6 +159,68 @@ namespace ITQJ.WebClient.Controllers
         }
 
 
+
+
+
+
+        [Authorize]
+        public async Task<IActionResult> AddSkills(string id)
+        {
+            var userCredentials = GetUserCredentials();
+
+
+            var personalInfo = new PersonalInfoVM();
+            personalInfo.Skills = new List<SkillM>();
+            personalInfo.Id = Guid.Parse(id);
+
+            if(userCredentials.Role == "Profesional")
+            {
+                var tempSkills = await CallApiGETAsync<List<SkillDTO>>(uri: "/api/skills",isSecured: false);
+
+                foreach(var skill in tempSkills)
+                {
+                    personalInfo.Skills.Add(new SkillM
+                    {
+                        Id = skill.Id,
+                        Name = skill.Name,
+                        Path = skill.Path,
+                        PersonalInfoId = personalInfo.Id
+                    });
+                }
+            }
+
+            return View(personalInfo.Skills);
+        }
+
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> AddSkills(List<SkillM> skills)
+        {
+                var temProfesionalSkills = new List<ProfesionalSkillCreateDTO>();
+
+                foreach(var skill in skills)
+                {
+                    if(skill.Percentage >= 1)
+                    {
+                        var profesionalSkill = new ProfesionalSkillCreateDTO
+                        {
+                            Percentage = skill.Percentage,
+                            PersonalInfoId = skill.PersonalInfoId,
+                            SkillId = skill.Id
+                        };
+
+                        temProfesionalSkills.Add(profesionalSkill);
+                    }
+
+                }
+
+                _ = await CallApiPOSTAsync(uri: "/api/profesionalSkills/group",body: temProfesionalSkills,isSecured: true);
+
+            return RedirectToAction("Index","Home");
+        }
+
+
         [Authorize]
         public async Task<IActionResult> Register()
         {
@@ -197,14 +259,12 @@ namespace ITQJ.WebClient.Controllers
             return View(personalInfo);
         }
 
+
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Register(PersonalInfoVM personalInfo)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return View(personalInfo);
-            //}
+            personalInfo.LegalDocument.Image = new byte[] { 0,0,0,0,1,0 };
 
             // Registra el documento de identidad.
             var newLegalDocument = await CallApiPOSTAsync<LegalDocumentResponseDTO>(uri: "/api/legalDocument", body: personalInfo.LegalDocument, isSecured: true);
@@ -214,32 +274,12 @@ namespace ITQJ.WebClient.Controllers
             var tempPersonalInfo = (PersonalInfoResponseDTO)personalInfo;
             var newPersonalInfo = await CallApiPOSTAsync<PersonalInfoResponseDTO>(uri: "/api/personalInfo", body: tempPersonalInfo, isSecured: true);
 
-            if (newPersonalInfo.User.Role == "Profesional")
-            {
-                // Registra los skills de dicho profesional.
-                var temProfesionalSkills = new List<ProfesionalSkillCreateDTO>();
-                foreach (var selectedSkill in personalInfo.Skills)
-                {
-                    var profesionalSkill = new ProfesionalSkillCreateDTO
-                    {
-                        Percentage = selectedSkill.Percentage,
-                        PersonalInfoId = newPersonalInfo.Id,
-                        SkillId = selectedSkill.SkillId
-                    };
-                    temProfesionalSkills.Add(profesionalSkill);
-                }
-                _ = await CallApiPOSTAsync(uri: "/api/profesionalSkills/", body: temProfesionalSkills, isSecured: true);
-
-                return RedirectToAction("EditProfesional");
-
-
-            }
-            else if (newPersonalInfo.User.Role == "Contratista")
+            if (newPersonalInfo.User.Role == "Contratista")
             {
                 return RedirectToAction("EditContratist");
             }
 
-            return Error();
+            return RedirectToRoute( new { action = "AddSkills", controller = "PersonalInfo", id = newPersonalInfo.Id });
         }
 
 

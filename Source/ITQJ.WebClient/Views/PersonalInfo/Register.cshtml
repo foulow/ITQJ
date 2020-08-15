@@ -68,6 +68,7 @@
 
             </div>
 
+            @*TODO: agregar soporte  de imagenes.
             <div class="form-group">
 
                 <label asp-for="LegalDocument.Image" class="control-label">Foto del documetno legal</label><br />
@@ -76,7 +77,7 @@
 
                 <span asp-validation-for="LegalDocument.Image" class="text-danger"></span>
 
-            </div>
+            </div>*@
 
             <div class="form-group">
 
@@ -89,64 +90,7 @@
 
             </div>
 
-            @if (Model.Skills != null && Model.Skills.Count > 0)
-            {
-                <hr />
-                <h3>Seleccione las habilidades tecnicas que conoce</h3>
-
-
-                @foreach (var skill in Model.Skills)
-                {
-                    var InId = "inputID" + skill.Id;
-                    var ImId = "imgID" + skill.Id;
-                    var ChId = "CheckID" + skill.Id;
-
-                    <div class="icon-skill-edict d-inline-block">
-
-                        <div class="ContSkill1">
-
-                            <div class="conte-Edict">
-
-                                <div class="ContSkill2">
-
-                                    <div class="titulo" style="">
-
-                                        <label>@skill.Name</label> <input hidden class="Check" id="@ChId" type="checkbox" />
-
-                                    </div>
-
-                                    <div class="DivIMG" style="">
-                                        <a onclick="Check('@skill.Id','@InId','@ChId','@ImId')" id="@ImId">
-                                            <i aria-hidden="true">
-                                                <img src="@skill.Path" asp-for="" asp-append-version="true" />
-                                            </i>
-                                        </a>
-                                    </div>
-
-                                    <div class="ContPorcen">
-
-                                        <div class="form-group">
-
-                                            <label asp-for="@skill.Percentage" id="@skill.Id">   @skill.Percentage % </label>
-
-                                            <input onchange="ChangePorcentage('@skill.Id','@InId','@ChId','@ImId')" id="@InId" asp-for="@skill.Percentage" type="range" max="100" min="0" class="form-control-range">
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-                }
-            }
-
-
-            <input type="submit" class="btn badge-dark" style="float:none;" value="Finalizar registro" />
+            <input type="submit" class="btn badge-dark" style="float:none;" value="Registro siguiente" />
 
         </form>
 

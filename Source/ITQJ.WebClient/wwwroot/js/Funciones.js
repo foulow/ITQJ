@@ -1,5 +1,8 @@
 ﻿$(document).ready(() => {
 
+
+
+
     $("#Editar").css({
         visibility: "hidden",
         position: "absolute",
@@ -149,7 +152,7 @@ function MaxPostulantOff(CheckClose, MaxPas, CheckPostulant, InputClose) {
 
 function MaxPostulant(CheckClose, MaxPas)
 {
-    debugger;
+
     var check,number;
 
     check = CheckClose;

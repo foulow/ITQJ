@@ -13,13 +13,13 @@
 
 }
 
-<div class="text-center">
+<div class="text-center" style="margin:100px 0px 0px 0px;">
 
     <h2>Publicar Poryecto</h2>
 
 </div>
 
-<div>
+<div style="margin:0px 0px 50px 0px;">
 
     <form method="post" asp-controller="Project" asp-action="Publish" class="bg-dark text-white w-50 rounded rounded-top" style="position:relative; border:2px solid aqua; left:50%; transform: translateX(-50%);">
 
@@ -81,6 +81,20 @@
     </form>
 
 </div>
+
+<script>
+
+    debugger;
+
+    $(document).ready(() => {
+
+        MaxPostulant(@CheckPostulant,@MaxPastilants);
+
+        MaxPostulantOff(@CheckPostulant,@MaxPastilants,@CheckCloseDate,@InputCloseDate);
+
+    });
+
+</script>
 
 @section Scripts {
 
