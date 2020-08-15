@@ -3,7 +3,7 @@
     ViewData["Title"] = "Pagina de perfil del Contratista";
 }
 
-    <div style="width:90%; transform:translateX(5%);">
+@*<div style="width:90%; transform:translateX(5%);">
 
         <div id="presentar" style="margin:100px 0px 0px 0px;">
 
@@ -39,4 +39,256 @@
 
         </div>
 
+    </div>*@
+<h1>Some content</h1>
+<div class="Star"></div>
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<div style="margin:0px 0px 0px 10px; padding:0px; display:inline-block">
+
+    @{ int SizeStarsY = 30, SizeStarsX = 40;}
+
+    <div style="display:block; position:relative;">
+
+        <div style="display:inline-block; position:relative">
+
+            <img id="HalfStar1" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:relative; top:0px; left:0px;" src="~/Image/star_half_empty.png" />
+
+            <img id="FullStar1" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:absolute; top:0px; left:0px;" src="~/Image/star_filled.png" />
+
+        </div>
+
+
+        <div style="display:inline-block; position:relative">
+
+
+            <img id="HalfStar2" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:relative; top:0px; left:0px; " src="~/Image/star_half_empty.png" />
+
+            <img id="FullStar2" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:absolute; top:0px; left:0px; " src="~/Image/star_filled.png" />
+
+
+        </div>
+
+
+        <div style="display:inline-block; position:relative">
+
+
+            <img id="HalfStar3" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:relative; top:0px; left:0px;" src="~/Image/star_half_empty.png" />
+
+            <img id="FullStar3" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:absolute; top:0px; left:0px;" src="~/Image/star_filled.png" />
+
+
+        </div>
+
+
+        <div style="display:inline-block; position:relative">
+
+
+            <img id="HalfStar4" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:relative; top:0px; left:0px;" src="~/Image/star_half_empty.png" />
+
+            <img id="FullStar4" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:absolute; top:0px; left:0px;" src="~/Image/star_filled.png" />
+
+
+        </div>
+
+
+        <div style="display:inline-block; position:relative">
+
+
+            <img id="HalfStar5" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:relative; top:0px; left:0px;" src="~/Image/star_half_empty.png" />
+
+            <img id="FullStar5" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:absolute; top:0px; left:0px;" src="~/Image/star_filled.png" />
+
+
+        </div>
+
+
     </div>
+
+
+    <div style="display:block; border:1px dotted red; border-radius:10px;">
+
+
+        <input onchange="ActiveStar()" id="RangoStar" value="0" name="Stars" type="range" max="100" min="0" class="form-control-range" />
+
+    </div>
+
+    <script>
+
+        function ActiveStar() {
+            debugger;
+
+            var value = document.getElementById('RangoStar').value;
+
+            if (value <= 9) {
+                $("#HalfStar1").css({ visibility: "hidden" });
+                $("#FullStar1").css({ visibility: "hidden" });
+                $("#HalfStar2").css({ visibility: "hidden" });
+                $("#FullStar2").css({ visibility: "hidden" });
+                $("#HalfStar3").css({ visibility: "hidden" });
+                $("#FullStar3").css({ visibility: "hidden" });
+                $("#HalfStar4").css({ visibility: "hidden" });
+                $("#FullStar4").css({ visibility: "hidden" });
+                $("#HalfStar5").css({ visibility: "hidden" });
+                $("#FullStar5").css({ visibility: "hidden" });
+            }
+
+            else if (value >= 10 && value <= 19) {
+                $("#HalfStar1").css({ visibility: "visible" });
+
+                $("#FullStar1").css({ visibility: "hidden" });
+                $("#HalfStar2").css({ visibility: "hidden" });
+                $("#FullStar2").css({ visibility: "hidden" });
+                $("#HalfStar3").css({ visibility: "hidden" });
+                $("#FullStar3").css({ visibility: "hidden" });
+                $("#HalfStar4").css({ visibility: "hidden" });
+                $("#FullStar4").css({ visibility: "hidden" });
+                $("#HalfStar5").css({ visibility: "hidden" });
+                $("#FullStar5").css({ visibility: "hidden" });
+            }
+
+            else if (value >= 20 && value <= 29) {
+                $("#FullStar1").css({ visibility: "visible" });
+
+                $("#HalfStar1").css({ visibility: "hidden" });
+                $("#HalfStar2").css({ visibility: "hidden" });
+                $("#FullStar2").css({ visibility: "hidden" });
+                $("#HalfStar3").css({ visibility: "hidden" });
+                $("#FullStar3").css({ visibility: "hidden" });
+                $("#HalfStar4").css({ visibility: "hidden" });
+                $("#FullStar4").css({ visibility: "hidden" });
+                $("#HalfStar5").css({ visibility: "hidden" });
+                $("#FullStar5").css({ visibility: "hidden" });
+            }
+
+            else if (value >= 30 && value <= 39) {
+                $("#FullStar1").css({ visibility: "visible" });
+
+                $("#HalfStar2").css({ visibility: "visible" });
+
+                $("#HalfStar1").css({ visibility: "hidden" });
+                $("#FullStar2").css({ visibility: "hidden" });
+                $("#HalfStar3").css({ visibility: "hidden" });
+                $("#FullStar3").css({ visibility: "hidden" });
+                $("#HalfStar4").css({ visibility: "hidden" });
+                $("#FullStar4").css({ visibility: "hidden" });
+                $("#HalfStar5").css({ visibility: "hidden" });
+                $("#FullStar5").css({ visibility: "hidden" });
+            }
+
+            else if (value >= 40 && value <= 49) {
+                $("#FullStar1").css({ visibility: "visible" });
+
+                $("#FullStar2").css({ visibility: "visible" });
+
+                $("#HalfStar1").css({ visibility: "hidden" });
+                $("#HalfStar2").css({ visibility: "hidden" });
+                $("#HalfStar3").css({ visibility: "hidden" });
+                $("#FullStar3").css({ visibility: "hidden" });
+                $("#HalfStar4").css({ visibility: "hidden" });
+                $("#FullStar4").css({ visibility: "hidden" });
+                $("#HalfStar5").css({ visibility: "hidden" });
+                $("#FullStar5").css({ visibility: "hidden" });
+            }
+
+            else if (value >= 50 && value <= 59) {
+                $("#FullStar1").css({ visibility: "visible" });
+                $("#FullStar2").css({ visibility: "visible" });
+
+                $("#HalfStar3").css({ visibility: "visible" });
+
+                $("#HalfStar1").css({ visibility: "hidden" });
+                $("#HalfStar2").css({ visibility: "hidden" });
+                $("#FullStar3").css({ visibility: "hidden" });
+                $("#HalfStar4").css({ visibility: "hidden" });
+                $("#FullStar4").css({ visibility: "hidden" });
+                $("#HalfStar5").css({ visibility: "hidden" });
+                $("#FullStar5").css({ visibility: "hidden" });
+            }
+
+            else if (value >= 60 && value <= 69) {
+                $("#FullStar1").css({ visibility: "visible" });
+                $("#FullStar2").css({ visibility: "visible" });
+
+                $("#FullStar3").css({ visibility: "visible" });
+
+                $("#HalfStar1").css({ visibility: "hidden" });
+                $("#HalfStar2").css({ visibility: "hidden" });
+                $("#HalfStar3").css({ visibility: "hidden" });
+                $("#HalfStar4").css({ visibility: "hidden" });
+                $("#FullStar4").css({ visibility: "hidden" });
+                $("#HalfStar5").css({ visibility: "hidden" });
+                $("#FullStar5").css({ visibility: "hidden" });
+            }
+
+            else if (value >= 70 && value <= 79) {
+                $("#FullStar1").css({ visibility: "visible" });
+                $("#FullStar2").css({ visibility: "visible" });
+                $("#FullStar3").css({ visibility: "visible" });
+
+                $("#HalfStar4").css({ visibility: "visible" });
+
+                $("#HalfStar1").css({ visibility: "hidden" });
+                $("#HalfStar2").css({ visibility: "hidden" });
+                $("#HalfStar3").css({ visibility: "hidden" });
+                $("#FullStar4").css({ visibility: "hidden" });
+                $("#HalfStar5").css({ visibility: "hidden" });
+                $("#FullStar5").css({ visibility: "hidden" });
+            }
+
+            else if (value >= 80 && value <= 89) {
+                $("#FullStar1").css({ visibility: "visible" });
+                $("#FullStar2").css({ visibility: "visible" });
+                $("#FullStar3").css({ visibility: "visible" });
+
+                $("#FullStar4").css({ visibility: "visible" });
+
+                $("#HalfStar1").css({ visibility: "hidden" });
+                $("#HalfStar2").css({ visibility: "hidden" });
+                $("#HalfStar3").css({ visibility: "hidden" });
+                $("#HalfStar4").css({ visibility: "hidden" });
+                $("#HalfStar5").css({ visibility: "hidden" });
+                $("#FullStar5").css({ visibility: "hidden" });
+            }
+
+            else if (value >= 90 && value <= 99) {
+                $("#FullStar1").css({ visibility: "visible" });
+                $("#FullStar2").css({ visibility: "visible" });
+                $("#FullStar3").css({ visibility: "visible" });
+                $("#FullStar4").css({ visibility: "visible" });
+
+                $("#HalfStar5").css({ visibility: "visible" });
+
+                $("#HalfStar1").css({ visibility: "hidden" });
+                $("#HalfStar2").css({ visibility: "hidden" });
+                $("#HalfStar3").css({ visibility: "hidden" });
+                $("#HalfStar4").css({ visibility: "hidden" });
+                $("#FullStar5").css({ visibility: "hidden" });
+            }
+
+            else if (value == 100) {
+
+                $("#FullStar1").css({ visibility: "visible" });
+                $("#FullStar2").css({ visibility: "visible" });
+                $("#FullStar3").css({ visibility: "visible" });
+                $("#FullStar4").css({ visibility: "visible" });
+                $("#FullStar5").css({ visibility: "visible" });
+
+                $("#HalfStar1").css({ visibility: "hidden" });
+                $("#HalfStar2").css({ visibility: "hidden" });
+                $("#HalfStar3").css({ visibility: "hidden" });
+                $("#HalfStar4").css({ visibility: "hidden" });
+                $("#HalfStar5").css({ visibility: "hidden" });
+            }
+        }
+
+    </script>
+
+</div>
