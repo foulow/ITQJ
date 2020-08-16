@@ -3,7 +3,10 @@
     ViewData["Title"] = "Pagina de perfil del Contratista";
 }
 
-@*<div style="width:90%; transform:translateX(5%);">
+<div id="1" class="Star" style="margin:0px 0px 0px 10px; padding:0px; display:inline-block;"></div>
+
+
+<div style="width:90%; transform:translateX(5%);">
 
         <div id="presentar" style="margin:100px 0px 0px 0px;">
 
@@ -39,19 +42,13 @@
 
         </div>
 
-    </div>*@
-<h1>Some content</h1>
-<div class="Star"></div>
+    </div>
 
 
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
 
-<div style="margin:0px 0px 0px 10px; padding:0px; display:inline-block">
+
+
+@*<div style="margin:0px 0px 0px 10px; padding:0px; display:inline-block">
 
     @{ int SizeStarsY = 30, SizeStarsX = 40;}
 
@@ -112,9 +109,7 @@
 
     </div>
 
-
     <div style="display:block; border:1px dotted red; border-radius:10px;">
-
 
         <input onchange="ActiveStar()" id="RangoStar" value="0" name="Stars" type="range" max="100" min="0" class="form-control-range" />
 
@@ -122,7 +117,9 @@
 
     <script>
 
-        function ActiveStar() {
+        function ActiveStar()
+        {
+
             debugger;
 
             var value = document.getElementById('RangoStar').value;
@@ -291,4 +288,5 @@
 
     </script>
 
-</div>
+</div>*@
+
