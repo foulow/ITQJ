@@ -3,8 +3,7 @@
     ViewData["Title"] = "Inicio";
     string Descr = "";
 
-    int Nex = Model.PageIndex + 1, Back = Model.PageIndex - 1;
-
+    int Nex = Model.PageIndex + 1, Back = Model.PageIndex - 1, postulaciones = 0;
 }
 
 <section class="Main">
@@ -32,7 +31,7 @@
 
             <div class="d-block p-0 m-0">
 
-                @if (Model.TotalPages > 1)
+                @if(Model.TotalPages > 1)
                 {
                     <div class="d-block p-0 m-0">
 
@@ -41,7 +40,8 @@
                             <nav aria-label="Page navigation example h2">
 
                                 <ul class="pagination">
-                                    @if (Model.PageIndex != 1)
+
+                                    @if(Model.PageIndex != 1)
                                     {
                                         <li class="page-item">
 
@@ -53,15 +53,20 @@
                                     }
 
 
-                                    @for (int i = 1; i <= Model.TotalPages; i++)
+                                    @for(int i = 1; i <= Model.TotalPages; i++)
                                     {
-                                        if (i == Model.PageIndex)
+                                        if(i == Model.PageIndex)
                                         {
                                             <li class="page-item active" aria-current="page">
+
                                                 <span class="page-link text-dark">
+
                                                     @i
+
                                                     <span class="sr-only">(current)</span>
+
                                                 </span>
+
                                             </li>
                                         }
                                         else
@@ -76,7 +81,7 @@
                                     }
 
 
-                                    @if (Model.PageIndex != Model.TotalPages)
+                                    @if(Model.PageIndex != Model.TotalPages)
                                     {
                                         <li class="page-item">
 
@@ -88,7 +93,9 @@
 
                                         </li>
                                     }
+
                                 </ul>
+
                             </nav>
 
                         </div>
@@ -98,10 +105,12 @@
 
                 <hr />
 
-                @if (Model.Projects != null && Model.Projects.Count > 0)
+                @if(Model.Projects != null && Model.Projects.Count > 0)
                 {
-                    @foreach (var dato in Model.Projects)
+                    @foreach(var dato in Model.Projects)
                     {
+                        postulaciones = dato.PostulantsLimit - dato.Postulants.Count;
+
                         <a asp-route-projectId="@dato.Id" asp-controller="Project" asp-action="Index" onmouseover="ProjectOver('@dato.Id')" onmouseout="ProjectDown('@dato.Id')">
 
                             <div style="border: 2px solid lightgray; border-radius: 6px;" id="@dato.Id">
@@ -124,14 +133,14 @@
 
                                     <div class="col d-inline m-0 p-0 ">
 
-                                        @if (!dato.Description.Equals(null))
+                                        @if(!dato.Description.Equals(null))
                                         {
-                                            if (dato.Description.Length >= 100)
+                                            if(dato.Description.Length >= 100)
                                             {
-                                                Descr = dato.Description.Substring(0, 150);
+                                                Descr = dato.Description.Substring(0,150);
                                                 Descr += "...";
                                             }
-                                            else if (dato.Description.Equals(string.Empty))
+                                            else if(dato.Description.Equals(string.Empty))
                                             {
                                                 Descr = "Sin Descripción.";
                                             }
@@ -178,7 +187,7 @@
 
                                         <strong class="h6 m-0 p-0">
 
-                                            Postaciones restante: <text class="text-danger">@dato.PostulantsLimit</text>
+                                            Postaciones restante: <text class="text-danger"> @postulaciones </text>
 
                                         </strong>
 
@@ -197,8 +206,10 @@
                 else
                 {
                     <div class="text-center">
+
                         <h1>Parece que no hay proyectos disponibles de momento.</h1> <br />
-                        @if (ViewBag.UserRole == "Contratista")
+
+                        @if(ViewBag.UserRole == "Contratista")
                         {
                             <p>Sé el primero en publicar un proyecto para que otros profesionales puedan realizar tu trabajo.</p>
                         }
@@ -206,10 +217,14 @@
                         {
                             <p>Intenta entrar nuevamenta dentro de unos minutos.</p>
                         }
+
                     </div>
+
                 }
 
                 <button onclick="ScrollUp()" class="ButtonUp" style="outline: none; float: left;"></button>
+
+            </div>
 
         </article>
 

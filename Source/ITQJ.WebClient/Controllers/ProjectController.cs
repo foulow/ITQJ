@@ -26,7 +26,8 @@ namespace ITQJ.WebClient.Controllers
             if (projectInfo == null)
                 return PageNotFound();
 
-            return View(projectInfo);
+
+                return View(projectInfo);
         }
 
         [Authorize]

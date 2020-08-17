@@ -57,8 +57,9 @@ header{
         right: 5%;
     }
 
-main {
-    min-height: calc(100vh - 165px - 60px);
+main 
+{
+    min-height: calc(100vh - 65px - 60px);
 }
 
 .Main {
