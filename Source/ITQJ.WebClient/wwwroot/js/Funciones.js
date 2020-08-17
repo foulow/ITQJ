@@ -568,7 +568,7 @@ function RangeStar() {
     input.style.width = "100%";
     input.onchange = function ()
     {
-        var value = document.getElementById('RangoStar').value;
+        var value = document.getElementById(ID).value;
 
         if (value <= 9) {
             $("#HalfStar1").css({ visibility: "hidden" });

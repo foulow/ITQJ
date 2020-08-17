@@ -12,19 +12,20 @@
     var Div = "div" + @Model.Id;
     var Fcta = "fcta" + @Model.Id;
 
-    if (ViewBag.ErrorMesseger != null)
+    if(ViewBag.ErrorMesseger != null)
     {
         <script>
             alert(ViewBag.ErrorMesseger);
         </script>
     }
 
+    var postulaciones = Model.PostulantsLimit - Model.Postulants.Count;
 
     Func<bool> funcVerifiContratis = () =>
     {
         Guid userId = ViewBag.UserId;
 
-        if (Model.UserId == userId)
+        if(Model.UserId == userId)
         {
             return true;
         }
@@ -38,7 +39,7 @@
 
         var fecha = Model.CloseDate.ToString();
 
-        if (fecha.Substring(0, 8) == "1/1/0001")
+        if(fecha.Substring(0,8) == "1/1/0001")
         {
             return "Nullo";
         }
@@ -102,7 +103,7 @@
 
             <strong class="h6 m-0 p-0">
 
-                Postaciones restante: <text class="text-danger">@Model.PostulantsLimit</text>
+                Postaciones restante: <text class="text-danger">@postulaciones</text>
 
             </strong>
 
@@ -110,13 +111,32 @@
 
     </div>
 
-    @if (!funcVerifiContratis())
+    @if(!funcVerifiContratis())
     {
-        <form method="post" class="d-inline-block" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
 
-            <input id="Submit" type="submit" value="Postularse" class="btn btn-dark m-3" />
+        if(Model.Postulants.Count == 0)
+        {
+            <form method="post" class="d-inline-block" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
 
-        </form>
+                <input id="Submit" type="submit" value="Postularse" class="btn btn-dark m-3" />
+
+            </form>
+        }
+        else
+        {
+            if(Model.Postulants.FirstOrDefault(x => x.UserId == ViewBag.UserId).Equals(null))
+            {
+                <form method="post" class="d-inline-block" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
+
+                    <input id="Submit" type="submit" value="Postularse" class="btn btn-dark m-3" />
+
+                </form>
+            }
+            else
+            {
+
+            }
+        }
 
         <div class="d-inline-block">
 
