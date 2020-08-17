@@ -1,9 +1,11 @@
-﻿
+﻿@model ITQJ.Domain.DTOs.ProjectResponseDTO;
+
 @{
     ViewData["Title"] = "Projecto";
+
+    ViewBag.ProjectId = Model.Id;
 }
 
-@model ITQJ.Domain.DTOs.ProjectResponseDTO;
 
 @{
     var Id = "id" + Model.Id;
@@ -125,4 +127,7 @@
 
 </div>
 
+@section Chat {
+    <partial name="_Chat" />
+}
 

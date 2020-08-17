@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ITQJ.API.Migrations
 {
-    public partial class UpdateMigration : Migration
+    public partial class MessageUpdate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -153,23 +153,25 @@ namespace ITQJ.API.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     DeletedFlag = table.Column<bool>(nullable: false),
                     Text = table.Column<string>(maxLength: 500, nullable: false),
-                    UserId = table.Column<Guid>(nullable: false),
+                    MessageDate = table.Column<DateTime>(nullable: false),
+                    FromUserId = table.Column<Guid>(nullable: false),
+                    ToUserId = table.Column<Guid>(nullable: false),
                     ProjectId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Messages", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Messages_Users_FromUserId",
+                        column: x => x.FromUserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Messages_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Messages_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -233,14 +235,14 @@ namespace ITQJ.API.Migrations
                 column: "DocumentTypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Messages_FromUserId",
+                table: "Messages",
+                column: "FromUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Messages_ProjectId",
                 table: "Messages",
                 column: "ProjectId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Messages_UserId",
-                table: "Messages",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PersonalInfos_LegalDocumentId",

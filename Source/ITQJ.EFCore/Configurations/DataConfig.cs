@@ -175,39 +175,39 @@ namespace ITQJ.EFCore.Configurations
         public static IEnumerable<User> Users =>
             new User[]
             {
-                new User
-                {
-                    Id = Guid.Parse("7A5B3C6E-7E95-435E-B46F-1F449F49BE04"),
-                    Email = "jeffreyissaul@hotmail.com",
-                    Subject = "auth0|5f0c49e03e0de80013aa852c",
-                    Role = "Profesional"
-                },
+                //new User
+                //{
+                //    Id = Guid.Parse("7A5B3C6E-7E95-435E-B46F-1F449F49BE04"),
+                //    Email = "jeffreyissaul@hotmail.com",
+                //    Subject = "auth0|5f0c49e03e0de80013aa852c",
+                //    Role = "Profesional"
+                //},
                 new User
                 {
                     Id = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84"),
                     Email = "luiseduardofrias27@gmail.com",
                     Subject = "auth0|5f2eb494022f3a003d353973",
                     Role = "Contratista"
-                },
-                new User
-                {
-                    Id = Guid.Parse("d2b17c1e-205c-4167-8219-08d839ce621a"),
-                    Email = "jessejose@outlook.es",
-                    Subject = "auth0|5f2b8e5d58e286003737cd4a",
-                    Role = "Contratista"
-                }
+                }//,
+                //new User
+                //{
+                //    Id = Guid.Parse("d2b17c1e-205c-4167-8219-08d839ce621a"),
+                //    Email = "jessejose@outlook.es",
+                //    Subject = "auth0|5f2b8e5d58e286003737cd4a",
+                //    Role = "Contratista"
+                //}
             };
 
         public static IEnumerable<LegalDocument> LegalDocuments =>
             new LegalDocument[]
             {
-                new LegalDocument
-                {
-                    Id = Guid.Parse("8B817101-C051-4BF4-8A1E-ECC2BB32B613"),
-                    Number = "123-4567789-0",
-                    Image = new byte[] { 1,1,1,1,1,1,1,1 },
-                    DocumentTypeId = Guid.Parse("189EE312-AFD2-4145-9687-585D001F23E7")
-                },
+                //new LegalDocument
+                //{
+                //    Id = Guid.Parse("8B817101-C051-4BF4-8A1E-ECC2BB32B613"),
+                //    Number = "123-4567789-0",
+                //    Image = new byte[] { 1,1,1,1,1,1,1,1 },
+                //    DocumentTypeId = Guid.Parse("189EE312-AFD2-4145-9687-585D001F23E7")
+                //},
                 new LegalDocument
                 {
                     Id = Guid.Parse("CE3695B2-CCF1-4521-A3EB-DAE703FFBDFB"),
@@ -220,16 +220,16 @@ namespace ITQJ.EFCore.Configurations
         public static IEnumerable<PersonalInfo> PersonalInfos =>
             new PersonalInfo[]
             {
-                new PersonalInfo
-                {
-                    Id = Guid.Parse("73415AAD-60B5-4179-8E2E-C76D9CA64529"),
-                    Name = "Jeffrey Jose",
-                    PhoneNumber = "8091234567",
-                    Description = @"Jeffrey es un experimentado desarrollador full stack especializado en                  seguridad informatica y desarrollo multiplataformas",
-                    PagLink = "www.abc.com",
-                    LegalDocumentId = Guid.Parse("8B817101-C051-4BF4-8A1E-ECC2BB32B613"),
-                    UserId = Guid.Parse("7A5B3C6E-7E95-435E-B46F-1F449F49BE04")
-                },
+                //new PersonalInfo
+                //{
+                //    Id = Guid.Parse("73415AAD-60B5-4179-8E2E-C76D9CA64529"),
+                //    Name = "Jeffrey Jose",
+                //    PhoneNumber = "8091234567",
+                //    Description = @"Jeffrey es un experimentado desarrollador full stack especializado en                  seguridad informatica y desarrollo multiplataformas",
+                //    PagLink = "www.abc.com",
+                //    LegalDocumentId = Guid.Parse("8B817101-C051-4BF4-8A1E-ECC2BB32B613"),
+                //    UserId = Guid.Parse("7A5B3C6E-7E95-435E-B46F-1F449F49BE04")
+                //},
                 new PersonalInfo
                 {
                     Id = Guid.Parse("02F30D25-73D1-47DA-83FB-07753ED4DD83"),
@@ -243,28 +243,28 @@ namespace ITQJ.EFCore.Configurations
                 }
             };
 
-        public static IEnumerable<ProfesionalSkill> ProfesionalSkills =>
-            new ProfesionalSkill[]
-            {
-                new ProfesionalSkill
-                {
-                    Percentage = 70,
-                    PersonalInfoId = Guid.Parse("73415AAD-60B5-4179-8E2E-C76D9CA64529"),
-                    SkillId = Guid.Parse("0F5F4AE9-4E26-4A38-B2D1-A5338AF48BAA")
-                },
-                new ProfesionalSkill
-                {
-                    Percentage = 80,
-                    PersonalInfoId = Guid.Parse("73415AAD-60B5-4179-8E2E-C76D9CA64529"),
-                    SkillId = Guid.Parse("D99EBA61-53CC-41E1-AFEE-5C99A6AF102A")
-                },
-                new ProfesionalSkill
-                {
-                    Percentage = 50,
-                    PersonalInfoId = Guid.Parse("73415AAD-60B5-4179-8E2E-C76D9CA64529"),
-                    SkillId = Guid.Parse("1EA43D00-8DC7-4B82-96E0-EABFEA74C9B9")
-                }
-            };
+        //public static IEnumerable<ProfesionalSkill> ProfesionalSkills =>
+        //    new ProfesionalSkill[]
+        //    {
+        //        new ProfesionalSkill
+        //        {
+        //            Percentage = 70,
+        //            PersonalInfoId = Guid.Parse("73415AAD-60B5-4179-8E2E-C76D9CA64529"),
+        //            SkillId = Guid.Parse("0F5F4AE9-4E26-4A38-B2D1-A5338AF48BAA")
+        //        },
+        //        new ProfesionalSkill
+        //        {
+        //            Percentage = 80,
+        //            PersonalInfoId = Guid.Parse("73415AAD-60B5-4179-8E2E-C76D9CA64529"),
+        //            SkillId = Guid.Parse("D99EBA61-53CC-41E1-AFEE-5C99A6AF102A")
+        //        },
+        //        new ProfesionalSkill
+        //        {
+        //            Percentage = 50,
+        //            PersonalInfoId = Guid.Parse("73415AAD-60B5-4179-8E2E-C76D9CA64529"),
+        //            SkillId = Guid.Parse("1EA43D00-8DC7-4B82-96E0-EABFEA74C9B9")
+        //        }
+        //    };
 
         public static IEnumerable<Project> Projects =>
         new Project[]

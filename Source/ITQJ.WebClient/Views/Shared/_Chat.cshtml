@@ -1,4 +1,8 @@
-﻿<audio id="notification-audio">
+﻿@{
+    var isProfesional = ViewBag.UserRole == "Profesional";
+}
+
+<audio id="notification-audio">
 
     <source src="https://freesound.org/people/grey24/sounds/316798/download/316798__grey24__flyffnotif.wav" type="audio/wav">
 
@@ -27,15 +31,15 @@
     <div class="d-flex justify-content-between bg-info mr-2" onclick="toggleChat()">
 
         @*
-        <div class="d-flex align-items-center"
-             style="position: fixed; right: 0; top: 0; height: 100%;">
-            <div id="fixed-right-chat-button">
-                <button id="button-chat"
-                        onclick="toggleChat()"
-                        type="button"
-                        class="btn bg-info text-light">
-                    <i class="fas fa-comment-dots fa-2x m-2"></i>
-                </button>*@
+            <div class="d-flex align-items-center"
+                 style="position: fixed; right: 0; top: 0; height: 100%;">
+                <div id="fixed-right-chat-button">
+                    <button id="button-chat"
+                            onclick="toggleChat()"
+                            type="button"
+                            class="btn bg-info text-light">
+                        <i class="fas fa-comment-dots fa-2x m-2"></i>
+                    </button>*@
     </div>
 
 </div>
@@ -43,17 +47,17 @@
 
 <div class="bg-white col-md-6" id="fixed-bottom-chat"
      style="
-     position: fixed; 
-     bottom: 0; 
-     right: 0; 
-     padding:0px; 
-     margin:0px; 
+     position: fixed;
+     bottom: 0;
+     right: 0;
+     padding:0px;
+     margin:0px;
      border-radius: 5px 5px 0px 0px;
      width:25%">
 
-    <div class="d-flex text-white" 
+    <div class="d-flex text-white"
          style="
-         background-color: #007BFF; 
+         background-color: #007BFF;
          padding:0px;
          margin: 0px;
          border-radius: 5px 5px 0px 0px;"
@@ -61,56 +65,13 @@
 
         <label class="fas fa-comment-dots fa-1x m-2"> </label>
 
-        <span class="h6 card-title text-white d-inline-block m-2" >Chat</span>
+        <span class="h6 card-title text-white d-inline-block m-2">Chat</span>
 
     </div>
 
     <div id="chat-container" style="box-sizing:border-box; padding:0px; margin:0px; border:1px solid #BCBCBC;">
 
-        <div id="user-name-form" class="form-group bg-light-gray p-2 mr-2 rounded">
-
-            <div class="d-flex justify-content-between align-items-end mb-1">
-
-                <label for="user-name mb-0">User Name</label>
-
-            </div>
-
-            <div class="d-flex align-items-start">
-
-                <div class="col mx-1 p-0">
-
-                    <input type="text" class="form-control" name="user-name" id="user-name" required maxlength="10" 
-                           aria-describedby="user name" placeholder="Ej: pepe" />
-
-                    <span id="user-name-error-message" class="text-danger"></span>
-
-                    <div style="position: absolute; right: 6px; top: 6px;">
-
-                        <span id="user-name-count">0</span>/10
-
-                    </div>
-
-                </div>
-
-                <button class="btn btn-primary mx-1" onclick="startChat(true)">
-
-                    User
-
-                </button>
-
-                <button class="btn btn-secondary mx-1" onclick="startChat(false)">
-
-                    Admin
-
-                </button>
-
-            </div>
-
-            <small id="user_name" class="form-text text-muted">The user name to be displayed.</small>
-
-        </div>
-
-        <div id="chat-form" class="row m-0 p-0"  style="background-color: #fff;">
+        <div id="chat-form" class="row m-0 p-0" style="background-color: #fff;">
 
             <div class="col border border-primary rounded p-0" style="height: 400px;">
 
@@ -129,18 +90,18 @@
                                 <textarea id="message" placeholder="Message" class="form-control"
                                           required maxlength="500" style="width:98.5%; height:40px;"></textarea>
 
-                                @*<p class="m-0" style="position: absolute; top: 6px; right: 6px;">
+                                <p class="m-0" style="position: absolute; top: 6px; right: 6px;">
 
-                <span id="message-count">0</span>/500
+                                    <span id="message-count">0</span>/500
 
-            </p>*@
+                                </p>
 
                             </div>
 
                             <img src="/Image/send.svg" id="send" name="send" class="btn-outline-primary" style="height:40px; width:40px; margin:0px; padding:0px; outline: none;" />
 
                             @*<button  style="outline: none">
-                            </button>*@
+                                </button>*@
 
                         </div>
 
@@ -164,11 +125,11 @@
             </div>
 
             <div id="user-list" class="col-5 border border-primary rounded p-0" style="width: 300px; overflow-y: scroll; overflow-x: hidden;">
-                
+
                 <div id="connected-users" class="list-group list-group-flush" role="tablist"></div>
 
                 <div id="users-placeholder" class="position-absolute" style="left: 0; top: 0; background-color: rgba(255, 255, 255, 0.4); width: 100%; height: 100%;">
-                    
+
                     <div class="d-flex flex-column justify-content-center align-items-center" style="height: 100%;">
 
                         <i class="fas fa-users-slash fa-4x"></i>
@@ -186,3 +147,31 @@
     </div>
 
 </div>
+
+@section Script {
+    <script src="~/js/chat.js"></script>
+
+    @if (isProfesional)
+    {
+
+        <script src="~/js/chatProfesional.js"></script>
+
+    }
+    else
+    {
+
+        <script src="~/js/chatContratist.js"></script>
+
+    }
+
+    <script type="text/javascript">
+
+        $(document).ready(() => {
+
+            startChat(@ViewBag.ProjectId, @isProfesional);
+
+        });
+
+    </script>
+}
+

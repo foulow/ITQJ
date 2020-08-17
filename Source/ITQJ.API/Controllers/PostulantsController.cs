@@ -21,6 +21,36 @@ namespace ITQJ.API.Controllers
 
         }
 
+        [HttpGet("{projectId}")]
+        public ActionResult GetPostulants([FromRoute] Guid projectId)
+        {
+            if (projectId == null || projectId == new Guid())
+                return BadRequest(new { Message = $"Error: el parametro {nameof(projectId)} no puede ser nulo." });
+
+            var postulants = this._appDBContext.Postulants
+                .Include(i => i.User)
+                .Where(x => x.ProjectId == projectId)
+                .ToList();
+
+            if (postulants != null && postulants.Count > 0)
+            {
+                var postulantsModel = this._mapper.Map<IEnumerable<PostulantResponseDTO>>(postulants);
+
+                return Ok(new
+                {
+
+                    Message = "OK",
+                    Result = postulantsModel
+
+                });
+            }
+
+            return NotFound(new
+            {
+                Message = "No existen postulaciones para este proyecto actualmente."
+            });
+        }
+
         [HttpGet("mypostulations/{userId}")]
         public ActionResult GetPostulantations([FromRoute] Guid userId, [FromQuery] int pageIndex = 1, [FromQuery] int maxResults = 5)
         {

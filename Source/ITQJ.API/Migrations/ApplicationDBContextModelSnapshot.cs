@@ -76,6 +76,12 @@ namespace ITQJ.API.Migrations
                     b.Property<bool>("DeletedFlag")
                         .HasColumnType("bit");
 
+                    b.Property<Guid>("FromUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("MessageDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
 
@@ -84,14 +90,14 @@ namespace ITQJ.API.Migrations
                         .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("ToUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex("FromUserId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("Messages");
                 });
@@ -340,16 +346,16 @@ namespace ITQJ.API.Migrations
 
             modelBuilder.Entity("ITQJ.Domain.Entities.Message", b =>
                 {
+                    b.HasOne("ITQJ.Domain.Entities.User", "User")
+                        .WithMany("Messages")
+                        .HasForeignKey("FromUserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("ITQJ.Domain.Entities.Project", "Project")
                         .WithMany("Messages")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ITQJ.Domain.Entities.User", "User")
-                        .WithMany("Messages")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 

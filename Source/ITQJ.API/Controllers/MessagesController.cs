@@ -2,6 +2,7 @@
 using ITQJ.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,16 +16,29 @@ namespace ITQJ.API.Controllers
     {
         public MessagesController(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
-        [HttpGet("{projectId}")]
-        public ActionResult GetMessagesByProjectId([FromRoute] Guid projectId)
+        [HttpGet("profesional/{projectId}")]
+        public ActionResult GetPostulantMessages([FromRoute] Guid projectId,
+            [FromQuery] Guid fromId,
+            [FromQuery] Guid toId)
         {
-            if (projectId == null || projectId == new Guid())
+            if (projectId == default)
                 return BadRequest(new { Message = $"Error: el parametro {nameof(projectId)} no puede ser nulo." });
 
-            var messages = this._appDBContext.Messages.Where(x => x.ProjectId == projectId).ToList();
+            if (fromId == default)
+                return BadRequest(new { Message = $"Error: el parametro {nameof(fromId)} no puede ser nulo." });
+
+            if (toId == default)
+                return BadRequest(new { Message = $"Error: el parametro {nameof(toId)} no puede ser nulo." });
+
+            var messages = this._appDBContext.Users
+                .Include(i => i.Messages)
+                .Where(x => x.Messages.Any(e => e.ProjectId == projectId &&
+                                           e.FromUserId == fromId &&
+                                           e.ToUserId == toId))
+                .ToList();
 
             var messagesModel = this._mapper
-                .Map<List<MessageResponseDTO>>(messages);
+                .Map<List<UserResponseDTO>>(messages);
 
             return Ok(new
             {
@@ -34,16 +48,19 @@ namespace ITQJ.API.Controllers
             });
         }
 
-        [HttpGet("{userId}")]
-        public ActionResult GetMessagesByUserId([FromRoute] Guid userId)
+        [HttpGet("contratist/{projectId}")]
+        public ActionResult GetMessagesByProjectId([FromRoute] Guid projectId)
         {
-            if (userId == null || userId == new Guid())
-                return BadRequest(new { Message = $"Error: el parametro {nameof(userId)} no puede ser nulo." });
+            if (projectId == null || projectId == new Guid())
+                return BadRequest(new { Message = $"Error: el parametro {nameof(projectId)} no puede ser nulo." });
 
-            var messages = this._appDBContext.Messages.Where(x => x.UserId == userId).ToList();
+            var messages = this._appDBContext.Users
+                .Include(i => i.Messages)
+                .Where(x => x.Messages.Any(e => e.ProjectId == projectId))
+                .ToList();
 
             var messagesModel = this._mapper
-                .Map<List<MessageResponseDTO>>(messages);
+                .Map<List<UserResponseDTO>>(messages);
 
             return Ok(new
             {

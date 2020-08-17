@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ITQJ.Domain.DTOs
 {
@@ -12,5 +14,14 @@ namespace ITQJ.Domain.DTOs
     public class UserResponseDTO : UserCreateDTO
     {
         public Guid Id { get; set; }
+
+        public virtual string ConnectionId { get; set; }
+
+        public virtual string UserName { get => Email.Split("@").First(); }
+
+        public virtual List<MessageResponseDTO> Messages { get; set; }
+
+
+
     }
 }

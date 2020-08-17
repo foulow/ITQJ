@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json.Linq;
 using RestSharp;
+using Serilog;
 using System;
 using System.Globalization;
 using System.Net.Http;
@@ -63,6 +64,7 @@ namespace ITQJ.WebClient.HttpHandlers
                 return "";
             }
 
+            Log.Information(expiresAt);
             var expiresAtDataTimeOffset =
                 DateTimeOffset.Parse(expiresAt, CultureInfo.InvariantCulture);
 
@@ -115,8 +117,7 @@ namespace ITQJ.WebClient.HttpHandlers
                         new AuthenticationToken
                         {
                             Name = "expires_at",
-                            Value = expiresIn.Second
-                            .ToString("o", CultureInfo.InvariantCulture)
+                            Value = expiresIn.ToString("o", CultureInfo.InvariantCulture)
                         }
                 };
 

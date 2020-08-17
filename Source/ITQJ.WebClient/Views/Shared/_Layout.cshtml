@@ -394,7 +394,7 @@
 
     </footer>
 
-    <partial name="_Chat" />
+    @RenderSection("Chat", required: false)
 
     <div style="width: 300px; position: fixed; bottom: 12px; right: 12px;">
         <div id="alert-container" style="width: 100%;"></div>
@@ -414,7 +414,6 @@
     <script src="~/lib/jquery/jquery-dateformat.js"></script>
     <script src="~/js/signalr/dist/browser/signalr.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/chat.js"></script>
     <script src="~/js/Funciones.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)

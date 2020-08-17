@@ -226,7 +226,14 @@ namespace ITQJ.WebClient.Controllers
 
         protected UserResponseDTO GetUserCredentials()
         {
-            var userCredentials = GetUserCredentialsAsync().Result;
+            var userCredentials = GetUserCredentialsAsync()?.Result;
+            if (userCredentials is null)
+                return new UserResponseDTO
+                {
+                    Id = Guid.NewGuid(),
+                    Email = "visitor@unregister.com",
+                    Role = "Desconosido"
+                };
 
             ViewBag.UserId = userCredentials.Id;
             ViewBag.UserName = userCredentials.Email.Split("@").First();
@@ -244,6 +251,10 @@ namespace ITQJ.WebClient.Controllers
         protected async Task<UserResponseDTO> EnsureUserCreated()
         {
             var userCredentials = await GetUserCredentialsAsync();
+
+            if (userCredentials is null)
+                return null;
+
             if (userCredentials.Role == "Desconosido")
             {
                 return userCredentials;

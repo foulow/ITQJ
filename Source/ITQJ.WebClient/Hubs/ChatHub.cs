@@ -1,41 +1,54 @@
-﻿using ITQJ.WebClient.Data;
-using ITQJ.WebClient.ViewModels;
+﻿using ITQJ.Domain.DTOs;
+using ITQJ.WebClient.Data;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ITQJ.WebClient.Hubs
 {
     public class ChatHub : Hub
     {
+        protected readonly IHttpClientFactory _clientFactory;
+
+        public ChatHub(IServiceProvider serviceProvider)
+        {
+            this._clientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
+        }
+
         #region Fields And Properties
 
         private static readonly object Locker = new object();
 
-        private static List<ChatUserM> _connectedUsers;
-        public static List<ChatUserM> ConnectedUsers
+        private static List<UserResponseDTO> _connectedUsers;
+        public static List<UserResponseDTO> ConnectedUsers
         {
             get
             {
                 lock (Locker)
                 {
-                    return _connectedUsers ??= new List<ChatUserM>();
+                    return _connectedUsers ??= new List<UserResponseDTO>();
                 }
             }
         }
 
-        private static List<ChatMessageM> _currentMessage;
-        public static List<ChatMessageM> CurrentMessages
+        private static List<MessageResponseDTO> _currentMessage;
+        public static List<MessageResponseDTO> CurrentMessages
         {
             get
             {
                 lock (Locker)
                 {
-                    return _currentMessage ??= new List<ChatMessageM>();
+                    return _currentMessage ??= new List<MessageResponseDTO>();
                 }
             }
         }
@@ -44,49 +57,75 @@ namespace ITQJ.WebClient.Hubs
 
         #region Connect Methods
 
-        public async Task<IActionResult> Connect(string userName, bool isHolding)
+        public async Task<IActionResult> Connect()
         {
-            if (string.IsNullOrEmpty(userName) || string.IsNullOrWhiteSpace(userName))
-                throw new InvalidDataException(Resources.InvalidUserName);
-
             if (ConnectedUsers.Any(x => x.ConnectionId.Equals(Context.ConnectionId)))
                 throw new InvalidOperationException(Resources.UserIsConnected);
 
-            var user = new ChatUserM
-            {
-                UserId = Guid.NewGuid(),
-                ConnectionId = Context.ConnectionId,
-                UserName = userName,
-                IsOnHold = isHolding
-            };
+            var user = await CallApiGETAsync<UserResponseDTO>(uri: "api/users", isSecured: true);
+            user.ConnectionId = Context.ConnectionId;
 
             ConnectedUsers.Add(user);
 
-            if (user.IsOnHold)
-            {
-                // send to all except caller client
-                await Clients.AllExcept(user.ConnectionId)
-                    .SendAsync(ChatHubMethods.NewUserAvailable, new
-                    {
-                        userId = user.UserId,
-                        userName = user.UserName,
-                        messageCount = 0
-                    });
-            }
-
-            return new OkObjectResult(user.UserId);
+            return new OkObjectResult(user.Id);
         }
 
-        public async void RequestConnectedUsers()
+        public async void GetPostulantsMessages(string projectId, string fromId)
         {
-            // send to caller user
-            var availableUser = ConnectedUsers.Where(x => x.IsOnHold)
+            if (Guid.TryParse(projectId, out Guid result))
+                throw new InvalidOperationException(Resources.UnableToGetMessages);
+
+            if (Guid.TryParse(fromId, out Guid userId))
+                throw new InvalidOperationException(Resources.UnableToGetMessages);
+
+            var postulants = await CallApiGETAsync<List<UserResponseDTO>>(uri: "api/messages/contratist/" + projectId, isSecured: true);
+
+            if (postulants.Count == 0)
+                return;
+
+            var availableUser = postulants.Where(x => x.Id != userId)
                 .Select(x => new
                 {
-                    userId = x.UserId,
-                    userName = x.UserName,
-                    messageCount = CurrentMessages.Count(y => y.FromUserId == x.UserId)
+                    id = x.Id,
+                    userName = x.Email.Split("@").First(),
+                    messageCount = x.Messages.Count,
+                    connectionId = ConnectedUsers.FirstOrDefault(s => s.Id == x.Id)?.ConnectionId
                 });
+
+            await Clients.Caller.SendAsync(ChatHubMethods.UpdateConnectedUsers, availableUser);
+        }
+
+        public async void GetProjectMessages(string projectId, string fromId, string toId)
+        {
+            if (Guid.TryParse(projectId, out Guid result))
+                throw new InvalidOperationException(Resources.UnableToGetMessages);
+
+            if (Guid.TryParse(fromId, out Guid fromUserId))
+                throw new InvalidOperationException(Resources.UnableToGetMessages);
+
+            if (Guid.TryParse(toId, out Guid toUserId))
+                throw new InvalidOperationException(Resources.UnableToGetMessages);
+
+            var queryResult = new Dictionary<string, string>
+            {
+                { nameof(fromId), fromId },
+                { nameof(toId), toId }
+            };
+
+            var postulants = await CallApiGETAsync<List<UserResponseDTO>>(uri: "api/messages/profesional/" + projectId + QueryString.Create(queryResult), isSecured: true);
+
+            if (postulants.Count == 0)
+                return;
+
+            var availableUser = postulants
+                .Select(x => new
+                {
+                    id = x.Id,
+                    userName = x.Email.Split("@").First(),
+                    messageCount = x.Messages.Count,
+                    connectionId = ConnectedUsers.FirstOrDefault(s => s.Id == x.Id)?.ConnectionId
+                });
+
             await Clients.Caller.SendAsync(ChatHubMethods.UpdateConnectedUsers, availableUser);
         }
 
@@ -94,83 +133,21 @@ namespace ITQJ.WebClient.Hubs
 
         #region Message Methods
 
-        public async Task<IActionResult> CacheMessage(ChatMessageM message)
+        public async Task<IActionResult> SendPrivateMessage(MessageResponseDTO message)
         {
-            if (!ConnectedUsers.Any(x => x.UserId.Equals(message.FromUserId)))
-                throw new InvalidOperationException(Resources.UserIsDisconnected);
+            await CallApiPOSTAsync<MessageResponseDTO>(uri: "api/messages/", body: message, isSecured: true);
 
-            // update notification indicator
-            await Clients.AllExcept(Context.ConnectionId)
-                .SendAsync(ChatHubMethods.UpdateUnreadMessages, message.FromUserId);
-
-            AddMessageInCache(message);
-
-            return new OkResult();
-        }
-
-        public async Task<IActionResult> SendPrivateMessage(ChatMessageM message)
-        {
-            if (!ConnectedUsers.Any(x => x.UserId.Equals(message.FromUserId)))
-                throw new InvalidOperationException(Resources.UserIsDisconnected);
-
-            var toUser = ConnectedUsers.FirstOrDefault(x => x.UserId == message.ToUserId);
-            if (toUser is null)
-                throw new InvalidOperationException(Resources.UserIsDisconnected);
-
-            await Clients.AllExcept(Context.ConnectionId)
-                .SendAsync(ChatHubMethods.UpdateUnreadMessages, message.FromUserId);
-
-            // send a private message to listener user
-            await Clients.Client(toUser.ConnectionId)
-                .SendAsync(ChatHubMethods.ReceiveMessage, message);
-
-            AddMessageInCache(message);
-
-            return new OkResult();
-        }
-
-        public async Task<IActionResult> RequestConversation(string fromId, string toId)
-        {
-            Guid fromUserId = Guid.Parse(fromId);
-            Guid toUserId = Guid.Parse(toId);
-
-            if (!ConnectedUsers.Any(x => x.UserId.Equals(fromUserId)))
-                throw new InvalidOperationException(Resources.UserIsDisconnected);
-
-            var toUser = ConnectedUsers.FirstOrDefault(x =>
-                x.UserId == toUserId &&
-                (x.IsOnHold || x.ConnectedWith == fromUserId));
-            if (toUser is null)
-                throw new InvalidOperationException(Resources.UserIsDisconnected);
-
-            if (toUser.IsOnHold)
+            var toUser = ConnectedUsers.FirstOrDefault(x => x.Id == message.ToUserId);
+            if (toUser != null)
             {
-                toUser.IsOnHold = false;
-                toUser.ConnectedWith = fromUserId;
-                // set all cached messages to the requesting user
-                CurrentMessages.Where(u => u.FromUserId == toUserId)
-                    .ToList()
-                    .ForEach(message => message.ToUserId = fromUserId);
+                await Clients.Client(toUser.ConnectionId)
+                    .SendAsync(ChatHubMethods.ReceiveMessage, message);
+                await Clients.Client(toUser.ConnectionId)
+                    .SendAsync(ChatHubMethods.UpdateUnreadMessages, message.ToUserId);
             }
 
-            // get all cached messages
-            var cachedConversation = CurrentMessages
-                .Where(u =>
-                    u.FromUserId == fromUserId && u.ToUserId == toUserId ||
-                    u.FromUserId == toUserId && u.ToUserId == fromUserId);
-
-            // hide user to others
-            await Clients.AllExcept(Context.ConnectionId)
-                .SendAsync(ChatHubMethods.UserNotAvailable, toUserId);
-
-            await Clients.Client(toUser.ConnectionId)
-                .SendAsync(ChatHubMethods.ConnectWith, fromUserId);
-
-            await Clients.Caller.SendAsync(ChatHubMethods.ReceiveConversation, cachedConversation);
-
             return new OkResult();
         }
-
         #endregion
 
         #region Overridden Methods
@@ -181,7 +158,6 @@ namespace ITQJ.WebClient.Hubs
             if (user == null)
                 return base.OnConnectedAsync();
 
-            Clients.All.SendAsync(ChatHubMethods.UserNotAvailable, user.UserId);
             ConnectedUsers.Remove(user);
             return base.OnConnectedAsync();
         }
@@ -192,7 +168,6 @@ namespace ITQJ.WebClient.Hubs
             if (user == null)
                 return base.OnDisconnectedAsync(exception);
 
-            Clients.All.SendAsync(ChatHubMethods.UserNotAvailable, user.UserId);
             ConnectedUsers.Remove(user);
             return base.OnDisconnectedAsync(exception);
         }
@@ -200,14 +175,55 @@ namespace ITQJ.WebClient.Hubs
         #endregion
 
         #region Auxiliary Methods
-
-        private static void AddMessageInCache(ChatMessageM _MessageDetail)
+        private async Task<T> CallApiGETAsync<T>(string uri, bool isSecured) where T : class
         {
-            CurrentMessages.Add(_MessageDetail);
-            if (CurrentMessages.Count > 1000)
-                CurrentMessages.RemoveAt(0);
+            var apiClient = this._clientFactory.CreateClient((isSecured) ? "SecuredAPIClient" : "APIClient");
+
+            var request = new HttpRequestMessage(HttpMethod.Get, uri);
+
+            var response = await apiClient.SendAsync(
+                request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseString = await response.Content.ReadAsStringAsync();
+                var jsonObject = JObject.Parse(responseString);
+
+                return jsonObject["result"]?.ToObject<T>();
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                throw new Exception("Problem accessing the API");
+            }
+
+            return null;
         }
 
+        private async Task<T> CallApiPOSTAsync<T>(string uri, T body, bool isSecured) where T : class
+        {
+            var apiClient = this._clientFactory.CreateClient((isSecured) ? "SecuredAPIClient" : "APIClient");
+
+            var request = new HttpRequestMessage(HttpMethod.Post, uri);
+            request.Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
+
+            var response = await apiClient.SendAsync(
+                request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseString = await response.Content.ReadAsStringAsync();
+                var jsonObject = JObject.Parse(responseString);
+
+                return jsonObject["result"]?.ToObject<T>();
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized ||
+                response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                throw new Exception("Problem accessing the API");
+            }
+
+            return null;
+        }
         #endregion
     }
 }

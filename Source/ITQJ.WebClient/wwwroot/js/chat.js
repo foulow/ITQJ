@@ -5,86 +5,33 @@ const connection = new signalR.HubConnectionBuilder()
 	//.withAutomaticReconnect([0, 2000, 10000, 30000]) // yields the default behavior
 	.withAutomaticReconnect()
 	.build(),
-	userNameInput = $("#user-name"),
-	connectButton = $("#connect"),
 	chatButton = $("#fixed-right-chat-button"),
 	messageInput = $("#message"),
 	sendButton = $("#send"),
-	connectForm = $("#user-name-form"),
 	chatContainer = $("#chat-container"),
 	chatForm = $("#chat-form"),
 	chatPlaceholder = $("#chat-placeholder"),
 	userPlaceholder = $("#users-placeholder"),
 	userListContainer = $("#user-list"),
 	userList = $("#connected-users"),
-	messageList = $("#messages-list");
+	messageList = $("#messages-list"),
 
 var tryConnectCount = 0,
 	isChatVisible = false,
+	projectId,
 	userId,
 	toUserId,
-	userName,
 	connectedUsers,
 	errorMessages,
-	isPtpChat;
+	isProfesional;
 
 $(document).ready(async () => {
 	connection.on("UpdateConnectedUsers",
-		data => {
-			userList.empty();
-			if (data) {
-				connectedUsers = data;
-				if (data.length > 0) {
-					connectedUsers.forEach(element => {
-						var user = createUser({
-							userName: element.userName,
-							userId: element.userId,
-							messageCount: element.messageCount
-						});
-						userList.append(user);
-					});
-					userPlaceholder.hide();
-				} else
-					userPlaceholder.show();
-			}
-		});
-
-	connection.on("NewUserAvailable",
-		data => {
-			if (data && !isPtpChat) {
-				if (!connectedUsers.includes(data))
-					connectedUsers.push(data);
-
-				var user = createUser({
-					userName: data.userName,
-					userId: data.userId,
-					messageCount: data.messageCount
-				});
-
-				userList.append(user);
-				userPlaceholder.hide();
-			}
-		});
-
-	connection.on("UserNotAvailable",
-		data => {
-			if (data && !isPtpChat) {
-				const userItem = $(`#${data}`);
-				if (userItem)
-					userItem.detach();
-
-				connectedUsers = connectedUsers.filter(x => x.userId !== data);
-
-				if (connectedUsers.length === 0)
-					userPlaceholder.show();
-			}
-		});
-
-	connection.on("ConnectWith", data => toUserId = data);
+		data => parseMessages(data));
 
 	connection.on("UpdateUnreadMessages",
 		data => {
-			if (data && !isPtpChat) {
+			if (data && !isProfesional) {
 				var user = connectedUsers.filter(x => x.userId === data);
 				if (toUserId === data || user.length <= 0)
 					return;
@@ -132,14 +79,7 @@ $(document).ready(async () => {
 		showAlert(errorMessages['ConnectionLost'], "alert-danger", 5000);
 	});
 
-	connectButton.click(connect);
-
 	sendButton.click(sendMessage);
-
-	userNameInput.bind('input',
-		function () {
-			setCount($("#user-name-count"), $(this).val());
-		});
 
 	messageInput.bind('input', updateMessageBox);
 
@@ -150,7 +90,6 @@ $(document).ready(async () => {
 	userListContainer.hide();
 	loader.hide();
 	sendButton.prop('disabled', true);
-	userNameInput.val("").focus();
 });
 
 function getErrorMessages() {
@@ -175,31 +114,20 @@ function toggleChat() {
 	}
 }
 
-function startChat(isNewRoom) {
-	if (!isValidUserName())
-		return;
-
-	connect(isNewRoom);
+function startChat(id, isProfesional) {
+	projectId = id;
+	connect(isProfesional);
 }
 
-function isValidUserName() {
-	userName = userNameInput.val();
-	let isValid = userName.length > 0;
-	if (!isValid)
-		showAlert(errorMessages['InvalidUserName'], "alert-danger", 5000);
-
-	return isValid;
-}
-
-function connect(isNewRoom = false) {
+function connect(isProfesional = false) {
 	loader.show();
 
 	connection.start()
 		.then(() => {
-			connection.invoke("Connect", userName, isNewRoom)
+			connection.invoke("Connect")
 				.then(data => {
 					userId = data.value;
-					showRoom(isNewRoom);
+					showRoom(isProfesional);
 				})
 				.catch(e => {
 					error(e);
@@ -211,16 +139,15 @@ function connect(isNewRoom = false) {
 		});
 }
 
-function showRoom(isNewRoom) {
-	isPtpChat = isNewRoom;
-	connectForm.hide();
+function showRoom(profesional) {
+	isProfesional = profesional;
 	chatForm.show();
 
-	if (isPtpChat) {
+	if (isProfesional) {
 		messageList.append(createMessage({
 			fromUserName: "",
 			messageDate: "",
-			message: "Wait for and admin to assist you."
+			message: "Envia un mensage para aumentar tus chanses de ser elegido para este proyecto."
 		}));
 
 		chatPlaceholder.hide();
@@ -238,17 +165,8 @@ function showRoom(isNewRoom) {
 function getConversation(id) {
 	if (toUserId === id)
 		return;
-
 	toUserId = id;
-	connection.invoke("RequestConversation", userId, toUserId)
-		.then(() => {
-			chatPlaceholder.hide();
-			$(`#count-${toUserId}`).text("");
-		})
-		.catch(e => {
-			error(e);
-			showAlert(errorMessages['UserIsDisconnected'], "alert-danger", 5000);
-		});
+	requestMessages(projectId, userId, toUserId);
 }
 
 function sendMessage() {
@@ -279,7 +197,7 @@ function sendMessage() {
 
 function updateMessageBox() {
 	const text = messageInput.val(),
-		isButtonDisabled = text.length <= 0;
+		isButtonDisabled = text.length <= 0 && text.length >= 501;
 
 	setCount($("#message-count"), text);
 	sendButton.prop('disabled', isButtonDisabled);
