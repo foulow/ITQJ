@@ -98,18 +98,18 @@ namespace ITQJ.EFCore
                 Log.Debug("PersonalInfos already populated.");
             }
 
-            if (!context.ProfesionalSkills.Any())
-            {
-                Log.Debug("ProfesionalSkills being populated...");
-                context.ProfesionalSkills.AddRange(DataConfig.ProfesionalSkills);
-                context.SaveChanges();
-                Log.Debug("ProfesionalSkills populated.");
-            }
-            else
-            {
-                Log.Debug("ProfesionalSkills already populated.");
-            }
-            Log.Information("Data feched.");
+            //if (!context.ProfesionalSkills.Any())
+            //{
+            //    Log.Debug("ProfesionalSkills being populated...");
+            //    context.ProfesionalSkills.AddRange(DataConfig.ProfesionalSkills);
+            //    context.SaveChanges();
+            //    Log.Debug("ProfesionalSkills populated.");
+            //}
+            //else
+            //{
+            //    Log.Debug("ProfesionalSkills already populated.");
+            //}
+            //Log.Information("Data feched.");
 
 
             if (!context.Projects.Any())

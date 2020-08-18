@@ -1,6 +1,5 @@
 ﻿namespace ITQJ.Domain.Entities
 {
-    using ITQJ.Domain.Entities;
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
@@ -13,10 +12,16 @@
         [StringLength(500)]
         public string Text { get; set; }
 
+        public DateTime MessageDate { get; set; }
+
         [JsonIgnore]
-        [ForeignKey("UserId")]
+        [ForeignKey("FromUserId")]
         public virtual User User { get; set; }
-        public Guid UserId { get; set; }
+        public Guid FromUserId { get; set; }
+
+        [JsonIgnore]
+        [ForeignKey("ToUserId")]
+        public Guid ToUserId { get; set; }
 
         [JsonIgnore]
         [ForeignKey("ProjectId")]

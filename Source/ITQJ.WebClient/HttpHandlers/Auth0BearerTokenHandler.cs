@@ -2,11 +2,13 @@
 using ITQJ.WebClient.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json.Linq;
 using RestSharp;
+using Serilog;
 using System;
 using System.Globalization;
 using System.Net.Http;
@@ -41,7 +43,7 @@ namespace ITQJ.WebClient.HttpHandlers
 
             if (string.IsNullOrWhiteSpace(accessToken))
             {
-                await _httpContextAccessor.HttpContext.ChallengeAsync("Auth0", new AuthenticationProperties() { RedirectUri = "/" });
+                await _httpContextAccessor.HttpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties() { RedirectUri = "/" });
             }
             else
             {
@@ -63,6 +65,7 @@ namespace ITQJ.WebClient.HttpHandlers
                 return "";
             }
 
+            Log.Information(expiresAt);
             var expiresAtDataTimeOffset =
                 DateTimeOffset.Parse(expiresAt, CultureInfo.InvariantCulture);
 
@@ -115,8 +118,7 @@ namespace ITQJ.WebClient.HttpHandlers
                         new AuthenticationToken
                         {
                             Name = "expires_at",
-                            Value = expiresIn.Second
-                            .ToString("o", CultureInfo.InvariantCulture)
+                            Value = expiresIn.ToString("o", CultureInfo.InvariantCulture)
                         }
                 };
 

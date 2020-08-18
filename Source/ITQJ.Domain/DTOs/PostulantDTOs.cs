@@ -22,5 +22,7 @@ namespace ITQJ.Domain.DTOs
         public Guid Id { get; set; }
 
         public ProjectCreateDTO Project { get; set; }
+
+        public UserResponseDTO User { get; set; }
     }
 }
