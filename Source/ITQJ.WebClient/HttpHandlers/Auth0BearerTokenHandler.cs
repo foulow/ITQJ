@@ -2,6 +2,7 @@
 using ITQJ.WebClient.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -42,7 +43,7 @@ namespace ITQJ.WebClient.HttpHandlers
 
             if (string.IsNullOrWhiteSpace(accessToken))
             {
-                await _httpContextAccessor.HttpContext.ChallengeAsync("Auth0", new AuthenticationProperties() { RedirectUri = "/" });
+                await _httpContextAccessor.HttpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties() { RedirectUri = "/" });
             }
             else
             {

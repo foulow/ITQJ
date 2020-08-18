@@ -4,15 +4,14 @@
     ViewData["Title"] = "Projecto";
 
     ViewBag.ProjectId = Model.Id;
-}
+    var isProfesional = (ViewBag.UserRole == "Profesional");
+    var isPostulated = Model.Postulants.FirstOrDefault(x => x.UserId == ViewBag.UserId).Equals(null);
 
-
-@{
     var Id = "id" + Model.Id;
     var Div = "div" + @Model.Id;
     var Fcta = "fcta" + @Model.Id;
 
-    if(ViewBag.ErrorMesseger != null)
+    if (ViewBag.ErrorMesseger != null)
     {
         <script>
             alert(ViewBag.ErrorMesseger);
@@ -23,9 +22,12 @@
 
     Func<bool> funcVerifiContratis = () =>
     {
+        if (ViewBag?.UserId is null)
+            return false;
+
         Guid userId = ViewBag.UserId;
 
-        if(Model.UserId == userId)
+        if (Model.UserId == userId)
         {
             return true;
         }
@@ -39,7 +41,7 @@
 
         var fecha = Model.CloseDate.ToString();
 
-        if(fecha.Substring(0,8) == "1/1/0001")
+        if (fecha.Substring(0, 8) == "1/1/0001")
         {
             return "Nullo";
         }
@@ -111,10 +113,10 @@
 
     </div>
 
-    @if(!funcVerifiContratis())
+    @if (!funcVerifiContratis())
     {
 
-        if(Model.Postulants.Count == 0)
+        if (Model.Postulants.Count == 0)
         {
             <form method="post" class="d-inline-block" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
 
@@ -124,7 +126,7 @@
         }
         else
         {
-            if(Model.Postulants.FirstOrDefault(x => x.UserId == ViewBag.UserId).Equals(null))
+            if (isPostulated)
             {
                 <form method="post" class="d-inline-block" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
 
@@ -134,7 +136,7 @@
             }
             else
             {
-
+                // TODO: agregar logica de despostularce. (opcional)
             }
         }
 
@@ -149,5 +151,32 @@
 
 @section Chat {
     <partial name="_Chat" />
+}
+
+@section Scripts {
+    <script src="~/js/chat.js"></script>
+
+    @if (isProfesional)
+    {
+
+        <script src="~/js/chatProfesional.js"></script>
+
+    }
+    else
+    {
+
+        <script src="~/js/chatContratist.js"></script>
+
+    }
+
+    <script type="text/javascript">
+
+        $(document).ready(() => {
+
+            startChat(@ViewBag.ProjectId, @isProfesional);
+
+        });
+
+    </script>
 }
 

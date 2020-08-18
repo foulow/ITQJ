@@ -253,7 +253,12 @@ namespace ITQJ.WebClient.Controllers
             var userCredentials = await GetUserCredentialsAsync();
 
             if (userCredentials is null)
-                return null;
+                return new UserResponseDTO
+                {
+                    Id = Guid.NewGuid(),
+                    Email = "visitor@unregister.com",
+                    Role = "Desconosido"
+                };
 
             if (userCredentials.Role == "Desconosido")
             {

@@ -14,7 +14,7 @@ const connection = new signalR.HubConnectionBuilder()
 	userPlaceholder = $("#users-placeholder"),
 	userListContainer = $("#user-list"),
 	userList = $("#connected-users"),
-	messageList = $("#messages-list"),
+	messageList = $("#messages-list");
 
 var tryConnectCount = 0,
 	isChatVisible = false,
@@ -85,7 +85,6 @@ $(document).ready(async () => {
 
 	getErrorMessages();
 
-	chatForm.hide();
 	chatContainer.hide();
 	userListContainer.hide();
 	loader.hide();
@@ -141,7 +140,6 @@ function connect(isProfesional = false) {
 
 function showRoom(profesional) {
 	isProfesional = profesional;
-	chatForm.show();
 
 	if (isProfesional) {
 		messageList.append(createMessage({

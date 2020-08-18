@@ -13,6 +13,7 @@ namespace ITQJ.WebClient.Controllers
     {
         public ProjectController(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
+        [Authorize]
         public async Task<IActionResult> Index(string projectId)
         {
             if (string.IsNullOrWhiteSpace(projectId))
@@ -21,13 +22,13 @@ namespace ITQJ.WebClient.Controllers
             if (User.Identity.IsAuthenticated)
                 GetUserCredentials();
 
-            var projectInfo = await CallApiGETAsync<ProjectResponseDTO>(uri: "/api/projects/" + projectId, isSecured: true);
+            var projectInfo = await CallApiGETAsync<ProjectResponseDTO>(uri: "/api/projects/" + projectId, isSecured: false);
 
             if (projectInfo == null)
                 return PageNotFound();
 
 
-                return View(projectInfo);
+            return View(projectInfo);
         }
 
         [Authorize]

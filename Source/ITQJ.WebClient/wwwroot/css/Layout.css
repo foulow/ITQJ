@@ -85,13 +85,12 @@ aside {
 }
 
 footer {
-    position:relative;
-    background: #000;
+    position: relative;
+    background: #323A40;
     color: #fff;
     clear: both;
     padding: 2px 0px;
-    margin-bottom:1.5%;
-    height:30px;
+    height: 60px;
 }
 
 .footerContainer label{
