@@ -17,7 +17,7 @@ namespace ITQJ.WebClient.Controllers
 
 
         [Authorize]
-        public async Task<IActionResult> Profesional(string userId)
+        public async Task<IActionResult> Profesional(string userId,string projectId)
         {
             if (string.IsNullOrWhiteSpace(userId))
                 return PageNotFound();

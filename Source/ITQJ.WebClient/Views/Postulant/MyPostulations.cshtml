@@ -3,187 +3,270 @@
     ViewData["Title"] = "Mis Postulaciones";
     string Descr = "";
 
-    int Nex = Model.PageIndex + 1, Back = Model.PageIndex - 1;
+    int Nex = Model.PageIndex + 1, Back = Model.PageIndex - 1, postulaciones = 0;
 }
-<div class="container">
+    <div class="container" style="margin-top:100px;">
 
-    <h4>Mis postulaciones</h4>
-    <hr />
+        <h4>Mis postulaciones</h4>
+        <hr />
 
-    @if (Model.TotalPages > 1)
-    {
-        <div class="d-block p-0 m-0">
+        @if(Model.TotalPages > 1)
+        {
+            <div class="d-block p-0 m-0">
 
-            <div class="d-inline-block bg-dark m-0 p-0" style="position:relative; left:50%; transform: translateX(-50%);">
+                <div class="d-inline-block bg-dark m-0 p-0" style="position:relative; left:50%; transform: translateX(-50%);">
 
-                <nav aria-label="Page navigation example h2">
+                    <nav aria-label="Page navigation example h2">
 
-                    <ul class="pagination">
-                        @if (Model.PageIndex != 1)
-                        {
-                            <li class="page-item">
-
-                                <a class="page-link" aria-label="Previous" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Back">
-                                    <span aria-hidden="true" class="text-dark">&laquo;</span>
-                                </a>
-
-                            </li>
-                        }
-
-
-                        @for (int i = 1; i <= Model.TotalPages; i++)
-                        {
-                            if (i == Model.PageIndex)
-                            {
-                                <li class="page-item active" aria-current="page">
-                                    <span class="page-link text-dark">
-                                        @i
-                                        <span class="sr-only">(current)</span>
-                                    </span>
-                                </li>
-                            }
-                            else
+                        <ul class="pagination">
+                            @if(Model.PageIndex != 1)
                             {
                                 <li class="page-item">
 
-                                    <a class="page-link text-dark" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@i">@i</a>
+                                    <a class="page-link" aria-label="Previous" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Back">
+                                        <span aria-hidden="true" class="text-dark">&laquo;</span>
+                                    </a>
 
                                 </li>
                             }
 
-                        }
 
-
-                        @if (Model.PageIndex != Model.TotalPages)
-                        {
-                            <li class="page-item">
-
-                                <a class="page-link" aria-label="Next" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Nex">
-
-                                    <span aria-hidden="true" class="text-dark">&raquo;</span>
-
-                                </a>
-
-                            </li>
-                        }
-                    </ul>
-                </nav>
-
-            </div>
-
-        </div>
-    }
-
-    <hr />
-
-    @if (Model.Postulants != null && Model.Postulants.Count > 0)
-    {
-        foreach (var postulations in Model.Postulants)
-        {
-            <a asp-route-projectId="@postulations.ProjectId" asp-controller="Project" asp-action="Index" onmouseover="ProjectOver('@postulations.ProjectId')" onmouseout="ProjectDown('@postulations.ProjectId')">
-
-                <div style="border: 2px solid lightgray; border-radius: 6px;" id="@postulations.ProjectId">
-
-                    <div class="col d-inline-block p-2 m-0  border badge-dark" style="border-radius: 6px;">
-
-                        <div class="col d-inline m-0 p-0">
-
-                            <strong class="h4 m-0 p-0">
-
-                                @postulations.Project.Name
-
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-                    <div class="col d-inline-block m-0 mb-1 p-2">
-
-                        <div class="col d-inline m-0 p-0 ">
-
-                            @if (!postulations.Project.Description.Equals(null))
+                            @for(int i = 1; i <= Model.TotalPages; i++)
                             {
-                                if (postulations.Project.Description.Length >= 100)
+                                if(i == Model.PageIndex)
                                 {
-                                    Descr = postulations.Project.Description.Substring(0, 150);
-                                    Descr += "...";
-                                }
-                                else if (postulations.Project.Description.Equals(string.Empty))
-                                {
-                                    Descr = "Sin Descripción.";
+                                    <li class="page-item active" aria-current="page">
+                                        <span class="page-link text-dark">
+                                            @i
+                                            <span class="sr-only">(current)</span>
+                                        </span>
+                                    </li>
                                 }
                                 else
                                 {
-                                    Descr = postulations.Project.Description;
+                                    <li class="page-item">
+
+                                        <a class="page-link text-dark" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@i">@i</a>
+
+                                    </li>
                                 }
 
                             }
 
-                            <strong class="h6 m-0 p-0">
 
-                                @Descr
+                            @if(Model.PageIndex != Model.TotalPages)
+                            {
+                                <li class="page-item">
 
-                            </strong>
+                                    <a class="page-link" aria-label="Next" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Nex">
 
-                        </div>
+                                        <span aria-hidden="true" class="text-dark">&raquo;</span>
 
-                    </div>
+                                    </a>
 
-                    <div class="col d-inline-block m-0 mb-1 p-2">
+                                </li>
+                            }
+                        </ul>
+                    </nav>
 
-                        <div class="col d-inline m-0 p-0 ">
+                </div>
 
-                            <strong class="h6 m-0 p-0">
+            </div>
+        }
 
-                                Publicado: <text class="text-info">@postulations.Project.PublishDate</text>
+        <div class="d-block p-0 m-0">
 
-                            </strong>
+            @if(Model.TotalPages > 1)
+            {
+                <div class="d-block p-0 m-0">
 
-                        </div>
+                    <div class="d-inline-block bg-dark m-0 p-0" style="position:relative; left:50%; transform: translateX(-50%);">
 
-                        <div class="col d-inline  ml-lg-3 p-0 ">
+                        <nav aria-label="Page navigation example h2">
 
-                            <strong class="h6 m-0 p-0">
+                            <ul class="pagination">
 
-                                Cierra: <text class="text-danger">@postulations.Project.CloseDate</text>
+                                @if(Model.PageIndex != 1)
+                                {
+                                    <li class="page-item">
 
-                            </strong>
+                                        <a class="page-link" aria-label="Previous" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Back">
+                                            <span aria-hidden="true" class="text-dark">&laquo;</span>
+                                        </a>
 
-                        </div>
+                                    </li>
+                                }
 
-                        <div class="col d-inline  ml-lg-3 p-0 ">
 
-                            <strong class="h6 m-0 p-0">
+                                @for(int i = 1; i <= Model.TotalPages; i++)
+                                {
+                                    if(i == Model.PageIndex)
+                                    {
+                                        <li class="page-item active" aria-current="page">
 
-                                Postaciones restante: <text class="text-danger">@postulations.Project.PostulantsLimit</text>
+                                            <span class="page-link text-dark">
 
-                            </strong>
+                                                @i
 
-                        </div>
+                                                <span class="sr-only">(current)</span>
+
+                                            </span>
+
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item">
+
+                                            <a class="page-link text-dark" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@i">@i</a>
+
+                                        </li>
+                                    }
+
+                                }
+
+
+                                @if(Model.PageIndex != Model.TotalPages)
+                                {
+                                    <li class="page-item">
+
+                                        <a class="page-link" aria-label="Next" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Nex">
+
+                                            <span aria-hidden="true" class="text-dark">&raquo;</span>
+
+                                        </a>
+
+                                    </li>
+                                }
+
+                            </ul>
+
+                        </nav>
 
                     </div>
 
                 </div>
+            }
 
-            </a>
+            <hr />
 
-            <br />
-            <br />
-        }
-    }
-    else
-    {
-        <div class="text-center">
-            <h1>Parece que no tienes postulaciones!</h1> <br />
-            @if (ViewBag.UserRole == "Profesional")
+            @if(Model.Postulants != null && Model.Postulants.Count > 0)
             {
-                <p>Comienza a realizar postulaciones, para comenzar a trabajar en tu primer proyecto.</p>
+                foreach(var postulations in Model.Postulants)
+                {
+                    postulaciones = postulations.Project.PostulantsLimit - Model.Postulants.Count;
+
+                    <a asp-route-projectId="@postulations.ProjectId" asp-controller="Project" asp-action="Index" onmouseover="ProjectOver('@postulations.ProjectId')" onmouseout="ProjectDown('@postulations.ProjectId')">
+
+                        <div style="border: 2px solid lightgray; border-radius: 6px;" id="@postulations.ProjectId">
+
+                            <div class="col d-inline-block p-2 m-0  border badge-dark" style="border-radius: 6px;">
+
+                                <div class="col d-inline m-0 p-0">
+
+                                    <strong class="h4 m-0 p-0">
+
+                                        @postulations.Project.Name
+
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col d-inline-block m-0 mb-1 p-2">
+
+                                <div class="col d-inline m-0 p-0 ">
+
+                                    @if(!postulations.Project.Description.Equals(null))
+                                    {
+                                        if(postulations.Project.Description.Length >= 100)
+                                        {
+                                            Descr = postulations.Project.Description.Substring(0,150);
+                                            Descr += "...";
+                                        }
+                                        else if(postulations.Project.Description.Equals(string.Empty))
+                                        {
+                                            Descr = "Sin Descripción.";
+                                        }
+                                        else
+                                        {
+                                            Descr = postulations.Project.Description;
+                                        }
+
+                                    }
+
+                                    <strong class="h6 m-0 p-0">
+
+                                        @Descr
+
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col d-inline-block m-0 mb-1 p-2">
+
+                                <div class="col d-inline m-0 p-0 ">
+
+                                    <strong class="h6 m-0 p-0">
+
+                                        Publicado: <text class="text-info">@postulations.Project.PublishDate</text>
+
+                                    </strong>
+
+                                </div>
+
+                                <div class="col d-inline  ml-lg-3 p-0 ">
+
+                                    <strong class="h6 m-0 p-0">
+
+                                        Cierra: <text class="text-danger">@postulations.Project.CloseDate</text>
+
+                                    </strong>
+
+                                </div>
+
+                                <div class="col d-inline  ml-lg-3 p-0 ">
+
+                                    <strong class="h6 m-0 p-0">
+
+                                        Postaciones restante: <text class="text-danger"> @postulaciones </text>
+
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                    <br />
+                    <br />
+                }
             }
             else
             {
-                <p>No deverias estar aqui, completa el proseso de registro para poder acceder a esta pagina.</p>
+                <div class="text-center">
+
+                    <h1>Parece que no hay proyectos disponibles de momento.</h1> <br />
+
+                    @if(ViewBag.UserRole == "Contratista")
+                    {
+                        <p>Sé el primero en publicar un proyecto para que otros profesionales puedan realizar tu trabajo.</p>
+                    }
+                    else
+                    {
+                        <p>Intenta entrar nuevamenta dentro de unos minutos.</p>
+                    }
+
+                </div>
+
             }
+
         </div>
-    }
-</div>
+
+    </div>

@@ -1,4 +1,5 @@
-﻿
+﻿@using ITQJ.Domain.DTOs;
+
 @{
     ViewData["Title"] = "Projecto";
 }
@@ -61,7 +62,7 @@
 
 </div>
 
-<div class="border badge-light mt-lg-3 p-2 mt-3 " style="margin:0% 0% 13% 0%">
+<div class="border badge-light mt-lg-3 p-2 mt-3 " style="margin:0px 0px 20px 0px">
 
     <div class="border-bottom border-dark mb-3">
 
@@ -87,7 +88,9 @@
 
             <strong class="h6 m-0 p-0">
 
-                Cierra: <text class="text-danger">
+                Cierra:
+
+                <text class="text-danger">
 
                     @func();
 
@@ -122,7 +125,9 @@
         }
         else
         {
-            if(Model.Postulants.FirstOrDefault(x => x.UserId == ViewBag.UserId).Equals(null))
+            var re = Model.Postulants.FirstOrDefault(x => x.UserId == ViewBag.UserId);
+
+            if(re == null)
             {
                 <form method="post" class="d-inline-block" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
 
@@ -146,3 +151,60 @@
 </div>
 
 
+@if(!funcVerifiContratis())
+{
+    <div class="border badge-light p-2 mt-2 " style="margin:0% 0% 13% 0%">
+
+        <ul>
+
+            @foreach(PostulantResponseDTO postulan in Model.Postulants)
+            {
+
+                <li style=" border-radius: 15px;
+                        border: 1px solid black;
+                        display: inline-block;
+                        margin: 10px;
+                        padding:2px;
+                        background-color: #007DFF;">
+
+                    <div style=" border-radius: 15px;
+                        border: 1px solid black;
+                        display: inline-block;
+                        margin: 0px;
+                        background-color: #ffffff">
+
+                        <div style="margin:5px 10px 5px 5px; padding:2px; display:inline-block;">
+
+                            <img alt="usuario" src="/Image/user_male.png" style="border-radius:0px; width: 50px; height: 50px;" />
+
+                            <strong class="h3"> @postulan. </strong>
+
+                        </div>
+
+
+                        <a style="text-decoration: none;" class="postulante" asp-controller="PersonalInfo" asp-action="Profesional" asp-route-userId="@postulan.UserId" asp-route-projectId=" @Model.Id">
+
+                            <img alt="verificar usuario" src="/Image/find_user.png" style="border-radius:0px; width: 50px; height: 50px;" />
+
+                            <strong class="h4">Ver perfil del Postalante </strong>
+
+                        </a>
+
+                        <a class="postulante" style="text-decoration: none;" asp-controller="PersonalInfo" asp-action="Profesional" asp-route-userId="@postulan.UserId" asp-route-projectId=" @Model.Id">
+
+                            <img alt="agregar usuario" src="/Image/add_user.png" style="border-radius:0px; width: 50px; height: 50px;" />
+
+                            <strong class="h4"> Asignar Postulante </strong>
+
+                        </a>
+
+                    </div>
+
+                </li>
+
+            }
+
+        </ul>
+
+    </div>
+}
