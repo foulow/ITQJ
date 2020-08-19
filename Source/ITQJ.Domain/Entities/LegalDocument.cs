@@ -14,8 +14,8 @@
         public string Number { get; set; }
 
         [Required]
-        [MaxLength(2097152)]
-        public byte[] Image { get; set; }
+        [StringLength(200)]
+        public string FileName { get; set; }
 
         [ForeignKey("DocumentTypeId")]
         public virtual DocumentType DocumentType { get; set; }

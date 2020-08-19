@@ -12,10 +12,10 @@ namespace ITQJ.Domain.Validations
                 .WithMessage($"El {nameof(LegalDocumentCreateDTO.DocumentTypeId)} no puede estar vacio.");
 
             RuleFor(legalDocument => legalDocument.Number).NotNull().NotEmpty()
-                .WithMessage($"El {nameof(PersonalInfoCreateDTO.Name)} no puede estar vacio.");
+                .WithMessage($"El {nameof(LegalDocumentCreateDTO.Number)} no puede estar vacio.");
 
-            RuleFor(legalDocument => legalDocument.Image).NotNull().NotEmpty()
-                .WithMessage($"El {nameof(PersonalInfoCreateDTO.PhoneNumber)} no puede estar vacio.");
+            RuleFor(legalDocument => legalDocument.FileName).NotNull().NotEmpty()
+                .WithMessage($"El {nameof(LegalDocumentCreateDTO.FileName)} no puede estar vacio.");
         }
     }
 
@@ -26,8 +26,8 @@ namespace ITQJ.Domain.Validations
             RuleFor(legalDocument => legalDocument.Number).NotNull()
                 .WithMessage($"El {nameof(PersonalInfoCreateDTO.Name)} no puede estar vacio.");
 
-            RuleFor(legalDocument => legalDocument.Image).NotNull()
-                .WithMessage($"El {nameof(PersonalInfoCreateDTO.PhoneNumber)} no puede estar vacio.");
+            RuleFor(legalDocument => legalDocument.FileName).NotNull()
+                .WithMessage($"El {nameof(LegalDocumentCreateDTO.FileName)} no puede estar vacio.");
         }
     }
 }

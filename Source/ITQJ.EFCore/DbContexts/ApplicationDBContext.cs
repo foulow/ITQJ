@@ -11,6 +11,8 @@
 
         public virtual DbSet<Message> Messages { get; set; }
 
+        public virtual DbSet<MileStone> MileStones { get; set; }
+
         public virtual DbSet<PersonalInfo> PersonalInfos { get; set; }
 
         public virtual DbSet<Postulant> Postulants { get; set; }
@@ -92,6 +94,10 @@
             modelBuilder.Entity<Message>()
                 .HasOne(e => e.Project)
                 .WithMany(e => e.Messages);
+
+            modelBuilder.Entity<MileStone>()
+                .HasOne(e => e.Project)
+                .WithMany(e => e.MileStones);
 
             modelBuilder.Entity<Review>()
                 .HasOne(e => e.User)

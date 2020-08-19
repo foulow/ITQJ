@@ -12,6 +12,7 @@
         [StringLength(500)]
         public string Text { get; set; }
 
+        [Required]
         public DateTime MessageDate { get; set; }
 
         [JsonIgnore]

@@ -11,7 +11,7 @@ namespace ITQJ.Domain.DTOs
     {
         public string Number { get; set; }
 
-        public byte[] Image { get; set; }
+        public string FileName { get; set; }
     }
 
     public class LegalDocumentResponseDTO : LegalDocumentCreateDTO

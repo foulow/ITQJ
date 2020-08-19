@@ -38,5 +38,7 @@
         public virtual ICollection<Postulant> Postulants { get; set; }
 
         public virtual ICollection<Message> Messages { get; set; }
+
+        public virtual ICollection<MileStone> MileStones { get; set; }
     }
 }

@@ -6,8 +6,11 @@ namespace ITQJ.Domain.DTOs
     public class ProjectCreateDTO : ProjectUpdateDTO
     {
         public string Name { get; set; }
+
         public string Description { get; set; }
+
         public DateTime PublishDate { get; set; }
+
         public Guid UserId { get; set; }
     }
 
@@ -23,9 +26,12 @@ namespace ITQJ.Domain.DTOs
     public class ProjectResponseDTO : ProjectCreateDTO
     {
         public Guid Id { get; set; }
-        public ICollection<SkillDTO> Skills { get; set; }
-        public ICollection<PostulantResponseDTO> Postulants { get; set; }
-        public ICollection<MessageResponseDTO> Messages { get; set; }
 
+        // TODO: implementar lista de skills requeridos.
+        //public ICollection<SkillDTO> Skills { get; set; }
+
+        public ICollection<PostulantResponseDTO> Postulants { get; set; }
+
+        public ICollection<MileStoneResponceDTO> MileStones { get; set; }
     }
 }

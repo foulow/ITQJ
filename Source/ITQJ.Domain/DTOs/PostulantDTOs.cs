@@ -5,6 +5,7 @@ namespace ITQJ.Domain.DTOs
     public class PostulantCreateDTO : PostulantUpdateDTO
     {
         public Guid UserId { get; set; }
+
         public Guid ProjectId { get; set; }
     }
 
@@ -21,8 +22,8 @@ namespace ITQJ.Domain.DTOs
     {
         public Guid Id { get; set; }
 
-        public ProjectCreateDTO Project { get; set; }
+        public virtual ProjectCreateDTO Project { get; set; }
 
-        public UserResponseDTO User { get; set; }
+        public virtual UserResponseDTO User { get; set; }
     }
 }

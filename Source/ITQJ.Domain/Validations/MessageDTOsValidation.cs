@@ -19,6 +19,9 @@ namespace ITQJ.Domain.Validations
 
             RuleFor(message => message.Text).NotNull().NotEmpty()
                 .WithMessage($"El {nameof(MessageCreateDTO.Text)} no puede estar vacio.");
+            
+            RuleFor(message => message.MessageDate).NotNull()
+                .WithMessage($"El {nameof(MessageCreateDTO.MessageDate)} no puede estar vacio.");
         }
     }
 }

@@ -175,13 +175,13 @@ namespace ITQJ.EFCore.Configurations
         public static IEnumerable<User> Users =>
             new User[]
             {
-                //new User
-                //{
-                //    Id = Guid.Parse("7A5B3C6E-7E95-435E-B46F-1F449F49BE04"),
-                //    Email = "jeffreyissaul@hotmail.com",
-                //    Subject = "auth0|5f0c49e03e0de80013aa852c",
-                //    Role = "Profesional"
-                //},
+                new User
+                {
+                    Id = Guid.Parse("7A5B3C6E-7E95-435E-B46F-1F449F49BE04"),
+                    Email = "sistema@itqj.com",
+                    Subject = "unasigned",
+                    Role = "Sistema"
+                },
                 new User
                 {
                     Id = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84"),
@@ -212,7 +212,7 @@ namespace ITQJ.EFCore.Configurations
                 {
                     Id = Guid.Parse("CE3695B2-CCF1-4521-A3EB-DAE703FFBDFB"),
                     Number = "123-4567789-0",
-                    Image = new byte[] { 1,1,1,1,1,1,1,1 },
+                    FileName = "e80f88af-c61e-4500-a77e-8ede80538b84.png",
                     DocumentTypeId = Guid.Parse("189EE312-AFD2-4145-9687-585D001F23E7")
                 }
             };
