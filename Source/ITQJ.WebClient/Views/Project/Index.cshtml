@@ -166,7 +166,7 @@
 
             @foreach (var postulan in Model.Postulants)
             {
-                <form class="form1" method="post" style="margin:0px; padding:0px;" asp-controller="Postulant" asp-action="SelectProfesional" asp-route-postulanId="@postulan.Id" asp-route-proyectId=" @Model.Id">
+                <form class="@postulan.Id" method="post" style="margin:0px; padding:0px;" asp-controller="Postulant" asp-action="SelectProfesional" asp-route-postulanId="@postulan.Id" asp-route-proyectId=" @Model.Id">
 
                     <ul>
                         <li style=" border-radius: 15px;
@@ -186,7 +186,7 @@
 
                                     <img alt="usuario" src="/Image/user_male.png" style="border-radius:0px; width: 50px; height: 50px;" />
 
-                                    <strong class="h3"> @postulan.User.Email </strong>
+                                    <strong class="h3"> @postulan.User.UserName </strong>
 
                                 </div>
 
@@ -198,26 +198,29 @@
 
                                 </a>
 
-                                <div onclick="enviar()" style="text-decoration: none;" class="postulante enviar">
+                                @if (postulan.IsSellected == false)
+                                {
+                                    <div onclick="enviar()" style="text-decoration: none;" class="postulante enviar">
 
-                                    <img alt="agregar usuario" src="/Image/add_user.png" style="border-radius:0px; width: 50px; height: 50px;" />
+                                        <img alt="agregar usuario" src="/Image/add_user.png" style="border-radius:0px; width: 50px; height: 50px;" />
 
-                                    <strong class="h4"> Asignar Postulante </strong>
+                                        <strong class="h4"> Asignar Postulante </strong>
 
-                                </div>
+                                    </div>
 
-                                <script>
+                                    <script>
 
-                                    function enviar() {
-                                        debugger;
+                                        function enviar() {
+                                            debugger;
 
-                                        var form = $('.form1');
+                                            var form = $('.@postulan.Id');
 
-                                        form.submit();
+                                            form.submit();
 
-                                    }
+                                        }
 
-                                </script>
+                                    </script>
+                                }
 
                             </div>
 

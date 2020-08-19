@@ -2,7 +2,7 @@
 
 namespace ITQJ.Domain.DTOs
 {
-    public class PostulantCreateDTO
+    public class PostulantCreateDTO : PostulantUpdateDTO
     {
         public Guid UserId { get; set; }
         public Guid ProjectId { get; set; }
@@ -10,11 +10,11 @@ namespace ITQJ.Domain.DTOs
 
     public class PostulantUpdateDTO
     {
-        public bool IsSellected { get; set; }
+        public bool IsSellected { get; set; } = false;
 
-        public bool HasWorkReview { get; set; }
+        public bool HasWorkReview { get; set; } = false;
 
-        public bool HasProyectReview { get; set; }
+        public bool HasProyectReview { get; set; } = false;
     }
 
     public class PostulantResponseDTO : PostulantCreateDTO

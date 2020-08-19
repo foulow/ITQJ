@@ -147,7 +147,6 @@ function showRoom(profesional) {
     chatPlaceholder.hide();
     messageInput.val("").focus();
   } else {
-    $("#fixed-buttom-chat").width(800);
     userListContainer.show();
 
     getConnectedUsers();
