@@ -1,0 +1,16 @@
+﻿
+
+.postulante {
+    cursor: pointer;
+    margin: 5px 10px 5px 5px;
+    padding: 3px;
+    display: inline-block;
+    border-radius: 15px;
+    border: 1px double black;
+    color: black;
+    background-color: #007DFF;
+}
+
+    .postulante:hover {
+        background-color: #908e8e;
+    }

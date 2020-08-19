@@ -17,8 +17,9 @@ namespace ITQJ.WebClient.Controllers
 
 
         [Authorize]
-        public async Task<IActionResult> Profesional(string userId)
+        public async Task<IActionResult> Profesional(string userId,Guid projectId, Guid PostulanId)
         {
+
             if (string.IsNullOrWhiteSpace(userId))
                 return PageNotFound();
 
@@ -35,8 +36,11 @@ namespace ITQJ.WebClient.Controllers
             else if (personalInfoDTO == null)
                 return PageNotFound();
 
-            return View(personalInfoDTO);
+
+            return View(new List<object>(){personalInfoDTO, Convert.ToString(projectId), Convert.ToString(PostulanId) });
         }
+
+
 
         [Authorize]
         public async Task<IActionResult> viewProfesionalInfo()

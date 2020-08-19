@@ -84,11 +84,15 @@ namespace ITQJ.Domain
             CreateMap<Postulant, PostulantCreateDTO>();
             CreateMap<Postulant, PostulantResponseDTO>();
 
+
             // Mapeo de datos modelo Message.
             CreateMap<MessageCreateDTO, Message>()
                 .ForMember(dest => dest.Id, act => act.Ignore());
             CreateMap<Message, MessageCreateDTO>();
             CreateMap<Message, MessageResponseDTO>();
+
+
+
             #endregion
         }
     }

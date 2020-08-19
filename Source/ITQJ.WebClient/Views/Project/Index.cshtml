@@ -1,5 +1,5 @@
-﻿@model ITQJ.Domain.DTOs.ProjectResponseDTO;
-
+﻿
+@model ITQJ.Domain.DTOs.ProjectResponseDTO;
 @{
     ViewData["Title"] = "Projecto";
 
@@ -12,149 +12,233 @@
     var Div = "div" + @Model.Id;
     var Fcta = "fcta" + @Model.Id;
 
-    if (ViewBag.ErrorMesseger != null)
+    if(ViewBag.ErrorMesseger != null)
     {
-        <script>
-            alert(ViewBag.ErrorMesseger);
-        </script>
+    <script>
+        alert(ViewBag.ErrorMesseger);
+    </script>
     }
 
     var postulaciones = Model.PostulantsLimit - Model.Postulants.Count;
 
-    Func<bool> funcVerifiContratis = () =>
-    {
-        if (ViewBag?.UserId is null)
-            return false;
+    Func<bool>
+        funcVerifiContratis = () =>
+        {
+        if(ViewBag?.UserId is null)
+        return false;
 
         Guid userId = ViewBag.UserId;
 
-        if (Model.UserId == userId)
+        if(Model.UserId == userId)
         {
-            return true;
+        return true;
         }
 
         return false;
 
-    };
+        };
 
-    Func<string> func = () =>
-    {
+        Func<string>
+            func = () =>
+            {
 
-        var fecha = Model.CloseDate.ToString();
+            var fecha = Model.CloseDate.ToString();
 
-        if (fecha.Substring(0, 8) == "1/1/0001")
-        {
+            if(fecha.Substring(0,8) == "1/1/0001")
+            {
             return "Nullo";
-        }
+            }
 
-        return Model.CloseDate.ToString();
+            return Model.CloseDate.ToString();
 
-    };
-}
+            };
+            }
 
-<div class="col d-inline-block p-2 border badge-dark" style="margin:4% 0% 2% 0%">
 
-    <div class="col d-inline m-0 p-0">
+            <div class="col d-inline-block p-2 border badge-dark" style="margin:4% 0% 2% 0%">
 
-        <strong class="h2 m-0 p-0">
+                <div class="col d-inline m-0 p-0">
 
-            @Model.Name
+                    <strong class="h2 m-0 p-0">
 
-        </strong>
+                        @Model.Name
 
-    </div>
+                    </strong>
 
-</div>
+                </div>
 
-<div class="border badge-light mt-lg-3 p-2 mt-3 " style="margin:0% 0% 13% 0%">
+            </div>
 
-    <div class="border-bottom border-dark mb-3">
+            <div class="border badge-light mt-lg-3 p-2 mt-3 " style="margin:0px 0px 20px 0px">
 
-        <strong>Descripción </strong>
+                <div class="border-bottom border-dark mb-3">
 
-    </div>
+                    <strong>Descripción </strong>
 
-    <text>@Model.Description</text>
+                </div>
 
-    <div class="mt-lg-4 mb-lg-4">
+                <text>@Model.Description</text>
 
-        <div class="d-inline m-0 p-0 ">
+                <div class="mt-lg-4 mb-lg-4">
 
-            <strong class="h6 m-0 p-0">
+                    <div class="d-inline m-0 p-0 ">
 
-                Publicado: <text class="text-info">@Model.PublishDate</text>
+                        <strong class="h6 m-0 p-0">
 
-            </strong>
+                            Publicado: <text class="text-info">@Model.PublishDate</text>
 
-        </div>
+                        </strong>
 
-        <div class="col d-inline  ml-lg-3 p-0 ">
+                    </div>
 
-            <strong class="h6 m-0 p-0">
+                    <div class="col d-inline  ml-lg-3 p-0 ">
 
-                Cierra: <text class="text-danger">
+                        <strong class="h6 m-0 p-0">
 
-                    @func();
+                            Cierra:
 
-                </text>
+                            <text class="text-danger">
 
-            </strong>
+                                @func();
 
-        </div>
+                            </text>
 
-        <div class="col d-inline  ml-lg-3 p-0 ">
+                        </strong>
 
-            <strong class="h6 m-0 p-0">
+                    </div>
 
-                Postaciones restante: <text class="text-danger">@postulaciones</text>
+                    <div class="col d-inline  ml-lg-3 p-0 ">
 
-            </strong>
+                        <strong class="h6 m-0 p-0">
 
-        </div>
+                            Postaciones restante: <text class="text-danger">@postulaciones</text>
 
-    </div>
+                        </strong>
 
-    @if (!funcVerifiContratis())
+                    </div>
+
+                </div>
+
+                @if(!funcVerifiContratis())
+                {
+
+                    if(Model.Postulants.Count == 0)
+                    {
+                        <form method="post" class="d-inline-block" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
+
+                            <input id="Submit" type="submit" value="Postularse" class="btn btn-dark m-3" />
+
+                        </form>
+                    }
+                    else
+                    {
+
+                        if(ViewBag.isPostulated == false)
+                        {
+                            <form method="post" class="d-inline-block" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
+
+                                <input id="Submit" type="submit" value="Postularse" class="btn btn-dark m-3" />
+
+                            </form>
+                        }
+                        else
+                        {
+                            // TODO: agregar logica de despostularce. (opcional)
+                        }
+                    }
+
+                    <div class="d-inline-block">
+
+                        <a asp-controller="PersonalInfo" asp-action="Contratist" asp-route-userId="@Model.UserId" class="btn btn-dark m-3"> Perfil del Contratista </a>
+
+                    </div>
+                }
+
+            </div>
+
+
+    @if(funcVerifiContratis())
     {
-
-        if (Model.Postulants.Count == 0)
+        if(Model.Postulants.Count != 0)
         {
-            <form method="post" class="d-inline-block" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
+            <div class="border badge-light p-2 mt-2 mb-2 " style="margin:0% 0% 13% 0%">
 
-                <input id="Submit" type="submit" value="Postularse" class="btn btn-dark m-3" />
+                <strong class="h2 m-5">Postulantes</strong>
 
-            </form>
+                @foreach(var postulan in Model.Postulants)
+                {
+                   <form class="form1" method="post" style="margin:0px; padding:0px;" asp-controller="Postulant" asp-action="SelectProfesional" asp-route-postulanId="@postulan.Id" asp-route-proyectId=" @Model.Id">
+                    
+                       <ul>
+                           <li style=" border-radius: 15px;
+                                       border: 1px solid black;
+                                       display: block;
+                                       margin: 10px;
+                                       padding:2px;
+                                       background-color: #007DFF;">
+                
+                               <div style=" border-radius: 15px;
+                                       border: 1px solid black;
+                                       display:block;
+                                       margin: 0px;
+                                       background-color: #ffffff">
+
+                                   <div style="margin:5px 10px 5px 5px; padding:2px;   display:inline-block;">
+
+                                       <img alt="usuario" src="/Image/user_male.png" style="border-radius:0px; width: 50px; height: 50px;" />
+
+                                       <strong class="h3"> @postulan.User.Email </strong>
+
+                                   </div>
+
+                                   <a style="text-decoration: none;" class="postulante" asp-controller="PersonalInfo" asp-action="Profesional" asp-route-userId="@postulan.User.Id" asp-route-PostulanId="@postulan.Id" asp-route-projectId=" @Model.Id">
+
+                                       <img alt="verificar usuario" src="/Image/find_user.png" style="border-radius:0px; width: 50px; height: 50px;" />
+
+                                       <strong class="h4">Ver perfil del Postalante </strong>
+
+                                   </a>
+
+                                   <div onclick="enviar()" style="text-decoration: none;" class="postulante enviar">
+
+                                       <img alt="agregar usuario" src="/Image/add_user.png" style="border-radius:0px; width: 50px; height: 50px;" />
+
+                                       <strong class="h4"> Asignar Postulante </strong>
+
+                                   </div>
+
+                                   <script>
+
+                                       function enviar()
+                                       {
+                                           debugger;
+
+                                           var form = $('.form1');
+
+                                           form.submit();
+
+                                       }
+
+                                   </script>
+
+                               </div>
+                
+                           </li>
+                
+                       </ul>
+                
+                   </form>
+                
+                }
+
+            </div>
         }
-        else
-        {
-            if (ViewBag.isPostulated == false)
-            {
-                <form method="post" class="d-inline-block" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
-
-                    <input id="Submit" type="submit" value="Postularse" class="btn btn-dark m-3" />
-
-                </form>
-            }
-            else
-            {
-                // TODO: agregar logica de despostularce. (opcional)
-            }
-        }
-
-        <div class="d-inline-block">
-
-            <a asp-controller="PersonalInfo" asp-action="Contratist" asp-route-userId="@Model.UserId" class="btn btn-dark m-3"> Perfil del Contratista </a>
-
-        </div>
     }
 
-</div>
+            @section Chat {
+                <partial name="_Chat" />
+            }
 
-@section Chat {
-    <partial name="_Chat" />
-}
-
-@section Scripts {
-    <script src="~/js/chat.js"></script>
-}
-
+            @section Scripts {
+                <script src="~/js/chat.js"></script>
+            }

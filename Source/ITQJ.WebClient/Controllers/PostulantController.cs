@@ -1,4 +1,5 @@
-﻿using ITQJ.WebClient.ViewModels;
+﻿using ITQJ.Domain.DTOs;
+using ITQJ.WebClient.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -42,6 +43,28 @@ namespace ITQJ.WebClient.Controllers
             };
 
             return CallApiGETAsync<PostutantListVM>(uri: "api/postulants/mypostulations/" + userId + QueryString.Create(queryResult), isSecured: true);
+        }
+
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> SelectProfesional(Guid postulanId,Guid proyectId)
+        {
+            PostulantUpdateDTO postulantData = new PostulantUpdateDTO();
+
+            if(!ModelState.IsValid)
+            {
+                return View(postulantData);
+            }
+
+            postulantData.IsSellected = true;
+
+            var response = await CallApiPUTAsync<PostulantUpdateDTO>(
+                uri: "api/Postulants/" + postulanId,body: postulantData, isSecured: true);
+
+
+            return RedirectToAction("Index","Project",new { projectId = proyectId });
+
         }
     }
 }

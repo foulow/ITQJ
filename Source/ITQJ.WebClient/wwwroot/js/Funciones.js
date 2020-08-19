@@ -1,8 +1,5 @@
 ﻿$(document).ready(() => {
 
-
-
-
     $("#Editar").css({
         visibility: "hidden",
         position: "absolute",
@@ -308,7 +305,7 @@ function Resize()
 
 function RangeStar() {
 
-    var _star = document.getElementsByClassName("Star");
+    //var _star = document.getElementsByClassName("Star");
 
     // primary
     var primary = document.createElement("div");
@@ -568,7 +565,10 @@ function RangeStar() {
     input.style.width = "100%";
     input.onchange = function ()
     {
+
         var value = document.getElementById(ID).value;
+
+        //$('.Star').attr(`value`, `${input.value}`);
 
         if (value <= 9) {
             $("#HalfStar1").css({ visibility: "hidden" });
@@ -736,7 +736,7 @@ function RangeStar() {
     range.appendChild(input);
 
     primary.appendChild(range); 
-    
+
     _star[0].appendChild(primary);
 
 }
