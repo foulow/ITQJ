@@ -75,14 +75,24 @@ namespace ITQJ.Domain
             // Mapeo de datos modelo Postulant.
             CreateMap<PostulantCreateDTO, Postulant>()
                 .ForMember(dest => dest.Id, act => act.Ignore());
+
+            CreateMap<PostulantUpdateDTO,Postulant>()
+            .ForMember(dest => dest.Id,act => act.Ignore())
+            .ForMember(dest => dest.ProjectId,act => act.Ignore())
+            .ForMember(dest => dest.UserId,act => act.Ignore());
+
             CreateMap<Postulant, PostulantCreateDTO>();
             CreateMap<Postulant, PostulantResponseDTO>();
+
 
             // Mapeo de datos modelo Message.
             CreateMap<MessageCreateDTO, Message>()
                 .ForMember(dest => dest.Id, act => act.Ignore());
             CreateMap<Message, MessageCreateDTO>();
             CreateMap<Message, MessageResponseDTO>();
+
+
+
             #endregion
         }
     }

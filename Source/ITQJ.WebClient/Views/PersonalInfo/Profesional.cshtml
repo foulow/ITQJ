@@ -1,8 +1,10 @@
-﻿@model ITQJ.Domain.DTOs.PersonalInfoResponseDTO;
+﻿@model List<object>;
 
 @{
     ViewData["Title"] = "Pagina de perfil del Profesional";
-
+    ITQJ.Domain.DTOs.PersonalInfoResponseDTO personalInfo = (ITQJ.Domain.DTOs.PersonalInfoResponseDTO)Model[0];
+    string projectId = Model[1].ToString();
+    string PostulanId = Model[2].ToString();
 }
 
 <div style="width:90%; transform:translateX(5%);">
@@ -14,31 +16,31 @@
 
         <div class="border badge-pill bg-primary mt-1" style="border: 1px solid white; box-shadow:2px 2px 6px #000;">
 
-            <p id="Mname" class="h2"> Nombre: @Model.Name </p>
+            <p id="Mname" class="h2"> Nombre: @personalInfo.Name </p>
 
         </div>
 
         @*<div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000;">
 
-            <p id="Memail" class="h2"> Correo: @Model.User.Email </p>
+                <p id="Memail" class="h2"> Correo: @Model.User.Email </p>
+
+            </div>
+
+            <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000">
+
+                <p id="Mnumero" class="h2"> Numero de telefono: @Model.PhoneNumber </p>
+
+            </div>*@
+
+        <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000">
+
+            <p id="Mling" class="h2"> Pagina Web: <a src="@personalInfo.PagLink">@personalInfo.PagLink </a></p>
 
         </div>
 
         <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000">
 
-            <p id="Mnumero" class="h2"> Numero de telefono: @Model.PhoneNumber </p>
-
-        </div>*@
-
-        <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000">
-
-            <p id="Mling" class="h2"> Pagina Web: <a src="@Model.PagLink">@Model.PagLink </a></p>
-
-        </div>
-
-        <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000">
-
-            <p id="Mdescripcion" class="h2"> Descripción: @Model.Description </p>
+            <p id="Mdescripcion" class="h2"> Descripción: @personalInfo.Description </p>
 
         </div>
 
@@ -46,16 +48,21 @@
 
 </div>
 
+@if(projectId != null || projectId != string.Empty)
+{
+    <div class="d-inline-block " style="transform:translateX(20%); margin:20px 0px 10px 10px;">
+        
+        <form method="post" asp-controller="Postulant"
+               asp-action="SelectProfesional"
+               asp-route-postulanId="@PostulanId"
+               asp-route-proyectId="@projectId">
 
-<div class="d-inline-block " style="transform:translateX(20%); margin:20px 0px 10px 10px;">
+            <input class="btn btn-dark" type="submit" value="Contratar para el proyecto" />
 
-    <a asp-controller="Project" asp-action="MyProyects" asp-route-userId="@Model.UserId" class="btn btn-dark m-3">
+        </form>
 
-        Contratar para un proyecto
-
-    </a>
-
-</div>
+    </div>
+}
 
 
 <div class="container" style="width:90%; transform:translateX(5%); margin:20px 0px 100px 0px; ">
@@ -64,12 +71,12 @@
 
         <h1 class="mb-5">Profesional Skill</h1>
 
-        @if(Model.ProfesionalSkills.FirstOrDefault(x => x.Percentage >= 1).Equals(null))
+        @if(personalInfo.ProfesionalSkills.FirstOrDefault(x => x.Percentage >= 1).Equals(null))
         {
             <h2> Sin avilidades para mostrar.</h2>
         }
         else
-            @foreach(ITQJ.Domain.DTOs.ProfesionalSkillResponseDTO skill in Model.ProfesionalSkills)
+            @foreach(ITQJ.Domain.DTOs.ProfesionalSkillResponseDTO skill in personalInfo.ProfesionalSkills)
             {
                 if(skill.Percentage >= 1)
                 {
