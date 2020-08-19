@@ -54,7 +54,7 @@ namespace ITQJ.API.Controllers
         [HttpGet("mypostulations/{userId}")]
         public ActionResult GetPostulantations([FromRoute] Guid userId, [FromQuery] int pageIndex = 1, [FromQuery] int maxResults = 5)
         {
-            if (userId == null || userId == new Guid())
+            if (userId == default)
                 return BadRequest(new { Message = $"Error: el parametro {nameof(userId)} no puede ser nulo." });
 
             if (pageIndex < 1)
@@ -110,10 +110,10 @@ namespace ITQJ.API.Controllers
             if (newPostulant == null)
                 return BadRequest(new { Error = "No se enviaron los datos esperados." });
 
-            var repuesta = _appDBContext.Postulants.Add(newPostulant);
-            _appDBContext.SaveChanges();
+            var repuesta = this._appDBContext.Postulants.Add(newPostulant);
+            this._appDBContext.SaveChanges();
 
-            var postulantsModel = _mapper.Map<PostulantResponseDTO>(repuesta.Entity);
+            var postulantsModel = this._mapper.Map<PostulantResponseDTO>(repuesta.Entity);
 
             return Ok(new
             {
@@ -122,6 +122,45 @@ namespace ITQJ.API.Controllers
                 Result = postulantsModel
 
             });
+        }
+
+        [HttpPut("{postulantId}")]
+        public ActionResult UpdatePostulant([FromRoute] Guid postulantId, [FromBody] PostulantUpdateDTO postulantData)
+        {
+            if (postulantId == default)
+                return BadRequest(new { Message = $"Error: el parametro {nameof(postulantId)} no puede ser nulo." });
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new
+                {
+                    Message = "La informacion de registro del proyecto son invalidos.",
+                    ErrorsCount = ModelState.ErrorCount,
+                    Errors = ModelState.Select(x => x.Value.Errors)
+                });
+            }
+
+            var postulantToUpdate = _appDBContext.Postulants.FirstOrDefault(x => x.Id == postulantId);
+
+            if (postulantToUpdate != null)
+            {
+                this._mapper.Map<PostulantUpdateDTO, Postulant>(postulantData, postulantToUpdate);
+
+                this._appDBContext.Postulants.Update(postulantToUpdate);
+                this._appDBContext.SaveChanges();
+
+                var postulantsModel = _mapper.Map<PostulantResponseDTO>(postulantToUpdate);
+
+                return Ok(new
+                {
+                    Message = "OK",
+                    Result = postulantsModel
+                });
+            }
+            else
+            {
+                return NotFound(new { Error = "No se encontro el postulante a actualizar." });
+            }
         }
     }
 }

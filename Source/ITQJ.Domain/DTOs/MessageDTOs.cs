@@ -13,5 +13,7 @@ namespace ITQJ.Domain.DTOs
     public class MessageResponseDTO : MessageCreateDTO
     {
         public Guid Id { get; set; }
+
+        public virtual UserResponseDTO User { get; set; }
     }
 }

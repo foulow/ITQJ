@@ -57,53 +57,28 @@ namespace ITQJ.WebClient.Hubs
 
         #region Connect Methods
 
-        public async Task<IActionResult> Connect()
+        public IActionResult Connect()
         {
             if (ConnectedUsers.Any(x => x.ConnectionId.Equals(Context.ConnectionId)))
                 throw new InvalidOperationException(Resources.UserIsConnected);
 
-            var user = await CallApiGETAsync<UserResponseDTO>(uri: "api/users", isSecured: true);
+            var user = CallApiGETAsync<UserResponseDTO>(uri: "api/users", isSecured: true);
             user.ConnectionId = Context.ConnectionId;
 
             ConnectedUsers.Add(user);
 
-            return new OkObjectResult(user.Id);
+            return new OkResult();
         }
 
-        public async void GetPostulantsMessages(string projectId, string fromId)
+        public void GetMessages(string projectId, string fromId, string toId)
         {
-            if (Guid.TryParse(projectId, out Guid result))
+            if (!Guid.TryParse(projectId, out Guid result))
                 throw new InvalidOperationException(Resources.UnableToGetMessages);
 
-            if (Guid.TryParse(fromId, out Guid userId))
+            if (!Guid.TryParse(fromId, out Guid fromUserGuid))
                 throw new InvalidOperationException(Resources.UnableToGetMessages);
 
-            var postulants = await CallApiGETAsync<List<UserResponseDTO>>(uri: "api/messages/contratist/" + projectId, isSecured: true);
-
-            if (postulants.Count == 0)
-                return;
-
-            var availableUser = postulants.Where(x => x.Id != userId)
-                .Select(x => new
-                {
-                    id = x.Id,
-                    userName = x.Email.Split("@").First(),
-                    messageCount = x.Messages.Count,
-                    connectionId = ConnectedUsers.FirstOrDefault(s => s.Id == x.Id)?.ConnectionId
-                });
-
-            await Clients.Caller.SendAsync(ChatHubMethods.UpdateConnectedUsers, availableUser);
-        }
-
-        public async void GetProjectMessages(string projectId, string fromId, string toId)
-        {
-            if (Guid.TryParse(projectId, out Guid result))
-                throw new InvalidOperationException(Resources.UnableToGetMessages);
-
-            if (Guid.TryParse(fromId, out Guid fromUserId))
-                throw new InvalidOperationException(Resources.UnableToGetMessages);
-
-            if (Guid.TryParse(toId, out Guid toUserId))
+            if (!Guid.TryParse(toId, out Guid toUserGuid))
                 throw new InvalidOperationException(Resources.UnableToGetMessages);
 
             var queryResult = new Dictionary<string, string>
@@ -112,38 +87,59 @@ namespace ITQJ.WebClient.Hubs
                 { nameof(toId), toId }
             };
 
-            var postulants = await CallApiGETAsync<List<UserResponseDTO>>(uri: "api/messages/profesional/" + projectId + QueryString.Create(queryResult), isSecured: true);
+            var messages = CallApiGETAsync<List<MessageResponseDTO>>(uri: "api/messages/" + projectId + QueryString.Create(queryResult), isSecured: true);
 
-            if (postulants.Count == 0)
+            if (messages is null || messages.Count == 0)
                 return;
 
-            var availableUser = postulants
+            var userMessages = messages
                 .Select(x => new
                 {
-                    id = x.Id,
-                    userName = x.Email.Split("@").First(),
-                    messageCount = x.Messages.Count,
-                    connectionId = ConnectedUsers.FirstOrDefault(s => s.Id == x.Id)?.ConnectionId
+                    fromUserId = x.FromUserId,
+                    toUserId = x.ToUserId,
+                    userName = (x.FromUserId == fromUserGuid)? "Yo" : x.User.UserName,
+                    text = x.Text,
+                    messageDate = x.MessageDate
                 });
 
-            await Clients.Caller.SendAsync(ChatHubMethods.UpdateConnectedUsers, availableUser);
+            Clients.Caller.SendAsync(ChatHubMethods.ReceiveConversation, userMessages).Wait();           
         }
 
+        public void GetPostulants(string projectId)
+        {
+            if (!Guid.TryParse(projectId, out Guid result))
+                throw new InvalidOperationException(Resources.UnableToGetMessages);
+
+            var postulants = CallApiGETAsync<List<PostulantResponseDTO>>(uri: "api/postulants/" + projectId, isSecured: true);
+            
+            if (postulants is null || postulants.Count == 0)
+                return;
+            
+            var postulantsInfo = postulants
+                .Select(x => new
+                {
+                    id = x.User.Id,
+                    userName = x.User.UserName,
+                    messageCount = 0
+                });
+            
+            Clients.Caller.SendAsync(ChatHubMethods.UpdateConnectedUsers, postulantsInfo).Wait();           
+        }
         #endregion
 
         #region Message Methods
 
-        public async Task<IActionResult> SendPrivateMessage(MessageResponseDTO message)
+        public IActionResult SendPrivateMessage(MessageResponseDTO message)
         {
-            await CallApiPOSTAsync<MessageResponseDTO>(uri: "api/messages/", body: message, isSecured: true);
+            CallApiPOSTAsync<MessageResponseDTO>(uri: "api/messages/", body: message, isSecured: true);
 
             var toUser = ConnectedUsers.FirstOrDefault(x => x.Id == message.ToUserId);
             if (toUser != null)
             {
-                await Clients.Client(toUser.ConnectionId)
-                    .SendAsync(ChatHubMethods.ReceiveMessage, message);
-                await Clients.Client(toUser.ConnectionId)
-                    .SendAsync(ChatHubMethods.UpdateUnreadMessages, message.ToUserId);
+                Clients.Client(toUser.ConnectionId)
+                    .SendAsync(ChatHubMethods.ReceiveMessage, message).Wait();
+                Clients.Client(toUser.ConnectionId)
+                    .SendAsync(ChatHubMethods.UpdateUnreadMessages, message.ToUserId).Wait();
             }
 
             return new OkResult();
@@ -175,18 +171,18 @@ namespace ITQJ.WebClient.Hubs
         #endregion
 
         #region Auxiliary Methods
-        private async Task<T> CallApiGETAsync<T>(string uri, bool isSecured) where T : class
+        private T CallApiGETAsync<T>(string uri, bool isSecured) where T : class
         {
             var apiClient = this._clientFactory.CreateClient((isSecured) ? "SecuredAPIClient" : "APIClient");
 
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
 
-            var response = await apiClient.SendAsync(
-                request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+            var response = apiClient.SendAsync(
+                request, HttpCompletionOption.ResponseHeadersRead).Result;
 
             if (response.IsSuccessStatusCode)
             {
-                var responseString = await response.Content.ReadAsStringAsync();
+                var responseString = response.Content.ReadAsStringAsync().Result;
                 var jsonObject = JObject.Parse(responseString);
 
                 return jsonObject["result"]?.ToObject<T>();
@@ -199,19 +195,19 @@ namespace ITQJ.WebClient.Hubs
             return null;
         }
 
-        private async Task<T> CallApiPOSTAsync<T>(string uri, T body, bool isSecured) where T : class
+        private T CallApiPOSTAsync<T>(string uri, T body, bool isSecured) where T : class
         {
             var apiClient = this._clientFactory.CreateClient((isSecured) ? "SecuredAPIClient" : "APIClient");
 
             var request = new HttpRequestMessage(HttpMethod.Post, uri);
             request.Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
 
-            var response = await apiClient.SendAsync(
-                request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+            var response = apiClient.SendAsync(
+                request, HttpCompletionOption.ResponseHeadersRead).Result;
 
             if (response.IsSuccessStatusCode)
             {
-                var responseString = await response.Content.ReadAsStringAsync();
+                var responseString = response.Content.ReadAsStringAsync().Result;
                 var jsonObject = JObject.Parse(responseString);
 
                 return jsonObject["result"]?.ToObject<T>();

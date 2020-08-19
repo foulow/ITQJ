@@ -65,7 +65,6 @@ namespace ITQJ.WebClient.HttpHandlers
                 return "";
             }
 
-            Log.Information(expiresAt);
             var expiresAtDataTimeOffset =
                 DateTimeOffset.Parse(expiresAt, CultureInfo.InvariantCulture);
 

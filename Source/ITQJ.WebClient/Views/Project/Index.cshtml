@@ -4,8 +4,9 @@
     ViewData["Title"] = "Projecto";
 
     ViewBag.ProjectId = Model.Id;
-    var isProfesional = (ViewBag.UserRole == "Profesional");
-    var isPostulated = Model.Postulants.FirstOrDefault(x => x.UserId == ViewBag.UserId).Equals(null);
+    ViewBag.ToId = Model.UserId;
+    ViewBag.isProfesional = (ViewBag.UserRole == "Profesional");
+    ViewBag.isPostulated = Model.Postulants.Any(x => x.UserId == ViewBag.UserId);
 
     var Id = "id" + Model.Id;
     var Div = "div" + @Model.Id;
@@ -126,7 +127,7 @@
         }
         else
         {
-            if (isPostulated)
+            if (ViewBag.isPostulated == false)
             {
                 <form method="post" class="d-inline-block" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
 
@@ -155,28 +156,5 @@
 
 @section Scripts {
     <script src="~/js/chat.js"></script>
-
-    @if (isProfesional)
-    {
-
-        <script src="~/js/chatProfesional.js"></script>
-
-    }
-    else
-    {
-
-        <script src="~/js/chatContratist.js"></script>
-
-    }
-
-    <script type="text/javascript">
-
-        $(document).ready(() => {
-
-            startChat(@ViewBag.ProjectId, @isProfesional);
-
-        });
-
-    </script>
 }
 
