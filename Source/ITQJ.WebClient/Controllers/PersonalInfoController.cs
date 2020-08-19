@@ -275,7 +275,7 @@ namespace ITQJ.WebClient.Controllers
         [Authorize]
         public async Task<IActionResult> Register(PersonalInfoVM personalInfo)
         {
-            personalInfo.LegalDocument.Image = new byte[] { 0,0,0,0,1,0 };
+            personalInfo.LegalDocument.FileName = "ninguno.desconosido";
 
             // Registra el documento de identidad.
             var newLegalDocument = await CallApiPOSTAsync<LegalDocumentResponseDTO>(uri: "/api/legalDocument", body: personalInfo.LegalDocument, isSecured: true);

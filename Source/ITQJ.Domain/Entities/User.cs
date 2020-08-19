@@ -34,6 +34,9 @@
         public virtual ICollection<Message> Messages { get; set; }
 
         [JsonIgnore]
+        public virtual ICollection<MileStone> MileStones { get; set; }
+
+        [JsonIgnore]
         public virtual ICollection<Review> Reviews { get; set; }
     }
 }

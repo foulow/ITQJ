@@ -50,10 +50,10 @@ namespace ITQJ.API.Migrations
                     b.Property<Guid>("DocumentTypeId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<byte[]>("Image")
+                    b.Property<string>("FileName")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)")
-                        .HasMaxLength(2097152);
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
 
                     b.Property<string>("Number")
                         .IsRequired()
@@ -100,6 +100,43 @@ namespace ITQJ.API.Migrations
                     b.HasIndex("ProjectId");
 
                     b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("ITQJ.Domain.Entities.MileStone", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("DeletedFlag")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UploadDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("MileStone");
                 });
 
             modelBuilder.Entity("ITQJ.Domain.Entities.PersonalInfo", b =>
@@ -356,6 +393,21 @@ namespace ITQJ.API.Migrations
                         .WithMany("Messages")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ITQJ.Domain.Entities.MileStone", b =>
+                {
+                    b.HasOne("ITQJ.Domain.Entities.Project", "Project")
+                        .WithMany("MileStones")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("ITQJ.Domain.Entities.User", "User")
+                        .WithMany("MileStones")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 

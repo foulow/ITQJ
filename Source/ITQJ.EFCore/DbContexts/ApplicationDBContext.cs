@@ -97,7 +97,12 @@
 
             modelBuilder.Entity<MileStone>()
                 .HasOne(e => e.Project)
-                .WithMany(e => e.MileStones);
+                .WithMany(e => e.MileStones)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<MileStone>()
+                .HasOne(e => e.User)
+                .WithMany(e => e.MileStones)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Review>()
                 .HasOne(e => e.User)

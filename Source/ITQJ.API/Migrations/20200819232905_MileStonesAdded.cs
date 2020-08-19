@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ITQJ.API.Migrations
 {
-    public partial class MessageUpdate : Migration
+    public partial class MileStonesAdded : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -56,7 +56,7 @@ namespace ITQJ.API.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     DeletedFlag = table.Column<bool>(nullable: false),
                     Number = table.Column<string>(maxLength: 25, nullable: false),
-                    Image = table.Column<byte[]>(maxLength: 2097152, nullable: false),
+                    FileName = table.Column<string>(maxLength: 200, nullable: false),
                     DocumentTypeId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -175,6 +175,33 @@ namespace ITQJ.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MileStone",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    DeletedFlag = table.Column<bool>(nullable: false),
+                    Description = table.Column<string>(maxLength: 500, nullable: false),
+                    FileName = table.Column<string>(maxLength: 200, nullable: false),
+                    UploadDate = table.Column<DateTime>(nullable: false),
+                    ProjectId = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MileStone", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MileStone_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_MileStone_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Postulants",
                 columns: table => new
                 {
@@ -245,6 +272,16 @@ namespace ITQJ.API.Migrations
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MileStone_ProjectId",
+                table: "MileStone",
+                column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MileStone_UserId",
+                table: "MileStone",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PersonalInfos_LegalDocumentId",
                 table: "PersonalInfos",
                 column: "LegalDocumentId",
@@ -303,6 +340,9 @@ namespace ITQJ.API.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Messages");
+
+            migrationBuilder.DropTable(
+                name: "MileStone");
 
             migrationBuilder.DropTable(
                 name: "Postulants");
