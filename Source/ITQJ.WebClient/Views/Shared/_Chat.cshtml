@@ -1,6 +1,6 @@
 ﻿@{
     string functionCall = (ViewBag.isPostulated || ViewBag.UserId == ViewBag.ToId) ?
-    $"startChat('{ViewBag.ProjectId}', '{ViewBag.UserId}', '{ViewBag.UserName}', '{ViewBag.ToId}', '{ViewBag.isProfesional}')" :  
+    $"startChat('{ViewBag.ProjectId}', '{ViewBag.UserId}', '{ViewBag.UserName}', '{ViewBag.ToId}', '{ViewBag.isProfesional}')" :
     "showPostulationNeed()";
 }
 <audio id="notification-audio">
@@ -13,43 +13,15 @@
 
 </audio>
 
-@*
-    <div class="d-flex align-items-center" style="position: fixed; right: 0; top: 0; height: 100%;">
-
-                <div id="fixed-right-chat-button">
-
-                <button id="button-chat" onclick="toggleChat()" type="button" class="btn bg-info text-light">
-
-                    <i class="fas fa-comment-dots fa-2x m-2"></i>
-
-                </button>
-
-            </div>
-
-    </div>
-*@
-
 <div class="col-md-6 m-0" id="fixed-buttom-chat" style="position: fixed; bottom: 0; right: 0;">
-        <div class="d-flex text-white"
-            style="
+    <div class="d-flex text-white"
+         style="
             background-color: #007BFF;
             padding:0px;
             margin: 0px;
             border-radius: 5px 5px 0px 0px;"
-            id = "trigger-button-chat"
-            onclick="@functionCall">
-
-<<<<<<< HEAD
-=======
-    <div class="d-flex text-white"
-         style="
-         cursor:pointer;
-         background-color: #007BFF; 
-         padding:0px;
-         margin: 0px;
-         border-radius: 5px 5px 0px 0px;"
-         >
->>>>>>> 8526b36aec158d8cc1ef9f72b0e183d154be58c5
+         id="trigger-button-chat"
+         onclick="@functionCall">
 
 
         <button type="button" class="btn btn-block p-0 text-white">

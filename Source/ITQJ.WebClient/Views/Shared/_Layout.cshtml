@@ -15,7 +15,7 @@
     <link href="/css/BarraConocimiento.css" rel="stylesheet" />
     <link href="~/css/Layout.css" rel="stylesheet" />
     <link href="~/css/Project.css" rel="stylesheet" />
-   
+
     <script src="https://kit.fontawesome.com/0358124a37.js" crossorigin="anonymous"></script>
 
 </head>
@@ -79,19 +79,19 @@
                                     </button>
 
                                     <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                        @if(!User.Identity.IsAuthenticated)
+                                        @if (!User.Identity.IsAuthenticated)
                                         {
                                             <a class="dropdown-item"
                                                asp-controller="Home"
                                                asp-action="LogIn">Informacion Personal</a>
                                         }
-                                        else if(ViewBag.UserRole == "Profesional")
+                                        else if (ViewBag.UserRole == "Profesional")
                                         {
                                             <a class="dropdown-item"
                                                asp-controller="PersonalInfo"
                                                asp-action="viewProfesionalInfo">Informacion Personal</a>
                                         }
-                                        else if(ViewBag.UserRole == "Contratista")
+                                        else if (ViewBag.UserRole == "Contratista")
                                         {
                                             <a class="dropdown-item"
                                                asp-controller="PersonalInfo"
@@ -114,7 +114,7 @@
                                     </button>
 
                                     <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                        @if(!User.Identity.IsAuthenticated)
+                                        @if (!User.Identity.IsAuthenticated)
                                         {
                                             <a class="dropdown-item" asp-controller="Home" asp-action="LogIn">Mis reseñas</a>
                                             <a class="dropdown-item" asp-controller="Home" asp-action="LogIn">Hacer Reseña</a>
@@ -139,17 +139,17 @@
                                     </button>
 
                                     <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                        @if(!User.Identity.IsAuthenticated)
+                                        @if (!User.Identity.IsAuthenticated)
                                         {
                                             <a class="dropdown-item" asp-controller="Home" asp-action="LogIn">Mis proyectos</a>
                                         }
-                                        else if(ViewBag.UserRole == "Profesional")
+                                        else if (ViewBag.UserRole == "Profesional")
                                         {
                                             <a class="dropdown-item"
                                                asp-controller="Postulant"
                                                asp-action="MyPostulations">Mis postulaciones</a>
                                         }
-                                        else if(ViewBag.UserRole == "Contratista")
+                                        else if (ViewBag.UserRole == "Contratista")
                                         {
                                             <a class="dropdown-item"
                                                asp-controller="Project"
@@ -173,7 +173,7 @@
                                     </button>
 
                                     <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                        @if(!User.Identity.IsAuthenticated)
+                                        @if (!User.Identity.IsAuthenticated)
                                         {
                                             <a class="dropdown-item" asp-action="LogIn">Acceder con Auth0</a>
 
@@ -236,19 +236,19 @@
                                 </button>
 
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    @if(!User.Identity.IsAuthenticated)
+                                    @if (!User.Identity.IsAuthenticated)
                                     {
                                         <a class="dropdown-item"
                                            asp-controller="Home"
                                            asp-action="LogIn">Informacion Personal</a>
                                     }
-                                    else if(ViewBag.UserRole == "Profesional")
+                                    else if (ViewBag.UserRole == "Profesional")
                                     {
                                         <a class="dropdown-item"
                                            asp-controller="PersonalInfo"
                                            asp-action="viewProfesionalInfo">Informacion Personal</a>
                                     }
-                                    else if(ViewBag.UserRole == "Contratista")
+                                    else if (ViewBag.UserRole == "Contratista")
                                     {
                                         <a class="dropdown-item"
                                            asp-controller="PersonalInfo"
@@ -266,7 +266,7 @@
                                 </button>
 
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    @if(!User.Identity.IsAuthenticated)
+                                    @if (!User.Identity.IsAuthenticated)
                                     {
                                         <a class="dropdown-item" asp-controller="Home" asp-action="LogIn">Mis reseñas</a>
                                         <a class="dropdown-item" asp-controller="Home" asp-action="LogIn">Hacer Reseña</a>
@@ -287,17 +287,17 @@
                                 </button>
 
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    @if(!User.Identity.IsAuthenticated)
+                                    @if (!User.Identity.IsAuthenticated)
                                     {
                                         <a class="dropdown-item" asp-controller="Home" asp-action="LogIn">Mis proyectos</a>
                                     }
-                                    else if(ViewBag.UserRole == "Profesional")
+                                    else if (ViewBag.UserRole == "Profesional")
                                     {
                                         <a class="dropdown-item"
                                            asp-controller="Postulant"
                                            asp-action="MyPostulations">Mis postulaciones</a>
                                     }
-                                    else if(ViewBag.UserRole == "Contratista")
+                                    else if (ViewBag.UserRole == "Contratista")
                                     {
                                         <a class="dropdown-item"
                                            asp-controller="Project"
@@ -317,7 +317,7 @@
                                 </button>
 
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    @if(!User.Identity.IsAuthenticated)
+                                    @if (!User.Identity.IsAuthenticated)
                                     {
                                         <a class="dropdown-item" asp-action="LogIn">Acceder con Auth0</a>
 
@@ -362,7 +362,7 @@
 
     <main role="main" class="pb-3">
 
-        @if(ViewBag?.Errors != null)
+        @if (ViewBag?.Errors != null)
         {
             <div class="@ViewBag?.ErrorLevel text-center">
 
@@ -417,7 +417,7 @@
     <script src="~/js/chat.js" asp-append-version="true"></script>
     <script src="~/js/Funciones.js" asp-append-version="true"></script>
 
-    @RenderSection("Scripts",required: false)
+    @RenderSection("Scripts", required: false)
 
     <script type="text/javascript">
 
