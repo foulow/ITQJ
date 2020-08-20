@@ -62,7 +62,7 @@ namespace ITQJ.WebClient.Hubs
             if (ConnectedUsers.Any(x => x.ConnectionId.Equals(Context.ConnectionId)))
                 throw new InvalidOperationException(Resources.UserIsConnected);
 
-            var user = CallApiGETAsync<UserResponseDTO>(uri: "api/users", isSecured: true);
+            var user = CallApiGET<UserResponseDTO>(uri: "api/users", isSecured: true);
             user.ConnectionId = Context.ConnectionId;
 
             ConnectedUsers.Add(user);
@@ -87,7 +87,7 @@ namespace ITQJ.WebClient.Hubs
                 { nameof(toId), toId }
             };
 
-            var messages = CallApiGETAsync<List<MessageResponseDTO>>(uri: "api/messages/" + projectId + QueryString.Create(queryResult), isSecured: true);
+            var messages = CallApiGET<List<MessageResponseDTO>>(uri: "api/messages/" + projectId + QueryString.Create(queryResult), isSecured: true);
 
             if (messages is null || messages.Count == 0)
                 return;
@@ -110,7 +110,7 @@ namespace ITQJ.WebClient.Hubs
             if (!Guid.TryParse(projectId, out Guid result))
                 throw new InvalidOperationException(Resources.UnableToGetMessages);
 
-            var postulants = CallApiGETAsync<List<PostulantResponseDTO>>(uri: "api/postulants/" + projectId, isSecured: true);
+            var postulants = CallApiGET<List<PostulantResponseDTO>>(uri: "api/postulants/" + projectId, isSecured: true);
             
             if (postulants is null || postulants.Count == 0)
                 return;
@@ -131,15 +131,23 @@ namespace ITQJ.WebClient.Hubs
 
         public IActionResult SendPrivateMessage(MessageResponseDTO message)
         {
-            CallApiPOSTAsync<MessageResponseDTO>(uri: "api/messages/", body: message, isSecured: true);
+            var newMessage = CallApiPOST<MessageResponseDTO>(uri: "api/messages/", body: message, isSecured: true);
 
             var toUser = ConnectedUsers.FirstOrDefault(x => x.Id == message.ToUserId);
             if (toUser != null)
             {
+                var sendMessage = new {
+                    fromUserId = newMessage.FromUserId,
+                    toUserId = newMessage.ToUserId,
+                    userName = newMessage.User.UserName,
+                    text = newMessage.Text,
+                    messageDate = newMessage.MessageDate
+                };
+
                 Clients.Client(toUser.ConnectionId)
-                    .SendAsync(ChatHubMethods.ReceiveMessage, message).Wait();
+                    .SendAsync(ChatHubMethods.ReceiveMessage, sendMessage).Wait();
                 Clients.Client(toUser.ConnectionId)
-                    .SendAsync(ChatHubMethods.UpdateUnreadMessages, message.ToUserId).Wait();
+                    .SendAsync(ChatHubMethods.UpdateUnreadMessages, sendMessage.toUserId).Wait();
             }
 
             return new OkResult();
@@ -171,7 +179,7 @@ namespace ITQJ.WebClient.Hubs
         #endregion
 
         #region Auxiliary Methods
-        private T CallApiGETAsync<T>(string uri, bool isSecured) where T : class
+        private T CallApiGET<T>(string uri, bool isSecured) where T : class
         {
             var apiClient = this._clientFactory.CreateClient((isSecured) ? "SecuredAPIClient" : "APIClient");
 
@@ -195,7 +203,7 @@ namespace ITQJ.WebClient.Hubs
             return null;
         }
 
-        private T CallApiPOSTAsync<T>(string uri, T body, bool isSecured) where T : class
+        private T CallApiPOST<T>(string uri, T body, bool isSecured) where T : class
         {
             var apiClient = this._clientFactory.CreateClient((isSecured) ? "SecuredAPIClient" : "APIClient");
 

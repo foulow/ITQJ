@@ -73,6 +73,10 @@ namespace ITQJ.API.Controllers
             this._appDBContext.SaveChanges();
 
             var messageModel = this._mapper.Map<MessageResponseDTO>(tempMessage.Entity);
+            var userInfo = this._appDBContext.Users.FirstOrDefault(x => x.Id == messageModel.FromUserId);
+
+            if (userInfo != null)
+                messageModel.User = this._mapper.Map<UserResponseDTO>(userInfo);
 
             return Ok(new
             {

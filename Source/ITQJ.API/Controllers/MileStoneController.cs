@@ -30,7 +30,7 @@ namespace ITQJ.API.Controllers
                 return NotFound(new { Message = "El recurso no ha sido encontrado."});
 
             var mileStonesModel = this._mapper
-                .Map<List<MileStoneResponceDTO>>(mileStones);
+                .Map<List<MileStoneResponseDTO>>(mileStones);
 
             return Ok(new
             {
@@ -60,7 +60,7 @@ namespace ITQJ.API.Controllers
             var tempMileStone = this._appDBContext.MileStones.Add(newMileStone);
             this._appDBContext.SaveChanges();
 
-            var mileStoneModel = this._mapper.Map<MileStoneResponceDTO>(tempMileStone.Entity);
+            var mileStoneModel = this._mapper.Map<MileStoneResponseDTO>(tempMileStone.Entity);
 
             return Ok(new
             {

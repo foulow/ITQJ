@@ -40,7 +40,7 @@ namespace ITQJ.Domain.Validations
             RuleFor(project => project.CloseDate).NotNull()
                 .WithMessage($"El {nameof(ProjectCreateDTO.CloseDate)} no puede estar vacio.");
 
-            RuleFor(project => project.IsOpen).NotNull().NotEqual(false)
+            RuleFor(project => project.IsOpen).NotNull()
                 .WithMessage($"El {nameof(ProjectCreateDTO.IsOpen)} no puede estar vacio.");
         }
     }

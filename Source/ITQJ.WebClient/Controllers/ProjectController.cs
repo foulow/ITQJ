@@ -1,10 +1,14 @@
 ﻿using ITQJ.Domain.DTOs;
 using ITQJ.WebClient.ViewModels;
+using ITQJ.WebClient.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ITQJ.WebClient.Controllers
@@ -13,7 +17,6 @@ namespace ITQJ.WebClient.Controllers
     {
         public ProjectController(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
-        [Authorize]
         public async Task<IActionResult> Index(string projectId)
         {
             if (string.IsNullOrWhiteSpace(projectId))
@@ -27,7 +30,7 @@ namespace ITQJ.WebClient.Controllers
             if (projectInfo == null)
                 return PageNotFound();
 
-
+            ViewBag.CurrentDate = DateTime.Now;
             return View(projectInfo);
         }
 
@@ -92,12 +95,12 @@ namespace ITQJ.WebClient.Controllers
                 return View(project);
             }
 
-            var newProject = await CallApiPUTAsync<ProjectResponseDTO>(uri: "/api/projects/myprojects/" + project.Id.ToString(), body: project, isSecured: true);
+            var editedProyect = await CallApiPUTAsync<ProjectResponseDTO>(uri: "/api/projects/myprojects/" + project.Id.ToString(), body: project, isSecured: true);
 
-            if (newProject == null)
+            if (editedProyect == null)
                 return View(project);
 
-            return RedirectToAction("Edit", new { projectId = newProject.Id.ToString() });
+            return RedirectToAction("Edit", new { projectId = project.Id });
         }
 
         [Authorize]
@@ -116,14 +119,65 @@ namespace ITQJ.WebClient.Controllers
 
             if (repuesta.Equals(null))
             {
-                ViewBag.ErrorMesseger = "Error al Postularte. \n Reintente.";
+                ViewBag.ErrorMesseger = "Error al Postularse. \n Intentelo nuevamente.";
 
-                return View();
+                return RedirectToAction("Index", new { projectId = projectId });
             }
 
             return RedirectToAction("Index", new { projectId = projectId });
         }
 
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> PostMileStone(MileStoneVM milestoneData)
+        {
+            if (milestoneData.FormFile.Length == 0)
+            {
+                return RedirectToAction("Index", new { projectId = milestoneData.ProjectId });
+            }
+
+            var fileName = $"{Guid.NewGuid()}.{Path.GetFileName(milestoneData.FormFile.FileName).Split(".").Last()}";
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), Resources.SubDirectory, fileName);
+
+            await using (var stream = System.IO.File.Create(filePath))
+            {
+                await milestoneData.FormFile.CopyToAsync(stream);
+            }
+
+            MileStoneResponseDTO newMileStone = (MileStoneResponseDTO)milestoneData;
+            newMileStone.FileName = fileName;
+            newMileStone.UploadDate = DateTime.Now;
+            var repuesta = await CallApiPOSTAsync<MileStoneResponseDTO>(uri: "/api/mileStone/", body: newMileStone, isSecured: true);
+
+            if (repuesta.Equals(null))
+            {
+                ViewBag.ErrorMesseger = "Error al enviar la entrega del proyecto. \n Intentelo nuevamente.";
+
+                if (System.IO.File.Exists(filePath))
+                    System.IO.File.Delete(filePath);
+
+                return RedirectToAction("Index", new { projectId = milestoneData.ProjectId });
+            }
+
+            return RedirectToAction("Index", new { projectId = milestoneData.ProjectId });
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> CloseProject(ProjectResponseDTO project)
+        {
+            var userCredentials = GetUserCredentials();
+
+            if (userCredentials.Id != project.UserId)
+                return RedirectToAction("AccessDenied", "Authorization");
+
+            var editedProyect = await CallApiPUTAsync<ProjectResponseDTO>(uri: "/api/projects/myprojects/" + project.Id.ToString(), body: project, isSecured: true);
+
+            if (editedProyect == null)
+                return RedirectToAction("Index", new { projectId = project.Id });
+
+            return RedirectToAction("Index", new { projectId = project.Id });
+        }
 
         [Authorize]
         public async Task<IActionResult> MyProjects(int pageIndex = 1, int maxResults = 5)

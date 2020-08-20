@@ -92,7 +92,7 @@ namespace ITQJ.Domain
             CreateMap<MileStoneCreateDTO, MileStone>()
                 .ForMember(dest => dest.Id, act => act.Ignore());
             CreateMap<MileStone, MileStoneCreateDTO>();
-            CreateMap<MileStone, MileStoneResponceDTO>();
+            CreateMap<MileStone, MileStoneResponseDTO>();
             #endregion
         }
     }

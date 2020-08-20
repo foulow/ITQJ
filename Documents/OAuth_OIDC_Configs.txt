@@ -15,9 +15,3 @@ Client:
 	ResponseType: token id_token
 
 	URL: https://localhost:44348/
-
-
-get data of a user claim on API controller:
-var email = User.Claims.First(x => x.Type == "email").Value;
-
-www.identityserver.com/documentation/admin-ui/

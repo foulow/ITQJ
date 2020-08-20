@@ -2,10 +2,25 @@
 @{
     ViewData["Title"] = "Projecto";
 
+    // Chatroom related variables.
     ViewBag.ProjectId = Model.Id;
     ViewBag.ToId = Model.UserId;
+
+    // Profesional related variables.
     ViewBag.isProfesional = (ViewBag.UserRole == "Profesional");
+    ViewBag.canPostulate = (Model.CloseDate < ViewBag.CurrentDate);
     ViewBag.isPostulated = Model.Postulants.Any(x => x.UserId == ViewBag.UserId);
+    if (ViewBag.isPostulated)
+    {
+        ViewBag.canSendMileStone = Model.Postulants.FirstOrDefault(x => x.UserId == ViewBag.UserId).IsSellected;
+    }
+    else
+    {
+        ViewBag.canSendMileStone = false;
+    }
+
+    // Contratist related variables.
+    ViewBag.canCloseProject = (Model.MileStones.Count > 0);
 
     var Id = "id" + Model.Id;
     var Div = "div" + @Model.Id;
@@ -21,7 +36,7 @@
     var postulaciones = Model.PostulantsLimit - Model.Postulants.Count;
 
     Func<bool>
-        funcVerifiContratis = () =>
+        isProjectOwner = () =>
         {
             if (ViewBag?.UserId is null)
                 return false;
@@ -38,14 +53,17 @@
         };
 
     Func<string>
-        func = () =>
+        showCloseDate = () =>
         {
+            if (!ViewBag.canPostulate)
+            {
+                return Model.CloseDate.ToString() + " Cerrado";
+            }
 
             var fecha = Model.CloseDate.ToString();
-
             if (fecha.Substring(0, 8) == "1/1/0001")
             {
-                return "Nullo";
+                return "Siempre abierto";
             }
 
             return Model.CloseDate.ToString();
@@ -98,7 +116,7 @@
 
                 <text class="text-danger">
 
-                    @func();
+                    @showCloseDate();
 
                 </text>
 
@@ -117,22 +135,25 @@
         </div>
 
     </div>
-
-    @if (!funcVerifiContratis())
+    
+    @if (!User.Identity.IsAuthenticated)
     {
+        <div class="d-inline-block">
 
-        if (Model.Postulants.Count == 0)
+            <a asp-action="LogIn" asp-controller="Home" class="btn btn-dark m-3"> Postularse </a>
+
+        </div>
+        <div class="d-inline-block">
+            
+            <a asp-action="LogIn" asp-controller="Home" class="btn btn-dark m-3"> Perfil del Contratista </a>
+
+        </div>
+    }
+    else
+    {
+        if (ViewBag.isProfesional)
         {
-            <form method="post" class="d-inline-block" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
-
-                <input id="Submit" type="submit" value="Postularse" class="btn btn-dark m-3" />
-
-            </form>
-        }
-        else
-        {
-
-            if (ViewBag.isPostulated == false)
+            if (ViewBag.canPostulate && !ViewBag.isPostulated)
             {
                 <form method="post" class="d-inline-block" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
 
@@ -152,11 +173,72 @@
 
         </div>
     }
-
 </div>
 
+@if(ViewBag.canCloseProject)
+{
+    if (isProjectOwner() && Model.IsOpen)
+    {
+        <div class="border badge-light p-2 mt-2 mb-2 " style="margin:0% 0% 13% 0%">
 
-@if (funcVerifiContratis())
+            <form method="post" asp-action="CloseProject" asp-controller="Project" class="d-inline-block">
+
+                <div hidden>
+                    <input asp-for="Id" type="text" />
+                    <input asp-for="UserId" type="text" />
+                    <input asp-for="PostulantsLimit" type="text" />
+                    <input asp-for="CloseDate" type="date" />
+                </div>
+
+                <input id="Submit" type="submit" value="Aceptar entrega y cerrar proyecto" class="btn btn-dark m-3" />
+
+            </form>
+
+        </div>
+    }
+
+    if (isProjectOwner() || ViewBag.canSendMileStone)
+    {
+        <div class="border badge-light p-2 mt-2 mb-2 " style="margin:0% 0% 13% 0%">
+
+            <strong class="h2 m-5">Lista de entregas realizadas</strong>
+
+            @foreach(var mileStone in Model.MileStones)
+            {
+                if(isProjectOwner() || mileStone.UserId == ViewBag.UserId)
+                {
+                    <ul>
+                        <li style=" border-radius: 15px;
+                                    border: 1px solid black;
+                                    display: block;
+                                    margin: 10px;
+                                    padding:2px;
+                                    background-color: #007DFF;">
+
+                            <div style=" border-radius: 15px;
+                                border: 1px solid black;
+                                display:block;
+                                margin: 0px;
+                                background-color: #ffffff">
+
+                                <label class="text-center">@mileStone.UploadDate</label>
+
+                                <p>@mileStone.Description</p>
+
+                            
+                                <a asp-controller="Project" asp-action="Download" asp-route-fileName="@mileStone.FileName" >Descargar entrega</a>
+
+                            </div>
+
+                        </li>
+                    </ul>
+                }
+            }
+        </div>
+    }
+}
+
+@if (isProjectOwner())
 {
     if (Model.Postulants.Count != 0)
     {
@@ -170,17 +252,17 @@
 
                     <ul>
                         <li style=" border-radius: 15px;
-                                       border: 1px solid black;
-                                       display: block;
-                                       margin: 10px;
-                                       padding:2px;
-                                       background-color: #007DFF;">
+                                    border: 1px solid black;
+                                    display: block;
+                                    margin: 10px;
+                                    padding:2px;
+                                    background-color: #007DFF;">
 
                             <div style=" border-radius: 15px;
-                                       border: 1px solid black;
-                                       display:block;
-                                       margin: 0px;
-                                       background-color: #ffffff">
+                                    border: 1px solid black;
+                                    display:block;
+                                    margin: 0px;
+                                    background-color: #ffffff">
 
                                 <div style="margin:5px 10px 5px 5px; padding:2px;   display:inline-block;">
 
@@ -198,11 +280,11 @@
 
                                 </a>
 
-                                @if (postulan.IsSellected == false)
+                                @if (!postulan.IsSellected)
                                 {
                                     <div onclick="enviar()" style="text-decoration: none;" class="postulante enviar">
 
-                                        <img alt="agregar usuario" src="/Image/add_user.png" style="border-radius:0px; width: 50px; height: 50px;" />
+                                        <img alt="agregar usuario" src="/Image/add_user.png" style="b`order-radius:0px; width: 50px; height: 50px;" />
 
                                         <strong class="h4"> Asignar Postulante </strong>
 
@@ -234,6 +316,61 @@
 
         </div>
     }
+}
+else if (ViewBag.canSendMileStone && Model.IsOpen)
+{
+    <div class="border badge-light p-2 mt-2 mb-2 " style="margin:0% 0% 13% 0%">
+
+        <strong class="h2 m-5">Realizar una entrega</strong>
+
+        <form asp-action="PostMileStone" enctype="multipart/form-data" method="post">
+
+            <input hidden type="text" id="ProjectId" name="ProjectId" value="@ViewBag.ProjectId">
+            <input hidden type="text" id="UserId" name="UserId" value="@ViewBag.UserId">
+
+            <ul>
+                <li style=" border-radius: 15px;
+                            border: 1px solid black;
+                            display: block;
+                            margin: 10px;
+                            padding:2px;
+                            background-color: #007DFF;">
+
+                    <div style=" border-radius: 15px;
+                            border: 1px solid black;
+                            display:block;
+                            margin: 0px;
+                            background-color: #ffffff">
+
+                        <div class="form-group">
+
+                            <label for="Description" class="text-center">Describa brebemente que se realizo en en entrega</label>
+
+                            <textarea class="form-control" id="Description" name="Description" placeholder="Description" maxlength="500" required></textarea>
+                            
+                            <span for="Description" class="text-danger"></span>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="FormFile" class="text-center">Seleccione un fichero a adjuntar para la entrega</label>
+                            
+                            <input class="form-control" id="FormFile" name="FormFile" placeholder="Nigun fichero seleccionado" type="file" required>
+                            
+                            <span for="FormFile" class="text-danger"></span>
+
+                        </div>
+
+                        <input id="Upload" type="submit" value="Subir entrega" class="btn btn-dark m-3"/>
+
+                    </div>
+
+                </li>
+            </ul>
+        </form>
+    
+    </div>
 }
 
 @section Chat {

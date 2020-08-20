@@ -136,7 +136,7 @@ function showRoom(profesional) {
   if (isProfesional == "True") {
     messageList.append(
       createMessage({
-        fromUserName: "",
+        userName: "sistema",
         messageDate: "",
         text:
           "Envia un mensage para aumentar tus chanses de ser elegido para este proyecto.",
@@ -148,7 +148,6 @@ function showRoom(profesional) {
     messageInput.val("").focus();
   } else {
     userListContainer.show();
-
     getConnectedUsers();
   }
 
@@ -174,8 +173,9 @@ function updatePostulantsList(data) {
 }
 
 function getConversation(id) {
-  debugger;
   if (toUserId === id) return;
+
+  messageList.empty();
   toUserId = id;
   requestMessages(projectId, userId, toUserId);
 }
@@ -186,7 +186,7 @@ function sendMessage() {
       projectId: projectId,
       fromUserId: userId,
       toUserId: toUserId,
-      fromUserName: userName,
+      userName: userName,
       messageDate: new Date(),
       text: message,
     },
@@ -195,7 +195,7 @@ function sendMessage() {
   connection
     .invoke(method, messageDetails)
     .then(() => {
-      messageDetails.fromUserName = "Me";
+      messageDetails.userName = "Yo";
       const messageBody = createMessage(messageDetails);
       messageList.append(messageBody);
     })
@@ -219,20 +219,6 @@ function requestMessages(projectId, fromId, toId) {
       error(e);
       showAlert(errorMessages["UserIsDisconnected"], "alert-danger", 5000);
     });
-}
-
-function parseMessages(data) {
-  if (data) {
-    const messages = data;
-    if (messages) {
-      messageList.empty();
-      messages.forEach((element) => {
-        if (element.fromUserId === userId) element.fromUserName = "Me";
-        const message = createMessage(element);
-        messageList.append(message);
-      });
-    }
-  }
 }
 
 function updateMessageBox() {
@@ -261,7 +247,7 @@ function createMessage(data) {
       .replace(/>/g, "&gt;"),
     userName = data.userName,
     messageColor =
-      userName === ""
+      userName === "sistema"
         ? "bg-secondary"
         : userName === "Yo"
         ? "bg-success"

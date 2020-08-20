@@ -15,7 +15,7 @@ namespace ITQJ.Domain.DTOs
         public Guid UserId { get; set; }
     }
 
-    public class MileStoneResponceDTO : MileStoneCreateDTO
+    public class MileStoneResponseDTO : MileStoneCreateDTO
     {
         public Guid Id { get; set; }
     }

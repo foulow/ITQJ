@@ -227,7 +227,6 @@ namespace ITQJ.WebClient
             app.UseCookiePolicy();
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
             app.UseRouting();
 

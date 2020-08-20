@@ -157,7 +157,7 @@
     <value>Not users are available.</value>
   </data>
   <data name="SubDirectory" xml:space="preserve">
-    <value>wwwroot/media/audios</value>
+    <value>wwwroot/milestones</value>
   </data>
   <data name="TranscribingAudio" xml:space="preserve">
     <value>Transcribing audio...</value>

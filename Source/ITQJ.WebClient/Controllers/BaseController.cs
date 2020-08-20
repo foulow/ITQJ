@@ -149,7 +149,8 @@ namespace ITQJ.WebClient.Controllers
 
         protected IActionResult PageNotFound()
         {
-            var userCredentials = GetUserCredentials();
+            if (User.Identity.IsAuthenticated)
+                GetUserCredentials();
 
             return View(nameof(PageNotFound));
         }
@@ -164,50 +165,10 @@ namespace ITQJ.WebClient.Controllers
         [Authorize]
         public async Task LogOut(string returnUrl = "/")
         {
-            #region Logout config for Reference Tokens
-            //var idpClient = this._clientFactory.CreateClient("IDPClient");
-
-            //var discoveryDocumentResponse = await idpClient.GetDiscoveryDocumentAsync();
-            //if (discoveryDocumentResponse.IsError)
-            //{
-            //    throw new Exception(
-            //        "Problem accessing the Discovery endpoint.",
-            //        discoveryDocumentResponse.Exception);
-            //}
-
-            //var clientCredentials = _clientConfiguration.CurrentValue;
-
-            //var accessTokenRevocationResponse = await idpClient.RevokeTokenAsync(
-            //    new TokenRevocationRequest
-            //    {
-            //        Address = discoveryDocumentResponse.RevocationEndpoint,
-            //        ClientId = clientCredentials.ClientId,
-            //        ClientSecret = clientCredentials.ClientSecret,
-            //        Token = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken)
-            //    });
-            //if (accessTokenRevocationResponse.IsError)
-            //{
-            //    throw new Exception(accessTokenRevocationResponse.Error);
-            //}
-
-            //var refreshTokenRevocationResponse = await idpClient.RevokeTokenAsync(
-            //    new TokenRevocationRequest
-            //    {
-            //        Address = discoveryDocumentResponse.RevocationEndpoint,
-            //        ClientId = clientCredentials.ClientId,
-            //        ClientSecret = clientCredentials.ClientSecret,
-            //        Token = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken)
-            //    });
-            //if (refreshTokenRevocationResponse.IsError)
-            //{
-            //    throw new Exception(refreshTokenRevocationResponse.Error);
-            //}
-            #endregion
-
             //await HttpContext.SignOutAsync("Auth0", new AuthenticationProperties { RedirectUri = returnUrl });
 
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = returnUrl });
+            await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = "https://localhost:44348" +  returnUrl});
 
             //return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
@@ -217,7 +178,7 @@ namespace ITQJ.WebClient.Controllers
         {
             //await HttpContext.ChallengeAsync("Auth0", new AuthenticationProperties() { RedirectUri = returnUrl });
 
-            await HttpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties() { RedirectUri = returnUrl });
+            await HttpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties() { RedirectUri = "https://localhost:44348" + returnUrl });
 
             // Get the currently authorized user claims information.
             //var userInfo = await GetUserInfo();

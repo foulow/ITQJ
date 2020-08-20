@@ -32,6 +32,6 @@ namespace ITQJ.Domain.DTOs
 
         public virtual ICollection<PostulantResponseDTO> Postulants { get; set; }
 
-        public virtual ICollection<MileStoneResponceDTO> MileStones { get; set; }
+        public virtual ICollection<MileStoneResponseDTO> MileStones { get; set; }
     }
 }
