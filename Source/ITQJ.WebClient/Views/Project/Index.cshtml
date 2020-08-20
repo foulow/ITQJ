@@ -121,31 +121,19 @@
     @if (!funcVerifiContratis())
     {
 
-        if (Model.Postulants.Count == 0)
-        {
-            <form method="post" class="d-inline-block" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
-
-                <input id="Submit" type="submit" value="Postularse" class="btn btn-dark m-3" />
-
-            </form>
-        }
-        else
-        {
-
-            if (ViewBag.isPostulated == false)
-            {
-                <form method="post" class="d-inline-block" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
-
-                    <input id="Submit" type="submit" value="Postularse" class="btn btn-dark m-3" />
-
-                </form>
-            }
-            else
-            {
-                // TODO: agregar logica de despostularce. (opcional)
-            }
-        }
-
+          if (ViewBag.isPostulated == false)
+          {
+              <form method="post" class="d-inline-block" asp-route-projectId="@Model.Id" asp-action="PostPostulants" asp-controller="Project">
+    
+                  <input id="Submit" type="submit" value="Postularse" class="btn btn-dark m-3" />
+    
+              </form>
+          }
+          else
+          {
+              // TODO: agregar logica de despostularce. (opcional)
+          }
+ 
         <div class="d-inline-block">
 
             <a asp-controller="PersonalInfo" asp-action="Contratist" asp-route-userId="@Model.UserId" class="btn btn-dark m-3"> Perfil del Contratista </a>

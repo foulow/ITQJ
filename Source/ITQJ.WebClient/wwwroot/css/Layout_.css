@@ -118,8 +118,7 @@ footer {
     width: 60px;
     position: relative;
     bottom: 40px;
-    text-decoration: none;
-    background-image: url(/Image/flecha-hacia-arriba.svg);
+    background-image: url(/Image/double_up.png);
 }
 
     .ButtonUp:hover {

@@ -3,20 +3,23 @@
 }
 
 <div class="d-flex align-items-center justify-content-center">
+
     <div class="text-center m-5">
-        <h1 style="font-size: 200px; font-weight: bold;">404</h1>
-        <h1>@ViewData["Title"]</h1>
-        <p>
-            The resource you are trying to access was not found.
-            <div>Or the access is denied, Would you prefer to <a asp-controller="Home" asp-action="LogOut">log in with other type of account</a> to visit this page?</div>
-        </p>
+        
+        <div style="padding:5px; height: 100%;  width: 100%; background: rgb(255,0,0);
+            background: radial-gradient(circle, rgba(255,0,0,1) 0%, rgba(230,230,230,1) 100%);">
+
+            <label class="h2" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-200%); color:red;">Error: Pagina no encontrada.</label>
+
+            <div style="padding: 5px; height: 100%; width: 100%; background: rgb(255,0,0); background: radial-gradient(circle, rgba(255,0,0,1) 0%, rgba(230,230,230,1) 100%);">
+
+                <img src="/Image/error-404-foxplay.png" style="padding: 5px; border-radius: 70px; height: 100%; width: 100%;" />
+
+            </div>
+
+        </div>
+    
     </div>
+
 </div>
 
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            loader.hide();
-        });
-    </script>
-}
