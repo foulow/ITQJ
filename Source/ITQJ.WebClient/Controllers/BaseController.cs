@@ -15,6 +15,7 @@ using Newtonsoft.Json.Linq;
 using RestSharp;
 using Serilog;
 using System;
+using System.IO;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;

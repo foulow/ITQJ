@@ -111,14 +111,14 @@ namespace ITQJ.WebClient.Controllers
         public async Task<IActionResult> PostReviews(ReviewsToMakeVM reviewData)
         {
             if(!ModelState.IsValid)
-                return View(reviewData);
+                return RedirectToAction("Index", reviewData);
 
             var newReview = (ReviewResponseDTO)reviewData.Review;
 
             var reviewResponse = await CallApiPOSTAsync<ReviewResponseDTO>(uri: "/api/reviews/", body: newReview, isSecured: true);
 
             if (reviewResponse is null)
-                return View(reviewData);
+                return RedirectToAction("Index", reviewData);
 
             var updatePostulant = new PostulantUpdateDTO
             {

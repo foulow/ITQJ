@@ -128,6 +128,25 @@ namespace ITQJ.WebClient.Controllers
         }
 
         [Authorize]
+        [HttpGet("[action]/{fileName}")]
+        public async Task<IActionResult> DownloadMileStone(string fileName)  
+        {  
+            if (string.IsNullOrWhiteSpace(fileName))  
+                return Content("nombre de archivo no existente");  
+        
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), Resources.SubDirectory, fileName);  
+        
+            var memory = new MemoryStream();  
+            using (var stream = new FileStream(filePath, FileMode.Open))  
+            {  
+                await stream.CopyToAsync(memory);
+            }  
+            memory.Position = 0;  
+            
+            return File(memory, GetContentType(filePath), Path.GetFileName(filePath));  
+        } 
+
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> PostMileStone(MileStoneVM milestoneData)
         {
@@ -204,6 +223,32 @@ namespace ITQJ.WebClient.Controllers
             }
 
             return View(projects);
+        }
+
+        private string GetContentType(string path)  
+        {  
+            var types = GetMimeTypes();  
+            var ext = Path.GetExtension(path).ToLowerInvariant();  
+            return types[ext];  
+        }  
+   
+        private Dictionary<string, string> GetMimeTypes()  
+        {  
+            return new Dictionary<string, string>  
+            {  
+                {".txt", "text/plain"},  
+                {".pdf", "application/pdf"},  
+                {".doc", "application/vnd.ms-word"},  
+                {".docx", "application/vnd.ms-word"},  
+                {".xls", "application/vnd.ms-excel"},  
+                {".xlsx", "application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet"},  
+                {".png", "image/png"},  
+                {".jpg", "image/jpeg"},  
+                {".jpeg", "image/jpeg"},  
+                {".gif", "image/gif"},  
+                {".csv", "text/csv"},
+                {".zip", "application/zip"}
+            };  
         }
     }
 }
