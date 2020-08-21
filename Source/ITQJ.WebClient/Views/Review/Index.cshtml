@@ -96,7 +96,22 @@
         {
             @foreach(var postulation in Model.ProjectsToReview)
             {
-                <div style="border: 2px solid #5c5c5c; border-radius: 6px; background-color: #8f8f8f;" id="@postulation.Id">
+                var ID = postulation.Id.ToString().Substring(0,12);
+                var  parrafo = "parrafo-" + postulation.Id.ToString().Substring(0,12);
+                var Porcentaje = "Porcentaje-" + postulation.Id.ToString().Substring(0,12);
+                var h1 = "h1-" + postulation.Id.ToString().Substring(0,12);
+                var h2 = "h2-" + postulation.Id.ToString().Substring(0,12);
+                var h3 = "h3-" + postulation.Id.ToString().Substring(0,12);
+                var h4 = "h4-" + postulation.Id.ToString().Substring(0,12);
+                var h5 = "h5-" + postulation.Id.ToString().Substring(0,12);
+                var f1 = "f1-" + postulation.Id.ToString().Substring(0,12);
+                var f2 = "f2-" + postulation.Id.ToString().Substring(0,12);
+                var f3 = "f3-" + postulation.Id.ToString().Substring(0,12);
+                var f4 = "f4-" + postulation.Id.ToString().Substring(0,12);
+                var f5 = "f5-" + postulation.Id.ToString().Substring(0,12);
+
+
+                <div style="border: 2px solid #5c5c5c; margin-bottom:30px; border-radius: 6px; background-color: #8f8f8f;" id="@postulation.Id">
 
                     <div class="col d-inline-block p-2 m-0  border badge-dark" style="border-radius: 6px;">
 
@@ -148,20 +163,9 @@
 
                                         <div style="display:inline-block; position:relative">
 
-                                            <img id="HalfStar1" width="@SizeStarsX" height="@SizeStarsY" style="visibility:visible; position:relative; top:0px; left:0px;" src="~/Image/star_half_empty.png" />
+                                            <img id="@h1" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:relative; top:0px; left:0px;" src="~/Image/star_half_empty.png" />
 
-                                            <img id="FullStar1" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:absolute; top:0px; left:0px;" src="~/Image/star_filled.png" />
-
-                                        </div>
-
-
-                                        <div style="display:inline-block; position:relative">
-
-
-                                            <img id="HalfStar2" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:relative; top:0px; left:0px; " src="~/Image/star_half_empty.png" />
-
-                                            <img id="FullStar2" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:absolute; top:0px; left:0px; " src="~/Image/star_filled.png" />
-
+                                            <img id="@f1" width="@SizeStarsX" height="@SizeStarsY" style="visibility:visible; position:absolute; top:0px; left:0px;" src="~/Image/star_filled.png" />
 
                                         </div>
 
@@ -169,9 +173,9 @@
                                         <div style="display:inline-block; position:relative">
 
 
-                                            <img id="HalfStar3" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:relative; top:0px; left:0px;" src="~/Image/star_half_empty.png" />
+                                            <img id="@h2" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:relative; top:0px; left:0px; " src="~/Image/star_half_empty.png" />
 
-                                            <img id="FullStar3" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:absolute; top:0px; left:0px;" src="~/Image/star_filled.png" />
+                                            <img id="@f2" width="@SizeStarsX" height="@SizeStarsY" style="visibility:visible; position:absolute; top:0px; left:0px; " src="~/Image/star_filled.png" />
 
 
                                         </div>
@@ -180,9 +184,9 @@
                                         <div style="display:inline-block; position:relative">
 
 
-                                            <img id="HalfStar4" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:relative; top:0px; left:0px;" src="~/Image/star_half_empty.png" />
+                                            <img id="@h3" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:relative; top:0px; left:0px;" src="~/Image/star_half_empty.png" />
 
-                                            <img id="FullStar4" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:absolute; top:0px; left:0px;" src="~/Image/star_filled.png" />
+                                            <img id="@f3" width="@SizeStarsX" height="@SizeStarsY" style="visibility:visible; position:absolute; top:0px; left:0px;" src="~/Image/star_filled.png" />
 
 
                                         </div>
@@ -191,9 +195,20 @@
                                         <div style="display:inline-block; position:relative">
 
 
-                                            <img id="HalfStar5" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:relative; top:0px; left:0px;" src="~/Image/star_half_empty.png" />
+                                            <img id="@h4" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:relative; top:0px; left:0px;" src="~/Image/star_half_empty.png" />
 
-                                            <img id="FullStar5" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:absolute; top:0px; left:0px;" src="~/Image/star_filled.png" />
+                                            <img id="@f4" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:absolute; top:0px; left:0px;" src="~/Image/star_filled.png" />
+
+
+                                        </div>
+
+
+                                        <div style="display:inline-block; position:relative">
+
+
+                                            <img id="@h5" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:relative; top:0px; left:0px;" src="~/Image/star_half_empty.png" />
+
+                                            <img id="@f5" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:absolute; top:0px; left:0px;" src="~/Image/star_filled.png" />
 
 
                                         </div>
@@ -203,195 +218,203 @@
 
                                     <div class="form-group" style="width: 320px; border: 1px dotted red; border-radius: 10px; display:inline-block;">
 
-                                        <input onchange="ActiveStar()" class="form-control-range Review.Points" type="range" id="Review.Points"  value="10" name="Review.Points" max="100" min="10"/> 
-                                        
+                                        <input onchange="ActiveStar('@ID','@h1','@h2','@h3','@h4','@h5','@f1','@f2','@f3','@f4','@f5','@Porcentaje','@parrafo')" class="form-control-range Review.Points" type="range" id="@ID" value="60" name="@ID" max="100" min="10" />
+
+                                        <input hidden class="@ID" asp-for="Review.Points" type="range" id="Review.Points" value="60" name="Review.Points"  />
+
                                     </div>
 
-                                    <div id="Porcentaje" class="d-inline-block"> <p id="parrafo">10%</p> </div>
+                                    <div id="@Porcentaje" class="d-inline-block"> <p id="@parrafo">60%</p> </div>
 
                                     <script>
 
-                                        function ActiveStar()
+                                        function ActiveStar(ID, h1, h2, h3, h4, h5, f1, f2, f3, f4, f5, Porcentaje, parrafo)
                                         {
                                             debugger;
 
-                                            var value = document.getElementById('Review.Points').value;
-                                            var porcentaje = document.getElementById('Porcentaje');
+                                            var inputGet = document.getElementById(ID);
+                                            var inputSet = document.getElementsByClassName(ID);
 
-                                            var P1 = document.getElementById('parrafo');
+                                            inputSet[0].setAttribute('value', inputGet.value);
+
+                                            var value = inputGet.value;
+
+                                            var porcentaje = document.getElementById(Porcentaje);
+
+                                            var P1 = document.getElementById(parrafo);
 
                                             porcentaje.removeChild(P1);
 
                                             var P = document.createElement("P");
-                                            P.id = "parrafo";
+                                            P.id = parrafo;
 
                                             var text = document.createTextNode(value + "%");
 
                                             P.appendChild(text);
 
-                                            
+
 
                                             porcentaje.appendChild(P);
-                                            
+
                                             if (value <= 9) {
-                                                $("#HalfStar1").css({ visibility: "hidden" });
-                                                $("#FullStar1").css({ visibility: "hidden" });
-                                                $("#HalfStar2").css({ visibility: "hidden" });
-                                                $("#FullStar2").css({ visibility: "hidden" });
-                                                $("#HalfStar3").css({ visibility: "hidden" });
-                                                $("#FullStar3").css({ visibility: "hidden" });
-                                                $("#HalfStar4").css({ visibility: "hidden" });
-                                                $("#FullStar4").css({ visibility: "hidden" });
-                                                $("#HalfStar5").css({ visibility: "hidden" });
-                                                $("#FullStar5").css({ visibility: "hidden" });
+                                                $("#" + h1).css({ visibility: "hidden" });
+                                                $("#" + f1).css({ visibility: "hidden" });
+                                                $("#" + h2).css({ visibility: "hidden" });
+                                                $("#" + f2).css({ visibility: "hidden" });
+                                                $("#" + h3).css({ visibility: "hidden" });
+                                                $("#" + f3).css({ visibility: "hidden" });
+                                                $("#" + h4).css({ visibility: "hidden" });
+                                                $("#" + f4).css({ visibility: "hidden" });
+                                                $("#" + h5).css({ visibility: "hidden" });
+                                                $("#" + f5).css({ visibility: "hidden" });
                                             }
 
                                             else if (value >= 10 && value <= 19) {
-                                                $("#HalfStar1").css({ visibility: "visible" });
+                                                $("#" + h1).css({ visibility: "visible" });
 
-                                                $("#FullStar1").css({ visibility: "hidden" });
-                                                $("#HalfStar2").css({ visibility: "hidden" });
-                                                $("#FullStar2").css({ visibility: "hidden" });
-                                                $("#HalfStar3").css({ visibility: "hidden" });
-                                                $("#FullStar3").css({ visibility: "hidden" });
-                                                $("#HalfStar4").css({ visibility: "hidden" });
-                                                $("#FullStar4").css({ visibility: "hidden" });
-                                                $("#HalfStar5").css({ visibility: "hidden" });
-                                                $("#FullStar5").css({ visibility: "hidden" });
+                                                $("#" + f1).css({ visibility: "hidden" });
+                                                $("#" + h2).css({ visibility: "hidden" });
+                                                $("#" + f2).css({ visibility: "hidden" });
+                                                $("#" + h3).css({ visibility: "hidden" });
+                                                $("#" + f3).css({ visibility: "hidden" });
+                                                $("#" + h4).css({ visibility: "hidden" });
+                                                $("#" + f4).css({ visibility: "hidden" });
+                                                $("#" + h5).css({ visibility: "hidden" });
+                                                $("#" + f5).css({ visibility: "hidden" });
                                             }
 
                                             else if (value >= 20 && value <= 29) {
-                                                $("#FullStar1").css({ visibility: "visible" });
+                                                $("#" + f1).css({ visibility: "visible" });
 
-                                                $("#HalfStar1").css({ visibility: "hidden" });
-                                                $("#HalfStar2").css({ visibility: "hidden" });
-                                                $("#FullStar2").css({ visibility: "hidden" });
-                                                $("#HalfStar3").css({ visibility: "hidden" });
-                                                $("#FullStar3").css({ visibility: "hidden" });
-                                                $("#HalfStar4").css({ visibility: "hidden" });
-                                                $("#FullStar4").css({ visibility: "hidden" });
-                                                $("#HalfStar5").css({ visibility: "hidden" });
-                                                $("#FullStar5").css({ visibility: "hidden" });
+                                                $("#" + h1).css({ visibility: "hidden" });
+                                                $("#" + h2).css({ visibility: "hidden" });
+                                                $("#" + f2).css({ visibility: "hidden" });
+                                                $("#" + h3).css({ visibility: "hidden" });
+                                                $("#" + f3).css({ visibility: "hidden" });
+                                                $("#" + h4).css({ visibility: "hidden" });
+                                                $("#" + f4).css({ visibility: "hidden" });
+                                                $("#" + h5).css({ visibility: "hidden" });
+                                                $("#" + f5).css({ visibility: "hidden" });
                                             }
 
                                             else if (value >= 30 && value <= 39) {
-                                                $("#FullStar1").css({ visibility: "visible" });
+                                                $("#" + f1).css({ visibility: "visible" });
 
-                                                $("#HalfStar2").css({ visibility: "visible" });
+                                                $("#" + h2).css({ visibility: "visible" });
 
-                                                $("#HalfStar1").css({ visibility: "hidden" });
-                                                $("#FullStar2").css({ visibility: "hidden" });
-                                                $("#HalfStar3").css({ visibility: "hidden" });
-                                                $("#FullStar3").css({ visibility: "hidden" });
-                                                $("#HalfStar4").css({ visibility: "hidden" });
-                                                $("#FullStar4").css({ visibility: "hidden" });
-                                                $("#HalfStar5").css({ visibility: "hidden" });
-                                                $("#FullStar5").css({ visibility: "hidden" });
+                                                $("#" + h1).css({ visibility: "hidden" });
+                                                $("#" + f2).css({ visibility: "hidden" });
+                                                $("#" + h3).css({ visibility: "hidden" });
+                                                $("#" + f3).css({ visibility: "hidden" });
+                                                $("#" + h4).css({ visibility: "hidden" });
+                                                $("#" + f4).css({ visibility: "hidden" });
+                                                $("#" + h5).css({ visibility: "hidden" });
+                                                $("#" + f5).css({ visibility: "hidden" });
                                             }
 
                                             else if (value >= 40 && value <= 49) {
-                                                $("#FullStar1").css({ visibility: "visible" });
+                                                $("#" + f1).css({ visibility: "visible" });
 
-                                                $("#FullStar2").css({ visibility: "visible" });
+                                                $("#" + f2).css({ visibility: "visible" });
 
-                                                $("#HalfStar1").css({ visibility: "hidden" });
-                                                $("#HalfStar2").css({ visibility: "hidden" });
-                                                $("#HalfStar3").css({ visibility: "hidden" });
-                                                $("#FullStar3").css({ visibility: "hidden" });
-                                                $("#HalfStar4").css({ visibility: "hidden" });
-                                                $("#FullStar4").css({ visibility: "hidden" });
-                                                $("#HalfStar5").css({ visibility: "hidden" });
-                                                $("#FullStar5").css({ visibility: "hidden" });
+                                                $("#" + h1).css({ visibility: "hidden" });
+                                                $("#" + h2).css({ visibility: "hidden" });
+                                                $("#" + h3).css({ visibility: "hidden" });
+                                                $("#" + f3).css({ visibility: "hidden" });
+                                                $("#" + h4).css({ visibility: "hidden" });
+                                                $("#" + f4).css({ visibility: "hidden" });
+                                                $("#" + h5).css({ visibility: "hidden" });
+                                                $("#" + f5).css({ visibility: "hidden" });
                                             }
 
                                             else if (value >= 50 && value <= 59) {
-                                                $("#FullStar1").css({ visibility: "visible" });
-                                                $("#FullStar2").css({ visibility: "visible" });
+                                                $("#" + f1).css({ visibility: "visible" });
+                                                $("#" + f2).css({ visibility: "visible" });
 
-                                                $("#HalfStar3").css({ visibility: "visible" });
+                                                $("#" + h3).css({ visibility: "visible" });
 
-                                                $("#HalfStar1").css({ visibility: "hidden" });
-                                                $("#HalfStar2").css({ visibility: "hidden" });
-                                                $("#FullStar3").css({ visibility: "hidden" });
-                                                $("#HalfStar4").css({ visibility: "hidden" });
-                                                $("#FullStar4").css({ visibility: "hidden" });
-                                                $("#HalfStar5").css({ visibility: "hidden" });
-                                                $("#FullStar5").css({ visibility: "hidden" });
+                                                $("#" + h1).css({ visibility: "hidden" });
+                                                $("#" + h2).css({ visibility: "hidden" });
+                                                $("#" + f3).css({ visibility: "hidden" });
+                                                $("#" + h4).css({ visibility: "hidden" });
+                                                $("#" + f4).css({ visibility: "hidden" });
+                                                $("#" + h5).css({ visibility: "hidden" });
+                                                $("#" + f5).css({ visibility: "hidden" });
                                             }
 
                                             else if (value >= 60 && value <= 69) {
-                                                $("#FullStar1").css({ visibility: "visible" });
-                                                $("#FullStar2").css({ visibility: "visible" });
+                                                $("#" + f1).css({ visibility: "visible" });
+                                                $("#" + f2).css({ visibility: "visible" });
 
-                                                $("#FullStar3").css({ visibility: "visible" });
+                                                $("#" + f3).css({ visibility: "visible" });
 
-                                                $("#HalfStar1").css({ visibility: "hidden" });
-                                                $("#HalfStar2").css({ visibility: "hidden" });
-                                                $("#HalfStar3").css({ visibility: "hidden" });
-                                                $("#HalfStar4").css({ visibility: "hidden" });
-                                                $("#FullStar4").css({ visibility: "hidden" });
-                                                $("#HalfStar5").css({ visibility: "hidden" });
-                                                $("#FullStar5").css({ visibility: "hidden" });
+                                                $("#" + h1).css({ visibility: "hidden" });
+                                                $("#" + h2).css({ visibility: "hidden" });
+                                                $("#" + h3).css({ visibility: "hidden" });
+                                                $("#" + h4).css({ visibility: "hidden" });
+                                                $("#" + f4).css({ visibility: "hidden" });
+                                                $("#" + h5).css({ visibility: "hidden" });
+                                                $("#" + f5).css({ visibility: "hidden" });
                                             }
 
                                             else if (value >= 70 && value <= 79) {
-                                                $("#FullStar1").css({ visibility: "visible" });
-                                                $("#FullStar2").css({ visibility: "visible" });
-                                                $("#FullStar3").css({ visibility: "visible" });
+                                                $("#" + f1).css({ visibility: "visible" });
+                                                $("#" + f2).css({ visibility: "visible" });
+                                                $("#" + f3).css({ visibility: "visible" });
 
-                                                $("#HalfStar4").css({ visibility: "visible" });
+                                                $("#" + h4).css({ visibility: "visible" });
 
-                                                $("#HalfStar1").css({ visibility: "hidden" });
-                                                $("#HalfStar2").css({ visibility: "hidden" });
-                                                $("#HalfStar3").css({ visibility: "hidden" });
-                                                $("#FullStar4").css({ visibility: "hidden" });
-                                                $("#HalfStar5").css({ visibility: "hidden" });
-                                                $("#FullStar5").css({ visibility: "hidden" });
+                                                $("#" + h1).css({ visibility: "hidden" });
+                                                $("#" + h2).css({ visibility: "hidden" });
+                                                $("#" + h3).css({ visibility: "hidden" });
+                                                $("#" + f4).css({ visibility: "hidden" });
+                                                $("#" + h5).css({ visibility: "hidden" });
+                                                $("#" + f5).css({ visibility: "hidden" });
                                             }
 
                                             else if (value >= 80 && value <= 89) {
-                                                $("#FullStar1").css({ visibility: "visible" });
-                                                $("#FullStar2").css({ visibility: "visible" });
-                                                $("#FullStar3").css({ visibility: "visible" });
+                                                $("#" + f1).css({ visibility: "visible" });
+                                                $("#" + f2).css({ visibility: "visible" });
+                                                $("#" + f3).css({ visibility: "visible" });
 
-                                                $("#FullStar4").css({ visibility: "visible" });
+                                                $("#" + f4).css({ visibility: "visible" });
 
-                                                $("#HalfStar1").css({ visibility: "hidden" });
-                                                $("#HalfStar2").css({ visibility: "hidden" });
-                                                $("#HalfStar3").css({ visibility: "hidden" });
-                                                $("#HalfStar4").css({ visibility: "hidden" });
-                                                $("#HalfStar5").css({ visibility: "hidden" });
-                                                $("#FullStar5").css({ visibility: "hidden" });
+                                                $("#" + h1).css({ visibility: "hidden" });
+                                                $("#" + h2).css({ visibility: "hidden" });
+                                                $("#" + h3).css({ visibility: "hidden" });
+                                                $("#" + h4).css({ visibility: "hidden" });
+                                                $("#" + h5).css({ visibility: "hidden" });
+                                                $("#" + f5).css({ visibility: "hidden" });
                                             }
 
                                             else if (value >= 90 && value <= 99) {
-                                                $("#FullStar1").css({ visibility: "visible" });
-                                                $("#FullStar2").css({ visibility: "visible" });
-                                                $("#FullStar3").css({ visibility: "visible" });
-                                                $("#FullStar4").css({ visibility: "visible" });
+                                                $("#" + f1).css({ visibility: "visible" });
+                                                $("#" + f2).css({ visibility: "visible" });
+                                                $("#" + f3).css({ visibility: "visible" });
+                                                $("#" + f4).css({ visibility: "visible" });
 
-                                                $("#HalfStar5").css({ visibility: "visible" });
+                                                $("#" + h5).css({ visibility: "visible" });
 
-                                                $("#HalfStar1").css({ visibility: "hidden" });
-                                                $("#HalfStar2").css({ visibility: "hidden" });
-                                                $("#HalfStar3").css({ visibility: "hidden" });
-                                                $("#HalfStar4").css({ visibility: "hidden" });
-                                                $("#FullStar5").css({ visibility: "hidden" });
+                                                $("#" + h1).css({ visibility: "hidden" });
+                                                $("#" + h2).css({ visibility: "hidden" });
+                                                $("#" + h3).css({ visibility: "hidden" });
+                                                $("#" + h4).css({ visibility: "hidden" });
+                                                $("#" + f5).css({ visibility: "hidden" });
                                             }
 
                                             else if (value == 100) {
 
-                                                $("#FullStar1").css({ visibility: "visible" });
-                                                $("#FullStar2").css({ visibility: "visible" });
-                                                $("#FullStar3").css({ visibility: "visible" });
-                                                $("#FullStar4").css({ visibility: "visible" });
-                                                $("#FullStar5").css({ visibility: "visible" });
+                                                $("#" + f1).css({ visibility: "visible" });
+                                                $("#" + f2).css({ visibility: "visible" });
+                                                $("#" + f3).css({ visibility: "visible" });
+                                                $("#" + f4).css({ visibility: "visible" });
+                                                $("#" + f5).css({ visibility: "visible" });
 
-                                                $("#HalfStar1").css({ visibility: "hidden" });
-                                                $("#HalfStar2").css({ visibility: "hidden" });
-                                                $("#HalfStar3").css({ visibility: "hidden" });
-                                                $("#HalfStar4").css({ visibility: "hidden" });
-                                                $("#HalfStar5").css({ visibility: "hidden" });
+                                                $("#" + h1).css({ visibility: "hidden" });
+                                                $("#" + h2).css({ visibility: "hidden" });
+                                                $("#" + h3).css({ visibility: "hidden" });
+                                                $("#" + h4).css({ visibility: "hidden" });
+                                                $("#" + h5).css({ visibility: "hidden" });
                                             }
                                         }
 

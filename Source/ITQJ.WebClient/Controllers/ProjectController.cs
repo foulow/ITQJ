@@ -195,7 +195,7 @@ namespace ITQJ.WebClient.Controllers
             if (editedProyect == null)
                 return RedirectToAction("Index", new { projectId = project.Id });
 
-            return RedirectToAction("Index", new { projectId = project.Id });
+            return RedirectToAction("Index","Review");
         }
 
         [Authorize]
