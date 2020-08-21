@@ -110,33 +110,37 @@
 
                         </div>
 
-                </div>
-
-                <form style="margin:10px;" method="post" asp-action="PostReviews" asp-controller="Review">
-
-                    <div hidden>
-
-                        @if(ViewBag.UserRole == "Profesional")
-                        {
-                            <input asp-for="Review.UserId" type="text" value="@postulation.UserId" />
-                            <input asp-for="Review.PostulantId" type="text" value="@postulation.Postulants.First(x => x.UserId == ViewBag.UserId).Id" />
-                        }
-                        else
-                        {
-                            <input asp-for="Review.UserId" type="text" value="@postulation.Postulants.First(x => x.IsSellected == true).UserId" />
-                            <input asp-for="Review.PostulantId" type="text" value="@postulation.Postulants.First(x => x.IsSellected == true).Id" />
-                        }
-                        <input asp-for="Review.ReviewerRole" type="text" value="@ViewBag.UserRole" />
                     </div>
+
+                    <form style="margin:10px;" method="post" asp-action="PostReviews" asp-controller="Review" >
+
+                        <div hidden>
+
+                            @if(ViewBag.UserRole == "Profesional")
+                            {
+                                <input asp-for="Review.UserId" type="text" value="@postulation.UserId" />
+
+                                <input asp-for="Review.PostulantId" type="text" value="@postulation.Postulants.First(x => x.UserId == ViewBag.UserId).Id" />
+                            }
+                            else
+                            {
+                                <input asp-for="Review.UserId" type="text" value="@postulation.Postulants.First(x => x.IsSellected == true).UserId" />
+                                
+                                <input asp-for="Review.PostulantId" type="text" value="@postulation.Postulants.First(x => x.IsSellected == true).Id" />
+                            }
+
+                            <input asp-for="Review.ReviewerRole" type="text" value="@ViewBag.UserRole" />
+
+                        </div>
 
 
                         <div class="form-group">
 
-                            <label asp-for="Review.Points" style="color:white;" class="control-label">Puntiación</label><br />
+                            <label asp-for="Review.Points" style="color:white;" class="control-label">Puntuación</label><br />
 
-                            <div>
+                            <div  class="form-group">
 
-                                <div style="margin:0px 0px 0px 10px; padding:0px; display:inline-block">
+                                <div class="form-group" style="margin:0px 0px 0px 10px; padding:0px; display:inline-block">
 
                                     @{ int SizeStarsY = 30, SizeStarsX = 60;}
 
@@ -197,9 +201,9 @@
 
                                     </div>
 
-                                    <div style="width: 320px; border: 1px dotted red; border-radius: 10px; display:inline-block;">
+                                    <div class="form-group" style="width: 320px; border: 1px dotted red; border-radius: 10px; display:inline-block;">
 
-                                        <input onchange="ActiveStar()" class="form-control-range" type="range" asp-for="Review.Points" id="RangoStar" value="10" name="Stars" max="100" min="10"/> 
+                                        <input onchange="ActiveStar()" class="form-control-range Review.Points" type="range" id="Review.Points"  value="10" name="Review.Points" max="100" min="10"/> 
                                         
                                     </div>
 
@@ -211,7 +215,7 @@
                                         {
                                             debugger;
 
-                                            var value = document.getElementById('RangoStar').value;
+                                            var value = document.getElementById('Review.Points').value;
                                             var porcentaje = document.getElementById('Porcentaje');
 
                                             var P1 = document.getElementById('parrafo');
@@ -415,28 +419,12 @@
 
                         <input type="submit" class="btn badge-dark" style="float:none;" value="Realizar reseña" />
 
+                    </form>
 
                 </div>
             }
         }
-        else
-        {
-            <div class="text-center">
-                <h1>Parece que no tienes proyectos completados!</h1> <br />
-                @if(ViewBag.UserRole == "Profesional")
-                {
-                    <p>Comienza a aplicar a proyectos para finalizarlos y así dar una reseña al contratista de dicho proyecto.</p>
-                }
-                else if(ViewBag.UserRole == "Contratista")
-                {
-                    <p>Comienza a publicar proyectos para resivir profesionales dispuestos a finalizarlos y así dar una reseña al profesional que complete esos proyectos.</p>
-                }
-                else
-                {
-                    <p>No deverias estar aqui, completa el proseso de registro para poder acceder a esta pagina.</p>
-                }
-            </div>
-        }
+
     </div>
 
 @section Scripts {
