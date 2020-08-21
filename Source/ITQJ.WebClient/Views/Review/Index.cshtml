@@ -110,15 +110,25 @@
 
                         </div>
 
+                </div>
+
+                <form style="margin:10px;" method="post" asp-action="PostReviews" asp-controller="Review">
+
+                    <div hidden>
+
+                        @if(ViewBag.UserRole == "Profesional")
+                        {
+                            <input asp-for="Review.UserId" type="text" value="@postulation.UserId" />
+                            <input asp-for="Review.PostulantId" type="text" value="@postulation.Postulants.First(x => x.UserId == ViewBag.UserId).Id" />
+                        }
+                        else
+                        {
+                            <input asp-for="Review.UserId" type="text" value="@postulation.Postulants.First(x => x.IsSellected == true).UserId" />
+                            <input asp-for="Review.PostulantId" type="text" value="@postulation.Postulants.First(x => x.IsSellected == true).Id" />
+                        }
+                        <input asp-for="Review.ReviewerRole" type="text" value="@ViewBag.UserRole" />
                     </div>
 
-                    <form style="margin:10px;" >
-
-                        <div hidden>
-                           
-                            <input asp-for="Review.UserId" type="text" value="@postulation.UserId" />
-
-                        </div>
 
                         <div class="form-group">
 
@@ -405,7 +415,6 @@
 
                         <input type="submit" class="btn badge-dark" style="float:none;" value="Realizar reseña" />
 
-                    </form>
 
                 </div>
             }

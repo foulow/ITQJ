@@ -38,6 +38,7 @@ namespace ITQJ.WebClient.Controllers
                 pendingReviews.ProjectsToReview = new List<ProjectResponseDTO>();
                 pendingReviews.PageIndex = pageIndex;
             }
+            pendingReviews.Review = new ReviewCreateVM();
 
             return View(pendingReviews);
         }
@@ -103,6 +104,33 @@ namespace ITQJ.WebClient.Controllers
             }
 
             return View(contratistReviews);
+        }
+        
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> PostReviews(ReviewsToMakeVM reviewData)
+        {
+            if(!ModelState.IsValid)
+                return View(reviewData);
+
+            var newReview = (ReviewResponseDTO)reviewData.Review;
+
+            var reviewResponse = await CallApiPOSTAsync<ReviewResponseDTO>(uri: "/api/reviews/", body: newReview, isSecured: true);
+
+            if (reviewResponse is null)
+                return View(reviewData);
+
+            var updatePostulant = new PostulantUpdateDTO
+            {
+                IsSellected = true,
+                HasWorkReview = (reviewData.Review.ReviewerRole == "Contratista") ? true : false,
+                HasProyectReview = (reviewData.Review.ReviewerRole == "Profesional") ? true : false
+            };
+            
+            var postulantResponse = await CallApiPUTAsync<PostulantUpdateDTO>(
+                uri: "api/postulants/" + reviewData.Review.PostulantId, body: updatePostulant, isSecured: true);
+
+            return RedirectToAction("Index");
         }
 
         private Task<ReviewListVM> GetReviews(string userId, int pageIndex, int maxResults)
