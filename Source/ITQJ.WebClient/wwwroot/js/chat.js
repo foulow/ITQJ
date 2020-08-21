@@ -246,17 +246,17 @@ function createMessage(data) {
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;"),
     userName = data.userName,
-    messageColor =
+        messageColor =   
       userName === "sistema"
-        ? "bg-secondary"
+        ? "background-color:#535252"
         : userName === "Yo"
-        ? "bg-success"
-        : "bg-primary",
+        ? "background-color:#ADADAD"
+        : "background-color:#007ACC",
     messageSender = `<p class="mb-0">${userName}</p>`,
     messageDate = `<p class="mb-0">${formattedDate}</p>`,
     messageHeader = `<div class="d-flex justify-content-between">${messageSender}${messageDate}</div>`,
     messageText = `<p class="mb-0">${message}</p>`,
-    messageBody = `<div class="${messageColor} text-white p-2 my-2">${messageHeader}${messageText}</div>`;
+      messageBody = `<div class="text-white p-2 my-2" style="${messageColor}" >${messageHeader}${messageText}</div>`;
 
   return messageBody;
 }
