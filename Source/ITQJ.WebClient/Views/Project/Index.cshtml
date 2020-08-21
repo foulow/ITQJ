@@ -201,7 +201,7 @@
     {
         <div class="border badge-light p-2 mt-2 mb-2 " style="margin:0% 0% 13% 0%">
 
-            <strong class="h2 m-5">Lista de entregas realizadas</strong>
+            <strong class="h2 mt-5 mb-5" style="margin-left:10px;">Lista de entregas realizadas</strong>
 
             @foreach(var mileStone in Model.MileStones)
             {
@@ -219,14 +219,22 @@
                                 border: 1px solid black;
                                 display:block;
                                 margin: 0px;
+                                padding:5px 10px;
                                 background-color: #ffffff">
 
-                                <label class="text-center">@mileStone.UploadDate</label>
+                                <div>
+                                    
+                                    <p class="h3 d-inline-block">Descripción:</p>  <p class="h4 d-inline-block"> @mileStone.Description </p>
+                                
+                                </div>
 
-                                <p>@mileStone.Description</p>
+                                <div>
 
-                            
-                                <a asp-controller="Project" asp-action="DownloadMileStone" asp-route-fileName="@mileStone.FileName" >Descargar entrega</a>
+                                    <label class="h5 text-center d-inline-block">Fecha: </label> <label class="h6"> @mileStone.UploadDate</label>
+
+                                    <a class="d-inline-block ml-1" asp-controller="Project" asp-action="DownloadMileStone" asp-route-fileName="@mileStone.FileName">Descargar entrega</a>
+
+                                </div>
 
                             </div>
 
@@ -321,7 +329,7 @@ else if (ViewBag.canSendMileStone && Model.IsOpen)
 {
     <div class="border badge-light p-2 mt-2 mb-2 " style="margin:0% 0% 13% 0%">
 
-        <strong class="h2 m-5">Realizar una entrega</strong>
+        <strong class="h2 mt-5 mb-5" style="margin-left:10px;">Realizar una entrega</strong>
 
         <form asp-action="PostMileStone" enctype="multipart/form-data" method="post">
 
@@ -340,13 +348,14 @@ else if (ViewBag.canSendMileStone && Model.IsOpen)
                             border: 1px solid black;
                             display:block;
                             margin: 0px;
+                            padding:5px 10px;
                             background-color: #ffffff">
 
                         <div class="form-group">
 
                             <label for="Description" class="text-center">Describa brebemente que se realizo en en entrega</label>
 
-                            <textarea class="form-control" id="Description" name="Description" placeholder="Description" maxlength="500" required></textarea>
+                            <textarea style="height:170px;" class="form-control" id="Description" name="Description" placeholder="Description" maxlength="2000" required></textarea>
                             
                             <span for="Description" class="text-danger"></span>
 
@@ -356,7 +365,8 @@ else if (ViewBag.canSendMileStone && Model.IsOpen)
 
                             <label for="FormFile" class="text-center">Seleccione un fichero a adjuntar para la entrega</label>
                             
-                            <input class="form-control" id="FormFile" name="FormFile" placeholder="Nigun fichero seleccionado" type="file" required>
+                            <input class="form-control" style="height:45px;"  id="FormFile" name="FormFile" placeholder="Ningun fichero seleccionado"
+                                   accept="image/*,.pdf,.doc,audio/*,video/*,rar/*" type="file" required>
                             
                             <span for="FormFile" class="text-danger"></span>
 

@@ -5,163 +5,427 @@
     int Nex = Model.PageIndex + 1, Back = Model.PageIndex - 1;
 }
 
-<div class="container">
-    @if (Model.TotalPages > 1)
-    {
-        <div class="d-block p-0 m-0">
+    <div class="container">
 
-            <div class="d-inline-block bg-dark m-0 p-0" style="position:relative; left:50%; transform: translateX(-50%);">
+        @if(Model.TotalPages > 1)
+        {
+            <div class="d-block p-0 m-0">
 
-                <nav aria-label="Page navigation example h2">
+                <div class="d-inline-block bg-dark m-0 p-0" style="position:relative; left:50%; transform: translateX(-50%);">
 
-                    <ul class="pagination">
-                        @if (Model.PageIndex != 1)
-                        {
-                            <li class="page-item">
+                    <nav aria-label="Page navigation example h2">
 
-                                <a class="page-link" aria-label="Previous" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Back">
-                                    <span aria-hidden="true" class="text-dark">&laquo;</span>
-                                </a>
+                        <ul class="pagination">
 
-                            </li>
-                        }
-
-
-                        @for (int i = 1; i <= Model.TotalPages; i++)
-                        {
-                            if (i == Model.PageIndex)
-                            {
-                                <li class="page-item active" aria-current="page">
-                                    <span class="page-link text-dark">
-                                        @i
-                                        <span class="sr-only">(current)</span>
-                                    </span>
-                                </li>
-                            }
-                            else
+                            @if(Model.PageIndex != 1)
                             {
                                 <li class="page-item">
 
-                                    <a class="page-link text-dark" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@i">@i</a>
+                                    <a class="page-link" aria-label="Previous" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Back">
+
+                                        <span aria-hidden="true" class="text-dark">&laquo;</span>
+
+                                    </a>
 
                                 </li>
                             }
 
-                        }
+
+                            @for(int i = 1; i <= Model.TotalPages; i++)
+                            {
+                                if(i == Model.PageIndex)
+                                {
+                                    <li class="page-item active" aria-current="page">
+
+                                        <span class="page-link text-dark">
+                                            @i
+
+                                            <span class="sr-only">(current)</span>
+
+                                        </span>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="page-item">
+
+                                        <a class="page-link text-dark" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@i">@i</a>
+
+                                    </li>
+                                }
+
+                            }
 
 
-                        @if (Model.PageIndex != Model.TotalPages)
-                        {
-                            <li class="page-item">
+                            @if(Model.PageIndex != Model.TotalPages)
+                            {
+                                <li class="page-item">
 
-                                <a class="page-link" aria-label="Next" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Nex">
+                                    <a class="page-link" aria-label="Next" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Nex">
 
-                                    <span aria-hidden="true" class="text-dark">&raquo;</span>
+                                        <span aria-hidden="true" class="text-dark">&raquo;</span>
 
-                                </a>
+                                    </a>
 
-                            </li>
-                        }
-                    </ul>
-                </nav>
-
-            </div>
-
-        </div>
-    }
-
-    <hr />
-
-    <h4>Aquí podras ver las reseñas que esten pendiente</h4>
-
-    @if (ViewBag.UserRole == "Profesional")
-    {
-        <p>Selecciona una de las reseñas pendiente del/los contratista(s) que desea puntuar</p>
-    }
-    else if (ViewBag.UserRole == "Contratista")
-    {
-        <p>Selecciona una de las reseñas pendiente del/los profesional(es) que desea puntuar</p>
-    }
-
-    @if (Model.ProjectsToReview != null && Model.ProjectsToReview.Count > 0)
-    {
-        @foreach (var postulation in Model.ProjectsToReview)
-        {
-            <div style="border: 2px solid lightgray; border-radius: 6px;" id="@postulation.Id">
-
-                <div class="col d-inline-block p-2 m-0  border badge-dark" style="border-radius: 6px;">
-
-                    <div class="col d-inline m-0 p-0">
-
-                        <strong class="h4 m-0 p-0">
-
-                            @postulation.Name
-
-                        </strong>
-
-                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
 
                 </div>
-                <form method="post" asp-action="PostReviews" asp-controller="Review">
-                    <div hidden>
-                        @if(ViewBag.UserRole == "Profesional")
-                        {
-                            <input asp-for="Review.UserId" type="text" value="@postulation.UserId" />
-                            <input asp-for="Review.PostulantId" type="text" value="@postulation.Postulants.First(x => x.UserId == ViewBag.UserId).Id" />
-                        }
-                        else
-                        {
-                            <input asp-for="Review.UserId" type="text" value="@postulation.Postulants.First(x => x.IsSellected == true).UserId" />
-                            <input asp-for="Review.PostulantId" type="text" value="@postulation.Postulants.First(x => x.IsSellected == true).Id" />
-                        }
-                        <input asp-for="Review.ReviewerRole" type="text" value="@ViewBag.UserRole" />
-                    </div>
-                    <div class="form-group">
-
-                        <label asp-for="Review.Points" class="control-label">Puntuación</label><br />
-
-                        <input type="range" asp-for="Review.Points" min="1" max="5" value="1" /><br />
-
-                        <span asp-validation-for="Review.Points" class="text-danger"></span>
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <i class="fas fa-pencil-alt prefix"></i>
-                        <label asp-for="Review.Description" class="control-label">Describenos porque desides dar esa puntiación</label><br />
-
-                        <textarea class="md-textarea form-control" asp-for="Review.Description"></textarea><br />
-
-                        <span asp-validation-for="Review.Description" class="text-danger"></span>
-
-                    </div>
-                    <input type="submit" class="btn badge-dark" style="float:none;" value="Realizar reseña" />
-
-                </form>
 
             </div>
         }
-    }
-    else
-    {
-        <div class="text-center">
-            <h1>Parece que no tienes proyectos completados!</h1> <br />
-            @if (ViewBag.UserRole == "Profesional")
+
+
+
+        <h4 style="margin-top:100px;">Reseñas pendientes</h4>
+
+        <hr />
+
+        @if(ViewBag.UserRole == "Profesional")
+        {
+            <p>Puntúa los contratistas, respecto a su descripción de requerimiento, comunicación, Pago, etc.</p>
+        }
+        else if(ViewBag.UserRole == "Contratista")
+        {
+            <p>Puntúa los profesionales, respecto a su calidad del trabajo, periodo de entrega, comunicación, etc.</p>
+        }
+
+        @if(Model.ProjectsToReview != null && Model.ProjectsToReview.Count > 0)
+        {
+            @foreach(var postulation in Model.ProjectsToReview)
             {
-                <p>Comienza a aplicar a proyectos para finalizarlos y así dar una reseña al contratista de dicho proyecto.</p>
+                <div style="border: 2px solid #5c5c5c; border-radius: 6px; background-color: #8f8f8f;" id="@postulation.Id">
+
+                    <div class="col d-inline-block p-2 m-0  border badge-dark" style="border-radius: 6px;">
+
+                        <div class="col d-inline m-0 p-0">
+
+                            <strong class="h4 m-0 p-0">
+
+                                @postulation.Name
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                    <form style="margin:10px;" method="post" asp-action="PostReviews" asp-controller="Review" >
+
+                        <div hidden>
+
+                            @if(ViewBag.UserRole == "Profesional")
+                            {
+                                <input asp-for="Review.UserId" type="text" value="@postulation.UserId" />
+
+                                <input asp-for="Review.PostulantId" type="text" value="@postulation.Postulants.First(x => x.UserId == ViewBag.UserId).Id" />
+                            }
+                            else
+                            {
+                                <input asp-for="Review.UserId" type="text" value="@postulation.Postulants.First(x => x.IsSellected == true).UserId" />
+                                
+                                <input asp-for="Review.PostulantId" type="text" value="@postulation.Postulants.First(x => x.IsSellected == true).Id" />
+                            }
+
+                            <input asp-for="Review.ReviewerRole" type="text" value="@ViewBag.UserRole" />
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label asp-for="Review.Points" style="color:white;" class="control-label">Puntuación</label><br />
+
+                            <div  class="form-group">
+
+                                <div class="form-group" style="margin:0px 0px 0px 10px; padding:0px; display:inline-block">
+
+                                    @{ int SizeStarsY = 30, SizeStarsX = 60;}
+
+                                    <div style="display:block; position:relative;">
+
+                                        <div style="display:inline-block; position:relative">
+
+                                            <img id="HalfStar1" width="@SizeStarsX" height="@SizeStarsY" style="visibility:visible; position:relative; top:0px; left:0px;" src="~/Image/star_half_empty.png" />
+
+                                            <img id="FullStar1" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:absolute; top:0px; left:0px;" src="~/Image/star_filled.png" />
+
+                                        </div>
+
+
+                                        <div style="display:inline-block; position:relative">
+
+
+                                            <img id="HalfStar2" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:relative; top:0px; left:0px; " src="~/Image/star_half_empty.png" />
+
+                                            <img id="FullStar2" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:absolute; top:0px; left:0px; " src="~/Image/star_filled.png" />
+
+
+                                        </div>
+
+
+                                        <div style="display:inline-block; position:relative">
+
+
+                                            <img id="HalfStar3" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:relative; top:0px; left:0px;" src="~/Image/star_half_empty.png" />
+
+                                            <img id="FullStar3" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:absolute; top:0px; left:0px;" src="~/Image/star_filled.png" />
+
+
+                                        </div>
+
+
+                                        <div style="display:inline-block; position:relative">
+
+
+                                            <img id="HalfStar4" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:relative; top:0px; left:0px;" src="~/Image/star_half_empty.png" />
+
+                                            <img id="FullStar4" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:absolute; top:0px; left:0px;" src="~/Image/star_filled.png" />
+
+
+                                        </div>
+
+
+                                        <div style="display:inline-block; position:relative">
+
+
+                                            <img id="HalfStar5" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:relative; top:0px; left:0px;" src="~/Image/star_half_empty.png" />
+
+                                            <img id="FullStar5" width="@SizeStarsX" height="@SizeStarsY" style="visibility:hidden; position:absolute; top:0px; left:0px;" src="~/Image/star_filled.png" />
+
+
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="form-group" style="width: 320px; border: 1px dotted red; border-radius: 10px; display:inline-block;">
+
+                                        <input onchange="ActiveStar()" class="form-control-range Review.Points" type="range" id="Review.Points"  value="10" name="Review.Points" max="100" min="10"/> 
+                                        
+                                    </div>
+
+                                    <div id="Porcentaje" class="d-inline-block"> <p id="parrafo">10%</p> </div>
+
+                                    <script>
+
+                                        function ActiveStar()
+                                        {
+                                            debugger;
+
+                                            var value = document.getElementById('Review.Points').value;
+                                            var porcentaje = document.getElementById('Porcentaje');
+
+                                            var P1 = document.getElementById('parrafo');
+
+                                            porcentaje.removeChild(P1);
+
+                                            var P = document.createElement("P");
+                                            P.id = "parrafo";
+
+                                            var text = document.createTextNode(value + "%");
+
+                                            P.appendChild(text);
+
+                                            
+
+                                            porcentaje.appendChild(P);
+                                            
+                                            if (value <= 9) {
+                                                $("#HalfStar1").css({ visibility: "hidden" });
+                                                $("#FullStar1").css({ visibility: "hidden" });
+                                                $("#HalfStar2").css({ visibility: "hidden" });
+                                                $("#FullStar2").css({ visibility: "hidden" });
+                                                $("#HalfStar3").css({ visibility: "hidden" });
+                                                $("#FullStar3").css({ visibility: "hidden" });
+                                                $("#HalfStar4").css({ visibility: "hidden" });
+                                                $("#FullStar4").css({ visibility: "hidden" });
+                                                $("#HalfStar5").css({ visibility: "hidden" });
+                                                $("#FullStar5").css({ visibility: "hidden" });
+                                            }
+
+                                            else if (value >= 10 && value <= 19) {
+                                                $("#HalfStar1").css({ visibility: "visible" });
+
+                                                $("#FullStar1").css({ visibility: "hidden" });
+                                                $("#HalfStar2").css({ visibility: "hidden" });
+                                                $("#FullStar2").css({ visibility: "hidden" });
+                                                $("#HalfStar3").css({ visibility: "hidden" });
+                                                $("#FullStar3").css({ visibility: "hidden" });
+                                                $("#HalfStar4").css({ visibility: "hidden" });
+                                                $("#FullStar4").css({ visibility: "hidden" });
+                                                $("#HalfStar5").css({ visibility: "hidden" });
+                                                $("#FullStar5").css({ visibility: "hidden" });
+                                            }
+
+                                            else if (value >= 20 && value <= 29) {
+                                                $("#FullStar1").css({ visibility: "visible" });
+
+                                                $("#HalfStar1").css({ visibility: "hidden" });
+                                                $("#HalfStar2").css({ visibility: "hidden" });
+                                                $("#FullStar2").css({ visibility: "hidden" });
+                                                $("#HalfStar3").css({ visibility: "hidden" });
+                                                $("#FullStar3").css({ visibility: "hidden" });
+                                                $("#HalfStar4").css({ visibility: "hidden" });
+                                                $("#FullStar4").css({ visibility: "hidden" });
+                                                $("#HalfStar5").css({ visibility: "hidden" });
+                                                $("#FullStar5").css({ visibility: "hidden" });
+                                            }
+
+                                            else if (value >= 30 && value <= 39) {
+                                                $("#FullStar1").css({ visibility: "visible" });
+
+                                                $("#HalfStar2").css({ visibility: "visible" });
+
+                                                $("#HalfStar1").css({ visibility: "hidden" });
+                                                $("#FullStar2").css({ visibility: "hidden" });
+                                                $("#HalfStar3").css({ visibility: "hidden" });
+                                                $("#FullStar3").css({ visibility: "hidden" });
+                                                $("#HalfStar4").css({ visibility: "hidden" });
+                                                $("#FullStar4").css({ visibility: "hidden" });
+                                                $("#HalfStar5").css({ visibility: "hidden" });
+                                                $("#FullStar5").css({ visibility: "hidden" });
+                                            }
+
+                                            else if (value >= 40 && value <= 49) {
+                                                $("#FullStar1").css({ visibility: "visible" });
+
+                                                $("#FullStar2").css({ visibility: "visible" });
+
+                                                $("#HalfStar1").css({ visibility: "hidden" });
+                                                $("#HalfStar2").css({ visibility: "hidden" });
+                                                $("#HalfStar3").css({ visibility: "hidden" });
+                                                $("#FullStar3").css({ visibility: "hidden" });
+                                                $("#HalfStar4").css({ visibility: "hidden" });
+                                                $("#FullStar4").css({ visibility: "hidden" });
+                                                $("#HalfStar5").css({ visibility: "hidden" });
+                                                $("#FullStar5").css({ visibility: "hidden" });
+                                            }
+
+                                            else if (value >= 50 && value <= 59) {
+                                                $("#FullStar1").css({ visibility: "visible" });
+                                                $("#FullStar2").css({ visibility: "visible" });
+
+                                                $("#HalfStar3").css({ visibility: "visible" });
+
+                                                $("#HalfStar1").css({ visibility: "hidden" });
+                                                $("#HalfStar2").css({ visibility: "hidden" });
+                                                $("#FullStar3").css({ visibility: "hidden" });
+                                                $("#HalfStar4").css({ visibility: "hidden" });
+                                                $("#FullStar4").css({ visibility: "hidden" });
+                                                $("#HalfStar5").css({ visibility: "hidden" });
+                                                $("#FullStar5").css({ visibility: "hidden" });
+                                            }
+
+                                            else if (value >= 60 && value <= 69) {
+                                                $("#FullStar1").css({ visibility: "visible" });
+                                                $("#FullStar2").css({ visibility: "visible" });
+
+                                                $("#FullStar3").css({ visibility: "visible" });
+
+                                                $("#HalfStar1").css({ visibility: "hidden" });
+                                                $("#HalfStar2").css({ visibility: "hidden" });
+                                                $("#HalfStar3").css({ visibility: "hidden" });
+                                                $("#HalfStar4").css({ visibility: "hidden" });
+                                                $("#FullStar4").css({ visibility: "hidden" });
+                                                $("#HalfStar5").css({ visibility: "hidden" });
+                                                $("#FullStar5").css({ visibility: "hidden" });
+                                            }
+
+                                            else if (value >= 70 && value <= 79) {
+                                                $("#FullStar1").css({ visibility: "visible" });
+                                                $("#FullStar2").css({ visibility: "visible" });
+                                                $("#FullStar3").css({ visibility: "visible" });
+
+                                                $("#HalfStar4").css({ visibility: "visible" });
+
+                                                $("#HalfStar1").css({ visibility: "hidden" });
+                                                $("#HalfStar2").css({ visibility: "hidden" });
+                                                $("#HalfStar3").css({ visibility: "hidden" });
+                                                $("#FullStar4").css({ visibility: "hidden" });
+                                                $("#HalfStar5").css({ visibility: "hidden" });
+                                                $("#FullStar5").css({ visibility: "hidden" });
+                                            }
+
+                                            else if (value >= 80 && value <= 89) {
+                                                $("#FullStar1").css({ visibility: "visible" });
+                                                $("#FullStar2").css({ visibility: "visible" });
+                                                $("#FullStar3").css({ visibility: "visible" });
+
+                                                $("#FullStar4").css({ visibility: "visible" });
+
+                                                $("#HalfStar1").css({ visibility: "hidden" });
+                                                $("#HalfStar2").css({ visibility: "hidden" });
+                                                $("#HalfStar3").css({ visibility: "hidden" });
+                                                $("#HalfStar4").css({ visibility: "hidden" });
+                                                $("#HalfStar5").css({ visibility: "hidden" });
+                                                $("#FullStar5").css({ visibility: "hidden" });
+                                            }
+
+                                            else if (value >= 90 && value <= 99) {
+                                                $("#FullStar1").css({ visibility: "visible" });
+                                                $("#FullStar2").css({ visibility: "visible" });
+                                                $("#FullStar3").css({ visibility: "visible" });
+                                                $("#FullStar4").css({ visibility: "visible" });
+
+                                                $("#HalfStar5").css({ visibility: "visible" });
+
+                                                $("#HalfStar1").css({ visibility: "hidden" });
+                                                $("#HalfStar2").css({ visibility: "hidden" });
+                                                $("#HalfStar3").css({ visibility: "hidden" });
+                                                $("#HalfStar4").css({ visibility: "hidden" });
+                                                $("#FullStar5").css({ visibility: "hidden" });
+                                            }
+
+                                            else if (value == 100) {
+
+                                                $("#FullStar1").css({ visibility: "visible" });
+                                                $("#FullStar2").css({ visibility: "visible" });
+                                                $("#FullStar3").css({ visibility: "visible" });
+                                                $("#FullStar4").css({ visibility: "visible" });
+                                                $("#FullStar5").css({ visibility: "visible" });
+
+                                                $("#HalfStar1").css({ visibility: "hidden" });
+                                                $("#HalfStar2").css({ visibility: "hidden" });
+                                                $("#HalfStar3").css({ visibility: "hidden" });
+                                                $("#HalfStar4").css({ visibility: "hidden" });
+                                                $("#HalfStar5").css({ visibility: "hidden" });
+                                            }
+                                        }
+
+                                    </script>
+
+                                </div>
+
+                            </div>
+
+                            <span asp-validation-for="Review.Points" class="text-danger"></span>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <i class="fas fa-pencil-alt prefix"></i>
+
+                            <label style="color:white;" asp-for="Review.Description" class="control-label">Descríbenos porque decides dar esa puntuación.</label><br />
+
+                            <textarea  style="height:200px" class="md-textarea form-control" asp-for="Review.Description"></textarea><br />
+
+                            <span asp-validation-for="Review.Description" class="text-danger"></span>
+
+                        </div>
+
+                        <input type="submit" class="btn badge-dark" style="float:none;" value="Realizar reseña" />
+
+                    </form>
+
+                </div>
             }
-            else if (ViewBag.UserRole == "Contratista")
-            {
-                <p>Comienza a publicar proyectos para resivir profesionales dispuestos a finalizarlos y así dar una reseña al profesional que complete esos proyectos.</p>
-            }
-            else
-            {
-                <p>No deverias estar aqui, completa el proseso de registro para poder acceder a esta pagina.</p>
-            }
-        </div>
-    }
-</div>
+        }
+
+    </div>
 
 @section Scripts {
 
