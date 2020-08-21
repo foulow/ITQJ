@@ -20,6 +20,7 @@
     }
 
     // Contratist related variables.
+    ViewBag.canSelectPostulant = !Model.Postulants.Any(x => x.IsSellected == true);
     ViewBag.canCloseProject = (Model.MileStones.Count > 0);
 
     var Id = "id" + Model.Id;
@@ -293,7 +294,7 @@
 
                                 </a>
 
-                                @if (!postulan.IsSellected)
+                                @if (ViewBag.canSelectPostulant && !postulan.IsSellected)
                                 {
                                     <div onclick="enviar()" style="text-decoration: none;" class="postulante enviar">
 
