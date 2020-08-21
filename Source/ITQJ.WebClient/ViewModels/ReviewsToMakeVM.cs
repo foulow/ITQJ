@@ -13,7 +13,7 @@ namespace ITQJ.WebClient.ViewModels
 
         public int PageIndex { get; set; }
 
-        public ReviewCreateDTO Review { get; set; }
+        public ReviewCreateVM Review { get; set; }
 
         public ICollection<ProjectResponseDTO> ProjectsToReview { get; set; }
     }
