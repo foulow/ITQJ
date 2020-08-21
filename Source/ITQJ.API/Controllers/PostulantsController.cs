@@ -141,11 +141,16 @@ namespace ITQJ.API.Controllers
             }
 
             var postulantToUpdate = _appDBContext.Postulants.FirstOrDefault(x => x.Id == postulantId);
-
+            
             if (postulantToUpdate != null)
             {
-                this._mapper.Map<PostulantUpdateDTO, Postulant>(postulantData, postulantToUpdate);
-
+                postulantToUpdate.IsSellected = (postulantData.IsSellected) ?
+                    postulantData.IsSellected : postulantToUpdate.IsSellected;
+                postulantToUpdate.HasWorkReview = (postulantData.HasWorkReview) ?
+                    postulantData.HasWorkReview : postulantToUpdate.HasWorkReview;
+                postulantToUpdate.HasProyectReview = (postulantData.HasProyectReview) ?
+                    postulantData.HasProyectReview : postulantToUpdate.HasProyectReview;
+                
                 this._appDBContext.Postulants.Update(postulantToUpdate);
                 this._appDBContext.SaveChanges();
 

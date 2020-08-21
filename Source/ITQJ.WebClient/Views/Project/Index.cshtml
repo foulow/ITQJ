@@ -8,7 +8,7 @@
 
     // Profesional related variables.
     ViewBag.isProfesional = (ViewBag.UserRole == "Profesional");
-    ViewBag.canPostulate = (Model.CloseDate < ViewBag.CurrentDate);
+    ViewBag.canPostulate = (Model.CloseDate > ViewBag.CurrentDate);
     ViewBag.isPostulated = Model.Postulants.Any(x => x.UserId == ViewBag.UserId);
     if (ViewBag.isPostulated)
     {
@@ -55,6 +55,11 @@
     Func<string>
         showCloseDate = () =>
         {
+            if (!Model.IsOpen)
+            {
+                return "Proyecto cerrado por contratista";
+            }
+
             if (!ViewBag.canPostulate)
             {
                 return Model.CloseDate.ToString() + " Cerrado";

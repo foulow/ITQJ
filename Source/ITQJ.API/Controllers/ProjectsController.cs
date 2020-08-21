@@ -27,13 +27,13 @@ namespace ITQJ.API.Controllers
                 return BadRequest(new { Error = $"Error: value for maxResults={maxResults} is lower than the minimund expected." });
 
             var projects = this._appDBContext.Projects
-                .Where(x => x.PostulantsLimit > x.Postulants.Count() && x.IsOpen == true)
+                .Where(x => x.PostulantsLimit > x.Postulants.Count() && x.IsOpen == true && (x.CloseDate == default(DateTime) || x.CloseDate > DateTime.Now))
                 .Skip((pageIndex - 1) * maxResults)
                 .Take(maxResults)
                 .ToList();
 
             var projectsCount = this._appDBContext.Projects
-                .Where(x => x.PostulantsLimit > x.Postulants.Count() && x.IsOpen == true)
+                .Where(x => x.PostulantsLimit > x.Postulants.Count() && x.IsOpen == true && (x.CloseDate == default(DateTime) || x.CloseDate > DateTime.Now))
                 .Count();
 
             var pagesCount = Math.Ceiling((float)projectsCount / (float)maxResults);
