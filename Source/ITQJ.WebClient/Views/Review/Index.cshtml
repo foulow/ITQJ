@@ -139,9 +139,9 @@
                             }
                             else
                             {
-                                <input asp-for="Review.UserId" type="text" value="@postulation.Postulants.First(x => x.IsSellected == true).UserId" />
+                                <input asp-for="Review.UserId" type="text" value="@postulation.Postulants.First(x => x.IsSellected == true && x.HasWorkReview == false).UserId" />
                                 
-                                <input class="Review.PostulantId" id="Review.PostulantId" name="Review.PostulantId" type="text" value="@postulation.Postulants.First(x => x.IsSellected == true && x.HasWorkReview == false).Id" />
+                                <input id="Review_PostulantId" name="Review.PostulantId" type="text" value="@postulation.Postulants.First(x => x.IsSellected == true && x.HasWorkReview == false).Id" />
                             }
 
                             <input asp-for="Review.ReviewerRole" type="text" value="@ViewBag.UserRole" />
@@ -230,7 +230,6 @@
 
                                         function ActiveStar(ID, h1, h2, h3, h4, h5, f1, f2, f3, f4, f5, Porcentaje, parrafo)
                                         {
-                                            debugger;
 
                                             var inputGet = document.getElementById(ID);
                                             var inputSet = document.getElementsByClassName(ID);

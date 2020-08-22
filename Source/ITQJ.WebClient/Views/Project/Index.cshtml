@@ -293,7 +293,7 @@
 
                                 </a>
 
-                                @if (ViewBag.canSelectPostulant && !postulan.IsSellected)
+                                @if (!postulan.IsSellected)
                                 {
                                     <div onclick="enviar()" style="text-decoration: none;" class="postulante enviar">
 
@@ -306,7 +306,6 @@
                                     <script>
 
                                         function enviar() {
-                                            debugger;
 
                                             var form = $('.@postulan.Id');
 
