@@ -5,7 +5,7 @@
 
     int Nex = Model.PageIndex + 1, Back = Model.PageIndex - 1, postulaciones = 0;
 }
-    <div class="container" style="margin-top:100px;">
+    <div class="container" style="margin-top:90px;">
 
         <h4>Mis postulaciones</h4>
         <hr />
@@ -46,7 +46,7 @@
                                 {
                                     <li class="page-item">
 
-                                        <a class="page-link text-dark" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@i">@i</a>
+                                        <a class="page-link text-dark" asp-controller="Postulant" asp-action="MyPostulations" asp-route-pageIndex="@i">@i</a>
 
                                     </li>
                                 }
@@ -58,7 +58,7 @@
                             {
                                 <li class="page-item">
 
-                                    <a class="page-link" aria-label="Next" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Nex">
+                                    <a class="page-link" aria-label="Next" asp-controller="Postulant" asp-action="MyPostulations" asp-route-pageIndex="@Nex">
 
                                         <span aria-hidden="true" class="text-dark">&raquo;</span>
 
@@ -74,81 +74,8 @@
             </div>
         }
 
+        <hr />
         <div class="d-block p-0 m-0">
-
-            @if(Model.TotalPages > 1)
-            {
-                <div class="d-block p-0 m-0">
-
-                    <div class="d-inline-block bg-dark m-0 p-0" style="position:relative; left:50%; transform: translateX(-50%);">
-
-                        <nav aria-label="Page navigation example h2">
-
-                            <ul class="pagination">
-
-                                @if(Model.PageIndex != 1)
-                                {
-                                    <li class="page-item">
-
-                                        <a class="page-link" aria-label="Previous" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Back">
-                                            <span aria-hidden="true" class="text-dark">&laquo;</span>
-                                        </a>
-
-                                    </li>
-                                }
-
-
-                                @for(int i = 1; i <= Model.TotalPages; i++)
-                                {
-                                    if(i == Model.PageIndex)
-                                    {
-                                        <li class="page-item active" aria-current="page">
-
-                                            <span class="page-link text-dark">
-
-                                                @i
-
-                                                <span class="sr-only">(current)</span>
-
-                                            </span>
-
-                                        </li>
-                                    }
-                                    else
-                                    {
-                                        <li class="page-item">
-
-                                            <a class="page-link text-dark" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@i">@i</a>
-
-                                        </li>
-                                    }
-
-                                }
-
-
-                                @if(Model.PageIndex != Model.TotalPages)
-                                {
-                                    <li class="page-item">
-
-                                        <a class="page-link" aria-label="Next" asp-controller="Home" asp-action="Index" asp-route-pageIndex="@Nex">
-
-                                            <span aria-hidden="true" class="text-dark">&raquo;</span>
-
-                                        </a>
-
-                                    </li>
-                                }
-
-                            </ul>
-
-                        </nav>
-
-                    </div>
-
-                </div>
-            }
-
-            <hr />
 
             @if(Model.Postulants != null && Model.Postulants.Count > 0)
             {

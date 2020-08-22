@@ -149,7 +149,7 @@
 
         </div>
         <div class="d-inline-block">
-            
+
             <a asp-action="LogIn" asp-controller="Home" class="btn btn-dark m-3"> Perfil del Contratista </a>
 
         </div>
@@ -173,9 +173,10 @@
         }
 
         <div class="d-inline-block">
-
-            <a asp-controller="PersonalInfo" asp-action="Contratist" asp-route-userId="@Model.UserId" class="btn btn-dark m-3"> Perfil del Contratista </a>
-
+            @if(ViewBag.UserId != Model.UserId)
+            {
+                <a asp-controller="PersonalInfo" asp-action="Contratist" asp-route-userId="@Model.UserId" class="btn btn-dark m-3"> Perfil del Contratista </a>
+            }
         </div>
     }
 </div>
