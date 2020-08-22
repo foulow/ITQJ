@@ -141,7 +141,7 @@
                             {
                                 <input asp-for="Review.UserId" type="text" value="@postulation.Postulants.First(x => x.IsSellected == true).UserId" />
                                 
-                                <input asp-for="Review.PostulantId" type="text" value="@postulation.Postulants.First(x => x.IsSellected == true).Id" />
+                                <input class="Review.PostulantId" id="Review.PostulantId" name="Review.PostulantId" type="text" value="@postulation.Postulants.First(x => x.IsSellected == true && x.HasWorkReview == false).Id" />
                             }
 
                             <input asp-for="Review.ReviewerRole" type="text" value="@ViewBag.UserRole" />

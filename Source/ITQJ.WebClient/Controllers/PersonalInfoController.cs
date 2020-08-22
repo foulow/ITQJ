@@ -287,7 +287,7 @@ namespace ITQJ.WebClient.Controllers
 
             if (newPersonalInfo.User.Role == "Contratista")
             {
-                return RedirectToAction("EditContratist");
+                return RedirectToAction("viewContratistInfo");
             }
 
             return RedirectToRoute( new { action = "AddSkills", controller = "PersonalInfo", id = newPersonalInfo.Id });

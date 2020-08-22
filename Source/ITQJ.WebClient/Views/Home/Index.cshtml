@@ -167,7 +167,7 @@
 
                                         <strong class="h6 m-0 p-0">
 
-                                            Publicado: <text class="text-info">@dato.PublishDate</text>
+                                            Publicado: <span class="text-info">@dato.PublishDate</span>
 
                                         </strong>
 
@@ -176,8 +176,15 @@
                                     <div class="col d-inline  ml-lg-3 p-0 ">
 
                                         <strong class="h6 m-0 p-0">
-
-                                            Cierre: <text class="text-danger">@dato.CloseDate</text>
+                                            Cierre:
+                                            @if(dato.CloseDate.ToString().Substring(0, 8) == "1/1/0001")
+                                            {
+                                                <span class="text-danger">Siempre abierto</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger">@dato.CloseDate.ToString()</span>
+                                            } 
 
                                         </strong>
 

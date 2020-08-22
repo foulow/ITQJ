@@ -8,7 +8,6 @@
 
     // Profesional related variables.
     ViewBag.isProfesional = (ViewBag.UserRole == "Profesional");
-    ViewBag.canPostulate = (Model.CloseDate > ViewBag.CurrentDate);
     ViewBag.isPostulated = Model.Postulants.Any(x => x.UserId == ViewBag.UserId);
     if (ViewBag.isPostulated)
     {

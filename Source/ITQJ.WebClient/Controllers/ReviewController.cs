@@ -123,8 +123,8 @@ namespace ITQJ.WebClient.Controllers
             var updatePostulant = new PostulantUpdateDTO
             {
                 IsSellected = true,
-                HasWorkReview = (reviewData.Review.ReviewerRole == "Contratista") ? true : false,
-                HasProyectReview = (reviewData.Review.ReviewerRole == "Profesional") ? true : false
+                HasWorkReview = (reviewData.Review.ReviewerRole == "Contratista"),
+                HasProyectReview = (reviewData.Review.ReviewerRole == "Profesional")
             };
             
             var postulantResponse = await CallApiPUTAsync<PostulantUpdateDTO>(

@@ -24,14 +24,33 @@ var tryConnectCount = 0,
   errorMessages,
   isProfesional;
 
+// Reconnection methods
+connection.onreconnected(() => {
+  startChat(projectId, userId, userName, toUserId, isProfesional);
+});
+
 $(document).ready(async () => {
   connection.on("UpdateConnectedUsers", (data) => {
     updatePostulantsList(data);
   });
 
+  connection.on("NewUserAvailable", (data) => {
+    if (!connectedUsers.includes(data)) {
+      connectedUsers.push(data);
+      var user = createUser({
+        userName: data.userName,
+        id: data.id,
+        messageCount: data.messageCount,
+      });
+      userList.append(user);
+      const audio = id("notification-audio");
+      audio.play();
+    }
+  });
+
   connection.on("UpdateUnreadMessages", (data) => {
-    if (data && !isProfesional) {
-      var user = connectedUsers.filter((x) => x.userId === data);
+    if (data && isProfesional === "False") {
+      var user = connectedUsers.filter((x) => x.id === data);
       if (toUserId === data || user.length <= 0) return;
 
       let messageCount = $(`#count-${data}`).text();
@@ -97,7 +116,7 @@ function toggleChat() {
   }
 }
 
-function startChat(id, fromId, name, toId, isProfesional) {
+function startChat(id, fromId, name, toId, profesional) {
   $("#trigger-button-chat").attr("onclick", "toggleChat()");
   toggleChat();
 
@@ -105,10 +124,11 @@ function startChat(id, fromId, name, toId, isProfesional) {
   userId = fromId;
   userName = name;
   toUserId = toId;
-  connect(isProfesional);
+  isProfesional = profesional;
+  connect();
 }
 
-function connect(isProfesional = "False") {
+function connect() {
   loader.show();
 
   connection
@@ -117,7 +137,7 @@ function connect(isProfesional = "False") {
       connection
         .invoke("Connect")
         .then(() => {
-          showRoom(isProfesional);
+          showRoom();
         })
         .catch((e) => {
           error(e);
@@ -129,10 +149,7 @@ function connect(isProfesional = "False") {
     });
 }
 
-function showRoom(profesional) {
-  debugger;
-  isProfesional = profesional;
-
+function showRoom() {
   if (isProfesional == "True") {
     messageList.append(
       createMessage({
@@ -246,7 +263,7 @@ function createMessage(data) {
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;"),
     userName = data.userName,
-        messageColor =   
+    messageColor =
       userName === "sistema"
         ? "background-color:#535252"
         : userName === "Yo"
@@ -256,7 +273,7 @@ function createMessage(data) {
     messageDate = `<p class="mb-0">${formattedDate}</p>`,
     messageHeader = `<div class="d-flex justify-content-between">${messageSender}${messageDate}</div>`,
     messageText = `<p class="mb-0">${message}</p>`,
-      messageBody = `<div class="text-white p-2 my-2" style="${messageColor}" >${messageHeader}${messageText}</div>`;
+    messageBody = `<div class="text-white p-2 my-2" style="${messageColor}" >${messageHeader}${messageText}</div>`;
 
   return messageBody;
 }
