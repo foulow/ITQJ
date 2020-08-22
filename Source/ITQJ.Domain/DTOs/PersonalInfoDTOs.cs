@@ -1,23 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ITQJ.Domain.DTOs
 {
     public class PersonalInfoCreateDTO : PersonalInfoUpdateDTO
     {
+        [Required]
         public Guid UserId { get; set; }
 
+        [Required]
         public Guid LegalDocumentId { get; set; }
     }
 
     public class PersonalInfoUpdateDTO
     {
+        [Required]
         public string Name { get; set; }
 
+        [Required]
         public string PhoneNumber { get; set; }
 
+        [Required]
         public string Description { get; set; }
 
+        [Required]
         public string PagLink { get; set; }
     }
 

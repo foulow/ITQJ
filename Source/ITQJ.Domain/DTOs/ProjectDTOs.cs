@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ITQJ.Domain.DTOs
 {
     public class ProjectCreateDTO : ProjectUpdateDTO
     {
+        [Required]
         public string Name { get; set; }
 
+        [Required]
         public string Description { get; set; }
 
+        [Required]
         public DateTime PublishDate { get; set; }
 
         public Guid UserId { get; set; }
@@ -16,8 +20,10 @@ namespace ITQJ.Domain.DTOs
 
     public class ProjectUpdateDTO
     {
+        [Required]
         public int PostulantsLimit { get; set; }
 
+        [Required]
         public DateTime CloseDate { get; set; }
 
         public bool IsOpen { get; set; }

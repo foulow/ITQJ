@@ -1,20 +1,26 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace ITQJ.Domain.DTOs
 {
     public class PostulantCreateDTO : PostulantUpdateDTO
     {
+        [Required]
         public Guid UserId { get; set; }
 
+        [Required]
         public Guid ProjectId { get; set; }
     }
 
     public class PostulantUpdateDTO
     {
+        [Required]
         public bool IsSellected { get; set; } = false;
 
+        [Required]
         public bool HasWorkReview { get; set; } = false;
 
+        [Required]
         public bool HasProyectReview { get; set; } = false;
     }
 
