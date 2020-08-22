@@ -30,6 +30,8 @@ namespace ITQJ.Domain.DTOs
         // TODO: implementar lista de skills requeridos.
         //public ICollection<SkillDTO> Skills { get; set; }
 
+        public bool NotCloseDate { get; set; }
+
         public virtual ICollection<PostulantResponseDTO> Postulants { get; set; }
 
         public virtual ICollection<MileStoneResponseDTO> MileStones { get; set; }

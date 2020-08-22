@@ -167,7 +167,7 @@
 
                                         <strong class="h6 m-0 p-0">
 
-                                            Publicado: <text class="text-info">@dato.PublishDate</text>
+                                            Publicado: <span class="text-info">@dato.PublishDate</span>
 
                                         </strong>
 
@@ -176,8 +176,15 @@
                                     <div class="col d-inline  ml-lg-3 p-0 ">
 
                                         <strong class="h6 m-0 p-0">
-
-                                            Cierre: <text class="text-danger">@dato.CloseDate</text>
+                                            Cierre:
+                                            @if(dato.CloseDate.ToString().Substring(0, 8) == "1/1/0001")
+                                            {
+                                                <span class="text-danger">Siempre abierto</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger">@dato.CloseDate.ToString()</span>
+                                            } 
 
                                         </strong>
 
@@ -291,22 +298,25 @@
 
             <div class="licencia">
 
-                <a rel="license" href="https://www.copyright.gov/">
+                <a rel="license" href="https://mit-license.org/">
 
-                    <img alt="Licencia de Creative Commons" src="~/Image/copyright.svg">
+                    <img alt="Licencia de MIT" src="~/Image/License_icon-mit-2.svg">
 
                 </a>
 
                 <br>
 
-                Este obra está bajo una
-                Esta obra está bajo una
-
-                <a rel="license" href="https://www.copyright.gov/">
-
-                    licencia de Copy Right
-
-                </a>.
+                <p class="text-center">
+                    Este obra está bajo una licencia compartida entre el
+                    <a href="https://www.itsc.edu.do">ITSC</a> y
+                    <a asp-action="About" asp-asp-controller="Home">Nosotros</a>
+                </p>
+                <p class="text-center">
+                    Esta obra y su 
+                    <a href="https://github.com/pbd201903/ITQJ">código fuente</a>
+                     están publicadas bajo una licencia
+                    <a rel="license" href="https://mit-license.org/">MIT</a>
+                </p> 
 
             </div>
 

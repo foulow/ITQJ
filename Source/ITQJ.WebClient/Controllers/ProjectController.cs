@@ -30,7 +30,7 @@ namespace ITQJ.WebClient.Controllers
             if (projectInfo == null)
                 return PageNotFound();
 
-            ViewBag.CurrentDate = DateTime.Now;
+            ViewBag.canPostulate = (projectInfo.CloseDate > DateTime.Now || projectInfo.CloseDate == DateTime.MinValue);
             return View(projectInfo);
         }
 
@@ -45,6 +45,7 @@ namespace ITQJ.WebClient.Controllers
 
             var newProject = new ProjectResponseDTO();
             newProject.UserId = userCredentials.Id;
+            newProject.CloseDate = DateTime.Now.AddDays(15);
 
             return View(newProject);
         }
@@ -59,6 +60,7 @@ namespace ITQJ.WebClient.Controllers
                 return View(project);
             }
 
+            project.CloseDate = DateTime.MinValue;
             var newProject = await CallApiPOSTAsync<ProjectResponseDTO>(uri: "/api/projects", body: project, isSecured: true);
 
             return RedirectToRoute(new { action = "Index", controller = "Project", projectId = newProject.Id });

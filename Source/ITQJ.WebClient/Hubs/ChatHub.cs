@@ -102,7 +102,22 @@ namespace ITQJ.WebClient.Hubs
                     messageDate = x.MessageDate
                 });
 
-            Clients.Caller.SendAsync(ChatHubMethods.ReceiveConversation, userMessages).Wait();           
+            Clients.Caller.SendAsync(ChatHubMethods.ReceiveConversation, userMessages).Wait();
+
+            var toUser = ConnectedUsers.FirstOrDefault(x => x.Id == toUserGuid);
+            if (toUser != null)
+            {
+                var user = ConnectedUsers.FirstOrDefault(x => x.ConnectionId ==  Context.ConnectionId);
+                var fromUser = new
+                {
+                    id = user.Id,
+                    userName = user.UserName,
+                    messageCount = 0
+                };
+
+                Clients.Client(toUser.ConnectionId)
+                    .SendAsync(ChatHubMethods.NewUserAvailable, fromUser).Wait();
+            }
         }
 
         public void GetPostulants(string projectId)
@@ -147,7 +162,7 @@ namespace ITQJ.WebClient.Hubs
                 Clients.Client(toUser.ConnectionId)
                     .SendAsync(ChatHubMethods.ReceiveMessage, sendMessage).Wait();
                 Clients.Client(toUser.ConnectionId)
-                    .SendAsync(ChatHubMethods.UpdateUnreadMessages, sendMessage.toUserId).Wait();
+                    .SendAsync(ChatHubMethods.UpdateUnreadMessages, sendMessage.fromUserId).Wait();
             }
 
             return new OkResult();

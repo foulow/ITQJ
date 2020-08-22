@@ -54,7 +54,7 @@
 
                 <div class="d-inline-block float-right">
                     <br />
-                    <input type="checkbox" id="@CheckCloseDate" onclick="ChecClose(@CheckCloseDate,@InputCloseDate)" />
+                    <input type="checkbox" asp-for="NotCloseDate" onclick="ChecClose(@CheckCloseDate,@InputCloseDate)" />
                     <label> Sin Fecha de Cierre </label>
                 </div>
 
@@ -87,8 +87,6 @@
 </div>
 
 <script>
-
-    debugger;
 
     $(document).ready(() => {
 
