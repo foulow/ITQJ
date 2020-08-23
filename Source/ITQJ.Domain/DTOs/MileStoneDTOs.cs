@@ -8,7 +8,6 @@ namespace ITQJ.Domain.DTOs
         [Required]
         public string Description { get; set; }
 
-        [Required]
         public string FileName { get; set; }
 
         [Required]

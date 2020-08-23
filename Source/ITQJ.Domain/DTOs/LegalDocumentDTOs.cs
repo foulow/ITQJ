@@ -14,7 +14,6 @@ namespace ITQJ.Domain.DTOs
         [Required]
         public string Number { get; set; }
 
-        [Required]
         public string FileName { get; set; }
     }
 

@@ -1,7 +1,6 @@
 ﻿
 using ITQJ.Domain.DTOs;
 using ITQJ.WebClient.Models;
-using ITQJ.WebClient.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -17,7 +16,7 @@ namespace ITQJ.WebClient.Controllers
 
 
         [Authorize]
-        public async Task<IActionResult> GetEdictSkills()
+        public async Task<IActionResult> EditSkills()
         {
 
             var userCredentials = GetUserCredentials();
@@ -30,7 +29,7 @@ namespace ITQJ.WebClient.Controllers
             if (personalInfo == null)
                 return RedirectToAction("Register");
 
-            List<SkillM>  skills = new List<SkillM>();
+            List<SkillM> skills = new List<SkillM>();
             List<SkillDTO> tempSkills = new List<SkillDTO>();
 
             tempSkills = await CallApiGETAsync<List<SkillDTO>>(uri: "/api/skills", isSecured: false);
@@ -72,6 +71,10 @@ namespace ITQJ.WebClient.Controllers
         [Authorize]
         public async Task<IActionResult> PostEdictSkills(List<SkillM> skills)
         {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("EditSkills", skills);
+            }
             var temProfesionalSkills = new List<ProfesionalSkillResponseDTO>();
 
             foreach (var skill in skills)

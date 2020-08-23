@@ -139,9 +139,9 @@
                             }
                             else
                             {
-                                <input asp-for="Review.UserId" type="text" value="@postulation.Postulants.First(x => x.IsSellected == true && x.HasWorkReview == false).UserId" />
+                                <input asp-for="Review.UserId" type="text" value="@postulation.Postulants.First(x => x.IsSelected == true && x.HasWorkReview == false).UserId" />
                                 
-                                <input id="Review_PostulantId" name="Review.PostulantId" type="text" value="@postulation.Postulants.First(x => x.IsSellected == true && x.HasWorkReview == false).Id" />
+                                <input id="Review_PostulantId" name="Review.PostulantId" type="text" value="@postulation.Postulants.First(x => x.IsSelected == true && x.HasWorkReview == false).Id" />
                             }
 
                             <input asp-for="Review.ReviewerRole" type="text" value="@ViewBag.UserRole" />

@@ -32,7 +32,7 @@ namespace ITQJ.EFCore.Configurations
                 },
                 new DocumentType {
                     Id = Guid.Parse("D514AD48-39BF-4212-843C-1A26289087FE"),
-                    Name = "RCN"
+                    Name = "RNC"
                 }
             };
 
@@ -181,14 +181,14 @@ namespace ITQJ.EFCore.Configurations
                     Email = "sistema@itqj.com",
                     Subject = "unasigned",
                     Role = "Sistema"
-                },
-                new User
-                {
-                    Id = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84"),
-                    Email = "luiseduardofrias27@gmail.com",
-                    Subject = "auth0|5f2eb494022f3a003d353973",
-                    Role = "Contratista"
                 }//,
+                //new User
+                //{
+                //    Id = Guid.Parse("E80F88AF-C61E-4500-A77E-8EDE80538B84"),
+                //    Email = "luiseduardofrias27@gmail.com",
+                //    Subject = "auth0|5f2eb494022f3a003d353973",
+                //    Role = "Contratista"
+                //},
                 //new User
                 //{
                 //    Id = Guid.Parse("d2b17c1e-205c-4167-8219-08d839ce621a"),

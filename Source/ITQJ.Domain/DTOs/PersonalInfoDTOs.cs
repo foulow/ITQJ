@@ -9,7 +9,6 @@ namespace ITQJ.Domain.DTOs
         [Required]
         public Guid UserId { get; set; }
 
-        [Required]
         public Guid LegalDocumentId { get; set; }
     }
 
@@ -24,7 +23,6 @@ namespace ITQJ.Domain.DTOs
         [Required]
         public string Description { get; set; }
 
-        [Required]
         public string PagLink { get; set; }
     }
 

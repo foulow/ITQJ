@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ITQJ.API.Migrations
 {
-    public partial class MileStonesAdded : Migration
+    public partial class FinalPreProductionMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -125,7 +125,7 @@ namespace ITQJ.API.Migrations
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     PhoneNumber = table.Column<string>(maxLength: 25, nullable: false),
                     Description = table.Column<string>(maxLength: 500, nullable: false),
-                    PagLink = table.Column<string>(maxLength: 200, nullable: false),
+                    PagLink = table.Column<string>(maxLength: 200, nullable: true),
                     LegalDocumentId = table.Column<Guid>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false)
                 },
@@ -209,7 +209,7 @@ namespace ITQJ.API.Migrations
                     DeletedFlag = table.Column<bool>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false),
                     ProjectId = table.Column<Guid>(nullable: false),
-                    IsSellected = table.Column<bool>(nullable: false),
+                    IsSelected = table.Column<bool>(nullable: false),
                     HasWorkReview = table.Column<bool>(nullable: false),
                     HasProyectReview = table.Column<bool>(nullable: false)
                 },

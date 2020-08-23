@@ -38,6 +38,8 @@ namespace ITQJ.Domain.DTOs
 
         public bool NotCloseDate { get; set; }
 
+        public bool MaxPostulants { get; set; }
+
         public virtual ICollection<PostulantResponseDTO> Postulants { get; set; }
 
         public virtual ICollection<MileStoneResponseDTO> MileStones { get; set; }

@@ -17,7 +17,7 @@
         public virtual Project Project { get; set; }
         public Guid ProjectId { get; set; }
 
-        public bool IsSellected { get; set; }
+        public bool IsSelected { get; set; }
 
         public bool HasWorkReview { get; set; }
 

@@ -20,8 +20,8 @@ namespace ITQJ.Domain.Validations
     {
         public PostulantUpdateDTOValidation()
         {
-            RuleFor(postulant => postulant.IsSellected).NotNull()
-                .WithMessage($"El {nameof(PostulantUpdateDTO.IsSellected)} no puede estar vacio.");
+            RuleFor(postulant => postulant.IsSelected).NotNull()
+                .WithMessage($"El {nameof(PostulantUpdateDTO.IsSelected)} no puede estar vacio.");
 
             RuleFor(postulant => postulant.HasWorkReview).NotNull()
                 .WithMessage($"El {nameof(PostulantUpdateDTO.HasWorkReview)} no puede estar vacio.");

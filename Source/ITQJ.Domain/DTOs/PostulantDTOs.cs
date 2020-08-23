@@ -15,7 +15,7 @@ namespace ITQJ.Domain.DTOs
     public class PostulantUpdateDTO
     {
         [Required]
-        public bool IsSellected { get; set; } = false;
+        public bool IsSelected { get; set; } = false;
 
         [Required]
         public bool HasWorkReview { get; set; } = false;

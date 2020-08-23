@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ITQJ.API.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20200819232905_MileStonesAdded")]
-    partial class MileStonesAdded
+    [Migration("20200822215052_FinalPreProductionMigration")]
+    partial class FinalPreProductionMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -164,7 +164,6 @@ namespace ITQJ.API.Migrations
                         .HasMaxLength(50);
 
                     b.Property<string>("PagLink")
-                        .IsRequired()
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
@@ -202,7 +201,7 @@ namespace ITQJ.API.Migrations
                     b.Property<bool>("HasWorkReview")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsSellected")
+                    b.Property<bool>("IsSelected")
                         .HasColumnType("bit");
 
                     b.Property<Guid>("ProjectId")

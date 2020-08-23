@@ -57,7 +57,7 @@ namespace ITQJ.WebClient.Controllers
                 return View(postulantData);
             }
 
-            postulantData.IsSellected = true;
+            postulantData.IsSelected = true;
 
             var response = await CallApiPUTAsync<PostulantUpdateDTO>(
                 uri: "api/Postulants/" + postulanId,body: postulantData, isSecured: true);

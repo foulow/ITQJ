@@ -1,6 +1,5 @@
 ﻿namespace ITQJ.Domain.Entities
 {
-    using ITQJ.Domain.Entities;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -22,10 +21,9 @@
         [StringLength(500)]
         public string Description { get; set; }
 
-        [Required]
         [DataType(DataType.Url)]
         [StringLength(200)]
-        public string PagLink { get; set; }
+        public string PagLink { get; set; } = null;
 
         [ForeignKey("LegalDocumentId")]
         public virtual LegalDocument LegalDocument { get; set; }

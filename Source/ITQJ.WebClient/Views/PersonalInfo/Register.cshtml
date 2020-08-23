@@ -11,6 +11,11 @@
 
             <div hidden>
                 <input asp-for="UserId" type="text" />
+                @for (var index = 0; index < Model.DocumentTypes.Count; index++)
+                {
+                    <input type="text" asp-for="DocumentTypes[index].Id" />
+                    <input type="text" asp-for="DocumentTypes[index].Name" />
+                }
             </div>
 
             <h3>Introduca sus datos personales</h3>
@@ -18,7 +23,7 @@
 
                 <label asp-for="Name" class="control-label">Nombre completo</label><br />
 
-                <input type="text" asp-for="Name" /><br />
+                <input required type="text" asp-for="Name" /><br />
 
                 <span asp-validation-for="Name" class="text-danger"></span>
 
@@ -28,7 +33,7 @@
 
                 <label asp-for="PhoneNumber" class="control-label">Número de telefono</label><br />
 
-                <input type="tel" asp-for="PhoneNumber" /><br />
+                <input required type="tel" asp-for="PhoneNumber" /><br />
 
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
 
@@ -39,7 +44,7 @@
                 <i class="fas fa-pencil-alt prefix"></i>
                 <label asp-for="Description" class="control-label">Pequeña descripción</label><br />
 
-                <textarea class="md-textarea form-control" asp-for="Description"></textarea><br />
+                <textarea required class="md-textarea form-control" asp-for="Description"></textarea><br />
 
                 <span asp-validation-for="Description" class="text-danger"></span>
 
@@ -62,35 +67,42 @@
 
                 <label asp-for="LegalDocument.Number" class="control-label">Numero de identidad</label><br />
 
-                <input type="text" asp-for="LegalDocument.Number" /><br />
+                <input required type="text" asp-for="LegalDocument.Number" /><br />
 
                 <span asp-validation-for="LegalDocument.Number" class="text-danger"></span>
 
             </div>
 
             @*TODO: agregar soporte  de imagenes.
+                <div class="form-group">
+
+                        <label asp-for="LegalDocument.Image" class="control-label">Foto del documetno legal</label><br />
+
+                        <input type="file" asp-for="LegalDocument.Image" /><br />
+
+                        <span asp-validation-for="LegalDocument.Image" class="text-danger"></span>
+
+                </div>*@
+
             <div class="form-group">
 
-                    <label asp-for="LegalDocument.Image" class="control-label">Foto del documetno legal</label><br />
-
-                    <input type="file" asp-for="LegalDocument.Image" /><br />
-
-                    <span asp-validation-for="LegalDocument.Image" class="text-danger"></span>
-
-            </div>*@
-
-            <div class="form-group">
-
-                <label asp-for="LegalDocument.DocumentTypeId">Rol</label>
+                <label asp-for="LegalDocument.DocumentTypeId">Tipo de documento</label><br />
 
                 <select asp-for="LegalDocument.DocumentTypeId"
                         class="dropdown"
-                        asp-items="@(new SelectList(Model.DocumentTypes, "Id", "Name"))" required>
+                        asp-items="@(new SelectList(Model.DocumentTypes, "Id", "Name"))">
                 </select>
 
             </div>
 
-            <input type="submit" class="btn badge-dark" style="float:none;" value="Registro siguiente" />
+            @if (ViewBag.UserRole == "Profesional")
+            {
+                <input type="submit" class="btn badge-dark" style="float:none;" value="Continuar registro" />
+            }
+            else
+            {
+                <input type="submit" class="btn badge-dark" style="float:none;" value="Finalizar registro" />
+            }
 
         </form>
 

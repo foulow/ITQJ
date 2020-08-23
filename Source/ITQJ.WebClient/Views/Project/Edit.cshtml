@@ -7,7 +7,7 @@
     var fecha = "  " + Model.PublishDate.ToString();
 
     var CheckPostulant = "CheckPostulant";
-    var MaxPastilants = "MaxPastilants";
+    var MaxPostulants = "MaxPostulants";
     var CheckCloseDate = "CheckCloseDate";
     var InputCloseDate = "InputCloseDate";
 
@@ -52,7 +52,7 @@
 
                 <div class="d-inline-block float-right">
                     <br />
-                    <input type="checkbox" onclick="ChecClose(@CheckCloseDate,@InputCloseDate)" />
+                    <input type="checkbox" onclick="CheckClose(@CheckCloseDate,@InputCloseDate)" />
                     <label> Sin Fecha de Cierre </label>
                 </div>
 
@@ -67,7 +67,7 @@
 
                 <div class="d-inline-block float-right">
                     <br />
-                    <input type="checkbox" onclick="MaxPostulant(@CheckPostulant,@MaxPastilants)" />
+                    <input type="checkbox" onclick="MaxPostulant(@CheckPostulant,@MaxPostulants)" />
                     <label>Maximo de postulantes</label>
                 </div>
 

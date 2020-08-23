@@ -91,62 +91,57 @@ function ProjectDown(proId) {
   });
 }
 
-function MaxPostulantOff(CheckClose, MaxPas, CheckPostulant, InputClose) {
-  var checkn, number;
-  var checkd, date;
+// function MaxPostulantOff(checkValue, MaxPas, CheckPostulant, InputClose) {
+//   var checkn, number;
+//   var date;
 
-  checkn = CheckPostulant;
-  date = InputClose;
-  checkd = CheckClose;
-  number = MaxPas;
+//   checkn = CheckPostulant;
+//   date = InputClose;
+//   number = MaxPas;
 
-  if (checkd.checked == true) {
-    number.value = 50;
-    $("#MaxPastilants").css({ pointerEvents: "none" });
-    document.getElementById("MaxPastilants").disabled = false;
-  }
+//   if (checkValue.checked == true) {
+//     number.value = 50;
+//     $("#MaxPostulants").css({ pointerEvents: "none" });
+//     document.getElementById("MaxPostulants").disabled = false;
+//   }
 
-  if (checkn.checked == true) {
-    defaultDate = date.defaultValue;
-    date.defaultValue = "3000-01-01";
-    $("#InputCloseDate").css({ pointerEvents: "none" });
-    document.getElementById("InputCloseDate").disabled = false;
-  }
-}
+//   if (checkn.checked == true) {
+//     defaultDate = date.defaultValue;
+//     date.defaultValue = "3000-01-01";
+//     $("#InputCloseDate").css({ pointerEvents: "none" });
+//     document.getElementById("InputCloseDate").disabled = false;
+//   }
+// }
 
-function MaxPostulant(CheckClose, MaxPas) {
-  var check, number;
+var defaultNumber;
+function MaxPostulant(checkbox, inputId) {
+  var inputPostulants = $("." + inputId);
 
-  check = CheckClose;
-  number = MaxPas;
-
-  if (check.checked == true) {
-    number.value = 50;
-    $("#MaxPastilants").css({ pointerEvents: "none" });
-    document.getElementById("MaxPastilants").disabled = true;
+  if (checkbox.checked == true) {
+    defaultNumber = inputPostulants.val();
+    inputPostulants.val(50);
+    inputPostulants.css({ pointerEvents: "none" });
+    inputPostulants.prop("disabled", true);
   } else {
-    number.value = 0;
-    $("#MaxPastilants").css({ pointerEvents: "painted" });
-    document.getElementById("MaxPastilants").disabled = false;
+    inputPostulants.val(defaultNumber);
+    inputPostulants.css({ pointerEvents: "painted" });
+    inputPostulants.prop("disabled", false);
   }
 }
 
 var defaultDate;
-function ChecClose(CheckPostulant, InputClose) {
-  var check, date;
+function CheckClose(checkValue, inputId) {
+  var inputClose = $("." + inputId);
 
-  check = CheckPostulant;
-  date = InputClose;
-
-  if (check.checked == true) {
-    defaultDate = date.defaultValue;
-    date.defaultValue = "3000-01-01";
-    $("#InputCloseDate").css({ pointerEvents: "none" });
-    document.getElementById("InputCloseDate").disabled = true;
+  if (checkValue.checked) {
+    defaultDate = inputClose.val();
+    inputClose.val(new Date());
+    inputClose.css({ pointerEvents: "none" });
+    inputClose.prop("disabled", true);
   } else {
-    date.defaultValue = defaultDate;
-    $("#InputCloseDate").css({ pointerEvents: "painted" });
-    document.getElementById("InputCloseDate").disabled = false;
+    inputClose.val(defaultDate);
+    inputClose.css({ pointerEvents: "painted" });
+    inputClose.prop("disabled", false);
   }
 }
 

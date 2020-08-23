@@ -2,15 +2,7 @@
 @{
     ViewData["Title"] = "Projecto";
     Model.PublishDate = DateTime.Now;
-    Model.CloseDate = DateTime.Now;
-    Model.PostulantsLimit = 0;
     var fecha = "  " + Model.PublishDate.ToString();
-
-    var CheckPostulant = "CheckPostulant";
-    var MaxPastilants = "MaxPastilants";
-    var CheckCloseDate = "CheckCloseDate";
-    var InputCloseDate = "InputCloseDate";
-
 }
 
 <div class="text-center" style="margin:100px 0px 0px 0px;">
@@ -25,78 +17,69 @@
 
         <div class="p-3 m-0 align-content-center border border-info">
 
-            <input type="text" hidden asp-for="UserId" />
-            <input type="text" hidden asp-for="Id" />
-            <input type="checkbox" hidden checked asp-for="IsOpen" />
+            <div hidden>
+                <input type="text" asp-for="UserId" />
+                <input type="text" asp-for="Id" />
+                <input type="date" asp-for="PublishDate" />
+                <input checked type="checkbox" asp-for="IsOpen" />
+            </div>
 
             <div class="form-group ">
                 <label asp-for="Name"> Titulo</label><br />
-                <input class="w-100" asp-for="Name" required type="text" />
+                <input required type="text" class="w-100" asp-for="Name" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
             <div class="form-group ">
                 <label asp-for="Description"> Descripccion </label><br />
-                <textarea class="w-100" asp-for="Description" rows="5"></textarea>
-            </div>
-
-            <div class="form-group ">
-                <label asp-for="PublishDate"> Fecha de publicación  @fecha.Substring(0,11) </label><br />
-                <input hidden asp-for="PublishDate" type="date" />
+                <textarea required class="w-100" asp-for="Description" rows="5"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
             <div>
 
                 <div class="form-group d-inline-block">
                     <label asp-for="CloseDate"> Fecha de Cierre </label><br />
-                    <input asp-for="CloseDate" type="date" id="@InputCloseDate" name="username" />
+                    <input required type="date" asp-for="CloseDate" class="CloseDate" />
                 </div>
 
                 <div class="d-inline-block float-right">
                     <br />
-                    <input type="checkbox" asp-for="NotCloseDate" onclick="ChecClose(@CheckCloseDate,@InputCloseDate)" />
+                    <input type="checkbox" asp-for="NotCloseDate" onclick="CheckClose(this, 'CloseDate')" />
                     <label> Sin Fecha de Cierre </label>
                 </div>
 
+                <br />
+                <span asp-validation-for="CloseDate" class="text-danger"></span>
             </div>
 
             <div>
 
                 <div class="form-group d-inline-block">
                     <label asp-for="PostulantsLimit"> Limite de postulantes </label><br />
-                    <input asp-for="PostulantsLimit" value="@Model.PostulantsLimit" type="number" id="@MaxPastilants" min="0" max="50" />
+                    <input required type="number" id="PostulantsLimit" name="PostulantsLimit" class="PostulantsLimit" min="1" max="50" value="@Model.PostulantsLimit"/>
                 </div>
 
                 <div class="d-inline-block float-right">
                     <br />
-                    <input type="checkbox" id="@CheckPostulant" onclick="MaxPostulant(@CheckPostulant,@MaxPastilants)" />
+                    <input type="checkbox" asp-for="MaxPostulants" onclick="MaxPostulant(this, 'PostulantsLimit')" />
                     <label>Maximo de postulantes</label>
                 </div>
 
+                <br />
+                <span asp-validation-for="PostulantsLimit" class="text-danger"></span>
             </div>
 
         </div>
 
         <div class="p-0 m-0">
-            <input class="btn btn-dark col" onclick="MaxPostulantOff(@CheckPostulant,@MaxPastilants,@CheckCloseDate,@InputCloseDate)" type="submit" value="Publicar" />
+            <input type="submit" class="btn btn-dark col" value="Publicar" />
             <br />
         </div>
 
     </form>
 
 </div>
-
-<script>
-
-    $(document).ready(() => {
-
-        MaxPostulant(@CheckPostulant,@MaxPastilants);
-
-        MaxPostulantOff(@CheckPostulant,@MaxPastilants,@CheckCloseDate,@InputCloseDate);
-
-    });
-
-</script>
 
 @section Scripts {
 

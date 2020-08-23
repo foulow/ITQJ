@@ -17,7 +17,7 @@ namespace ITQJ.WebClient.Controllers
 
 
         [Authorize]
-        public async Task<IActionResult> Profesional(string userId,Guid projectId, Guid PostulanId)
+        public async Task<IActionResult> Profesional(string userId, Guid projectId, Guid PostulanId)
         {
 
             if (string.IsNullOrWhiteSpace(userId))
@@ -37,7 +37,7 @@ namespace ITQJ.WebClient.Controllers
                 return PageNotFound();
 
 
-            return View(new List<object>(){personalInfoDTO, Convert.ToString(projectId), Convert.ToString(PostulanId) });
+            return View(new List<object>() { personalInfoDTO, Convert.ToString(projectId), Convert.ToString(PostulanId) });
         }
 
 
@@ -60,16 +60,16 @@ namespace ITQJ.WebClient.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> EdictProfesionalInfo()
+        public async Task<IActionResult> EditProfesionalInfo()
         {
             var userCredentials = GetUserCredentials();
 
-            if(userCredentials is null || userCredentials.Role == "Contratista")
+            if (userCredentials is null || userCredentials.Role == "Contratista")
                 return PageNotFound();
 
             var personalInfo = await GetPersonalInfo(userCredentials.Id.ToString());
 
-            if(personalInfo == null)
+            if (personalInfo == null)
                 return RedirectToAction("Register");
 
 
@@ -82,7 +82,7 @@ namespace ITQJ.WebClient.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(personalInfo);
+                return RedirectToAction("EditProfesionalInfo", personalInfo);
             }
 
             var response = await CallApiPUTAsync<PersonalInfoResponseDTO>(uri: "/api/PersonalInfo/" + personalInfo.Id, body: personalInfo, isSecured: true);
@@ -91,13 +91,13 @@ namespace ITQJ.WebClient.Controllers
             return RedirectToRoute(new { action = "viewProfesionalInfo", contructor = "PersonalInfo" });
         }
 
-        
+
 
 
         [Authorize]
         public async Task<IActionResult> Contratist(string userId)
         {
-            if(string.IsNullOrWhiteSpace(userId))
+            if (string.IsNullOrWhiteSpace(userId))
                 return PageNotFound();
 
             var userCredentials = GetUserCredentials();
@@ -106,11 +106,11 @@ namespace ITQJ.WebClient.Controllers
                 return RedirectToAction("AccessDenied", "Authorization");
 
             var personalInfoDTO = await GetPersonalInfo(userId);
-            if((personalInfoDTO is null) && (userId == userCredentials.Id.ToString()))
+            if ((personalInfoDTO is null) && (userId == userCredentials.Id.ToString()))
                 return RedirectToAction("Register");
-            else if(userId == userCredentials.Id.ToString())
+            else if (userId == userCredentials.Id.ToString())
                 return RedirectToAction("Contratist");
-            else if(personalInfoDTO == null)
+            else if (personalInfoDTO == null)
                 return PageNotFound();
 
             return View(personalInfoDTO);
@@ -122,12 +122,12 @@ namespace ITQJ.WebClient.Controllers
         {
             var userCredentials = GetUserCredentials();
 
-            if(userCredentials is null || userCredentials.Role == "Profesional")
+            if (userCredentials is null || userCredentials.Role == "Profesional")
                 return PageNotFound();
 
             var personalInfo = await GetPersonalInfo(userCredentials.Id.ToString());
 
-            if(personalInfo == null)
+            if (personalInfo == null)
                 return RedirectToAction("Register");
 
             return View(personalInfo);
@@ -135,16 +135,16 @@ namespace ITQJ.WebClient.Controllers
 
 
         [Authorize]
-        public async Task<IActionResult> EdictContratistInfo()
+        public async Task<IActionResult> EditContratistInfo()
         {
             var userCredentials = GetUserCredentials();
 
-            if(userCredentials is null || userCredentials.Role == "Profesional")
+            if (userCredentials is null || userCredentials.Role == "Profesional")
                 return PageNotFound();
 
             var personalInfo = await GetPersonalInfo(userCredentials.Id.ToString());
 
-            if(personalInfo == null)
+            if (personalInfo == null)
                 return RedirectToAction("Register");
 
             return View(personalInfo);
@@ -155,22 +155,22 @@ namespace ITQJ.WebClient.Controllers
         [HttpPost]
         public async Task<IActionResult> PutContratistInfo(PersonalInfoResponseDTO personalInfo)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                return View(personalInfo);
+                return RedirectToAction("EditContratistInfo", personalInfo);
             }
 
-            var response = await CallApiPUTAsync<PersonalInfoResponseDTO>(uri: "/api/PersonalInfo/" + personalInfo.Id,body: personalInfo,isSecured: true);
+            var response = await CallApiPUTAsync<PersonalInfoResponseDTO>(uri: "/api/PersonalInfo/" + personalInfo.Id, body: personalInfo, isSecured: true);
 
 
-            return RedirectToRoute(new { action = "viewContratistInfo",contructor = "PersonalInfo" });
+            return RedirectToRoute(new { action = "viewContratistInfo", contructor = "PersonalInfo" });
         }
 
 
 
 
 
-
+        [HttpGet]
         [Authorize]
         public async Task<IActionResult> AddSkills(string id)
         {
@@ -181,11 +181,11 @@ namespace ITQJ.WebClient.Controllers
             personalInfo.Skills = new List<SkillM>();
             personalInfo.Id = Guid.Parse(id);
 
-            if(userCredentials.Role == "Profesional")
+            if (userCredentials.Role == "Profesional")
             {
-                var tempSkills = await CallApiGETAsync<List<SkillDTO>>(uri: "/api/skills",isSecured: false);
+                var tempSkills = await CallApiGETAsync<List<SkillDTO>>(uri: "/api/skills", isSecured: false);
 
-                foreach(var skill in tempSkills)
+                foreach (var skill in tempSkills)
                 {
                     personalInfo.Skills.Add(new SkillM
                     {
@@ -205,27 +205,31 @@ namespace ITQJ.WebClient.Controllers
         [Authorize]
         public async Task<IActionResult> AddSkills(List<SkillM> skills)
         {
-                var temProfesionalSkills = new List<ProfesionalSkillCreateDTO>();
+            if (!ModelState.IsValid)
+            {
+                return View(skills);
+            }
+            var temProfesionalSkills = new List<ProfesionalSkillCreateDTO>();
 
-                foreach(var skill in skills)
+            foreach (var skill in skills)
+            {
+                if (skill.Percentage >= 1)
                 {
-                    if(skill.Percentage >= 1)
+                    var profesionalSkill = new ProfesionalSkillCreateDTO
                     {
-                        var profesionalSkill = new ProfesionalSkillCreateDTO
-                        {
-                            Percentage = skill.Percentage,
-                            PersonalInfoId = skill.PersonalInfoId,
-                            SkillId = skill.Id
-                        };
+                        Percentage = skill.Percentage,
+                        PersonalInfoId = skill.PersonalInfoId,
+                        SkillId = skill.Id
+                    };
 
-                        temProfesionalSkills.Add(profesionalSkill);
-                    }
-
+                    temProfesionalSkills.Add(profesionalSkill);
                 }
 
-                _ = await CallApiPOSTAsync(uri: "/api/profesionalSkills/group",body: temProfesionalSkills,isSecured: true);
+            }
 
-            return RedirectToAction("Index","Home");
+            _ = await CallApiPOSTAsync(uri: "/api/profesionalSkills/group", body: temProfesionalSkills, isSecured: true);
+
+            return RedirectToAction("Index", "Home");
         }
 
 
@@ -275,6 +279,10 @@ namespace ITQJ.WebClient.Controllers
         [Authorize]
         public async Task<IActionResult> Register(PersonalInfoVM personalInfo)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(personalInfo);
+            }
             personalInfo.LegalDocument.FileName = "ninguno.desconosido";
 
             // Registra el documento de identidad.
@@ -290,7 +298,7 @@ namespace ITQJ.WebClient.Controllers
                 return RedirectToAction("viewContratistInfo");
             }
 
-            return RedirectToRoute( new { action = "AddSkills", controller = "PersonalInfo", id = newPersonalInfo.Id });
+            return RedirectToRoute(new { action = "AddSkills", controller = "PersonalInfo", id = newPersonalInfo.Id });
         }
 
 

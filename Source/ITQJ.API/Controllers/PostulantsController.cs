@@ -144,8 +144,8 @@ namespace ITQJ.API.Controllers
             
             if (postulantToUpdate != null)
             {
-                postulantToUpdate.IsSellected = (postulantData.IsSellected) ?
-                    postulantData.IsSellected : postulantToUpdate.IsSellected;
+                postulantToUpdate.IsSelected = (postulantData.IsSelected) ?
+                    postulantData.IsSelected : postulantToUpdate.IsSelected;
                 postulantToUpdate.HasWorkReview = (postulantData.HasWorkReview) ?
                     postulantData.HasWorkReview : postulantToUpdate.HasWorkReview;
                 postulantToUpdate.HasProyectReview = (postulantData.HasProyectReview) ?

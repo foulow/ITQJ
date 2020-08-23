@@ -11,7 +11,7 @@
     ViewBag.isPostulated = Model.Postulants.Any(x => x.UserId == ViewBag.UserId);
     if (ViewBag.isPostulated)
     {
-        ViewBag.canSendMileStone = Model.Postulants.FirstOrDefault(x => x.UserId == ViewBag.UserId).IsSellected;
+        ViewBag.canSendMileStone = Model.Postulants.FirstOrDefault(x => x.UserId == ViewBag.UserId).IsSelected;
     }
     else
     {
@@ -19,7 +19,7 @@
     }
 
     // Contratist related variables.
-    ViewBag.canSelectPostulant = !Model.Postulants.Any(x => x.IsSellected == true);
+    ViewBag.canSelectPostulant = !Model.Postulants.Any(x => x.IsSelected == true);
     ViewBag.canCloseProject = (Model.MileStones.Count > 0);
 
     var Id = "id" + Model.Id;
@@ -140,7 +140,7 @@
         </div>
 
     </div>
-    
+
     @if (!User.Identity.IsAuthenticated)
     {
         <div class="d-inline-block">
@@ -172,16 +172,16 @@
             }
         }
 
-        <div class="d-inline-block">
-            @if(ViewBag.UserId != Model.UserId)
-            {
+        @if (ViewBag.UserId != Model.UserId)
+        {
+            <div class="d-inline-block">
                 <a asp-controller="PersonalInfo" asp-action="Contratist" asp-route-userId="@Model.UserId" class="btn btn-dark m-3"> Perfil del Contratista </a>
-            }
-        </div>
+            </div>
+        }
     }
 </div>
 
-@if(ViewBag.canCloseProject)
+@if (ViewBag.canCloseProject)
 {
     if (isProjectOwner() && Model.IsOpen)
     {
@@ -192,6 +192,8 @@
                 <div hidden>
                     <input asp-for="Id" type="text" />
                     <input asp-for="UserId" type="text" />
+                    <input asp-for="Name" type="text" />
+                    <input asp-for="Description" type="text" />
                     <input asp-for="PostulantsLimit" type="text" />
                     <input asp-for="CloseDate" type="date" />
                 </div>
@@ -209,9 +211,9 @@
 
             <strong class="h2 mt-5 mb-5" style="margin-left:10px;">Lista de entregas realizadas</strong>
 
-            @foreach(var mileStone in Model.MileStones)
+            @foreach (var mileStone in Model.MileStones)
             {
-                if(isProjectOwner() || mileStone.UserId == ViewBag.UserId)
+                if (isProjectOwner() || mileStone.UserId == ViewBag.UserId)
                 {
                     <ul>
                         <li style=" border-radius: 15px;
@@ -229,9 +231,9 @@
                                 background-color: #ffffff">
 
                                 <div>
-                                    
+
                                     <p class="h3 d-inline-block">Descripción:</p>  <p class="h4 d-inline-block"> @mileStone.Description </p>
-                                
+
                                 </div>
 
                                 <div>
@@ -294,7 +296,7 @@
 
                                 </a>
 
-                                @if (!postulan.IsSellected)
+                                @if (!postulan.IsSelected)
                                 {
                                     <div onclick="enviar()" style="text-decoration: none;" class="postulante enviar">
 
@@ -358,10 +360,10 @@ else if (ViewBag.canSendMileStone && Model.IsOpen)
 
                         <div class="form-group">
 
-                            <label for="Description" class="text-center">Describa brebemente que se realizo en en entrega</label>
+                            <label for="Description" class="text-center">Describa brebemente que se realizo en la entrega</label>
 
                             <textarea style="height:170px;" class="form-control" id="Description" name="Description" placeholder="Description" maxlength="2000" required></textarea>
-                            
+
                             <span for="Description" class="text-danger"></span>
 
                         </div>
@@ -369,22 +371,22 @@ else if (ViewBag.canSendMileStone && Model.IsOpen)
                         <div class="form-group">
 
                             <label for="FormFile" class="text-center">Seleccione un fichero a adjuntar para la entrega</label>
-                            
-                            <input class="form-control" style="height:45px;"  id="FormFile" name="FormFile" placeholder="Ningun fichero seleccionado"
+
+                            <input class="form-control" style="height:45px;" id="FormFile" name="FormFile" placeholder="Ningun fichero seleccionado"
                                    accept="image/*,.pdf,.doc,audio/*,video/*,rar/*" type="file" required>
-                            
+
                             <span for="FormFile" class="text-danger"></span>
 
                         </div>
 
-                        <input id="Upload" type="submit" value="Subir entrega" class="btn btn-dark m-3"/>
+                        <input id="Upload" type="submit" value="Subir entrega" class="btn btn-dark m-3" />
 
                     </div>
 
                 </li>
             </ul>
         </form>
-    
+
     </div>
 }
 

@@ -30,17 +30,20 @@
 
         <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000">
 
-            <p id="Mling" class="h2"> Pagina Web: <a src="@Model.PagLink">@Model.PagLink </a></p>
-
-        </div>
-
-        <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000">
-
             <p id="Mdescripcion" class="h2"> Descripción: @Model.Description </p>
 
         </div>
 
-        <a asp-controller="PersonalInfo" asp-action="EdictContratistInfo" class="btn btn-dark m-3"> Editar </a>
+        @if(!string.IsNullOrWhiteSpace(Model.PagLink))
+        {
+            <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000">
+
+                <p id="Mling" class="h2"> Pagina Web: <a src="@Model.PagLink">@Model.PagLink </a></p>
+
+            </div>
+        }
+
+        <a asp-controller="PersonalInfo" asp-action="EditContratistInfo" class="btn btn-dark m-3"> Editar </a>
 
     </div>
 

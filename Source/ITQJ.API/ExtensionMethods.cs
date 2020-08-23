@@ -20,7 +20,7 @@ namespace ITQJ.EFCore
         {
             try
             {
-                return (context.Projects.Any()) ? DBState.Fetched : DBState.Unfetched;
+                return (context.Users.Any()) ? DBState.Fetched : DBState.Unfetched;
             }
             catch (Exception ex)
             {
@@ -86,17 +86,17 @@ namespace ITQJ.EFCore
                 Log.Debug("LegalDocuments already populated.");
             }
 
-            if (!context.PersonalInfos.Any())
-            {
-                Log.Debug("PersonalInfos being populated...");
-                context.PersonalInfos.AddRange(DataConfig.PersonalInfos);
-                context.SaveChanges();
-                Log.Debug("PersonalInfos populated.");
-            }
-            else
-            {
-                Log.Debug("PersonalInfos already populated.");
-            }
+            //if (!context.PersonalInfos.Any())
+            //{
+            //    Log.Debug("PersonalInfos being populated...");
+            //    context.PersonalInfos.AddRange(DataConfig.PersonalInfos);
+            //    context.SaveChanges();
+            //    Log.Debug("PersonalInfos populated.");
+            //}
+            //else
+            //{
+            //    Log.Debug("PersonalInfos already populated.");
+            //}
 
             //if (!context.ProfesionalSkills.Any())
             //{
@@ -112,18 +112,18 @@ namespace ITQJ.EFCore
             //Log.Information("Data feched.");
 
 
-            if (!context.Projects.Any())
-            {
-                Log.Debug("Projects being populated...");
-                context.Projects.AddRange(DataConfig.Projects);
-                context.SaveChanges();
-                Log.Debug("Projects populated.");
-            }
-            else
-            {
-                Log.Debug("Projects already populated.");
-            }
-            Log.Information("Data feched.");
+            //if (!context.Projects.Any())
+            //{
+            //    Log.Debug("Projects being populated...");
+            //    context.Projects.AddRange(DataConfig.Projects);
+            //    context.SaveChanges();
+            //    Log.Debug("Projects populated.");
+            //}
+            //else
+            //{
+            //    Log.Debug("Projects already populated.");
+            //}
+            //Log.Information("Data feched.");
 
         }
     }

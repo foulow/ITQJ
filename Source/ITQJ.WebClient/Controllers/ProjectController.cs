@@ -46,6 +46,7 @@ namespace ITQJ.WebClient.Controllers
             var newProject = new ProjectResponseDTO();
             newProject.UserId = userCredentials.Id;
             newProject.CloseDate = DateTime.Now.AddDays(15);
+            newProject.PostulantsLimit = 10;
 
             return View(newProject);
         }
@@ -59,8 +60,13 @@ namespace ITQJ.WebClient.Controllers
             {
                 return View(project);
             }
+            
+            if (project.NotCloseDate)
+                project.CloseDate = DateTime.MinValue;
+            
+            if (project.MaxPostulants)
+                project.PostulantsLimit = 50;
 
-            project.CloseDate = DateTime.MinValue;
             var newProject = await CallApiPOSTAsync<ProjectResponseDTO>(uri: "/api/projects", body: project, isSecured: true);
 
             return RedirectToRoute(new { action = "Index", controller = "Project", projectId = newProject.Id });
@@ -152,6 +158,11 @@ namespace ITQJ.WebClient.Controllers
         [HttpPost]
         public async Task<IActionResult> PostMileStone(MileStoneVM milestoneData)
         {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Index", new { projectId = milestoneData.ProjectId });
+            }
+
             if (milestoneData.FormFile.Length == 0)
             {
                 return RedirectToAction("Index", new { projectId = milestoneData.ProjectId });
@@ -187,6 +198,11 @@ namespace ITQJ.WebClient.Controllers
         [HttpPost]
         public async Task<IActionResult> CloseProject(ProjectResponseDTO project)
         {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Index", project);
+            }
+
             var userCredentials = GetUserCredentials();
 
             if (userCredentials.Id != project.UserId)

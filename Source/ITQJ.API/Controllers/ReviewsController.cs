@@ -82,7 +82,7 @@ namespace ITQJ.API.Controllers
                     .Where(x =>
                            x.Postulants.Any(y =>
                                             y.ProjectId == x.Id &&
-                                            y.IsSellected == true &&
+                                            y.IsSelected == true &&
                                             y.UserId == userId &&
                                             y.HasProyectReview == false) &&
                            x.IsOpen == false)
@@ -98,7 +98,7 @@ namespace ITQJ.API.Controllers
                     .Where(x =>
                            x.Postulants.Any(y =>
                                             y.ProjectId == x.Id &&
-                                            y.IsSellected == true &&
+                                            y.IsSelected == true &&
                                             y.UserId == userId &&
                                             y.HasProyectReview == false) &&
                            x.IsOpen == false)
@@ -110,7 +110,7 @@ namespace ITQJ.API.Controllers
                     .Where(x =>
                            x.Postulants.Any(y =>
                                             y.ProjectId == x.Id &&
-                                            y.IsSellected == true &&
+                                            y.IsSelected == true &&
                                             y.HasWorkReview == false) &&
                            x.UserId == userId)
                     .Skip((pageIndex - 1) * maxResults)
@@ -124,7 +124,7 @@ namespace ITQJ.API.Controllers
                     .Where(x =>
                            x.Postulants.Any(y =>
                                             y.ProjectId == x.Id &&
-                                            y.IsSellected == true &&
+                                            y.IsSelected == true &&
                                             y.HasWorkReview == false) &&
                            x.UserId == userId)
                     .Count();

@@ -32,17 +32,20 @@
 
         <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000">
 
-            <p id="Mling" class="h2"> Pagina Web: <a src="@Model.PagLink">@Model.PagLink </a></p>
-
-        </div>
-
-        <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000">
-
             <p id="Mdescripcion" class="h2"> Descripción: @Model.Description </p>
 
         </div>
 
-        <a class="btn badge-dark mt-5 mb-5" asp-action="EdictProfesionalInfo" asp-controller="PersonalInfo"> Editar Informacion personal </a>
+        @if(!string.IsNullOrWhiteSpace(Model.PagLink))
+        {
+            <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000">
+
+                <p id="Mling" class="h2"> Pagina Web: <a src="@Model.PagLink">@Model.PagLink </a></p>
+
+            </div>
+        }
+        
+        <a class="btn badge-dark mt-5 mb-5" asp-action="EditProfesionalInfo" asp-controller="PersonalInfo"> Editar Informacion personal </a>
 
     </div>
 
@@ -125,7 +128,7 @@
  
     <div class="mt-3 position-relative pb-1">
     
-        <a  asp-controller="ProfesionalSkills" asp-action="GetEdictSkills" class="btn badge-dark" >Editar Habilidades</a>
+        <a  asp-controller="ProfesionalSkills" asp-action="EditSkills" class="btn badge-dark" >Editar Habilidades</a>
     
     </div>
 

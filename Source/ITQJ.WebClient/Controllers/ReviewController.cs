@@ -122,7 +122,7 @@ namespace ITQJ.WebClient.Controllers
 
             var updatePostulant = new PostulantUpdateDTO
             {
-                IsSellected = true,
+                IsSelected = true,
                 HasWorkReview = (reviewData.Review.ReviewerRole == "Contratista"),
                 HasProyectReview = (reviewData.Review.ReviewerRole == "Profesional")
             };

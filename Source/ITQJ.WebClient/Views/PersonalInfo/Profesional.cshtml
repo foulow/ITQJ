@@ -20,29 +20,34 @@
 
         </div>
 
-        @*<div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000;">
+        @*
+        <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000;">
 
-                <p id="Memail" class="h2"> Correo: @Model.User.Email </p>
+            <p id="Memail" class="h2"> Correo: @Model.User.Email </p>
 
-            </div>
-
-            <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000">
-
-                <p id="Mnumero" class="h2"> Numero de telefono: @Model.PhoneNumber </p>
-
-            </div>*@
+        </div>
 
         <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000">
 
-            <p id="Mling" class="h2"> Pagina Web: <a src="@personalInfo.PagLink">@personalInfo.PagLink </a></p>
+            <p id="Mnumero" class="h2"> Numero de telefono: @Model.PhoneNumber </p>
 
         </div>
+        *@
 
         <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000">
 
             <p id="Mdescripcion" class="h2"> Descripción: @personalInfo.Description </p>
 
         </div>
+
+        @if(!string.IsNullOrWhiteSpace(personalInfo.PagLink))
+        {
+            <div class="border badge-pill bg-primary mt-3" style="border: 1px solid white; box-shadow:2px 2px 6px #000">
+
+                <p id="Mling" class="h2"> Pagina Web: <a src="@personalInfo.PagLink">@personalInfo.PagLink </a></p>
+
+            </div>
+        }
 
     </div>
 
