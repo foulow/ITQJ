@@ -1,4 +1,4 @@
-# ITQJ
+# Information Technology Quick Jobs (ITQJ)
 Projecto para la construcción de una aplicación de búsqueda de empleo y contratación de profesionales del área de tecnología.
 
 ## Pre-requisitos
