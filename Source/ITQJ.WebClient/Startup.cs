@@ -1,3 +1,4 @@
+using Auth0.AspNetCore.Authentication;
 using AutoMapper;
 using FluentValidation.AspNetCore;
 using ITQJ.Domain.Validations;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using Serilog;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -34,6 +36,8 @@ namespace ITQJ.WebClient
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            IdentityModelEventSource.ShowPII = true;
+
             services.AddControllersWithViews()
                 .AddFluentValidation(fv =>
                     fv.RegisterValidatorsFromAssemblyContaining
@@ -58,7 +62,9 @@ namespace ITQJ.WebClient
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Add(Microsoft.Net.Http.Headers.HeaderNames.Accept, "application/json");
                 })
+                // OpenIdConnect Configuration Method.
                 //.AddHttpMessageHandler<IdentityServerBearerTokenHandler>();
+                // Auth0 Configuration Method.
                 .AddHttpMessageHandler<Auth0BearerTokenHandler>();
 
             services.AddHttpClient("APIClient", client =>
@@ -79,18 +85,6 @@ namespace ITQJ.WebClient
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            // IdentityServer client configuration.
-            //var idpURL = Configuration["autorityURL"];
-            //services.AddTransient<IdentityServerBearerTokenHandler>();
-            //services.AddHttpClient("IDPClient", client =>
-            //    {
-            //        client.BaseAddress = new Uri(idpURL);
-            //        client.DefaultRequestHeaders.Clear();
-            //        client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
-            //    });
-            //services.Configure<ClientCredentialsM>(Configuration.GetSection("ClientConfiguration:IdentityServer"));
-            //var scopes = Configuration.GetSection("ClientConfiguration:IdentityServer:AllowedScopes").GetChildren();
-
             // Auth0 client configuration.
             var idpURL = Configuration["ClientConfiguration:Auth0:Authority"];
             services.AddHttpClient("IDPClient", client =>
@@ -103,93 +97,122 @@ namespace ITQJ.WebClient
             services.Configure<ClientCredentialsM>(Configuration.GetSection("ClientConfiguration:Auth0"));
             var scopes = Configuration.GetSection("ClientConfiguration:Auth0:AllowedScopes").GetChildren();
 
-            services.AddAuthentication(options =>
-                {
-                    // IdentityServer client configuration.
-                    //options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-                    //options.DefaultChallengeScheme = "oidc";
+            // OpenIdConnect Configuration Method.
+            //services.AddAuthentication(options =>
+            //    {
+            //        // IdentityServer client configuration.
+            //        //options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            //        //options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            //        //options.DefaultChallengeScheme = "oidc";
+            //        options.DefaultChallengeScheme = "Auth0";
 
-                    // Auth0 client configuration.
-                    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                })
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+            //        // Auth0 client configuration.
+            //        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            //        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            //        options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            //    })
+            //    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+            //    {
+            //        options.AccessDeniedPath = "/Authorization/AccessDenied";
+            //    })
+            //.AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
+            //{
+            //    // General client configuration.
+            //    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            //    options.SaveTokens = true;
+            //    foreach (var scope in scopes)
+            //    {
+            //        options.Scope.Add(scope.Value);
+            //    }
+
+            //    // Auth0 client configuration.
+            //    options.Authority = Configuration["ClientConfiguration:Auth0:Authority"];
+            //    options.CallbackPath = new PathString("/signin-auth0");
+            //    options.ClaimsIssuer = "Auth0";
+            //    options.RequireHttpsMetadata = false;
+            //    options.ClientId = Configuration["ClientConfiguration:Auth0:ClientId"];
+            //    options.ClientSecret = Configuration["ClientConfiguration:Auth0:ClientSecret"];
+            //    options.ResponseType = "code";
+            //    options.ClaimActions.MapUniqueJsonKey("role", "role");
+            //    options.ClaimActions.MapUniqueJsonKey("email", "email");
+            //    options.ClaimActions.MapUniqueJsonKey("name", "name");
+            //    options.Events = new OpenIdConnectEvents
+            //    {
+            //        OnRedirectToIdentityProvider = context =>
+            //        {
+            //            context.ProtocolMessage.SetParameter("audience",
+            //                Configuration["ClientConfiguration:Auth0:Audience"]);
+
+            //            return Task.CompletedTask;
+            //        },
+            //        // handle the logout redirection 
+            //        OnRedirectToIdentityProviderForSignOut = (context) =>
+            //        {
+            //            var logoutUri = $"{Configuration["ClientConfiguration:Auth0:Authority"]}/v2/logout?client_id={Configuration["ClientConfiguration:Auth0:ClientId"]}";
+
+            //            var postLogoutUri = context.Properties.RedirectUri;
+            //            if (!string.IsNullOrEmpty(postLogoutUri))
+            //            {
+            //                if (postLogoutUri.StartsWith("/"))
+            //                {
+            //                    // transform to absolute
+            //                    var request = context.Request;
+            //                    postLogoutUri = request.Scheme + "://" + request.Host + request.PathBase + postLogoutUri;
+            //                }
+            //                logoutUri += $"&returnTo={Uri.EscapeDataString(postLogoutUri)}";
+            //            }
+
+            //            context.Response.Redirect(logoutUri);
+            //            context.HandleResponse();
+
+            //            return Task.CompletedTask;
+            //        }
+            //    };
+            //});
+
+            // Auth0 Configuration Method.
+            services.AddAuth0WebAppAuthentication(options =>
+            {
+                options.Domain = Configuration["ClientConfiguration:Auth0:Domain"];
+                options.CallbackPath = new PathString("/signin-auth0");
+                options.ClientId = Configuration["ClientConfiguration:Auth0:ClientId"];
+                options.ClientSecret = Configuration["ClientConfiguration:Auth0:ClientSecret"];
+                options.ResponseType = "code";
+                options.Scope = "openid profile email name roles offline_access itqj_api";
+                options.OpenIdConnectEvents = new OpenIdConnectEvents
                 {
-                    options.AccessDeniedPath = "/Authorization/AccessDenied";
-                })
-                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
-                //.AddOpenIdConnect("oidc", options =>
-                //.AddOpenIdConnect("Auth0", options =>
-                {
-                    // General client configuration.
-                    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.SaveTokens = true;
-                    foreach (var scope in scopes)
+                    OnRedirectToIdentityProvider = context =>
                     {
-                        options.Scope.Add(scope.Value);
-                    }
+                        context.ProtocolMessage.SetParameter("audience",
+                            Configuration["ClientConfiguration:Auth0:Audience"]);
 
-                    // IdentityServer client configuration.
-                    //options.Authority = authorityURL;
-                    //options.ClientId = Configuration["ClientConfiguration:IdentityServer:ClientId"];
-                    //options.ClientSecret = Configuration["ClientConfiguration:IdentityServer:ClientSecret"];
-                    //options.ResponseType = "code";
-                    //options.ClaimActions.MapUniqueJsonKey("email", "email");
-                    //options.ClaimActions.MapUniqueJsonKey("phone", "phone");
-                    //options.ClaimActions.MapUniqueJsonKey("role", "role");
-                    //options.GetClaimsFromUserInfoEndpoint = true;
-                    //options.TokenValidationParameters = new TokenValidationParameters
-                    //{
-                    //    NameClaimType = JwtClaimTypes.GivenName,
-                    //    RoleClaimType = JwtClaimTypes.Role
-                    //};
-
-                    // Auth0 client configuration.
-                    options.Authority = Configuration["ClientConfiguration:Auth0:Authority"];
-                    options.CallbackPath = new PathString("/signin-auth0");
-                    options.ClaimsIssuer = "Auth0";
-                    options.RequireHttpsMetadata = false;
-                    options.ClientId = Configuration["ClientConfiguration:Auth0:ClientId"];
-                    options.ClientSecret = Configuration["ClientConfiguration:Auth0:ClientSecret"];
-                    options.ResponseType = "code";
-                    options.ClaimActions.MapUniqueJsonKey("role", "role");
-                    options.ClaimActions.MapUniqueJsonKey("email", "email");
-                    options.ClaimActions.MapUniqueJsonKey("name", "name");
-                    options.Events = new OpenIdConnectEvents
+                        return Task.CompletedTask;
+                    },
+                    // handle the logout redirection 
+                    OnRedirectToIdentityProviderForSignOut = (context) =>
                     {
-                        OnRedirectToIdentityProvider = context =>
-                        {
-                            context.ProtocolMessage.SetParameter("audience",
-                                Configuration["ClientConfiguration:Auth0:Audience"]);
+                        var logoutUri = $"{Configuration["ClientConfiguration:Auth0:Authority"]}/v2/logout?client_id={Configuration["ClientConfiguration:Auth0:ClientId"]}";
 
-                            return Task.CompletedTask;
-                        },
-                        // handle the logout redirection 
-                        OnRedirectToIdentityProviderForSignOut = (context) =>
+                        var postLogoutUri = context.Properties.RedirectUri;
+                        if (!string.IsNullOrEmpty(postLogoutUri))
                         {
-                            var logoutUri = $"{Configuration["ClientConfiguration:Auth0:Authority"]}/v2/logout?client_id={Configuration["ClientConfiguration:Auth0:ClientId"]}";
-
-                            var postLogoutUri = context.Properties.RedirectUri;
-                            if (!string.IsNullOrEmpty(postLogoutUri))
+                            if (postLogoutUri.StartsWith("/"))
                             {
-                                if (postLogoutUri.StartsWith("/"))
-                                {
-                                    // transform to absolute
-                                    var request = context.Request;
-                                    postLogoutUri = request.Scheme + "://" + request.Host + request.PathBase + postLogoutUri;
-                                }
-                                logoutUri += $"&returnTo={ Uri.EscapeDataString(postLogoutUri)}";
+                                // transform to absolute
+                                var request = context.Request;
+                                postLogoutUri = request.Scheme + "://" + request.Host + request.PathBase + postLogoutUri;
                             }
-
-                            context.Response.Redirect(logoutUri);
-                            context.HandleResponse();
-
-                            return Task.CompletedTask;
+                            logoutUri += $"&returnTo={Uri.EscapeDataString(postLogoutUri)}";
                         }
-                    };
-                });
+
+                        context.Response.Redirect(logoutUri);
+                        context.HandleResponse();
+
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -225,7 +248,9 @@ namespace ITQJ.WebClient
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+#if !DEBUG
             app.UseHttpsRedirection();
+#endif
 
             app.UseRouting();
 

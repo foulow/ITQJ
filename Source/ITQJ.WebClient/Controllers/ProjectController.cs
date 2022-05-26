@@ -171,6 +171,11 @@ namespace ITQJ.WebClient.Controllers
             var fileName = $"{Guid.NewGuid()}.{Path.GetFileName(milestoneData.FormFile.FileName).Split(".").Last()}";
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), Resources.SubDirectory, fileName);
 
+            if (!System.IO.Directory.Exists(Resources.SubDirectory))
+            {
+                System.IO.Directory.CreateDirectory(Resources.SubDirectory);
+            }
+
             await using (var stream = System.IO.File.Create(filePath))
             {
                 await milestoneData.FormFile.CopyToAsync(stream);

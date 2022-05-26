@@ -22,6 +22,8 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using Auth0.AspNetCore.Authentication;
 
 namespace ITQJ.WebClient.Controllers
 {
@@ -34,6 +36,12 @@ namespace ITQJ.WebClient.Controllers
         protected readonly IHttpClientFactory _clientFactory;
         protected readonly IOptionsMonitor<ClientCredentialsM> _clientConfiguration;
         protected readonly IWebHostEnvironment _environment;
+
+#if !DEBUG
+        private string _beaseWebURL = "https://localhost:44348";
+#else
+        private string _beaseWebURL = "http://localhost:5048";
+#endif
 
         public BaseController(IServiceProvider serviceProvider)
         {
@@ -166,24 +174,29 @@ namespace ITQJ.WebClient.Controllers
         [Authorize]
         public async Task LogOut(string returnUrl = "/")
         {
-            //await HttpContext.SignOutAsync("Auth0", new AuthenticationProperties { RedirectUri = returnUrl });
+            var authenticationProperties = new AuthenticationProperties { RedirectUri = Url.Action("Index", "Home") };
+
 
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = "https://localhost:44348" +  returnUrl});
+            // OpenIdConnect Configuration Method.
+            //await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, authenticationProperties);
+            // Auth0 Configuration Method.
+            await HttpContext.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
 
-            //return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
 
         //[Authorize]
         public async Task LogIn(string returnUrl = "/")
         {
-            //await HttpContext.ChallengeAsync("Auth0", new AuthenticationProperties() { RedirectUri = returnUrl });
+            var authenticationProperties = new AuthenticationProperties() { RedirectUri = _beaseWebURL + returnUrl };
 
-            await HttpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties() { RedirectUri = "https://localhost:44348" + returnUrl });
+            // OpenIdConnect Configuration Method.
+            //await HttpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, authenticationProperties);
+            // Auth0 Configuration Method.
+            await HttpContext.ChallengeAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
 
             // Get the currently authorized user claims information.
             //var userInfo = await GetUserInfo();
-            //return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
 
         protected UserResponseDTO GetUserCredentials()

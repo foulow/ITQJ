@@ -14,10 +14,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using Serilog;
 using System;
 using System.Threading.Tasks;
-
+using Microsoft.OpenApi.Models;
 
 namespace ITQJ.Domain
 {
@@ -33,17 +34,21 @@ namespace ITQJ.Domain
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            IdentityModelEventSource.ShowPII = true;
+
             var migrationsAssembly = typeof(Startup).Assembly.GetName().FullName;
             services.AddDbContext<ApplicationDBContext>(options =>
                             options.UseSqlServer(Configuration.GetConnectionString(name: "DefaultConnection"),
                                 sql => sql.MigrationsAssembly(migrationsAssembly))
                                 .UseLazyLoadingProxies());
 
+#if !DEBUG
             services.AddHttpsRedirection(options =>
             {
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
                 options.HttpsPort = 44338;
             });
+#endif
 
             services.AddCors(options =>
             {
@@ -53,7 +58,8 @@ namespace ITQJ.Domain
                         builder.WithOrigins(new string[]
                             {
                                 Configuration["AudienceURL"],
-                                Configuration["AuthorityURL"]
+                                Configuration["AuthorityURL"],
+                                Configuration["ApiResources:Auth0:Audience"]
                             });
                         builder.AllowAnyHeader();
                         builder.AllowAnyMethod();
@@ -65,6 +71,8 @@ namespace ITQJ.Domain
                     .AddFluentValidation(fv =>
                         fv.RegisterValidatorsFromAssemblyContaining
                             <UserCreateDTOValidation>());
+
+            services.AddSwaggerGen();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -132,7 +140,17 @@ namespace ITQJ.Domain
                 });
             });
 
+#if !DEBUG
             app.UseHttpsRedirection();
+#endif
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ITQJ.API");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseRouting();
 
